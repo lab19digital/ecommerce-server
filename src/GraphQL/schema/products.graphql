@@ -55,6 +55,7 @@ type ProductCategory {
 }
 
 type Tag {
+    id: ID!
     name: String
     products: [Product!]! @hasMany
 }
