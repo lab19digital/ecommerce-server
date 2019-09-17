@@ -8,7 +8,7 @@
     use Illuminate\Database\Eloquent\Relations\HasManyThrough;
     use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-    use Lab19\Cart\Models\Category;
+    use Lab19\Cart\Models\Product;
 
     class Tag extends Model {
 
@@ -47,7 +47,7 @@
 
 
         /**
-         * Tag relation
+         * Product relation
          *
          * @var $query
          */

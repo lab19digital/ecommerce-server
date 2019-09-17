@@ -9,6 +9,7 @@
     use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
     use Lab19\Cart\Models\Category;
+    use Lab19\Cart\Models\Tag;
 
     class Product extends Model {
 
@@ -157,6 +158,15 @@
         }
 
         /**
+         * Tag relation
+         *
+         * @var $query
+         */
+        public function tags(){
+            return $this->belongsToMany(Tag::class, 'cart_product_tag')->withTimestamps();
+        }
+
+        /**
          * In stock products scope
          *
          * @var $query
@@ -237,16 +247,6 @@
         public function getMetaAttribute(){
             $meta = $this->getAttribute('productMeta');
             return $meta;
-        }
-
-
-        /**
-         * Tag relation
-         *
-         * @var $query
-         */
-        public function tags(){
-            return $this->belongsToMany(Tag::class, 'cart_product_tag')->withTimestamps();
         }
 
     }

@@ -16,7 +16,7 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Product::class, function (Faker $faker) {
+$factory->define(Tag::class, function (Faker $faker) {
     $rand = rand(0,10);
     return [
         'name' => $faker->word()
