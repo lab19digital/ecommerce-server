@@ -7,6 +7,7 @@ extend type Query {
             builder: "Lab19\\Cart\\GraphQL\\Builders\\ProductsBuilder@search"
         )
     product(id: ID @eq): Product @find(model: "Lab19\\Cart\\Models\\Product")
+    tag(id: Int! @eq): Tag @find(model: "Lab19\\Cart\\Models\\Tag")
 }
 
 input ProductsQueryInput {
@@ -33,6 +34,7 @@ type Product {
     dimensions: ProductDimensions
     weight: ProductWeight
     images: [Image!]
+    tags: [Tag!]! @hasMany
 }
 
 type ProductDimensions {
@@ -50,6 +52,11 @@ type ProductWeight {
 type ProductCategory {
     id: Int!
     title: String!
+}
+
+type Tag {
+    name: String
+    products: [Product!]! @hasMany
 }
 
 extend type Mutation {

@@ -239,4 +239,14 @@
             return $meta;
         }
 
+
+        /**
+         * Tag relation
+         *
+         * @var $query
+         */
+        public function tags(){
+            return $this->belongsToMany(Tag::class, 'cart_product_tag')->withTimestamps();
+        }
+
     }
