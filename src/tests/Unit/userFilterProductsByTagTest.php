@@ -13,33 +13,41 @@ class TestFilterProducts extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->availableCount = 11;
+        // $this->availableCount = 11;
 
-        factory(Product::class, $this->availableCount)->create()->each(function ($product) {
-            $product->status = 'IN_STOCK';
-            $product->title = 'Coffee pod';
-            $product->published = 1;
-            $product->save();
-        });
+        // factory(Product::class, $this->availableCount)->create()->each(function ($product) {
+        //     $product->status = 'IN_STOCK';
+        //     $product->title = 'Coffee pod';
+        //     $product->published = 1;
+        //     $product->save();
+        // });
 
-        factory(Product::class, $this->availableCount + 10)->create()->each(function ($product) {
-            $product->status = 'OUT_OF_STOCK';
-            $product->save();
-        });
+        // factory(Product::class, $this->availableCount + 10)->create()->each(function ($product) {
+        //     $product->status = 'OUT_OF_STOCK';
+        //     $product->save();
+        // });
 
 
-        factory(Tag::class, 20)->create()->each(function ($tag) {
-            $tag->save();
-        });
+        // factory(Tag::class, 20)->create()->each(function ($tag) {
+        //     $tag->save();
+        // });
         
     }
 
     public function testUserShouldBeAbleToFilterProductsByTag(): void
     {
 
+        $product = factory(Product::class)->create();
+        $product->save();
+
+        $tag = factory(Tag::class)->create();
+        $tag->save();
+
+        $product->tags()->attach(1);
+
         $response = $this->graphQL('
                 query {
-                    tags {
+                    tag(id: 1) {
                         name
                     }
                 }
