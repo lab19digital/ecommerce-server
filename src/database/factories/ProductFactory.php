@@ -19,7 +19,8 @@ use Faker\Generator as Faker;
 $factory->define(Product::class, function (Faker $faker) {
     $rand = rand(0,10);
     return [
-        'title' => $faker->title(),
+        'title' => $faker->word(),
+        'short_description' => $faker->sentence(),
         'status' => $rand > 5 ? 'IN_STOCK' : 'OUT_OF_STOCK',
         'published' => $rand > 5 ? 1 : 0
     ];

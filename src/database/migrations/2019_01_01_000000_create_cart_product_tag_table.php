@@ -13,7 +13,7 @@ class CreateCartProductTagTable extends Migration
      */
     public function up()
     {
-        Schema::create('cart_product_tag', function (Blueprint $table) {
+        Schema::create('product_tag', function (Blueprint $table) {
             $table->primary(['product_id', 'tag_id']); //This is to avoid duplicate  relationships
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('tag_id');

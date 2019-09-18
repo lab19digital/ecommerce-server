@@ -37,18 +37,21 @@ class TestFilterProducts extends TestCase
     public function testUserShouldBeAbleToFilterProductsByTag(): void
     {
 
-        $product = factory(Product::class)->create();
-        $product->save();
-
         $tag = factory(Tag::class)->create();
         $tag->save();
+
+        $product = factory(Product::class)->create();
+        $product->save();
 
         $product->tags()->attach(1);
 
         $response = $this->graphQL('
                 query {
                     tag(id: 1) {
-                        name
+                        products {
+                            title
+                            short_description
+                        }
                     }
                 }
             ');
