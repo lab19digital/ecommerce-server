@@ -77,4 +77,56 @@ class TestFilterProducts extends TestCase
             ]
         ]);
     }
+
+    
+    public function testUserShouldBeAbleToFilterForTaggable(): void
+    {
+        $creatQuantity = 10;
+
+        factory(Tag::class, $creatQuantity)->create()->each(function ($tag) {
+            $tag->save();
+        });
+
+        factory(Product::class, $creatQuantity)->create()->each(function ($product) {
+            $product->tag(1);
+            $product->save();
+        });
+
+
+        $product = Product::find(1);
+        $tag = Tag::find(1);
+
+
+        $response = $this->graphQL('
+                query {
+                    tag(id: 1) {
+                        products {
+                            id
+                            title
+                            short_description
+                        }
+                    }
+                }
+            ');
+
+        $response->assertDontSee('errors');
+
+        $result = $response->decodeResponseJson();
+
+        print json_encode($result);
+
+        $this->assertCount($creatQuantity, $result['data']['tag']['products']);
+
+        $this->assertTrue($product->tags->contains('id', $tag->id));
+
+        $response->assertJsonStructure([
+            'data' => [
+                'tag' => [
+                    'products' => [
+                            ['id', 'title', 'short_description']
+                    ]
+                ]
+            ]
+        ]);
+    }
 }
