@@ -167,6 +167,15 @@
         }
 
         /**
+         * Tag relation
+         *
+         * @var $query
+         */
+        public function tag($tag){
+            return $this->tags()->attach($tag);
+        }
+
+        /**
          * In stock products scope
          *
          * @var $query

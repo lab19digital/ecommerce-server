@@ -31,7 +31,7 @@ class TestFilterProducts extends TestCase
         // factory(Tag::class, 20)->create()->each(function ($tag) {
         //     $tag->save();
         // });
-        
+
     }
 
     public function testUserShouldBeAbleToFilterProductsByTag(): void
@@ -43,12 +43,13 @@ class TestFilterProducts extends TestCase
         $product = factory(Product::class)->create();
         $product->save();
 
-        $product->tags()->attach(1);
+        $product->tag($tag);
 
         $response = $this->graphQL('
                 query {
                     tag(id: 1) {
                         products {
+                            id
                             title
                             short_description
                         }
@@ -62,17 +63,18 @@ class TestFilterProducts extends TestCase
 
         print json_encode($result);
 
-        // $this->assertCount(4, $result['data']['products']['data']);
+        $this->assertCount(3, $result['data']['tag']['products'][0]);
 
-        // $response->assertJsonStructure([
-        //     'data' => [
-        //         'products' => [
-        //             'data' => [
-        //                 ['id', 'title'],
-        //             ]
-        //         ]
-        //     ]
-        // ]);
+        $this->assertTrue($product->tags->contains('id', $tag->id));
+
+        $response->assertJsonStructure([
+            'data' => [
+                'tag' => [
+                    'products' => [
+                        ['id', 'title', 'short_description']
+                    ]
+                ]
+            ]
+        ]);
     }
-
 }
