@@ -13,37 +13,41 @@ class TestFilterProducts extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        // $this->availableCount = 11;
-
-        // factory(Product::class, $this->availableCount)->create()->each(function ($product) {
-        //     $product->status = 'IN_STOCK';
-        //     $product->title = 'Coffee pod';
-        //     $product->published = 1;
-        //     $product->save();
-        // });
-
-        // factory(Product::class, $this->availableCount + 10)->create()->each(function ($product) {
-        //     $product->status = 'OUT_OF_STOCK';
-        //     $product->save();
-        // });
+        $this->availableCount = 11;
 
 
-        // factory(Tag::class, 20)->create()->each(function ($tag) {
-        //     $tag->save();
-        // });
+        factory(Tag::class, $this->availableCount)->create()->each(function ($tag) {
+            $tag->save();
+        });
 
+
+        factory(Product::class, $this->availableCount)->create()->each(function ($product) {
+            $product->status = 'IN_STOCK';
+            $product->title = 'Coffee pod';
+            $product->published = 1;
+            $product->save();
+        });
+
+        factory(Product::class, $this->availableCount + 10)->create()->each(function ($product) {
+            $product->status = 'OUT_OF_STOCK';
+            $product->save();
+        });
     }
 
-    public function testUserShouldBeAbleToFilterProductsByTag(): void
+    public function testQueryTagAndRetrieveProducts(): void
     {
 
-        $tag = factory(Tag::class)->create();
-        $tag->save();
+        $tag = Tag::find(1);
 
-        $product = factory(Product::class)->create();
-        $product->save();
+        $product1 = Product::find(1);
+        $product2 = Product::find(2);
+        $product3 = Product::find(3);
 
-        $product->tag($tag);
+        
+        $product1->tag($tag);
+        $product2->tag($tag);
+        $product3->tag($tag);
+
 
         $response = $this->graphQL('
                 query {
@@ -63,9 +67,9 @@ class TestFilterProducts extends TestCase
 
         print json_encode($result);
 
-        $this->assertCount(3, $result['data']['tag']['products'][0]);
+        $this->assertCount(3, $result['data']['tag']['products']);
 
-        $this->assertTrue($product->tags->contains('id', $tag->id));
+        $this->assertTrue($product1->tags->contains('id', $tag->id));
 
         $response->assertJsonStructure([
             'data' => [
@@ -78,32 +82,25 @@ class TestFilterProducts extends TestCase
         ]);
     }
 
-    
-    public function testUserShouldBeAbleToFilterForTaggable(): void
+    public function testQueryProductAndRetrieveTags(): void
     {
-        $creatQuantity = 10;
-
-        factory(Tag::class, $creatQuantity)->create()->each(function ($tag) {
-            $tag->save();
-        });
-
-        factory(Product::class, $creatQuantity)->create()->each(function ($product) {
-            $product->tag(1);
-            $product->save();
-        });
-
 
         $product = Product::find(1);
-        $tag = Tag::find(1);
 
+        $tag1 = Tag::find(1);
+        $tag2 = Tag::find(2);
+        $tag3 = Tag::find(3);
+
+        $product->tag($tag1);
+        $product->tag($tag2);
+        $product->tag($tag3);
 
         $response = $this->graphQL('
                 query {
-                    tag(id: 1) {
-                        products {
+                    product(id: 1) {
+                        tags {
                             id
-                            title
-                            short_description
+                            name
                         }
                     }
                 }
@@ -115,15 +112,15 @@ class TestFilterProducts extends TestCase
 
         print json_encode($result);
 
-        $this->assertCount($creatQuantity, $result['data']['tag']['products']);
+        $this->assertCount(3, $result['data']['product']['tags']);
 
-        $this->assertTrue($product->tags->contains('id', $tag->id));
+        $this->assertTrue($product->tags->contains('id', $tag1->id));
 
         $response->assertJsonStructure([
             'data' => [
-                'tag' => [
-                    'products' => [
-                            ['id', 'title', 'short_description']
+                'product' => [
+                    'tags' => [
+                        ['id', 'name']
                     ]
                 ]
             ]
