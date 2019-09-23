@@ -7,9 +7,6 @@ extend type Query {
             builder: "Lab19\\Cart\\GraphQL\\Builders\\ProductsBuilder@search"
         )
     product(id: ID @eq): Product @find(model: "Lab19\\Cart\\Models\\Product")
-
-    tags: [Tag!]! @all(model: "Lab19\\Cart\\Models\\Tag")
-    tag(id: Int! @eq): Tag @find(model: "Lab19\\Cart\\Models\\Tag")
 }
 
 input ProductsQueryInput {
@@ -54,12 +51,6 @@ type ProductWeight {
 type ProductCategory {
     id: Int!
     title: String!
-}
-
-type Tag {
-    id: ID!
-    name: String
-    products: [Product!]! @hasMany
 }
 
 extend type Mutation {

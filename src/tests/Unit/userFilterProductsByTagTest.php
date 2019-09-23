@@ -126,4 +126,52 @@ class TestFilterProducts extends TestCase
             ]
         ]);
     }
+
+    public function testQueryTagAndRetrieveProductsWithPagination(): void
+    {
+
+        $tag = Tag::find(1);
+
+        $product1 = Product::find(1);
+        $product2 = Product::find(2);
+        $product3 = Product::find(3);
+
+        
+        $product1->tag($tag);
+        $product2->tag($tag);
+        $product3->tag($tag);
+
+
+        $response = $this->graphQL('
+                query {
+                    tag(id: 1) {
+                        products {
+                            id
+                            title
+                            short_description
+                        }
+                    }
+                }
+            ');
+
+        $response->assertDontSee('errors');
+
+        $result = $response->decodeResponseJson();
+
+        print json_encode($result);
+
+        $this->assertCount(3, $result['data']['tag']['products']);
+
+        $this->assertTrue($product1->tags->contains('id', $tag->id));
+
+        $response->assertJsonStructure([
+            'data' => [
+                'tag' => [
+                    'products' => [
+                        ['id', 'title', 'short_description']
+                    ]
+                ]
+            ]
+        ]);
+    }
 }
