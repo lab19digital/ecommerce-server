@@ -6,5 +6,5 @@ extend type Query {
 type Tag {
     id: ID!
     name: String
-    products: [Product!]! @hasMany
+    products: [Product!]! @hasMany(type: "paginator")
 }
