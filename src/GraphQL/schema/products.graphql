@@ -33,7 +33,7 @@ type Product {
     dimensions: ProductDimensions
     weight: ProductWeight
     images: [Image!]
-    tags: [Tag!]! @hasMany
+    tags: [Tag!] @hasMany
 }
 
 type ProductDimensions {
