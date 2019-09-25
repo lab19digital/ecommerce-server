@@ -152,4 +152,40 @@ class TestFilterProducts extends TestCase
             ]
         ]);
     }
+
+    public function testQueryProductsEloguent(): void
+    {
+
+        factory(Product::class, 100)->create()->each(function ($product) {
+            $product->addTag(1);
+            $product->save();
+        });
+
+        $product = Product::find(1);
+        $product->addTag(1);
+        $product->addTag(2);
+        $product->addTag(3);
+
+        $tags = $product->tags;
+
+
+        $this->assertNotEmpty($tags);
+        print json_encode($tags);
+    }
+
+    public function testQueryTagsEloguent(): void
+    {
+
+        factory(Product::class, 100)->create()->each(function ($product) {
+            $product->addTag(1);
+            $product->save();
+        });
+
+        $tag = Tag::find(1);
+
+        $result = $tag->products;
+
+        $this->assertNotEmpty($result);
+        print json_encode($result);
+    }
 }
