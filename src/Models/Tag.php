@@ -52,7 +52,7 @@
          * @var $query
          */
         public function products(){
-            return $this->morphedByMany(Product::class, 'taggable')->withTimestamps();
+            return $this->morphedByMany(Product::class, 'taggable','cart_taggables')->withTimestamps();
         }
 
     }

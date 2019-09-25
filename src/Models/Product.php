@@ -163,7 +163,7 @@
          * @var $query
          */
         public function tags(){
-            return $this->morphToMany(Tag::class, 'taggable')->withTimestamps();
+            return $this->morphToMany(Tag::class, 'taggable','cart_taggables')->withTimestamps();
         }
 
         /**

@@ -13,7 +13,7 @@ class CreateCartTaggablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('taggables', function (Blueprint $table) {
+        Schema::create('cart_taggables', function (Blueprint $table) {
             $table->primary(['tag_id', 'taggable_id', 'taggable_type']); //This is to avoid duplicate  relationships
 
             $table->unsignedInteger('tag_id');
