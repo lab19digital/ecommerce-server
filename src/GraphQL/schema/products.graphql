@@ -7,6 +7,13 @@ extend type Query {
             builder: "Lab19\\Cart\\GraphQL\\Builders\\ProductsBuilder@search"
         )
     product(id: ID @eq): Product @find(model: "Lab19\\Cart\\Models\\Product")
+
+    productsByTag(tag: Int!): [Product!]!
+        @paginate(
+            type: "paginator",
+            model: "Lab19\\Cart\\Models\\Product",
+            builder: "Lab19\\Cart\\GraphQL\\Builders\\ProductsBuilder@search"
+        )
 }
 
 input ProductsQueryInput {
