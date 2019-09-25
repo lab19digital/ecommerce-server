@@ -171,7 +171,7 @@
          *
          * @var $query
          */
-        public function tag($tag){
+        public function addTag($tag){
             return $this->tags()->attach($tag);
         }
 

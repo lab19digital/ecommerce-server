@@ -38,7 +38,7 @@ class TestFilterProducts extends TestCase
     {
 
         factory(Product::class, 100)->create()->each(function ($product) {
-            $product->tag(1);
+            $product->addTag(1);
             $product->save();
         });
 
@@ -91,9 +91,9 @@ class TestFilterProducts extends TestCase
         $tag2 = Tag::find(2);
         $tag3 = Tag::find(3);
 
-        $product->tag($tag1);
-        $product->tag($tag2);
-        $product->tag($tag3);
+        $product->addTag($tag1);
+        $product->addTag($tag2);
+        $product->addTag($tag3);
 
         $response = $this->graphQL('
                 query {
