@@ -94,6 +94,9 @@ class TestFilterProducts extends TestCase
             productsByTags(count:10, page:1, tags: [1,2,3,4,5]) {
                 data {
                     id
+                    title
+                    short_description
+                    status
                 }
                 paginatorInfo {
                     currentPage
@@ -115,7 +118,7 @@ class TestFilterProducts extends TestCase
             'data' => [
                 'productsByTags' => [
                     'data' => [
-                        ['id']
+                        ['id','title','short_description','status']
                     ]
                 ]
             ]
