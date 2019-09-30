@@ -34,7 +34,7 @@ class ProductsBuilder
         return $query;
     }
 
-
+    //TODO: Could merge productsByTag with productsByTags, as the only difference is parameter type. E.g array or int
     public function productsByTags($root, array $args, $context, ResolveInfo $resolveInfo)
     {
 
