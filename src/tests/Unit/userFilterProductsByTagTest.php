@@ -34,6 +34,94 @@ class TestFilterProducts extends TestCase
         });
     }
 
+
+    public function testProductsByTag(): void
+    {
+
+        factory(Product::class, 4)->create()->each(function ($product) {
+            $product->addTag(1);
+            $product->save();
+        });
+
+
+        $response = $this->graphQL('
+        query {
+            productsByTag(count:10, page:1, tag: 1) {
+                data {
+                    id
+                    title
+                    short_description
+                    status
+                }
+                paginatorInfo {
+                    currentPage
+                    lastPage
+                }
+            }
+        }
+        ');
+
+        $response->assertDontSee('errors');
+
+        $result = $response->decodeResponseJson();
+
+        print json_encode($result);
+
+        $this->assertCount(4, $result['data']['productsByTag']['data']);
+
+        $response->assertJsonStructure([
+            'data' => [
+                'productsByTag' => [
+                    'data' => [
+                        ['id','title','short_description','status']
+                    ]
+                ]
+            ]
+        ]);
+    }
+
+    public function testProductsByMultipleTags(): void
+    {
+
+        factory(Product::class, 5)->create()->each(function ($product) {
+            $product->addTag(rand(1,5));
+            $product->save();
+        });
+
+
+        $response = $this->graphQL('
+        query {
+            productsByTags(count:10, page:1, tags: [1,2,3,4,5]) {
+                data {
+                    id
+                }
+                paginatorInfo {
+                    currentPage
+                    lastPage
+                }
+            }
+        }
+        ');
+
+        $response->assertDontSee('errors');
+
+        $result = $response->decodeResponseJson();
+
+        print json_encode($result);
+
+        $this->assertCount(5, $result['data']['productsByTags']['data']);
+
+        $response->assertJsonStructure([
+            'data' => [
+                'productsByTags' => [
+                    'data' => [
+                        ['id']
+                    ]
+                ]
+            ]
+        ]);
+    }
+
     public function testQueryTagAndRetrieveProducts(): void
     {
 
