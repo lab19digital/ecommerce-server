@@ -8,7 +8,7 @@ Gernzy server is a php library for ecommerce.
 * composer update
 * npm install
 
-## Notes for auto linting and styling
+## Notes for code checking
 
 When commiting, php-cs-fixer will automatically lint and standardize the files that you comit.
 * https://github.com/okonet/lint-staged
