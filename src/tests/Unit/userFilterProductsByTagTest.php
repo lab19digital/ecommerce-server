@@ -3,6 +3,11 @@
 use Lab19\Cart\Testing\TestCase;
 use Lab19\Cart\Models\Product;
 use Lab19\Cart\Models\Tag;
+
+mclmclkmzlvmlzcvkm
+dcnsdvkl
+34u034ti34
+
 /**
  * @group Products
  */
