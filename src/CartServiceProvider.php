@@ -12,9 +12,9 @@ use Lab19\Cart\Services\OrderService;
 use Lab19\Cart\Services\CartService;
 use Lab19\Cart\AuthServiceProvider;
 
-use Lab19\Cart\AuthServiceProvider;
-use Lab19\Cart\AuthServiceProvider;
-use Lab19\Cart\AuthServiceProvider;
+                use Lab19\Cart\dfvdfb;
+                use Lab19\Cart\dbdbdb;
+                use Lab19\Cart\dbdfb;
 
 class CartServiceProvider extends ServiceProvider
 {
