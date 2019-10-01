@@ -1,19 +1,16 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
+    ->exclude('somedir')
+    ->notPath('src/Symfony/Component/Translation/Tests/fixtures/resources.php')
     ->in(__DIR__)
-    ->exclude(['bootstrap', 'storage', 'vendor'])
-    ->name('*.php')
-    ->name('_ide_helper')
-    ->notName('*.blade.php')
-    ->ignoreDotFiles(true)
-    ->ignoreVCS(true);
+;
 
 return PhpCsFixer\Config::create()
     ->setRules([
         '@PSR2' => true,
+        'strict_param' => true,
         'array_syntax' => ['syntax' => 'short'],
-        'ordered_imports' => ['sortAlgorithm' => 'alpha'],
-        'no_unused_imports' => true,
     ])
-    ->setFinder($finder);
+    ->setFinder($finder)
+;

@@ -3,7 +3,8 @@
 use Lab19\Cart\Testing\TestCase;
 use Lab19\Cart\Models\Product;
 use Lab19\Cart\Models\Tag;
-                    use Lab19\Cart\Models\Blah;
+                    
+    use Lab19\Cart\Models\Blah;
 
 /**
  * @group Products
