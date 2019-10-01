@@ -5,8 +5,8 @@
 Gernzy server is a php library for ecommerce.
 
 ## Usage
-* composer update
-* npm install
+* `composer update`
+* `npm install`
 
 ## Notes for code checking
 
