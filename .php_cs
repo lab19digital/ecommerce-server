@@ -1,5 +1,4 @@
 <?php
-dofvdflvmp
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
