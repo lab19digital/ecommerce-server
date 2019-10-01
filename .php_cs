@@ -1,7 +1,7 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->in('./src')
+    ->in(__DIR__)
     ->exclude(['bootstrap', 'storage', 'vendor'])
     ->name('*.php')
     ->name('_ide_helper')
