@@ -16,9 +16,9 @@ class TestFilterProducts extends TestCase
         $this->availableCount = 11;
 
 
-        factory(Tag::class, $this->availableCount)->create()->each(function ($tag) {
-            $tag->save();
-        });
+                                                                                                                                                                                                                                                        factory(Tag::class, $this->availableCount)->create()->each(function ($tag) {
+                                                                                                                                                                                                                                                            $tag->save();
+                                                                                                                                                                                                                                                        });
 
 
         factory(Product::class, $this->availableCount)->create()->each(function ($product) {
