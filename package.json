@@ -33,7 +33,7 @@
       "git add"
     ],
     "*.php": [
-      "./vendor/bin/phpcs --standard=PSR2",
+      "./vendor/bin/phpcs --standard=PSR2 ./src",
       "git add"
     ]
   },
