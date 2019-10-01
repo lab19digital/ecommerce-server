@@ -33,7 +33,7 @@
       "git add"
     ],
     "*.php": [
-      "php ./vendor/bin/php-cs-fixer fix /src --rules=-@PSR2,-blank_line_before_statement,strict_comparison",
+      "php ./vendor/bin/php-cs-fixer fix fix ./src --rules=@PSR2",
       "git add"
     ]
   },
