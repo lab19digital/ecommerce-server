@@ -10,10 +10,11 @@ Gernzy server is a php library for ecommerce.
 
 ## Notes for code checking
 
-When commiting, php-cs-fixer will automatically lint and standardize the files that you comit.
-* https://github.com/okonet/lint-staged
-* https://github.com/typicode/husky
-* https://github.com/FriendsOfPHP/PHP-CS-Fixer
+The files you commit will be standardized on commit.
+* [https://github.com/okonet/lint-staged]
+* [https://github.com/typicode/husky]
+* [https://github.com/FriendsOfPHP/PHP-CS-Fixer]
+* [https://prettier.io/docs/en/install.html]
 
 ## Contributing
 TBC
