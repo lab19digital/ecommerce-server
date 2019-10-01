@@ -16,6 +16,8 @@ use Lab19\Cart\AuthServiceProvider;
                 use Lab19\Cart\dbdbdb;
                 use Lab19\Cart\dbdfb;
 
+                sdmsdanvosdnvosdnvosdkvkldv
+
 class CartServiceProvider extends ServiceProvider
 {
     /**
