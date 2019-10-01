@@ -16,9 +16,9 @@ class TestFilterProducts extends TestCase
         $this->availableCount = 11;
 
 
-                                                                                                                                                                                                                                                        factory(Tag::class, $this->availableCount)->create()->each(function ($tag) {
-                                                                                                                                                                                                                                                            $tag->save();
-                                                                                                                                                                                                                                                        });
+        factory(Tag::class, $this->availableCount)->create()->each(function ($tag) {
+            $tag->save();
+        });
 
 
         factory(Product::class, $this->availableCount)->create()->each(function ($product) {
@@ -71,7 +71,7 @@ class TestFilterProducts extends TestCase
             'data' => [
                 'productsByTag' => [
                     'data' => [
-                        ['id','title','short_description','status']
+                        ['id', 'title', 'short_description', 'status']
                     ]
                 ]
             ]
@@ -82,7 +82,7 @@ class TestFilterProducts extends TestCase
     {
 
         factory(Product::class, 5)->create()->each(function ($product) {
-            $product->addTag(rand(1,5));
+            $product->addTag(rand(1, 5));
             $product->save();
         });
 
@@ -114,7 +114,7 @@ class TestFilterProducts extends TestCase
             'data' => [
                 'productsByTags' => [
                     'data' => [
-                        ['id','title','short_description','status']
+                        ['id', 'title', 'short_description', 'status']
                     ]
                 ]
             ]
