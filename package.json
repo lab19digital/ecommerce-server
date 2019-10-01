@@ -33,7 +33,7 @@
       "git add"
     ],
     "*.php": [
-      "php ./vendor/bin/php-cs-fixer fix fix ./src --rules=@PSR2",
+      "php ./vendor/bin/php-cs-fixer fix --config .php_cs",
       "git add"
     ]
   },

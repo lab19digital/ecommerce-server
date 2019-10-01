@@ -16,6 +16,9 @@ return PhpCsFixer\Config::create()
         'ordered_imports' => ['sortAlgorithm' => 'alpha'],
         'no_unused_imports' => true,
         'strict_param' => true,
+        'line_ending' => true,
+        'full_opening_tag' => true,
+        'indentation_type' => true,
     ])
     ->setIndent("\t")
     ->setLineEnding("\r\n")
