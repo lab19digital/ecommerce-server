@@ -5,10 +5,10 @@ namespace Lab19\Cart\GraphQL\Mutations;
 use \App;
 use GraphQL\Type\Definition\ResolveInfo;
 use Lab19\Cart\Actions\CreateTag;
-// use Lab19\Cart\Actions\UpdateProduct;
-// use Lab19\Cart\Actions\DeleteProduct;
-// use Lab19\Cart\Actions\ProductAttachImages;
-// use Lab19\Cart\Actions\ProductSetFeaturedImage;
+// use Lab19\Cart\Actions\UpdateTag;
+// use Lab19\Cart\Actions\DeleteTag;
+// use Lab19\Cart\Actions\TagAttachImages;
+// use Lab19\Cart\Actions\TagSetFeaturedImage;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Product
