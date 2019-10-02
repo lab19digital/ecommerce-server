@@ -2,7 +2,7 @@
     use Lab19\Cart\Testing\TestCase;
 
 /**
-     * @group Products
+     * @group Tags
      */
     class TestCreateTagTest extends TestCase
     {
@@ -47,14 +47,14 @@
         public function testAdminUserCanCreateTag()
         {
             /** @var \Illuminate\Foundation\Testing\TestResponse $response */
-            $response = $this->createTag(["title" => "Coffee dripper"]);
+            $response = $this->createTag(["name" => "electronics"]);
 
             $response->assertDontSee('errors');
 
             $response->assertJsonStructure([
                 'data' => [
                     'createTag' => [
-                        'id', 'title'
+                        'id', 'name'
                     ]
                 ]
             ]);
@@ -64,7 +64,7 @@
 
         public function testAdminUserCanUpdateTag(): void
         {
-            $json = $this->createTag(["title" => "Coffee dripper"])->decodeResponseJson();
+            $json = $this->createTag(["name" => "Coffee dripper"])->decodeResponseJson();
 
             /** @var \Illuminate\Foundation\Testing\TestResponse $response */
             $response = $this->graphQLWithSession('

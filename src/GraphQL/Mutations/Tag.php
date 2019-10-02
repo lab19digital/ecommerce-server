@@ -11,7 +11,7 @@ use Lab19\Cart\Actions\CreateTag;
 // use Lab19\Cart\Actions\TagSetFeaturedImage;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class Product
+class Tag
 {
 
     /**

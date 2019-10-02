@@ -8,11 +8,9 @@ class CreateTag
 {
     public static function handle($args): Tag
     {
-        $tag = new Tag([
+        $tag = Tag::create([
             'name' => $args['name']
         ]);
-
-        $tag->save();
 
         return $tag;
     }
