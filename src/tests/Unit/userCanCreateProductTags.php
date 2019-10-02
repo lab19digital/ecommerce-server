@@ -1,78 +1,138 @@
 <?php
-
-use Lab19\Cart\Models\Product;
-use Lab19\Cart\Models\Tag;
-use Lab19\Cart\Testing\TestCase;
+    use Lab19\Cart\Testing\TestCase;
 
 /**
- * @group Products
- */
-class TestFilterProducts extends TestCase
-{
-    public function setUp(): void
+     * @group Products
+     */
+    class TestCreateTagTest extends TestCase
     {
-        parent::setUp();
-        $this->availableCount = 11;
-
-
-        factory(Tag::class, $this->availableCount)->create()->each(function ($tag) {
-            $tag->save();
-        });
-
-
-        factory(Product::class, $this->availableCount)->create()->each(function ($product) {
-            $product->status = 'IN_STOCK';
-            $product->title = 'Coffee pod';
-            $product->published = 1;
-            $product->save();
-        });
-
-        factory(Product::class, $this->availableCount + 10)->create()->each(function ($product) {
-            $product->status = 'OUT_OF_STOCK';
-            $product->save();
-        });
-    }
-
-
-    public function testOnlyAdminsCanCreateTag(): void
-    {
-        factory(Product::class, 4)->create()->each(function ($product) {
-            $product->addTag(1);
-            $product->save();
-        });
-
-
-        $response = $this->graphQL('
-        query {
-            productsByTag(count:10, page:1, tag: 1) {
-                data {
-                    id
-                    title
-                    short_description
-                    status
+        public function setUp(): void
+        {
+            parent::setUp();
+            $response = $this->graphQL('
+                mutation {
+                    logIn(input:{
+                        email:"admin@example.com",
+                        password: "password"
+                        }) {
+                        token
+                        user {
+                            name
+                            email
+                            id
+                        }
+                    }
                 }
-                paginatorInfo {
-                    currentPage
-                    lastPage
-                }
-            }
+            ');
+            $result = $response->decodeResponseJson();
+
+            // Set the global session token to use for the test
+            $this->sessionToken = $result['data']['logIn']['token'];
         }
-        ');
 
-        $response->assertDontSee('errors');
+        public function createTag($args)
+        {
+            return $this->graphQLWithSession('
+                mutation {
+                    createTag(input:{
+                        name:"' . $args['name'] . '"
+                        }) {
+                        id
+                        name
+                    }
+                }
+            ');
+        }
 
-        $result = $response->decodeResponseJson();
+        public function testAdminUserCanCreateTag()
+        {
+            /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+            $response = $this->createTag(["title" => "Coffee dripper"]);
 
-        $this->assertCount(4, $result['data']['productsByTag']['data']);
+            $response->assertDontSee('errors');
 
-        $response->assertJsonStructure([
-            'data' => [
-                'productsByTag' => [
-                    'data' => [
-                        ['id', 'title', 'short_description', 'status']
+            $response->assertJsonStructure([
+                'data' => [
+                    'createTag' => [
+                        'id', 'title'
                     ]
                 ]
-            ]
-        ]);
+            ]);
+
+            return $response->decodeResponseJson();
+        }
+
+        public function testAdminUserCanUpdateTag(): void
+        {
+            $json = $this->createTag(["title" => "Coffee dripper"])->decodeResponseJson();
+
+            /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+            $response = $this->graphQLWithSession('
+                mutation {
+                    updateProduct(id: "' . $json['data']['createTag']['id'] . '", input:{
+                        title:"Coffee Dripper x2"
+                        }) {
+                        id
+                        title
+                    }
+                }
+            ');
+
+            $result = $response->decodeResponseJson();
+
+            $response->assertDontSee('errors');
+
+            $response->assertJsonStructure([
+                'data' => [
+                    'updateProduct' => [
+                        'id', 'title'
+                    ]
+                ]
+            ]);
+
+            $response->assertDontSee('errors');
+
+            $this->assertEquals($result['data']['updateProduct']['title'], 'Coffee Dripper x2');
+        }
+
+        public function testAdminUserCanDeleteTag(): void
+        {
+            $json = $this->createTag(["title" => "Coffee dripper"])->decodeResponseJson();
+
+            /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+            $response = $this->graphQLWithSession('
+                mutation {
+                    deleteProduct(id: "' . $json['data']['createTag']['id'] . '") {
+                        success
+                    }
+                }
+            ');
+
+            $response->assertDontSee('errors');
+
+            $response->assertJsonStructure([
+                'data' => [
+                    'deleteProduct' => [
+                        'success'
+                    ]
+                ]
+            ]);
+
+            $result = $response->decodeResponseJson();
+
+            $this->assertEquals($result['data']['deleteProduct']['success'], true);
+        }
+
+        public function testAdminUserCannotDeleteNonExistentTag(): void
+        {
+            $response = $this->graphQLWithSession('
+                mutation {
+                    deleteProduct(id: 99) {
+                        success
+                    }
+                }
+            ');
+
+            $response->assertSee('errors');
+        }
     }
-}
