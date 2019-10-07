@@ -41,13 +41,4 @@ class Tag
         $result = $deleteTag->handle($args['id']);
         return ['success' => $result];
     }
-
-    public function attachImages($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {
-        $attachImage = App::make(ProductAttachImages::class);
-        $result = $attachImage->handle($args['product_id'], $args['images']);
-        return [
-            'product' => $result
-        ];
-    }
 }
