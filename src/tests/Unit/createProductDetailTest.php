@@ -748,6 +748,7 @@ class TestCreateProductDetailTest extends TestCase
             ]
         ]);
 
+        // Make sure the user now becomes a guest by loggin them out
         $this->logoutUser($this->sessionToken);
 
         $response = $this->graphQLWithSession('
