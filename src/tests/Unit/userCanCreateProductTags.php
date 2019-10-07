@@ -97,12 +97,12 @@
 
         public function testAdminUserCanDeleteTag(): void
         {
-            $json = $this->createTag(["title" => "Coffee dripper"])->decodeResponseJson();
+            $json = $this->createTag(["name" => "Coffee dripper"])->decodeResponseJson();
 
             /** @var \Illuminate\Foundation\Testing\TestResponse $response */
             $response = $this->graphQLWithSession('
                 mutation {
-                    deleteProduct(id: "' . $json['data']['createTag']['id'] . '") {
+                    deleteTag(id: "' . $json['data']['createTag']['id'] . '") {
                         success
                     }
                 }
@@ -112,7 +112,7 @@
 
             $response->assertJsonStructure([
                 'data' => [
-                    'deleteProduct' => [
+                    'deleteTag' => [
                         'success'
                     ]
                 ]
@@ -120,14 +120,14 @@
 
             $result = $response->decodeResponseJson();
 
-            $this->assertEquals($result['data']['deleteProduct']['success'], true);
+            $this->assertEquals($result['data']['deleteTag']['success'], true);
         }
 
         public function testAdminUserCannotDeleteNonExistentTag(): void
         {
             $response = $this->graphQLWithSession('
                 mutation {
-                    deleteProduct(id: 99) {
+                    deleteTag(id: 999) {
                         success
                     }
                 }

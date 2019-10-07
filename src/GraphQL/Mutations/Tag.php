@@ -5,10 +5,8 @@ namespace Lab19\Cart\GraphQL\Mutations;
 use \App;
 use GraphQL\Type\Definition\ResolveInfo;
 use Lab19\Cart\Actions\CreateTag;
+use Lab19\Cart\Actions\DeleteTag;
 use Lab19\Cart\Actions\UpdateTag;
-// use Lab19\Cart\Actions\DeleteTag;
-// use Lab19\Cart\Actions\TagAttachImages;
-// use Lab19\Cart\Actions\TagSetFeaturedImage;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Tag
@@ -39,8 +37,8 @@ class Tag
 
     public function delete($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $deleteProduct = App::make(DeleteProduct::class);
-        $result = $deleteProduct->handle($args['id']);
+        $deleteTag = App::make(DeleteTag::class);
+        $result = $deleteTag->handle($args['id']);
         return ['success' => $result];
     }
 
@@ -48,15 +46,6 @@ class Tag
     {
         $attachImage = App::make(ProductAttachImages::class);
         $result = $attachImage->handle($args['product_id'], $args['images']);
-        return [
-            'product' => $result
-        ];
-    }
-
-    public function setFeaturedImage($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {
-        $setFeaturedImage = App::make(ProductSetFeaturedImage::class);
-        $result = $setFeaturedImage->handle($args['product_id'], $args['image_id']);
         return [
             'product' => $result
         ];
