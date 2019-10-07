@@ -15,8 +15,7 @@ class TagPolicy
      */
     public function create(User $me)
     {
-        // return $me->isAdmin();
-        return true;
+        return $me->isAdmin();
     }
 
     /**
