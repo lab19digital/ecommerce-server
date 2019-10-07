@@ -5,7 +5,7 @@ namespace Lab19\Cart\GraphQL\Mutations;
 use \App;
 use GraphQL\Type\Definition\ResolveInfo;
 use Lab19\Cart\Actions\CreateTag;
-// use Lab19\Cart\Actions\UpdateTag;
+use Lab19\Cart\Actions\UpdateTag;
 // use Lab19\Cart\Actions\DeleteTag;
 // use Lab19\Cart\Actions\TagAttachImages;
 // use Lab19\Cart\Actions\TagSetFeaturedImage;
@@ -32,8 +32,8 @@ class Tag
 
     public function update($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $updateProduct = App::make(UpdateProduct::class);
-        $result = $updateProduct->handle($args['id'], $args['input']);
+        $updateTag = App::make(UpdateTag::class);
+        $result = $updateTag->handle($args['id'], $args['input']);
         return $result;
     }
 

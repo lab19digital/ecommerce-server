@@ -69,11 +69,11 @@
             /** @var \Illuminate\Foundation\Testing\TestResponse $response */
             $response = $this->graphQLWithSession('
                 mutation {
-                    updateProduct(id: "' . $json['data']['createTag']['id'] . '", input:{
-                        title:"Coffee Dripper x2"
+                    updateTag(id: "' . $json['data']['createTag']['id'] . '", input:{
+                        name:"Hardware"
                         }) {
                         id
-                        title
+                        name
                     }
                 }
             ');
@@ -84,15 +84,15 @@
 
             $response->assertJsonStructure([
                 'data' => [
-                    'updateProduct' => [
-                        'id', 'title'
+                    'updateTag' => [
+                        'id', 'name'
                     ]
                 ]
             ]);
 
             $response->assertDontSee('errors');
 
-            $this->assertEquals($result['data']['updateProduct']['title'], 'Coffee Dripper x2');
+            $this->assertEquals($result['data']['updateTag']['name'], 'Hardware');
         }
 
         public function testAdminUserCanDeleteTag(): void
