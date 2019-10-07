@@ -77,6 +77,7 @@ class TestCreateProductDetailTest extends TestCase
                         title: "1x Cappuccino"
                         }) {
                         id
+                        title
                     }
                 }
             ');
@@ -588,6 +589,11 @@ class TestCreateProductDetailTest extends TestCase
     public function testAdminUserCanCreateTagOnProduct(): void
     {
         $product = $this->createProduct()->decodeResponseJson();
+        
+        $this->assertDatabaseHas('cart_products', [
+            'title' => $product['data']['createProduct']['title'],
+        ]);
+
         $productId = $product['data']['createProduct']['id'];
 
         $response = $this->graphQLWithSession('
@@ -630,9 +636,6 @@ class TestCreateProductDetailTest extends TestCase
 
         $response->assertDontSee('errors');
 
-        print json_encode($response);
-
-
         $response->assertJsonStructure([
             'data' => ['addProductTags' => [
                 'product' => ['id', 'tags' => [
@@ -648,6 +651,10 @@ class TestCreateProductDetailTest extends TestCase
     public function testAdminUserCanCreateManyTagsOnProduct(): void
     {
         $product = $this->createProduct()->decodeResponseJson();
+
+        $this->assertDatabaseHas('cart_products', [
+            'title' => $product['data']['createProduct']['title'],
+        ]);
 
         $productId = $product['data']['createProduct']['id'];
         $tags = [];
@@ -694,8 +701,6 @@ class TestCreateProductDetailTest extends TestCase
             ');
 
         $response->assertDontSee('errors');
-
-        print json_encode($response);
 
         $response->assertJsonStructure([
             'data' => ['addProductTags' => [
