@@ -28,7 +28,3 @@ input CreateTagInput {
 input UpdateTagInput {
     name: String!
 }
-
-input DeleteTagInput {
-    success: Boolean!
-}
