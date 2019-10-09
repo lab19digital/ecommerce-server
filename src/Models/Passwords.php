@@ -23,6 +23,8 @@
         protected $fillable = [
             'email',
             'token',
+            'password',
+            'password_confirmation',
             'created_at'
         ];
 

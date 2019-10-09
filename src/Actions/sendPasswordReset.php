@@ -20,7 +20,7 @@ class SendPasswordReset
 
         Passwords::create([
             'email' => $user->email,
-            'token' => $token,
+            'token' => Hash::make($token),
             'created_at' => Carbon::now(),
         ]);
 

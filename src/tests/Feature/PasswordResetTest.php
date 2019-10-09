@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Lab19\Cart\Models\Passwords;
 use Lab19\Cart\Models\User;
@@ -14,6 +15,7 @@ use Notification;
 class PasswordResetTest extends TestCase
 {
     use WithFaker;
+    const USER_ORIGINAL_PASSWORD = 'secret';
 
     public function setUp(): void
     {
@@ -37,7 +39,7 @@ class PasswordResetTest extends TestCase
 
         Passwords::create([
             'email' => $user->email,
-            'token' => $token,
+            'token' => Hash::make($token),
             'created_at' => Carbon::now(),
         ]);
 
@@ -57,7 +59,7 @@ class PasswordResetTest extends TestCase
                 // retrive the mail content
                 $mailData = $notification->toMail($user)->toArray();
                 print $mailData['actionUrl'];
-                $this->assertEquals(route('password.reset.token', ['token' => $notification->getToken()]), $mailData['actionUrl']);
+                $this->assertEquals(route('password.reset', ['token' => $notification->getToken()]), $mailData['actionUrl']);
                 return $token == $notification->getToken();
             }
         );
@@ -112,50 +114,40 @@ class PasswordResetTest extends TestCase
 
 
     /**
-     * A basic feature test example.
-     *
-     * @return void
+     * Testing submitting the password reset page.
      */
-    public function testResetEmailAndTokenNotificationGraphQlPasswordMatch()
+    public function testSubmitPasswordReset()
     {
-        // Create user
         $user = factory(User::class)->create([
-            'password' => bcrypt('secret'),
+            'password' => bcrypt(self::USER_ORIGINAL_PASSWORD)
         ]);
 
-        
-        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
-        $response = $this->graphQLWithSession('
-        mutation {
-            resetUserPassword(email: "' . $user->email . '") {
-                success
-            }
-        }
-        ');
+        $token = Password::broker()->createToken($user);
 
-        $result = $response->decodeResponseJson();
-
-        $response->assertDontSee('errors');
-
-        $response->assertJsonStructure([
-            'data' => [
-                'resetUserPassword' => [
-                    'success'
-                ]
-            ]
+        Passwords::create([
+            'email' => $user->email,
+            'token' => Hash::make($token),
+            'created_at' => Carbon::now(),
         ]);
 
-        $result = $response->decodeResponseJson();
+        $password = str_random();
 
-        $this->assertEquals($result['data']['resetUserPassword']['success'], true);
+        $this
+            ->post(route('password.reset'), [
+                'token' => $token,
+                'email' => $user->email,
+                'password' => $password,
+                'password_confirmation' => $password,
+            ])
+            ->assertSuccessful();
 
-        $this->assertDatabaseHas('cart_password_resets', [
-            'email' => $user->email
-        ]);
-        
-        Notification::assertSentTo(
-            $user,
-            GernzyResetPassword::class
-        );
+        $user->refresh();
+
+        $this->assertFalse(Hash::check(
+            self::USER_ORIGINAL_PASSWORD,
+            $user->password
+        ));
+
+        $this->assertTrue(Hash::check($password, $user->password));
     }
 }

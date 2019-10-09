@@ -73,6 +73,6 @@ class CartServiceProvider extends ServiceProvider
             __DIR__.'/config/mail.php' => config_path('mail.php'),
         ]);
 
-        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/Http/routes/web.php');
     }
 }
