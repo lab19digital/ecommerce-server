@@ -8,6 +8,7 @@ use Lab19\Cart\Actions\CreateUser;
 use Lab19\Cart\Actions\DeleteUser;
 use Lab19\Cart\Actions\DemoteUser;
 use Lab19\Cart\Actions\ElevateUser;
+use Lab19\Cart\Actions\ResetPassword;
 use Lab19\Cart\Actions\SendPasswordReset;
 use Lab19\Cart\Actions\UpdateUser;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -60,10 +61,17 @@ class User
         return $result;
     }
 
-    public function resetPassword($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    public function resetPasswordLink($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $sendPasswordReset = App::make(SendPasswordReset::class);
         $result = $sendPasswordReset->handle($args['email']);
+        return ['success' => $result];
+    }
+
+    public function resetPassword($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        $passwordReset = App::make(ResetPassword::class);
+        $result = $passwordReset->handle($args['input']);
         return ['success' => $result];
     }
 }

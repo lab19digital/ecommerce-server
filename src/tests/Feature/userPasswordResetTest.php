@@ -111,34 +111,51 @@ class PasswordResetTest extends TestCase
     }
 
 
-
     /**
-     * Testing submitting the password reset page.
+     * A basic feature test example.
+     *
+     * @return void
      */
-    public function testSubmitPasswordReset()
+    public function testResetPasswordGraphQl()
     {
-        $user = factory(User::class)->create([
-            'password' => bcrypt(self::USER_ORIGINAL_PASSWORD)
-        ]);
-
+        // Create user
+        $user = factory(User::class)->create();
         $token = Password::broker()->createToken($user);
-
+        $password = str_random();
         PasswordResets::create([
             'email' => $user->email,
             'token' => Hash::make($token),
             'created_at' => Carbon::now(),
         ]);
 
-        $password = str_random();
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        mutation {
+            resetPassword(input:{ 
+                token: "' . $token . '",
+                password: "' . $password . '"
+                password_confirmation: "' . $password . '"
+                }) {
+                success
+            }
+        }
+        ');
 
-        $this
-            ->post(route('password.reset'), [
-                'token' => $token,
-                'email' => $user->email,
-                'password' => $password,
-                'password_confirmation' => $password,
-            ])
-            ->assertSuccessful();
+        $result = $response->decodeResponseJson();
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'resetPassword' => [
+                    'success'
+                ]
+            ]
+        ]);
+
+        $result = $response->decodeResponseJson();
+
+        $this->assertEquals($result['data']['resetPassword']['success'], true);
 
         $user->refresh();
 
@@ -148,5 +165,9 @@ class PasswordResetTest extends TestCase
         ));
 
         $this->assertTrue(Hash::check($password, $user->password));
+
+        // $this->assertDatabaseHas('cart_password_resets', [
+        //     'email' => $user->email
+        // ]);
     }
 }
