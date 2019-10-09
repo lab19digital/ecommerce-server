@@ -78,7 +78,7 @@ class PasswordResetTest extends TestCase
         /** @var \Illuminate\Foundation\Testing\TestResponse $response */
         $response = $this->graphQLWithSession('
         mutation {
-            resetUserPassword(email: "' . $user->email . '") {
+            resetUserPasswordLink(email: "' . $user->email . '") {
                 success
             }
         }
@@ -90,7 +90,7 @@ class PasswordResetTest extends TestCase
 
         $response->assertJsonStructure([
             'data' => [
-                'resetUserPassword' => [
+                'resetUserPasswordLink' => [
                     'success'
                 ]
             ]
@@ -98,7 +98,7 @@ class PasswordResetTest extends TestCase
 
         $result = $response->decodeResponseJson();
 
-        $this->assertEquals($result['data']['resetUserPassword']['success'], true);
+        $this->assertEquals($result['data']['resetUserPasswordLink']['success'], true);
 
         $this->assertDatabaseHas('cart_password_resets', [
             'email' => $user->email
