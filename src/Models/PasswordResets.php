@@ -4,7 +4,7 @@
 
     use Illuminate\Database\Eloquent\Model;
 
-    class Passwords extends Model
+    class PasswordResets extends Model
     {
         public $timestamps = false;
 

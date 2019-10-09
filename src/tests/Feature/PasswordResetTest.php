@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Lab19\Cart\Models\Passwords;
+use Lab19\Cart\Models\PasswordResets;
 use Lab19\Cart\Models\User;
 use Lab19\Cart\Notifications\GernzyResetPassword;
 use Lab19\Cart\Testing\TestCase;
@@ -36,17 +36,17 @@ class PasswordResetTest extends TestCase
 
         // $user = User::where('email', request()->input('email'))->first();
         $token = Password::broker()->createToken($user);
-
-        Passwords::create([
+        $tokenHash = Hash::make($token);
+        PasswordResets::create([
             'email' => $user->email,
-            'token' => Hash::make($token),
+            'token' => $tokenHash,
             'created_at' => Carbon::now(),
         ]);
 
 
         $this->assertDatabaseHas('cart_password_resets', [
             'email' => $user->email,
-            'token' => $token,
+            'token' => $tokenHash,
         ]);
 
 
@@ -58,8 +58,7 @@ class PasswordResetTest extends TestCase
             function ($notification, $channels) use ($token, $user) {
                 // retrive the mail content
                 $mailData = $notification->toMail($user)->toArray();
-                print $mailData['actionUrl'];
-                $this->assertEquals(route('password.reset', ['token' => $notification->getToken()]), $mailData['actionUrl']);
+                $this->assertEquals(route('password.reset.token', ['token' => $notification->getToken()]), $mailData['actionUrl']);
                 return $token == $notification->getToken();
             }
         );
@@ -124,7 +123,7 @@ class PasswordResetTest extends TestCase
 
         $token = Password::broker()->createToken($user);
 
-        Passwords::create([
+        PasswordResets::create([
             'email' => $user->email,
             'token' => Hash::make($token),
             'created_at' => Carbon::now(),
