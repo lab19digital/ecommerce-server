@@ -239,4 +239,52 @@ class PasswordResetTest extends TestCase
             'email' => $user->email
         ]);
     }
+
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function testResetPasswordGraphQlTokenExpired()
+    {
+        // Create user
+        $user = factory(User::class)->create();
+        $token = Password::broker()->createToken($user);
+        $password = str_random();
+
+        PasswordResets::create([
+            'email' => $user->email,
+            'token' => Hash::make($token),
+            'created_at' => Carbon::now()->addHours(random_int(25, 1000)),
+        ]);
+
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        mutation {
+            resetPassword(input:{ 
+                email: "' . $user->email . '",
+                token: "' . $token . '",
+                password: "' . $password . '"
+                password_confirmation: "' . $password . '"
+                }) {
+                success
+            }
+        }
+        ');
+
+        $result = $response->decodeResponseJson();
+
+        $response->assertSee('errors');
+
+        $this->assertEquals($result['errors'][0]['message'], 'Token expired');
+
+        $user->refresh();
+
+        $this->assertFalse(Hash::check($password, $user->password));
+
+        $this->assertDatabaseMissing('cart_password_resets', [
+            'email' => $user->email
+        ]);
+    }
 }
