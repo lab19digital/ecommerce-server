@@ -122,11 +122,11 @@ class PasswordResetTest extends TestCase
         $user = factory(User::class)->create();
         $token = Password::broker()->createToken($user);
         $password = str_random();
-        
+
         PasswordResets::create([
             'email' => $user->email,
             'token' => Hash::make($token),
-            'created_at' => Carbon::now(),
+            'created_at' => Carbon::now()->addHours(random_int(0, 24)),
         ]);
 
         /** @var \Illuminate\Foundation\Testing\TestResponse $response */
