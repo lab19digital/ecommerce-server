@@ -35,18 +35,16 @@ class ResetPassword
         }
 
         // Check the record and compare the token from the args to the one in the table and return email, then delete the record
-        if (Hash::check($args['token'], $resetRecord->token)) {
-            $email = $resetRecord->email;
+        if (!Hash::check($args['token'], $resetRecord->token)) {
+            throw new GernzyException(
+                'Token mismatch',
+                'The token does not match our records, please resubmit a password reset request.'
+            );
             $resetRecord->delete();
         }
 
-        // Check that email exists
-        if (empty($email)) {
-            return false;
-        }
-
         // Update the User's record with the new ID
-        $user = User::where('email', $email)->firstOrFail();
+        $user = User::where('email', $resetRecord->email)->firstOrFail();
         $user->password = Hash::make($args['password']);
         $user->setRememberToken(Str::random(60));
         $user->save();
