@@ -13,7 +13,7 @@ class ResetPassword
 {
     public static function handle($args): User
     {
-        // Get the records from the cart_password_resets table and compute the difference in time to see if token has expired
+        // Check if the reset record exists in the db
         $resetRecord =  PasswordResets::where('email', $args['email'])->first();
         if ($resetRecord === null) {
             throw new GernzyException(
@@ -25,7 +25,7 @@ class ResetPassword
         $createdAtTime = Carbon::parse($resetRecord->created_at);
         $timeDiff = $createdAtTime->diffInHours(Carbon::now());
 
-        // Check if created less than 24 hours ago
+        // Check if reset request was created less than 24 hours ago
         if ($timeDiff > 24) {
             $resetRecord->delete();
             throw new GernzyException(
@@ -36,7 +36,6 @@ class ResetPassword
 
         // Check the record and compare the token from the args to the one in the table and return email, then delete the record
         if (!Hash::check($args['token'], $resetRecord->token)) {
-            $resetRecord->delete();
             throw new GernzyException(
                 'Token mismatch',
                 'The token does not match our records, please resubmit a password reset request.'
@@ -46,11 +45,11 @@ class ResetPassword
         // Update the User's record with the new ID
         $user = User::where('email', $resetRecord->email)->first();
         if ($user === null) {
+            $resetRecord->delete();
             throw new GernzyException(
                 'The provided email does not exist.',
                 'Please resubmit a password reset request.'
             );
-            $resetRecord->delete();
         }
 
         $user->password = Hash::make($args['password']);

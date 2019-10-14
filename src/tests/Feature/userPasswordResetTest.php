@@ -70,7 +70,7 @@ class PasswordResetTest extends TestCase
      *
      * @return void
      */
-    public function testResetEmailAndTokenNotificationGraphQl()
+    public function testResetEmailLinkNotificationGraphQl()
     {
         // Create user
         $user = factory(User::class)->create();
@@ -184,6 +184,58 @@ class PasswordResetTest extends TestCase
         $this->assertTrue(Hash::check($password, $user->password));
 
         $this->assertDatabaseMissing('cart_password_resets', [
+            'email' => $user->email
+        ]);
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function testResetPasswordGraphQlWrongEmail()
+    {
+        // Create user
+        $user = factory(User::class)->create([
+            'password' => bcrypt(self::USER_ORIGINAL_PASSWORD),
+        ]);
+
+        $token = Password::broker()->createToken($user);
+        $password = str_random();
+
+        PasswordResets::create([
+            'email' => $user->email,
+            'token' => Hash::make($token),
+            'created_at' => Carbon::now()->addHours(random_int(0, 24)),
+        ]);
+
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        mutation {
+            resetPassword(input:{ 
+                email: "' . str_random() . '",
+                token: "' . $token . '",
+                password: "' . $password . '"
+                password_confirmation: "' . $password . '"
+                }) {
+                success
+            }
+        }
+        ');
+
+        $result = $response->decodeResponseJson();
+
+        $response->assertSee('errors');
+
+        $this->assertEquals($result['errors'][0]['message'], 'The provided email does not exist.');
+
+        $user->refresh();
+
+        $this->assertFalse(Hash::check($password, $user->password));
+
+        $this->assertTrue(Hash::check(self::USER_ORIGINAL_PASSWORD, $user->password));
+
+        $this->assertDatabaseHas('cart_password_resets', [
             'email' => $user->email
         ]);
     }
