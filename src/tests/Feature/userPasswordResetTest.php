@@ -122,6 +122,7 @@ class PasswordResetTest extends TestCase
         $user = factory(User::class)->create();
         $token = Password::broker()->createToken($user);
         $password = str_random();
+        
         PasswordResets::create([
             'email' => $user->email,
             'token' => Hash::make($token),
