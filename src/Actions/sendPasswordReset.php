@@ -18,16 +18,17 @@ class SendPasswordReset
             PasswordResets::where('email', '=', $email)->delete();
         }
 
-        $user = User::where('email', $email)->firstOrFail();
-        $token = Password::broker()->createToken($user);
+        $user = User::where('email', $email)->first();
+        if ($user->exists()) {
+            $token = Password::broker()->createToken($user);
+            PasswordResets::create([
+                'email' => $user->email,
+                'token' => Hash::make($token),
+                'created_at' => Carbon::now(),
+            ]);
 
-        PasswordResets::create([
-            'email' => $user->email,
-            'token' => Hash::make($token),
-            'created_at' => Carbon::now(),
-        ]);
-
-        $user->notify(new GernzyResetPassword($token));
+            $user->notify(new GernzyResetPassword($token));
+        }
 
         return $user;
     }
