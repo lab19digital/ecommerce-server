@@ -19,7 +19,7 @@ class SendPasswordReset
         }
 
         $user = User::where('email', $email)->first();
-        if ($user->exists()) {
+        if ($user !== null) {
             $token = Password::broker()->createToken($user);
             PasswordResets::create([
                 'email' => $user->email,
