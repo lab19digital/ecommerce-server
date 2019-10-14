@@ -132,6 +132,7 @@ class PasswordResetTest extends TestCase
         $response = $this->graphQLWithSession('
         mutation {
             resetPassword(input:{ 
+                email: "' . $user->email . '",
                 token: "' . $token . '",
                 password: "' . $password . '"
                 password_confirmation: "' . $password . '"
