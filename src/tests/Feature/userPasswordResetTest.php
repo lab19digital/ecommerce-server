@@ -74,6 +74,15 @@ class PasswordResetTest extends TestCase
     {
         // Create user
         $user = factory(User::class)->create();
+        $token = Password::broker()->createToken($user);
+
+        // This is to create a record in the resets table and thus should be deleted by the resetUserPasswordLink funtion
+        // it caters for multiple reset requests
+        $testResetRecord = PasswordResets::create([
+            'email' => $user->email,
+            'token' => Hash::make($token),
+            'created_at' => Carbon::now(),
+        ]);
 
         /** @var \Illuminate\Foundation\Testing\TestResponse $response */
         $response = $this->graphQLWithSession('
@@ -99,6 +108,8 @@ class PasswordResetTest extends TestCase
         $result = $response->decodeResponseJson();
 
         $this->assertEquals($result['data']['resetUserPasswordLink']['success'], true);
+
+        $this->assertNotEquals(PasswordResets::where('email', '=', $user->email)->first()->token, $testResetRecord->token);
 
         $this->assertDatabaseHas('cart_password_resets', [
             'email' => $user->email

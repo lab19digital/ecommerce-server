@@ -13,10 +13,12 @@ class SendPasswordReset
 {
     public static function handle($email): User
     {
-        // Find the user
-        $user = User::where('email', $email)->first();
+        // Delete reset record if already exists
+        if (PasswordResets::where('email', '=', $email)->exists()) {
+            PasswordResets::where('email', '=', $email)->delete();
+        }
 
-        // Generate token
+        $user = User::where('email', $email)->firstOrFail();
         $token = Password::broker()->createToken($user);
 
         PasswordResets::create([
