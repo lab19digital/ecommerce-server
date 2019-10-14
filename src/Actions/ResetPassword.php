@@ -36,11 +36,11 @@ class ResetPassword
 
         // Check the record and compare the token from the args to the one in the table and return email, then delete the record
         if (!Hash::check($args['token'], $resetRecord->token)) {
+            $resetRecord->delete();
             throw new GernzyException(
                 'Token mismatch',
                 'The token does not match our records, please resubmit a password reset request.'
             );
-            $resetRecord->delete();
         }
 
         // Update the User's record with the new ID
@@ -48,6 +48,9 @@ class ResetPassword
         $user->password = Hash::make($args['password']);
         $user->setRememberToken(Str::random(60));
         $user->save();
+
+        // Delete the reset record after the user password has been updated
+        $resetRecord->delete();
 
         return $user;
     }

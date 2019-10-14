@@ -14,6 +14,7 @@ class CreateCartPasswordResetsTable extends Migration
     public function up()
     {
         Schema::create('cart_password_resets', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('email')->index();
             $table->string('token');
             $table->timestamp('created_at')->nullable();

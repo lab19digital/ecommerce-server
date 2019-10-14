@@ -13,9 +13,11 @@ class SendPasswordReset
 {
     public static function handle($email): User
     {
+        $resetRecord = PasswordResets::where('email', '=', $email)->first();
+
         // Delete reset record if already exists
-        if (PasswordResets::where('email', '=', $email)->exists()) {
-            PasswordResets::where('email', '=', $email)->delete();
+        if ($resetRecord !== null) {
+            $resetRecord->delete();
         }
 
         $user = User::where('email', $email)->first();

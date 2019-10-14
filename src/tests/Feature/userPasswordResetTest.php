@@ -119,6 +119,10 @@ class PasswordResetTest extends TestCase
             $user,
             GernzyResetPassword::class
         );
+
+        $this->assertDatabaseMissing('cart_password_resets', [
+            'token' => $testResetRecord->token
+        ]);
     }
 
 
@@ -179,8 +183,8 @@ class PasswordResetTest extends TestCase
 
         $this->assertTrue(Hash::check($password, $user->password));
 
-        // $this->assertDatabaseHas('cart_password_resets', [
-        //     'email' => $user->email
-        // ]);
+        $this->assertDatabaseMissing('cart_password_resets', [
+            'email' => $user->email
+        ]);
     }
 }
