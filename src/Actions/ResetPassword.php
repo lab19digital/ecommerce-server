@@ -44,7 +44,15 @@ class ResetPassword
         }
 
         // Update the User's record with the new ID
-        $user = User::where('email', $resetRecord->email)->firstOrFail();
+        $user = User::where('email', $resetRecord->email)->first();
+        if ($user === null) {
+            throw new GernzyException(
+                'The provided email does not exist.',
+                'Please resubmit a password reset request.'
+            );
+            $resetRecord->delete();
+        }
+
         $user->password = Hash::make($args['password']);
         $user->setRememberToken(Str::random(60));
         $user->save();
