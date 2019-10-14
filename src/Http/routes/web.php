@@ -17,9 +17,3 @@ Route::get(
     'Lab19\Cart\Http\controllers\ResetPasswordController@index'
 )
     ->name('password.reset.token');
-
-Route::post(
-    'password/reset',
-    'Lab19\Cart\Http\controllers\ResetPasswordController@resetPassword'
-)
-    ->name('password.reset');
