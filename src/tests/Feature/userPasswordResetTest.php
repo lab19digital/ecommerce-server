@@ -125,6 +125,53 @@ class PasswordResetTest extends TestCase
         ]);
     }
 
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function testResetEmailLinkNotificationGraphQlNonExistentEmail()
+    {
+        //The endpoint is made not to return a reponse whether the submitted email actaully exists in the DB
+
+
+        // Create user
+        $user = factory(User::class)->create();
+        $token = Password::broker()->createToken($user);
+
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        mutation {
+            resetUserPasswordLink(email: "' . str_random() . '") {
+                success
+            }
+        }
+        ');
+
+        $result = $response->decodeResponseJson();
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'resetUserPasswordLink' => [
+                    'success'
+                ]
+            ]
+        ]);
+
+        $this->assertEquals($result['data']['resetUserPasswordLink']['success'], true);
+
+        $this->assertDatabaseMissing('cart_password_resets', [
+            'email' => $user->email
+        ]);
+
+        Notification::assertNotSentTo(
+            $user,
+            GernzyResetPassword::class
+        );
+    }
+
 
     /**
      * A basic feature test example.
@@ -284,6 +331,111 @@ class PasswordResetTest extends TestCase
         $this->assertFalse(Hash::check($password, $user->password));
 
         $this->assertDatabaseMissing('cart_password_resets', [
+            'email' => $user->email
+        ]);
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function testResetPasswordGraphQlPasswordMismatch()
+    {
+        // Create user
+        $user = factory(User::class)->create([
+            'password' => bcrypt(self::USER_ORIGINAL_PASSWORD),
+        ]);
+
+        $token = Password::broker()->createToken($user);
+
+        $password = str_random();
+        $password_confirmation = str_random();
+
+        PasswordResets::create([
+            'email' => $user->email,
+            'token' => Hash::make($token),
+            'created_at' => Carbon::now()->addHours(random_int(0, 24)),
+        ]);
+
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        mutation {
+            resetPassword(input:{ 
+                email: "' . $user->email . '",
+                token: "' . $token . '",
+                password: "' . $password . '"
+                password_confirmation: "' . $password_confirmation . '"
+                }) {
+                success
+            }
+        }
+        ');
+
+        $result = $response->decodeResponseJson();
+
+        $response->assertSee('errors');
+
+        $this->assertEquals($result['errors'][0]['message'], 'The provided passwords.');
+
+        $user->refresh();
+
+        $this->assertFalse(Hash::check($password, $user->password));
+
+        $this->assertDatabaseHas('cart_password_resets', [
+            'email' => $user->email
+        ]);
+    }
+
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function testResetPasswordGraphQlPasswordInvalidLength()
+    {
+        // Create user
+        $user = factory(User::class)->create([
+            'password' => bcrypt(self::USER_ORIGINAL_PASSWORD),
+        ]);
+
+        $token = Password::broker()->createToken($user);
+
+        $password = str_random(random_int(0, 7));
+        $password_confirmation = $password;
+
+        PasswordResets::create([
+            'email' => $user->email,
+            'token' => Hash::make($token),
+            'created_at' => Carbon::now()->addHours(random_int(0, 24)),
+        ]);
+
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        mutation {
+            resetPassword(input:{ 
+                email: "' . $user->email . '",
+                token: "' . $token . '",
+                password: "' . $password . '"
+                password_confirmation: "' . $password_confirmation . '"
+                }) {
+                success
+            }
+        }
+        ');
+
+        $result = $response->decodeResponseJson();
+
+        $response->assertSee('errors');
+
+        $this->assertEquals($result['errors'][0]['message'], 'The provided password is too short.');
+
+        $user->refresh();
+
+        $this->assertFalse(Hash::check($password, $user->password));
+
+        $this->assertDatabaseHas('cart_password_resets', [
             'email' => $user->email
         ]);
     }

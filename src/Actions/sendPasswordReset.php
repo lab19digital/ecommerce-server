@@ -21,16 +21,24 @@ class SendPasswordReset
         }
 
         $user = User::where('email', $email)->first();
-        if ($user !== null) {
-            $token = Password::broker()->createToken($user);
-            PasswordResets::create([
-                'email' => $user->email,
-                'token' => Hash::make($token),
-                'created_at' => Carbon::now(),
-            ]);
 
-            $user->notify(new GernzyResetPassword($token));
+        // Do not indicate that the user does not exist
+        // The empty user object is returned, because User.php requires a returned User instance.
+        // TODO:Check if the empty user return is a good pattern
+        if ($user === null) {
+            $empty = new User();
+            return $empty;
         }
+
+        $token = Password::broker()->createToken($user);
+        PasswordResets::create([
+            'email' => $user->email,
+            'token' => Hash::make($token),
+            'created_at' => Carbon::now(),
+        ]);
+
+        $user->notify(new GernzyResetPassword($token));
+
 
         return $user;
     }

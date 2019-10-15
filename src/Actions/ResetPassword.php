@@ -13,6 +13,23 @@ class ResetPassword
 {
     public static function handle($args): User
     {
+
+        // Check if the passwords match
+        if ($args['password'] !== $args['password_confirmation']) {
+            throw new GernzyException(
+                'The provided passwords.',
+                'Please resubmit passwords and make sure they match.'
+            );
+        }
+
+        // Check if the passwords have min length
+        if (strlen($args['password']) < 8) {
+            throw new GernzyException(
+                'The provided password is too short.',
+                'Please resubmit password and make sure it is a minimum of 8 characters.'
+            );
+        }
+
         // Check if the reset record exists in the db
         $resetRecord =  PasswordResets::where('email', $args['email'])->first();
         if ($resetRecord === null) {
