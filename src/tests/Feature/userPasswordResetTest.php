@@ -150,17 +150,7 @@ class PasswordResetTest extends TestCase
 
         $result = $response->decodeResponseJson();
 
-        $response->assertDontSee('errors');
-
-        $response->assertJsonStructure([
-            'data' => [
-                'resetUserPasswordLink' => [
-                    'success'
-                ]
-            ]
-        ]);
-
-        $this->assertEquals($result['data']['resetUserPasswordLink']['success'], true);
+        $response->assertSee('errors');
 
         $this->assertDatabaseMissing('cart_password_resets', [
             'email' => $user->email
