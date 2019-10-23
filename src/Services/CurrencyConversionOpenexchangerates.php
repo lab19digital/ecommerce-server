@@ -57,4 +57,14 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
     public function setCartCurrency()
     {
     }
+
+    
+    /**
+     * Convert between currency
+     *
+     * @param int
+     */
+    public function convertCurrency()
+    {
+    }
 }
