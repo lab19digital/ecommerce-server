@@ -58,7 +58,7 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
      */
     public function setRate()
     {
-        if (empty($currency) || empty($api_response)) {
+        if (isset($currency) || isset($api_response)) {
             return null;
         }
 

@@ -50,7 +50,7 @@ class CurrencyConversionTest extends TestCase
      *
      * @return void
      */
-    public function testContractImplementation()
+    public function testContractImplementationThroughController()
     {
         // Construct and pass the type of implementation.
         // In a controller it should be type hinted automatically throught the laravel service container
@@ -58,6 +58,22 @@ class CurrencyConversionTest extends TestCase
         // I'm using a factory pattern to create the object
         $currency = new ExampleObjectOrController(CurrencyConverterFactory::create('EUR', 'USD'));
         
-        dd($currency->index());
+        $this->assertTrue(null !== $currency->index() && !empty($currency->index()));
+    }
+
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function testContractImplementation()
+    {
+        // Construct and pass the type of implementation.
+        // In a controller it should be type hinted automatically throught the laravel service container
+        // as it is bound in the register method of the cart service provider
+        // I'm using a factory pattern to create the object
+        $currency = CurrencyConverterFactory::create('EUR', 'USD');
+        
+        $this->assertTrue(null !== $currency->getRate() && !empty($currency->getRate()));
     }
 }

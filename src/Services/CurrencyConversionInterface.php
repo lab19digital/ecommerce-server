@@ -30,5 +30,5 @@ interface CurrencyConversionInterface
      *
      * @param int
      */
-    public function convertCurrency();
+    public function convertCurrency($amount);
 }
