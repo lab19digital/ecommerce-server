@@ -52,6 +52,12 @@ class CartServiceProvider extends ServiceProvider
         $this->app->bind('Lab19\OrderService', OrderService::class);
         $this->app->bind('Lab19\CartService', CartService::class);
 
+        // Implement our default binding
+        $this->app->bind(
+            'Lab19\Services\CurrencyConversionInterface',
+            'Lab19\Services\CurrencyConversionOpenexchangerates'
+        );
+
         $directives = [
             'Lab19\\Cart\\GraphQL\\Directives',
         ];
@@ -67,12 +73,12 @@ class CartServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
-        
+
         // Allow developers to override mail config
         $this->publishes([
-            __DIR__.'/config/mail.php' => config_path('mail.php'),
+            __DIR__ . '/config/mail.php' => config_path('mail.php'),
         ]);
 
-        $this->loadRoutesFrom(__DIR__.'/Http/routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/Http/routes/web.php');
     }
 }

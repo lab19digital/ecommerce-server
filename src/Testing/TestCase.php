@@ -2,12 +2,13 @@
 
     namespace Lab19\Cart\Testing;
 
-    use Orchestra\Testbench\TestCase as BaseTestCase;
-    use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
+    use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
     use Illuminate\Foundation\Testing\DatabaseMigrations;
     use Illuminate\Foundation\Testing\RefreshDatabase;
-    use Lab19\Cart\Testing\Seeds\UsersSeeder;
     use Illuminate\Foundation\Testing\TestResponse;
+    use Lab19\Cart\Testing\Seeds\UsersSeeder;
+    use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
+    use Orchestra\Testbench\TestCase as BaseTestCase;
 
     abstract class TestCase extends BaseTestCase
     {
@@ -26,6 +27,10 @@
                 'database' => ':memory:',
                 'prefix'   => '',
             ]);
+
+            $app->useEnvironmentPath(__DIR__.'/..');
+            $app->bootstrapWith([LoadEnvironmentVariables::class]);
+            parent::getEnvironmentSetUp($app);
         }
 
         protected function getPackageProviders($app)
@@ -46,9 +51,10 @@
             $this->withoutExceptionHandling();
         }
 
-        public function graphQLWithSession( String $query ){
+        public function graphQLWithSession(String $query)
+        {
             /** @var \Illuminate\Foundation\Testing\TestResponse $response */
-            if( !$this->sessionToken ){
+            if (!$this->sessionToken) {
                 $response = $this->graphQL('
                     mutation {
                         createSession {
@@ -66,7 +72,8 @@
             ]);
         }
 
-        public function graphQLCreateAccountWithSession( $email = 'test@test.com', $password = 'password', $token = null ){
+        public function graphQLCreateAccountWithSession($email = 'test@test.com', $password = 'password', $token = null)
+        {
 
             /** @var \Illuminate\Foundation\Testing\TestResponse $response */
             $response = $this->postGraphQL(['query' => '
@@ -116,4 +123,3 @@
             );
         }
     }
-
