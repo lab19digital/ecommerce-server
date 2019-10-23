@@ -3,10 +3,11 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
+use Lab19\Cart\Factories\CurrencyConverterFactory;
 use Lab19\Cart\Services\CurrencyConversionInterface;
-use Lab19\Cart\Services\CurrencyConversionOpenexchangerates;
 use Lab19\Cart\Testing\TestCase;
 
+// just an example of how the controller in laravel may inject the CurrencyConverter dependency
 class ExampleObjectOrController
 {
     protected $currency;
@@ -54,7 +55,9 @@ class CurrencyConversionTest extends TestCase
         // Construct and pass the type of implementation.
         // In a controller it should be type hinted automatically throught the laravel service container
         // as it is bound in the register method of the cart service provider
-        $currency = new ExampleObjectOrController(new CurrencyConversionOpenexchangerates('EUR'));
+        // I'm using a factory pattern to create the object
+        $currency = new ExampleObjectOrController(CurrencyConverterFactory::create('EUR', 'USD'));
+        
         dd($currency->index());
     }
 }
