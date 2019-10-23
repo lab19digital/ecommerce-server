@@ -57,7 +57,7 @@ class CurrencyConversionTest extends TestCase
         // as it is bound in the register method of the cart service provider
         // I'm using a factory pattern to create the object
         $currency = new ExampleObjectOrController(CurrencyConverterFactory::create('EUR', 'USD'));
-        
+
         $this->assertTrue(null !== $currency->index() && !empty($currency->index()));
     }
 
@@ -73,7 +73,7 @@ class CurrencyConversionTest extends TestCase
         // as it is bound in the register method of the cart service provider
         // I'm using a factory pattern to create the object
         $currency = CurrencyConverterFactory::create('EUR', 'USD');
-        
-        $this->assertTrue(null !== $currency->getRate() && !empty($currency->getRate()));
+
+        $this->assertTrue(null !== $currency->convertCurrency(10) && !empty($currency->convertCurrency(10)));
     }
 }
