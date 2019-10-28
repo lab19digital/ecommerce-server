@@ -50,13 +50,20 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
     }
 
     /**
-     * Get response
+     * This function makes the api request to open exchange api. It then sets the response to
+     * the api_response object property. It reads the api token from the env file.
      *
      * @param string
      */
     public function setResponseFromOpenExhange()
     {
         $token = env('currency_api_token', '');
+
+        // Make sure the token and base currency is available
+        if (!isset($token) && !isset($this->baseCurrency)) {
+            return null;
+        }
+
         $endpoint = self::API_BASE_PATH . "latest.json?app_id=" . $token . "&base=" . $this->baseCurrency;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $endpoint);
