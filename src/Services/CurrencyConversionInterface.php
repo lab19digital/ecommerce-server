@@ -19,11 +19,19 @@ interface CurrencyConversionInterface
     public function setRate();
 
     /**
-     * Set's a currecy in the cart session object
+     * Get's a currecy in the session object
      *
      * @param int
      */
-    public function getCartCurrency();
+    public function getSessionCurrency();
+
+
+    /**
+     * Set's a currecy in the session object
+     *
+     * @param int
+     */
+    public function setSessionCurrency();
 
     /**
      * Set's a currecy in the cart session object

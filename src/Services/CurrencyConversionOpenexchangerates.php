@@ -2,6 +2,8 @@
 
 namespace Lab19\Cart\Services;
 
+use \App;
+
 class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
 {
     protected $currency;
@@ -11,14 +13,8 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
     protected $api_response;
     protected const API_BASE_PATH = "https://openexchangerates.org/api/";
 
-    /**
-     *  constructor.
-     *
-     */
-    public function __construct()
-    {
-    }
 
+    /*------------------Setters------------------*/
     /**
      * Set's the object currency
      *
@@ -27,26 +23,6 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
     public function setCurrency($currency = '')
     {
         $this->currency = $currency;
-    }
-
-    /**
-     * Set's the object base currency
-     *
-     * @param string
-     */
-    public function setBaseCurrency($baseCurrency = '')
-    {
-        $this->baseCurrency = $baseCurrency;
-    }
-
-    /**
-     * Get's a conversion rate by it's currency
-     *
-     * @param string
-     */
-    public function getRate()
-    {
-        return $this->rate;
     }
 
     /**
@@ -91,18 +67,53 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
         $this->rate = $api_response->rates->$currency;
     }
 
+
+    /**
+     * Set's the object base currency
+     *
+     * @param string
+     */
+    public function setBaseCurrency($baseCurrency = '')
+    {
+        $this->baseCurrency = $baseCurrency;
+    }
+
     /**
      * Set the cart currency
      *
      * @param int
      */
-    public function getCartCurrency()
+    public function setSessionCurrency()
     {
-        $cart = resolve('Lab19\CartService');
-        return $cart;
+        $session = App::make('Lab19\SessionService');
+        $currency = $this->currency;
+        $session->setCurrency($currency);
     }
 
+    /*------------------Getters------------------*/
 
+    /**
+     * Get's a conversion rate by it's currency
+     *
+     * @param string
+     */
+    public function getRate()
+    {
+        return $this->rate;
+    }
+
+    /**
+     * Get the cart currency
+     *
+     * @param int
+     */
+    public function getSessionCurrency()
+    {
+        $session = App::make('Lab19\SessionService');
+        return $session;
+    }
+
+    /*------------------Methods------------------*/
     /**
      * Convert between currency
      *

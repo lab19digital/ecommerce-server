@@ -80,10 +80,10 @@ class CurrencyConversionTest extends TestCase
      */
     public function testSetCartCurrency()
     {
+        $this->withoutExceptionHandling();
         $currency = CurrencyConverterFactory::create('EUR', 'USD');
 
-        dd($currency->getCartCurrency());
-
-        $this->assertTrue(null !== $currency->convertCurrency(10) && !empty($currency->convertCurrency(10)));
+        dd($currency->getSessionCurrency());
+        // $this->assertTrue(null !== $currency->convertCurrency(10) && !empty($currency->convertCurrency(10)));
     }
 }

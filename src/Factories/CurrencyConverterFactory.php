@@ -11,6 +11,7 @@ class CurrencyConverterFactory
         $currencyObject = new CurrencyConversionOpenexchangerates($currency, $base);
         $currencyObject->setCurrency($currency);
         $currencyObject->setBaseCurrency($base);
+        $currencyObject->setSessionCurrency();
         $currencyObject->setResponseFromOpenExhange();
         $currencyObject->setRate();
         return $currencyObject;
