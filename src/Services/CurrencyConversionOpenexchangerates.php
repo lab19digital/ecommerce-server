@@ -14,11 +14,28 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
     /**
      *  constructor.
      *
-     * @param CurrencyConversionInterface $currency
      */
-    public function __construct($currency, $baseCurrency)
+    public function __construct()
+    {
+    }
+
+    /**
+     * Set's the object currency
+     *
+     * @param string
+     */
+    public function setCurrency($currency = '')
     {
         $this->currency = $currency;
+    }
+
+    /**
+     * Set's the object base currency
+     *
+     * @param string
+     */
+    public function setBaseCurrency($baseCurrency = '')
+    {
         $this->baseCurrency = $baseCurrency;
     }
 
@@ -72,7 +89,7 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
      *
      * @param int
      */
-    public function setCartCurrency()
+    public function getCartCurrency()
     {
         $cart = resolve('Lab19\CartService');
         return $cart;

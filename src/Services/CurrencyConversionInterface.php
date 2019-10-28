@@ -23,7 +23,7 @@ interface CurrencyConversionInterface
      *
      * @param int
      */
-    public function setCartCurrency();
+    public function getCartCurrency();
 
     /**
      * Set's a currecy in the cart session object

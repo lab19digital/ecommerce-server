@@ -82,7 +82,7 @@ class CurrencyConversionTest extends TestCase
     {
         $currency = CurrencyConverterFactory::create('EUR', 'USD');
 
-        dd($currency->setCartCurrency());
+        dd($currency->getCartCurrency());
 
         $this->assertTrue(null !== $currency->convertCurrency(10) && !empty($currency->convertCurrency(10)));
     }
