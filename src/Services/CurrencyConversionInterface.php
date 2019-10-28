@@ -31,4 +31,18 @@ interface CurrencyConversionInterface
      * @param int
      */
     public function convertCurrency($amount);
+
+    /**
+     * Set's a currency in the object
+     *
+     * @param int
+     */
+    public function setCurrency($currency);
+
+    /**
+     * Set's the base currency in the object
+     *
+     * @param int
+     */
+    public function setBaseCurrency($baseCurrency);
 }
