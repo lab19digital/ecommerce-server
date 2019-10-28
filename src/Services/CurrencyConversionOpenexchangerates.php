@@ -74,6 +74,8 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
      */
     public function setCartCurrency()
     {
+        $cart = resolve('Lab19\CartService');
+        return $cart;
     }
 
 
