@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Lab19\Cart\Factories\CurrencyConverterFactory;
+use Lab19\Cart\Models\Product;
 use Lab19\Cart\Services\CurrencyConversionInterface;
 use Lab19\Cart\Testing\TestCase;
 
@@ -42,6 +43,57 @@ class CurrencyConversionTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->availableCount = 11;
+
+        factory(Product::class, $this->availableCount)->create();
+    }
+
+    // Helper functions
+    public function createSession()
+    {
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQL('
+                mutation {
+                    createSession {
+                        token
+                    }
+                }
+            ');
+
+        $start = $response->decodeResponseJson();
+
+        $token = $start['data']['createSession']['token'];
+
+        return $token;
+    }
+
+    public function setSessionCurency($token)
+    {
+        $response = $this->postGraphQL(['query' => '
+                mutation {
+                    setSessionCurrency(input: {
+                        currency: "EUR"
+                        baseCurrency: "USD"
+                    }){
+                        currency
+                        baseCurrency
+                        rate
+                    }
+                }
+            '], [
+            'HTTP_Authorization' => 'Bearer ' . $token
+        ]);
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'setSessionCurrency' => [
+                    'rate', 'baseCurrency', 'currency'
+                ]
+            ]
+        ]);
     }
 
 
@@ -112,6 +164,48 @@ class CurrencyConversionTest extends TestCase
             'data' => [
                 'setSessionCurrency' => [
                     'rate', 'baseCurrency', 'currency'
+                ]
+            ]
+        ]);
+    }
+
+
+    public function testGuestUserCanViewInStockProductsWithChosenCurrency(): void
+    {
+        // Create a session
+        $token = $this->createSession();
+
+        // Set the session currency
+        $this->setSessionCurency($token);
+
+
+        $response = $this->graphQL('
+            query {
+                products(count:10) {
+                    data {
+                        id
+                        title
+                        price_cents
+                        price_currency
+                    }
+                }
+            }
+        ');
+
+        $response->assertDontSee('errors');
+
+        $result = $response->decodeResponseJson();
+
+        print json_encode($result);
+
+        $this->assertTrue(!empty($result['data']['products']['data']));
+
+        $response->assertJsonStructure([
+            'data' => [
+                'products' => [
+                    'data' => [
+                        ['id', 'title'],
+                    ]
                 ]
             ]
         ]);
