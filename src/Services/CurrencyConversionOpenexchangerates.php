@@ -2,8 +2,6 @@
 
 namespace Lab19\Cart\Services;
 
-use \App;
-
 class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
 {
     protected $currency;
@@ -78,17 +76,6 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
         $this->baseCurrency = $baseCurrency;
     }
 
-    /**
-     * Set the cart currency
-     *
-     * @param int
-     */
-    public function setSessionCurrency()
-    {
-        $session = App::make('Lab19\SessionService');
-        $currency = $this->currency;
-        $session->setCurrency($currency);
-    }
 
     /*------------------Getters------------------*/
 
@@ -102,16 +89,6 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
         return $this->rate;
     }
 
-    /**
-     * Get the cart currency
-     *
-     * @param int
-     */
-    public function getSessionCurrency()
-    {
-        $session = App::make('Lab19\SessionService');
-        return $session;
-    }
 
     /*------------------Methods------------------*/
     /**

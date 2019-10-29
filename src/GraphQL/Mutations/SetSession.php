@@ -2,10 +2,10 @@
 
 namespace Lab19\Cart\GraphQL\Mutations;
 
-use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use Illuminate\Support\Str;
 use \App;
+use GraphQL\Type\Definition\ResolveInfo;
+use Lab19\Cart\Factories\CurrencyConverterFactory;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class SetSession
 {
@@ -22,7 +22,23 @@ class SetSession
     {
         $session = App::make('Lab19\SessionService');
 
-        $session->update( $args['input'] );
+        $session->update($args['input']);
+
+        return $session->get();
+    }
+
+    public function setCurrency($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        $session = App::make('Lab19\SessionService');
+
+        $currency = $args['input']['currency'];
+        $baseCurrency = $args['input']['baseCurrency'];
+
+        $currencyObject = CurrencyConverterFactory::create($currency, $baseCurrency);
+
+        $rate = $currencyObject->getRate();
+
+        $session->update(['currency' => $currency, 'baseCurrency' => $baseCurrency, 'rate' => $rate]);
 
         return $session->get();
     }

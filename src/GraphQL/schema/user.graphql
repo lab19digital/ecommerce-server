@@ -14,6 +14,11 @@ input SetSessionInput {
     products: [CartProductInput!]
 }
 
+input SetSessionCurrency {
+    currency: String
+    baseCurrency: String
+}
+
 input CartProductInput {
     id: ID!
     quantity: Int!
@@ -22,6 +27,12 @@ input CartProductInput {
 type SetSessionPayload {
     cart_uuid: String
     products: [CartProduct]
+}
+
+type SetSessionCurrencyPayload {
+    currency: String
+    baseCurrency: String
+    rate: String
 }
 
 type CartProduct {

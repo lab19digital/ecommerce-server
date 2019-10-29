@@ -73,17 +73,47 @@ class CurrencyConversionTest extends TestCase
         $this->assertTrue(null !== $currency->convertCurrency(10) && !empty($currency->convertCurrency(10)));
     }
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testSetCartCurrency()
+
+    public function testSetCartCurrencySession(): void
     {
         $this->withoutExceptionHandling();
-        $currency = CurrencyConverterFactory::create('EUR', 'USD');
 
-        dd($currency->getSessionCurrency());
-        // $this->assertTrue(null !== $currency->convertCurrency(10) && !empty($currency->convertCurrency(10)));
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQL('
+                mutation {
+                    createSession {
+                        token
+                    }
+                }
+            ');
+
+        $start = $response->decodeResponseJson();
+
+        $token = $start['data']['createSession']['token'];
+
+        $response = $this->postGraphQL(['query' => '
+                mutation {
+                    setSessionCurrency(input: {
+                        currency: "EUR"
+                        baseCurrency: "USD"
+                    }){
+                        currency
+                        baseCurrency
+                        rate
+                    }
+                }
+            '], [
+            'HTTP_Authorization' => 'Bearer ' . $token
+        ]);
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'setSessionCurrency' => [
+                    'rate', 'baseCurrency', 'currency'
+                ]
+            ]
+        ]);
     }
 }

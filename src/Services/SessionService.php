@@ -92,18 +92,6 @@ class SessionService
     }
 
 
-    /**
-     * Set the session currency
-     *
-     * @param int
-     */
-    public function setCurrency($currency)
-    {
-        $this->session->data = [
-            'currency' => $currency . ' this should be the currency'
-        ];
-    }
-
     // Getters
     public function get($key = null)
     {
