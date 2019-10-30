@@ -180,17 +180,21 @@ class CurrencyConversionTest extends TestCase
 
 
         $response = $this->graphQL('
-            query {
-                products(count:10) {
-                    data {
-                        id
-                        title
-                        price_cents
-                        price_currency
+                query {
+                    products(count:10, input: {token: "' . $token . '"} ) {
+                        data {
+                            id
+                            title
+                            price_cents
+                            price_currency
+                        }
+                        paginatorInfo {
+                            currentPage
+                            lastPage
+                        }
                     }
                 }
-            }
-        ');
+            ');
 
         $response->assertDontSee('errors');
 

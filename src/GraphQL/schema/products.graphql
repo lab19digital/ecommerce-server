@@ -1,5 +1,6 @@
 extend type Query {
     products(input: ProductsQueryInput): [Product!]!
+        @upperCase
         @paginate(
             type: "paginator"
             model: "Lab19\\Cart\\Models\\Product"
@@ -29,6 +30,7 @@ extend type Query {
 input ProductsQueryInput {
     keyword: String
     attributes: [ProductsQueryInputAttributes!]
+    token: String
 }
 
 input ProductsQueryInputAttributes {
