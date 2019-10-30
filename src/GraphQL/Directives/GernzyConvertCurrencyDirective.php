@@ -11,7 +11,7 @@ use Nuwave\Lighthouse\Support\Contracts\Directive;
 use Nuwave\Lighthouse\Support\Contracts\FieldMiddleware;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class UpperCaseDirective implements Directive, FieldMiddleware
+class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
 {
     public function __construct(SessionService $session)
     {
@@ -24,7 +24,7 @@ class UpperCaseDirective implements Directive, FieldMiddleware
      */
     public function name(): string
     {
-        return 'upperCase';
+        return 'gernzyConvertCurrency';
     }
 
     /**
