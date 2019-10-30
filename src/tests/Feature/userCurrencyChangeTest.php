@@ -110,7 +110,8 @@ class CurrencyConversionTest extends TestCase
         // I'm using a factory pattern to create the object
         $currency = new ExampleObjectOrController(CurrencyConverterFactory::create('EUR', 'USD'));
 
-        $this->assertTrue(null !== $currency->index() && !empty($currency->index()));
+        $this->assertTrue(null !== $currency->index());
+        $this->assertTrue(!empty($currency->index()));
     }
 
     /**
@@ -199,6 +200,8 @@ class CurrencyConversionTest extends TestCase
         $response->assertDontSee('errors');
 
         $result = $response->decodeResponseJson();
+
+        print json_encode($result);
 
         $this->assertTrue(!empty($result['data']['products']['data']));
 

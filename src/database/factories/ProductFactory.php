@@ -24,6 +24,6 @@ $factory->define(Product::class, function (Faker $faker) {
         'status' => $rand > 5 ? 'IN_STOCK' : 'OUT_OF_STOCK',
         'published' => $rand > 5 ? 1 : 0,
         'price_cents' => $faker->numberBetween($min = 1000, $max = 9000),
-        'price_currency' => $faker->currencyCode()
+        'price_currency' => 'USD' //$faker->currencyCode()
     ];
 });

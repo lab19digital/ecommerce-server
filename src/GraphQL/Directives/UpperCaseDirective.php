@@ -53,13 +53,18 @@ class UpperCaseDirective implements Directive, FieldMiddleware
                 return $result;
             }
 
+            $sessionBaseCurrency = $session['data']['baseCurrency']; //I initially set this through graphql session mutator
             $sessionCurrency = $session['data']['currency'];
-            $sessionBaseCurrency = $session['data']['baseCurrency'];
-
-            $currencyConverter = CurrencyConverterFactory::create($sessionCurrency, $sessionBaseCurrency);
 
             foreach ($result as $key => $value) {
-                $result[$key]['title'] = 'blah';
+                $productCurrency = $result[$key]['price_currency']; //This becomes the base to convert from
+                $productPriceCents = $result[$key]['price_cents'];
+
+                if (isset($productCurrency) && isset($productPriceCents)) {
+                    $currencyConverter = CurrencyConverterFactory::create($sessionCurrency, $productCurrency);
+                    // Set the new converted price
+                    $result[$key]['price_cents'] = $currencyConverter->convertCurrency($productPriceCents);
+                }
             }
 
             return $result;

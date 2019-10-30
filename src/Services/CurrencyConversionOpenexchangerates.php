@@ -4,12 +4,12 @@ namespace Lab19\Cart\Services;
 
 class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
 {
-    protected $currency;
-    protected $rate;
-    protected $baseCurrency;
-    protected $timestamp;
-    protected $api_response;
-    protected const API_BASE_PATH = "https://openexchangerates.org/api/";
+    public $currency;
+    public $rate;
+    public $baseCurrency;
+    public $timestamp;
+    public $api_response;
+    public const API_BASE_PATH = "https://openexchangerates.org/api/";
 
 
     /*------------------Setters------------------*/
@@ -56,7 +56,7 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
      */
     public function setRate()
     {
-        if (isset($currency) || isset($api_response)) {
+        if (!isset($this->currency) || !isset($this->api_response)) {
             return null;
         }
 
@@ -98,6 +98,6 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
      */
     public function convertCurrency($amount)
     {
-        return $amount * $this->rate;
+        return floor($amount * $this->rate);
     }
 }
