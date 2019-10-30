@@ -201,8 +201,6 @@ class CurrencyConversionTest extends TestCase
 
         $result = $response->decodeResponseJson();
 
-        print json_encode($result);
-
         $this->assertTrue(!empty($result['data']['products']['data']));
 
         $response->assertJsonStructure([

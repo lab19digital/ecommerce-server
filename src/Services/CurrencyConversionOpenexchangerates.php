@@ -4,12 +4,12 @@ namespace Lab19\Cart\Services;
 
 class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
 {
-    public $currency;
-    public $rate;
-    public $baseCurrency;
-    public $timestamp;
-    public $api_response;
-    public const API_BASE_PATH = "https://openexchangerates.org/api/";
+    protected $currency;
+    protected $rate;
+    protected $baseCurrency;
+    protected $timestamp;
+    protected $api_response;
+    protected const API_BASE_PATH = "https://openexchangerates.org/api/";
 
 
     /*------------------Setters------------------*/
