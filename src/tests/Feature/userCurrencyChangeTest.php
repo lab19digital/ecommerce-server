@@ -34,11 +34,9 @@ class ExampleObjectOrController
     }
 }
 
-
 class CurrencyConversionTest extends TestCase
 {
     use WithFaker;
-
 
     public function setUp(): void
     {
@@ -46,7 +44,8 @@ class CurrencyConversionTest extends TestCase
 
         $this->availableCount = 11;
 
-        factory(Product::class, $this->availableCount)->create();
+        $this->productPricesArray = factory(Product::class, $this->availableCount)->create();
+
     }
 
     // Helper functions
@@ -82,7 +81,7 @@ class CurrencyConversionTest extends TestCase
                     }
                 }
             '], [
-            'HTTP_Authorization' => 'Bearer ' . $token
+            'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
         $response->assertDontSee('errors');
@@ -90,12 +89,11 @@ class CurrencyConversionTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 'setSessionCurrency' => [
-                    'rate', 'baseCurrency', 'currency'
-                ]
-            ]
+                    'rate', 'baseCurrency', 'currency',
+                ],
+            ],
         ]);
     }
-
 
     /**
      * A basic feature test example.
@@ -126,7 +124,6 @@ class CurrencyConversionTest extends TestCase
         $this->assertTrue(null !== $currency->convertCurrency(10) && !empty($currency->convertCurrency(10)));
     }
 
-
     public function testSetCartCurrencySession(): void
     {
         $this->withoutExceptionHandling();
@@ -156,7 +153,7 @@ class CurrencyConversionTest extends TestCase
                     }
                 }
             '], [
-            'HTTP_Authorization' => 'Bearer ' . $token
+            'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
         $response->assertDontSee('errors');
@@ -164,12 +161,11 @@ class CurrencyConversionTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 'setSessionCurrency' => [
-                    'rate', 'baseCurrency', 'currency'
-                ]
-            ]
+                    'rate', 'baseCurrency', 'currency',
+                ],
+            ],
         ]);
     }
-
 
     public function testGuestUserCanViewInStockProductsWithChosenCurrency(): void
     {
@@ -178,7 +174,6 @@ class CurrencyConversionTest extends TestCase
 
         // Set the session currency
         $this->setSessionCurency($token);
-
 
         $response = $this->graphQL('
                 query {
@@ -201,6 +196,8 @@ class CurrencyConversionTest extends TestCase
 
         $result = $response->decodeResponseJson();
 
+        print $result['data']['products']['data'];
+
         $this->assertTrue(!empty($result['data']['products']['data']));
 
         $response->assertJsonStructure([
@@ -208,9 +205,76 @@ class CurrencyConversionTest extends TestCase
                 'products' => [
                     'data' => [
                         ['id', 'title'],
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    public function testProductPricesAreConverted(): void
+    {
+        $originalPrices = $this->productPricesArray->map(function ($item, $key) {
+            return ['id' => $item->id, 'title' => $item->title, 'price_cents' => $item->price_cents];
+        });
+
+        // Create a session
+        $token = $this->createSession();
+
+        // Set the session currency
+        $this->setSessionCurency($token);
+
+        $response = $this->graphQL('
+                query {
+                    products(count:10, input: {token: "' . $token . '"} ) {
+                        data {
+                            id
+                            title
+                            price_cents
+                            price_currency
+                        }
+                        paginatorInfo {
+                            currentPage
+                            lastPage
+                        }
+                    }
+                }
+            ');
+
+        $response->assertDontSee('errors');
+
+        $result = $response->decodeResponseJson();
+
+        $this->assertFalse(empty($result['data']['products']['data']));
+
+        /**
+         * Nested foreach loop, to loop through the response and get each product price after it has been converted to a different
+         * currency. Then compare these values to the original price of the corresponding prouct, to see that the value is indeed
+         * different.
+         *
+         * TODO: Manipulate collection of original prices using laravel collection methods
+         *
+         */
+        $convertedPrices = $result['data']['products']['data'];
+
+        foreach ($convertedPrices as $key => $convertedValue) {
+            foreach ($originalPrices as $key => $originalValue) {
+                if ($convertedValue['title'] == $originalValue['title']) {
+                    // print "\n" . $convertedValue['title'] . ' == ' . $originalValue['title'] . ".\n";
+                    // This shouldn't be the case, as the value should be converted to according to different currency rate
+                    $this->assertFalse($convertedValue['price_cents'] == $originalValue['price_cents']);
+                    break;
+                }
+            }
+        }
+
+        $response->assertJsonStructure([
+            'data' => [
+                'products' => [
+                    'data' => [
+                        ['id', 'title'],
+                    ],
+                ],
+            ],
         ]);
     }
 }
