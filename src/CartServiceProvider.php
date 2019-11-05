@@ -5,7 +5,6 @@ namespace Lab19\Cart;
 use Barryvdh\Cors\ServiceProvider as CorsServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Lab19\Cart\Services\CartService;
-
 use Lab19\Cart\Services\OrderService;
 use Lab19\Cart\Services\SessionService;
 use Lab19\Cart\Services\UserService;
@@ -63,6 +62,12 @@ class CartServiceProvider extends ServiceProvider
         ];
 
         $this->app['config']->set('lighthouse.namespaces.directives', $directives);
+
+        // Make mail config publishment optional by merging the config from the package.
+        $this->mergeConfigFrom(__DIR__ . '/config/mail.php', 'mail');
+
+        // Make cache config publishment optional by merging the config from the package.
+        $this->mergeConfigFrom(__DIR__ . '/config/cache.php', 'cache');
     }
 
     /**
@@ -77,6 +82,11 @@ class CartServiceProvider extends ServiceProvider
         // Allow developers to override mail config
         $this->publishes([
             __DIR__ . '/config/mail.php' => config_path('mail.php'),
+        ]);
+
+        // Allow developers to override cache config
+        $this->publishes([
+            __DIR__ . '/config/cache.php' => config_path('cache.php'),
         ]);
 
         $this->loadRoutesFrom(__DIR__ . '/Http/routes/web.php');

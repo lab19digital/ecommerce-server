@@ -4,7 +4,9 @@ namespace Lab19\Cart\GraphQL\Directives;
 
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Support\Facades\Cache;
 use Lab19\Cart\Factories\CurrencyConverterFactory;
+use Lab19\Cart\Services\CurrencyConversionManager;
 use Lab19\Cart\Services\SessionService;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
 use Nuwave\Lighthouse\Support\Contracts\Directive;
@@ -46,8 +48,10 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
             /** @var string $result */
             $result = $previousResolver($root, $args, $context, $info);
 
+            $token = $args['input']['token'];
+
             // Get the session by the provided token
-            $session = $this->session->getFromToken($args['input']['token']);
+            $session = $this->session->getFromToken($token);
 
             if (empty($session) || !isset($session)) {
                 return $result;
@@ -56,18 +60,11 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
             $sessionBaseCurrency = $session['data']['baseCurrency']; //I initially set this through graphql session mutator
             $sessionCurrency = $session['data']['currency'];
 
-            foreach ($result as $key => $value) {
-                $productCurrency = $result[$key]['price_currency']; //This becomes the base to convert from
-                $productPriceCents = $result[$key]['price_cents'];
+            $currencyManager = new CurrencyConversionManager();
+            $currencyManager->setResult($result);
+            $currencyManager->setSessionCurrency($sessionCurrency);
 
-                if (isset($productCurrency) && isset($productPriceCents)) {
-                    $currencyConverter = CurrencyConverterFactory::create($sessionCurrency, $productCurrency);
-                    // Set the new converted price
-                    $result[$key]['price_cents'] = $currencyConverter->convertCurrency($productPriceCents);
-                }
-            }
-
-            return $result;
+            return $currencyManager->convertPrices();
         };
 
         // Place the wrapped resolver back upon the FieldValue

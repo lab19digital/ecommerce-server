@@ -4,6 +4,7 @@ namespace Lab19\Cart\GraphQL\Mutations;
 
 use \App;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Support\Facades\Cache;
 use Lab19\Cart\Factories\CurrencyConverterFactory;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -39,6 +40,12 @@ class SetSession
         $rate = $currencyObject->getRate();
 
         $session->update(['currency' => $currency, 'baseCurrency' => $baseCurrency, 'rate' => $rate]);
+
+        // Set the cached rate for the user
+        $token = $session->getToken();
+        if (isset($token)) {
+            Cache::put($token, $rate, 1800);
+        }
 
         return $session->get();
     }

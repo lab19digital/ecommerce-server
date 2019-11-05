@@ -62,7 +62,9 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
 
         $currency = $this->currency;
         $api_response = $this->api_response;
-        $this->rate = $api_response->rates->$currency;
+        $rate = $api_response->rates->$currency;
+
+        $this->rate = $rate;
     }
 
 

@@ -45,7 +45,6 @@ class CurrencyConversionTest extends TestCase
         $this->availableCount = 11;
 
         $this->productPricesArray = factory(Product::class, $this->availableCount)->create();
-
     }
 
     // Helper functions
@@ -80,7 +79,7 @@ class CurrencyConversionTest extends TestCase
                         rate
                     }
                 }
-            ', ], [
+            ',], [
             'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
@@ -152,7 +151,7 @@ class CurrencyConversionTest extends TestCase
                         rate
                     }
                 }
-            ', ], [
+            ',], [
             'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
@@ -195,8 +194,6 @@ class CurrencyConversionTest extends TestCase
         $response->assertDontSee('errors');
 
         $result = $response->decodeResponseJson();
-
-        print $result['data']['products']['data'];
 
         $this->assertTrue(!empty($result['data']['products']['data']));
 
