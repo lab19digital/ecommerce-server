@@ -80,7 +80,7 @@ class CurrencyConversionTest extends TestCase
                         rate
                     }
                 }
-            '], [
+            ', ], [
             'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
@@ -152,7 +152,7 @@ class CurrencyConversionTest extends TestCase
                         rate
                     }
                 }
-            '], [
+            ', ], [
             'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
@@ -252,6 +252,7 @@ class CurrencyConversionTest extends TestCase
          * different.
          *
          * TODO: Manipulate collection of original prices using laravel collection methods
+         * https://laravel.com/docs/6.x/collections
          *
          */
         $convertedPrices = $result['data']['products']['data'];
