@@ -2,6 +2,7 @@
 
 namespace Lab19\Cart\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Lab19\Cart\Factories\CurrencyConverterFactory;
 
 class CurrencyConversionManager
@@ -73,31 +74,39 @@ class CurrencyConversionManager
             $productCurrency = $result[$key]['price_currency']; //This becomes the base to convert from
             $productPriceCents = $result[$key]['price_cents'];
 
-            if (isset($productCurrency) && isset($productPriceCents)) {
-
-                $currencyConverter = CurrencyConverterFactory::create($sessionCurrency, $productCurrency);
-
-                // Set the new converted price
-                $result[$key]['price_cents'] = $currencyConverter->convertCurrency($productPriceCents);
-
-
-                // // First try the cache for the rate
-                // $rate = Cache::get($token, null);
-
-                // if (!isset($rate)) {
-                //     // Fire up a new currency object for use
-                //     $currencyConverter = CurrencyConverterFactory::create($sessionCurrency, $productCurrency);
-
-                //     // Set the new converted price
-                //     $result[$key]['price_cents'] = $currencyConverter->convertCurrency($productPriceCents);
-
-                //     return $result;
-                // }
-
-                // if cache not empty then carry on 
+            if (!isset($productCurrency) && !isset($productPriceCents)) {
+                continue;
             }
+
+            // First try the cache for the rate
+            $rate = Cache::get($token, null);
+
+            if (isset($rate)) {
+                // Convert according to the cached rate
+                $result[$key]['price_cents'] = $this->convertCurrency($rate, $productPriceCents);
+
+                continue;
+            }
+
+            print 'Should not reach this';
+
+            // At this point there is no cached rate, and all variables are set so new up a currency object and convert price
+            $currencyConverter = CurrencyConverterFactory::create($sessionCurrency, $productCurrency);
+
+            // Set the new converted price
+            $result[$key]['price_cents'] = $currencyConverter->convertCurrency($productPriceCents);
         }
 
         return $result;
+    }
+
+    /**
+     * Convert between currency
+     *
+     * @param int
+     */
+    public function convertCurrency($rate, $amount)
+    {
+        return floor($amount * $rate);
     }
 }

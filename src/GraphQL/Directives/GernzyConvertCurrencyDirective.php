@@ -63,6 +63,7 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
             $currencyManager = new CurrencyConversionManager();
             $currencyManager->setResult($result);
             $currencyManager->setSessionCurrency($sessionCurrency);
+            $currencyManager->setToken($token);
 
             return $currencyManager->convertPrices();
         };
