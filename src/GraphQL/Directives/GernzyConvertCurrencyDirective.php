@@ -4,8 +4,6 @@ namespace Lab19\Cart\GraphQL\Directives;
 
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
-use Illuminate\Support\Facades\Cache;
-use Lab19\Cart\Factories\CurrencyConverterFactory;
 use Lab19\Cart\Services\CurrencyConversionManager;
 use Lab19\Cart\Services\SessionService;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
