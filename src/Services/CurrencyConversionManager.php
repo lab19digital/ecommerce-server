@@ -88,8 +88,6 @@ class CurrencyConversionManager
                 continue;
             }
 
-            print 'Should not reach this';
-
             // At this point there is no cached rate, and all variables are set so new up a currency object and convert price
             $currencyConverter = CurrencyConverterFactory::create($sessionCurrency, $productCurrency);
 
