@@ -21,6 +21,8 @@ class CurrencyConversionManager
     public function setResult($result)
     {
         $this->result = $result;
+
+        return $this;
     }
 
     /**
@@ -31,6 +33,7 @@ class CurrencyConversionManager
     public function setToken($token)
     {
         $this->token = $token;
+        return $this;
     }
 
 
@@ -42,6 +45,7 @@ class CurrencyConversionManager
     public function setSessionCurrency($sessionCurrency)
     {
         $this->sessionCurrency = $sessionCurrency;
+        return $this;
     }
 
 
