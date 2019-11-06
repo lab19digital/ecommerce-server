@@ -74,6 +74,7 @@ class CurrencyConversionManager
         $token = $this->token;
         $sessionCurrency = $this->sessionCurrency;
 
+        // TODO: Probably a good scenario for a singleton object
         foreach ($result as $key => $value) {
             $productCurrency = $result[$key]['price_currency']; //This becomes the base to convert from
             $productPriceCents = $result[$key]['price_cents'];
@@ -97,6 +98,11 @@ class CurrencyConversionManager
 
             // Set the new converted price
             $result[$key]['price_cents'] = $currencyConverter->convertCurrency($productPriceCents);
+
+            // Set the cache with the rate for the user
+            if (isset($token)) {
+                Cache::put($token, $currencyConverter->getRate(), 1800);
+            }
         }
 
         return $result;

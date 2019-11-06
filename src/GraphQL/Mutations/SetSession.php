@@ -33,19 +33,8 @@ class SetSession
         $session = App::make('Lab19\SessionService');
 
         $currency = $args['input']['currency'];
-        $baseCurrency = $args['input']['baseCurrency'];
 
-        $currencyObject = CurrencyConverterFactory::create($currency, $baseCurrency);
-
-        $rate = $currencyObject->getRate();
-
-        $session->update(['currency' => $currency, 'baseCurrency' => $baseCurrency, 'rate' => $rate]);
-
-        // Set the cached rate for the user
-        $token = $session->getToken();
-        if (isset($token)) {
-            Cache::put($token, $rate, 1800);
-        }
+        $session->update(['currency' => $currency]);
 
         return $session->get();
     }

@@ -16,7 +16,6 @@ input SetSessionInput {
 
 input SetSessionCurrency {
     currency: String
-    baseCurrency: String
 }
 
 input CartProductInput {
@@ -31,7 +30,6 @@ type SetSessionPayload {
 
 type SetSessionCurrencyPayload {
     currency: String
-    baseCurrency: String
     rate: String
 }
 

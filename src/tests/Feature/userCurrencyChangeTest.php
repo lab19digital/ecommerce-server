@@ -72,11 +72,8 @@ class CurrencyConversionTest extends TestCase
                 mutation {
                     setSessionCurrency(input: {
                         currency: "EUR"
-                        baseCurrency: "USD"
                     }){
                         currency
-                        baseCurrency
-                        rate
                     }
                 }
             ',], [
@@ -88,7 +85,7 @@ class CurrencyConversionTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 'setSessionCurrency' => [
-                    'rate', 'baseCurrency', 'currency',
+                    'currency',
                 ],
             ],
         ]);
@@ -144,11 +141,8 @@ class CurrencyConversionTest extends TestCase
                 mutation {
                     setSessionCurrency(input: {
                         currency: "EUR"
-                        baseCurrency: "USD"
                     }){
                         currency
-                        baseCurrency
-                        rate
                     }
                 }
             ',], [
@@ -160,7 +154,7 @@ class CurrencyConversionTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 'setSessionCurrency' => [
-                    'rate', 'baseCurrency', 'currency',
+                    'currency',
                 ],
             ],
         ]);
