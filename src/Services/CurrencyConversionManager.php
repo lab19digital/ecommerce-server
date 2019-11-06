@@ -36,7 +36,6 @@ class CurrencyConversionManager
         return $this;
     }
 
-
     /**
      * Set's the object sessionCurrency
      *
@@ -47,7 +46,6 @@ class CurrencyConversionManager
         $this->sessionCurrency = $sessionCurrency;
         return $this;
     }
-
 
     /*------------------Getters------------------*/
 
@@ -60,7 +58,6 @@ class CurrencyConversionManager
     {
         return;
     }
-
 
     /*------------------Methods------------------*/
     /**
@@ -93,7 +90,8 @@ class CurrencyConversionManager
                 continue;
             }
 
-            // At this point there is no cached rate, and all variables are set so new up a currency object and convert price
+            // At this point there is no cached rate, and all variables are set so new up a currency object and convert price.
+            // note that this makes the api call, thus caching the result afterwards reduces api usage
             $currencyConverter = CurrencyConverterFactory::create($sessionCurrency, $productCurrency);
 
             // Set the new converted price
