@@ -2,6 +2,8 @@
 
 namespace Lab19\Cart\Services;
 
+use Lab19\Cart\Exceptions\GernzyException;
+
 class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
 {
     protected $currency;
@@ -35,7 +37,10 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
 
         // Make sure the token and base currency is available
         if (!isset($token) && !isset($this->baseCurrency)) {
-            return null;
+            throw new GernzyException(
+                'An exception occured.',
+                'Token or baseCurrency were not set.'
+            );
         }
 
         $endpoint = self::API_BASE_PATH . "latest.json?app_id=" . $token . "&base=" . $this->baseCurrency;
@@ -57,7 +62,10 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
     public function setRate()
     {
         if (!isset($this->currency) || !isset($this->api_response)) {
-            return null;
+            throw new GernzyException(
+                'An exception occured.',
+                'Currency or api response were not set.'
+            );
         }
 
         $currency = $this->currency;
