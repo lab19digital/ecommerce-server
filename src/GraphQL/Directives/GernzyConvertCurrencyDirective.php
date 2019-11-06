@@ -46,9 +46,11 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
             /** @var string $result */
             $result = $previousResolver($root, $args, $context, $info);
 
-            $token = $args['input']['token'];
+            if (!isset($args['input']['token'])) {
+                return $result;
+            }
 
-            // Get the session by the provided token
+            $token = $args['input']['token'];
             $session = $this->session->getFromToken($token);
 
             if (empty($session) || !isset($session)) {
