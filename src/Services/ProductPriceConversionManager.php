@@ -11,6 +11,7 @@ class ProductPriceConversionManager
     protected $sessionCurrency;
     protected $token;
     protected $currencyConverter;
+    protected $cachedRate;
 
     /*------------------Setters------------------*/
     /**
@@ -48,6 +49,17 @@ class ProductPriceConversionManager
     }
 
     /**
+     * Set's the cached rate
+     *
+     * @param string
+     */
+    public function setCachedRate($cachedRate)
+    {
+        $this->cachedRate = $cachedRate;
+        return $this;
+    }
+
+    /**
      * Set's the converter object
      *
      * @param string
@@ -70,6 +82,7 @@ class ProductPriceConversionManager
         $result = $this->result;
         $token = $this->token;
         $sessionCurrency = $this->sessionCurrency;
+        $cachedRate = $this->cachedRate;
 
         // TODO: Probably a good scenario for a singleton object
         foreach ($result as $key => $value) {
@@ -80,14 +93,10 @@ class ProductPriceConversionManager
                 continue;
             }
 
-            // First try the cache for the rate
-            $rate = Cache::get($token, null);
-
-            if (isset($rate)) {
+            if (isset($cachedRate)) {
                 // Convert according to the cached rate, this does assume that each product in the
                 // result array has the same currency
-                $result[$key]['price_cents'] = $this->convertCurrency($rate, $productPriceCents);
-
+                $result[$key]['price_cents'] = $this->convertCurrency($cachedRate, $productPriceCents);
                 continue;
             }
 
@@ -101,7 +110,8 @@ class ProductPriceConversionManager
 
             // Set the cache with the rate for the user
             if (isset($token)) {
-                Cache::put($token, $currencyConverter->getRate(), 1800);
+                $cachedRate = $currencyConverter->getRate();
+                Cache::put($token, $cachedRate, 1800);
             }
         }
 

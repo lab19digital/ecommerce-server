@@ -4,6 +4,7 @@ namespace Lab19\Cart\GraphQL\Directives;
 
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Support\Facades\Cache;
 use Lab19\Cart\Factories\CurrencyConverterFactory;
 use Lab19\Cart\Services\ProductPriceConversionManager;
 use Lab19\Cart\Services\SessionService;
@@ -69,6 +70,7 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
                 ->setConverter(new CurrencyConverterFactory())
                 ->setResult($result)->setSessionCurrency($sessionCurrency)
                 ->setToken($token)
+                ->setCachedRate(Cache::get($token, null))
                 ->convertPrices();
 
         };
