@@ -80,9 +80,6 @@ class ProductPriceConversionManager
     public function convertPrices()
     {
         $result = $this->result;
-        $token = $this->token;
-        $sessionCurrency = $this->sessionCurrency;
-        $cachedRate = $this->cachedRate;
 
         // TODO: Probably a good scenario for a singleton object
         foreach ($result as $key => $value) {
@@ -93,26 +90,16 @@ class ProductPriceConversionManager
                 continue;
             }
 
-            if (isset($cachedRate)) {
+            if (isset($this->cachedRate)) {
                 // Convert according to the cached rate, this does assume that each product in the
                 // result array has the same currency
-                $result[$key]['price_cents'] = $this->convertCurrency($cachedRate, $productPriceCents);
+                $result[$key]['price_cents'] = $this->multiplyPriceByRate($this->cachedRate, $productPriceCents);
                 continue;
             }
 
-            // At this point there is no cached rate, and all variables are set so new up a currency object and convert price.
-            // note that this makes the api call, thus caching the result afterwards reduces api usage
-            $currencyConverter = $this->currencyConverter::create($sessionCurrency, $productCurrency);
+            // At this point there is no cache and a new api call will be made
+            $result[$key]['price_cents'] = $this->spawn($productCurrency, $productPriceCents);
 
-            // Set the new converted price
-            // $result[$key]['price_cents'] = $currencyConverter->convertCurrency($productPriceCents);
-            $result[$key]['price_cents'] = $this->convertCurrency($currencyConverter->getRate(), $productPriceCents);
-
-            // Set the cache with the rate for the user
-            if (isset($token)) {
-                $cachedRate = $currencyConverter->getRate();
-                Cache::put($token, $cachedRate, 1800);
-            }
         }
 
         return $result;
@@ -123,8 +110,28 @@ class ProductPriceConversionManager
      *
      * @param int
      */
-    public function convertCurrency($rate, $amount)
+    public function multiplyPriceByRate($rate, $amount)
     {
         return floor($amount * $rate);
+    }
+
+    /**
+     * Use the conversion service and spawn
+     *
+     * @param int
+     */
+    public function spawn($productCurrency, $productPriceCents)
+    {
+        // At this point there is no cached rate, and all variables are set so new up a currency object and convert price.
+        // note that this makes the api call, thus caching the result afterwards reduces api usage
+        $currencyConverter = $this->currencyConverter::create($this->sessionCurrency, $productCurrency);
+
+        // Set the cache with the rate for the user
+        if (isset($this->token)) {
+            $this->cachedRate = $currencyConverter->getRate();
+            Cache::put($this->token, $this->cachedRate, 1800);
+        }
+
+        return $this->multiplyPriceByRate($currencyConverter->getRate(), $productPriceCents);
     }
 }
