@@ -13,7 +13,6 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
     protected $api_response;
     protected const API_BASE_PATH = "https://openexchangerates.org/api/";
 
-
     /*------------------Setters------------------*/
     /**
      * Set's the object currency
@@ -33,13 +32,14 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
      */
     public function setResponseFromOpenExhange()
     {
+        // open exhange api token is set in a .env file so that is doesn't live in the code base
         $token = env('currency_api_token', '');
 
         // Make sure the token and base currency is available
         if (!isset($token) && !isset($this->baseCurrency)) {
             throw new GernzyException(
                 'An exception occured.',
-                'Token or baseCurrency were not set.'
+                'API Token or baseCurrency were not set.'
             );
         }
 
@@ -75,7 +75,6 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
         $this->rate = $rate;
     }
 
-
     /**
      * Set's the object base currency
      *
@@ -85,7 +84,6 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
     {
         $this->baseCurrency = $baseCurrency;
     }
-
 
     /*------------------Getters------------------*/
 
@@ -98,7 +96,6 @@ class CurrencyConversionOpenexchangerates implements CurrencyConversionInterface
     {
         return $this->rate;
     }
-
 
     /*------------------Methods------------------*/
     /**

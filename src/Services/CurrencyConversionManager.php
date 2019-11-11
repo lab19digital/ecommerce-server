@@ -49,15 +49,7 @@ class CurrencyConversionManager
 
     /*------------------Getters------------------*/
 
-    /**
-     * Get's a conversion rate by it's currency
-     *
-     * @param string
-     */
-    public function fun()
-    {
-        return;
-    }
+    //
 
     /*------------------Methods------------------*/
     /**
@@ -84,7 +76,8 @@ class CurrencyConversionManager
             $rate = Cache::get($token, null);
 
             if (isset($rate)) {
-                // Convert according to the cached rate
+                // Convert according to the cached rate, this does assume that each product in the
+                // result array has the same currency
                 $result[$key]['price_cents'] = $this->convertCurrency($rate, $productPriceCents);
 
                 continue;
