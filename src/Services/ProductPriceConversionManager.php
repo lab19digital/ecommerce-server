@@ -5,10 +5,10 @@ namespace Lab19\Cart\Services;
 use Illuminate\Support\Facades\Cache;
 use Lab19\Cart\Factories\CurrencyConverterFactory;
 
-class CurrencyConversionManager
+class ProductPriceConversionManager
 {
 
-    protected $result;
+    protected $result; //products array
     protected $sessionCurrency;
     protected $token;
 
