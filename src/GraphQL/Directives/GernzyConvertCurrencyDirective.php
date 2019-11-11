@@ -62,17 +62,13 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
             // sessionCurrency is set through graphql session mutator field
             $sessionCurrency = $session['data']['currency'];
 
-            $currencyManager = new ProductPriceConversionManager();
-
-            // new CurrencyConverterFactory();
-            // return $currencyManager->setResult($result)->setSessionCurrency($sessionCurrency)->setToken($token)->convertPrices();
-            return $currencyManager
+            return (new ProductPriceConversionManager())
                 ->setConverter(new CurrencyConverterFactory())
-                ->setResult($result)->setSessionCurrency($sessionCurrency)
+                ->setResult($result)
+                ->setSessionCurrency($sessionCurrency)
                 ->setToken($token)
                 ->setCachedRate(Cache::get($token, null))
                 ->convertPrices();
-
         };
 
         // Place the wrapped resolver back upon the FieldValue
