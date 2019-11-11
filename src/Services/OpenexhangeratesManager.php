@@ -97,7 +97,7 @@ class OpenexhangeratesManager
                 continue;
             }
 
-            // At this point there is no cache and a new api call will be made
+            // At this point there is no cache and a new api call will be made, this should only be hit once in the loop
             $result[$key]['price_cents'] = $this->getApiRateAndConvertPrice($productCurrency, $productPriceCents);
 
         }
