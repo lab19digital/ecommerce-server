@@ -59,10 +59,6 @@ class ProductPriceConversionManager
         return $this;
     }
 
-    /*------------------Getters------------------*/
-
-    //
-
     /*------------------Methods------------------*/
     /**
      * Convert between currency
