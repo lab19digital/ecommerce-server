@@ -68,6 +68,7 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
                 ->setSessionCurrency($sessionCurrency)
                 ->setToken($token)
                 ->setCachedRate(Cache::get($token, null))
+                ->setRpository((new Cache()))
                 ->convertPrices();
         };
 

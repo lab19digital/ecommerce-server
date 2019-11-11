@@ -12,6 +12,7 @@ class OpenexhangeratesManager
     protected $token;
     protected $currencyConverter;
     protected $cachedRate;
+    protected $repository;
 
     /*------------------Setters------------------*/
     /**
@@ -56,6 +57,17 @@ class OpenexhangeratesManager
     public function setCachedRate($cachedRate)
     {
         $this->cachedRate = $cachedRate;
+        return $this;
+    }
+
+    /**
+     * Set's the cached rate
+     *
+     * @param string
+     */
+    public function setRpository($repository)
+    {
+        $this->repository = $repository;
         return $this;
     }
 
@@ -129,9 +141,19 @@ class OpenexhangeratesManager
         // Set the cache with the rate for the user
         if (isset($this->token)) {
             $this->cachedRate = $currencyConverter->getRate();
-            Cache::put($this->token, $this->cachedRate, 1800);
+            $this->saveToRepository($this->token, $this->cachedRate, 1800);
         }
 
         return $this->multiplyPriceByRate($currencyConverter->getRate(), $productPriceCents);
+    }
+
+    /**
+     * Convert between currency
+     *
+     * @param int
+     */
+    public function saveToRepository($token, $rate, $time)
+    {
+        $this->repository::put($token, $rate, $time);
     }
 }
