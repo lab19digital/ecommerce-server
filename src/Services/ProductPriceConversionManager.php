@@ -3,7 +3,6 @@
 namespace Lab19\Cart\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Lab19\Cart\Factories\CurrencyConverterFactory;
 
 class ProductPriceConversionManager
 {
@@ -11,6 +10,7 @@ class ProductPriceConversionManager
     protected $result; //products array
     protected $sessionCurrency;
     protected $token;
+    protected $currencyConverter;
 
     /*------------------Setters------------------*/
     /**
@@ -44,6 +44,18 @@ class ProductPriceConversionManager
     public function setSessionCurrency($sessionCurrency)
     {
         $this->sessionCurrency = $sessionCurrency;
+        return $this;
+    }
+
+    /**
+     * Set's the converter object
+     *
+     * @param string
+     */
+    public function setConverter($currencyConverter)
+    {
+        $this->currencyConverter = $currencyConverter;
+
         return $this;
     }
 
@@ -85,10 +97,11 @@ class ProductPriceConversionManager
 
             // At this point there is no cached rate, and all variables are set so new up a currency object and convert price.
             // note that this makes the api call, thus caching the result afterwards reduces api usage
-            $currencyConverter = CurrencyConverterFactory::create($sessionCurrency, $productCurrency);
+            $currencyConverter = $this->currencyConverter::create($sessionCurrency, $productCurrency);
 
             // Set the new converted price
-            $result[$key]['price_cents'] = $currencyConverter->convertCurrency($productPriceCents);
+            // $result[$key]['price_cents'] = $currencyConverter->convertCurrency($productPriceCents);
+            $result[$key]['price_cents'] = $this->convertCurrency($currencyConverter->getRate(), $productPriceCents);
 
             // Set the cache with the rate for the user
             if (isset($token)) {

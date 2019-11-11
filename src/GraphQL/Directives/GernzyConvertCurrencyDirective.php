@@ -4,6 +4,7 @@ namespace Lab19\Cart\GraphQL\Directives;
 
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
+use Lab19\Cart\Factories\CurrencyConverterFactory;
 use Lab19\Cart\Services\ProductPriceConversionManager;
 use Lab19\Cart\Services\SessionService;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
@@ -62,7 +63,14 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
 
             $currencyManager = new ProductPriceConversionManager();
 
-            return $currencyManager->setResult($result)->setSessionCurrency($sessionCurrency)->setToken($token)->convertPrices();
+            // new CurrencyConverterFactory();
+            // return $currencyManager->setResult($result)->setSessionCurrency($sessionCurrency)->setToken($token)->convertPrices();
+            return $currencyManager
+                ->setConverter(new CurrencyConverterFactory())
+                ->setResult($result)->setSessionCurrency($sessionCurrency)
+                ->setToken($token)
+                ->convertPrices();
+
         };
 
         // Place the wrapped resolver back upon the FieldValue
