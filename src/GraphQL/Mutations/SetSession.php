@@ -3,6 +3,7 @@
 namespace Lab19\Cart\GraphQL\Mutations;
 
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Support\Facades\Cache;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 use \App;
 
@@ -33,6 +34,9 @@ class SetSession
         $currency = $args['input']['currency'];
 
         $session->update(['currency' => $currency]);
+
+        // Clear the previous rate for the user as a new currency has been chosen
+        Cache::forget($session->getToken());
 
         return $session->get();
     }
