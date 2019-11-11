@@ -4,7 +4,7 @@ namespace Lab19\Cart\Services;
 
 use Illuminate\Support\Facades\Cache;
 
-class ProductPriceConversionManager
+class OpenexhangeratesManager
 {
 
     protected $result; //products array
@@ -98,7 +98,7 @@ class ProductPriceConversionManager
             }
 
             // At this point there is no cache and a new api call will be made
-            $result[$key]['price_cents'] = $this->spawn($productCurrency, $productPriceCents);
+            $result[$key]['price_cents'] = $this->getApiRateAndConvertPrice($productCurrency, $productPriceCents);
 
         }
 
@@ -116,11 +116,11 @@ class ProductPriceConversionManager
     }
 
     /**
-     * Use the conversion service and spawn
+     * Use the conversion service and getApiRateAndConvertPrice
      *
      * @param int
      */
-    public function spawn($productCurrency, $productPriceCents)
+    public function getApiRateAndConvertPrice($productCurrency, $productPriceCents)
     {
         // At this point there is no cached rate, and all variables are set so new up a currency object and convert price.
         // note that this makes the api call, thus caching the result afterwards reduces api usage

@@ -54,7 +54,7 @@ class CartServiceProvider extends ServiceProvider
         // Implement our default binding of the currency converion interface
         $this->app->bind(
             'Lab19\Services\CurrencyConversionInterface',
-            'Lab19\Services\CurrencyConversionOpenexchangerates'
+            'Lab19\Services\Openexchangerates'
         );
 
         $directives = [

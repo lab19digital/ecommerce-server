@@ -2,11 +2,9 @@
 
 namespace Lab19\Cart\GraphQL\Mutations;
 
-use \App;
 use GraphQL\Type\Definition\ResolveInfo;
-use Illuminate\Support\Facades\Cache;
-use Lab19\Cart\Factories\CurrencyConverterFactory;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
+use \App;
 
 class SetSession
 {

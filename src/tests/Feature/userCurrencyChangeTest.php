@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\WithFaker;
-use Lab19\Cart\Factories\CurrencyConverterFactory;
+use Lab19\Cart\Factories\OpenexchangeratesFactory;
 use Lab19\Cart\Models\Product;
 use Lab19\Cart\Services\CurrencyConversionInterface;
 use Lab19\Cart\Testing\TestCase;
@@ -76,7 +76,7 @@ class CurrencyConversionTest extends TestCase
                         currency
                     }
                 }
-            ',], [
+            '], [
             'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
@@ -102,7 +102,7 @@ class CurrencyConversionTest extends TestCase
         // In a controller it should be type hinted automatically throught the laravel service container
         // as it is bound in the register method of the cart service provider
         // I'm using a factory pattern to create the object
-        $currency = new ExampleObjectOrController(CurrencyConverterFactory::create('EUR', 'USD'));
+        $currency = new ExampleObjectOrController(OpenexchangeratesFactory::create('EUR', 'USD'));
 
         $this->assertTrue(null !== $currency->index());
         $this->assertTrue(!empty($currency->index()));
@@ -115,7 +115,7 @@ class CurrencyConversionTest extends TestCase
      */
     public function testContractImplementation()
     {
-        $currency = CurrencyConverterFactory::create('EUR', 'USD');
+        $currency = OpenexchangeratesFactory::create('EUR', 'USD');
 
         $this->assertTrue(null !== $currency->convertCurrency(10) && !empty($currency->convertCurrency(10)));
     }
@@ -145,7 +145,7 @@ class CurrencyConversionTest extends TestCase
                         currency
                     }
                 }
-            ',], [
+            '], [
             'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
