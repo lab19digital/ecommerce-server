@@ -46,10 +46,8 @@ class Openexchangerates implements CurrencyConversionInterface
         }
 
         $client = new Client([
-            // Base URI is used with relative requests
             'base_uri' => self::API_BASE_PATH,
-            // You can set any number of default request options.
-            // 'timeout' => 2.0,
+            'timeout' => 2.0,
         ]);
 
         $response = $client->request('GET', $endpoint);
