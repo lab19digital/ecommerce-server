@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Cache;
 use Lab19\Cart\Testing\TestCase;
 
-class PasswordResetTest extends TestCase
+class GernzyPasswordResetTest extends TestCase
 {
     use WithFaker;
 
@@ -31,8 +31,8 @@ class PasswordResetTest extends TestCase
 
         $actual = Cache::get('some key');
 
-        // Assert function to test whether expected 
-        // value is equal to actual or not 
+        // Assert function to test whether expected
+        // value is equal to actual or not
         $this->assertEquals(
             $expected,
             $actual,
