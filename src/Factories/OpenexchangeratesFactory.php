@@ -2,13 +2,13 @@
 
 namespace Lab19\Cart\Factories;
 
-use Lab19\Cart\Services\Openexchangerates;
+use Lab19\Cart\Services\OpenExchangeRates;
 
-class OpenexchangeratesFactory
+class OpenExchangeRatesFactory
 {
     public static function create($currency, $base)
     {
-        $currencyObject = new Openexchangerates($currency, $base);
+        $currencyObject = new OpenExchangeRates($currency, $base);
         $currencyObject->setCurrency($currency);
         $currencyObject->setBaseCurrency($base);
         $currencyObject->setResponseFromOpenExchange(); //This function does the api call

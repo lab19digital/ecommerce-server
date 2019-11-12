@@ -4,7 +4,7 @@ namespace Lab19\Cart\Services;
 
 use Lab19\Cart\Exceptions\GernzyException;
 
-class Openexchangerates implements CurrencyConversionInterface
+class OpenExchangeRates implements CurrencyConversionInterface
 {
     protected $currency;
     protected $rate;

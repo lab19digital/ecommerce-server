@@ -7,7 +7,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\WithFaker;
-use Lab19\Cart\Factories\OpenexchangeratesFactory;
+use Lab19\Cart\Factories\OpenExchangeRatesFactory;
 use Lab19\Cart\Models\Product;
 use Lab19\Cart\Services\CurrencyConversionInterface;
 use Lab19\Cart\Testing\TestCase;
@@ -109,7 +109,7 @@ class CurrencyConversionTest extends TestCase
                         currency
                     }
                 }
-            '], [
+            ', ], [
             'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
@@ -148,7 +148,7 @@ class CurrencyConversionTest extends TestCase
      */
     public function testContractImplementation()
     {
-        $currency = OpenexchangeratesFactory::create('EUR', 'USD');
+        $currency = OpenExchangeRatesFactory::create('EUR', 'USD');
 
         $this->assertTrue(null !== $currency->convertCurrency(10) && !empty($currency->convertCurrency(10)));
     }
@@ -178,7 +178,7 @@ class CurrencyConversionTest extends TestCase
                         currency
                     }
                 }
-            '], [
+            ', ], [
             'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
