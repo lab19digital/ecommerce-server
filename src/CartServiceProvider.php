@@ -3,6 +3,7 @@
 namespace Lab19\Cart;
 
 use Barryvdh\Cors\ServiceProvider as CorsServiceProvider;
+use GuzzleHttp\Client;
 use Illuminate\Support\ServiceProvider;
 use Lab19\Cart\Services\CartService;
 use Lab19\Cart\Services\OrderService;
@@ -56,6 +57,13 @@ class CartServiceProvider extends ServiceProvider
             'Lab19\Services\CurrencyConversionInterface',
             'Lab19\Services\Openexchangerates'
         );
+
+        $this->app->bind('GuzzleHttp\Client', function ($app) {
+            return new Client([
+                'base_uri' => 'https://openexchangerates.org/api/',
+                'timeout' => 2.0,
+            ]);
+        });
 
         $directives = [
             'Lab19\\Cart\\GraphQL\\Directives',

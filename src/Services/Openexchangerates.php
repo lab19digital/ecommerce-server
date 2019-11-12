@@ -2,7 +2,6 @@
 
 namespace Lab19\Cart\Services;
 
-use GuzzleHttp\Client;
 use Lab19\Cart\Exceptions\GernzyException;
 
 class Openexchangerates implements CurrencyConversionInterface
@@ -45,10 +44,8 @@ class Openexchangerates implements CurrencyConversionInterface
             );
         }
 
-        $client = new Client([
-            'base_uri' => self::API_BASE_PATH,
-            'timeout' => 2.0,
-        ]);
+        // Resolve the guzzle instance out of the container
+        $client = resolve('GuzzleHttp\Client');
 
         $response = $client->request('GET', $endpoint);
         $response = json_decode($response->getBody());
