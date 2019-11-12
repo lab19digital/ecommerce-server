@@ -2,6 +2,7 @@
 
 namespace Lab19\Cart\Services;
 
+use GuzzleHttp\Client;
 use Lab19\Cart\Exceptions\GernzyException;
 
 class Openexchangerates implements CurrencyConversionInterface
@@ -34,6 +35,7 @@ class Openexchangerates implements CurrencyConversionInterface
     {
         // open exhange api token is set in a .env file so that is doesn't live in the code base
         $token = env('currency_api_token', '');
+        $endpoint = "latest.json?app_id=" . $token . "&base=" . $this->baseCurrency;
 
         // Make sure the token and base currency is available
         if (!isset($token) && !isset($this->baseCurrency)) {
@@ -43,15 +45,16 @@ class Openexchangerates implements CurrencyConversionInterface
             );
         }
 
-        $endpoint = self::API_BASE_PATH . "latest.json?app_id=" . $token . "&base=" . $this->baseCurrency;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $endpoint);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        $output = json_decode($output);
-        $this->api_response = $output;
+        $client = new Client([
+            // Base URI is used with relative requests
+            'base_uri' => self::API_BASE_PATH,
+            // You can set any number of default request options.
+            // 'timeout' => 2.0,
+        ]);
+
+        $response = $client->request('GET', $endpoint);
+        $response = json_decode($response->getBody());
+        $this->api_response = $response;
     }
 
     /**

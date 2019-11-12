@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Lab19\Cart\Factories\OpenexchangeratesFactory;
 use Lab19\Cart\Models\Product;
