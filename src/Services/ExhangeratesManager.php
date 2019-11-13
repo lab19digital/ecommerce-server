@@ -4,7 +4,7 @@ namespace Lab19\Cart\Services;
 
 use Illuminate\Support\Facades\Cache;
 
-class ExhangeratesManager
+class ExhangeRatesManager
 {
 
     protected $result; //products array
