@@ -30,7 +30,6 @@ extend type Query {
 input ProductsQueryInput {
     keyword: String
     attributes: [ProductsQueryInputAttributes!]
-    token: String
 }
 
 input ProductsQueryInputAttributes {

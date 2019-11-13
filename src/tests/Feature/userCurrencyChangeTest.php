@@ -80,27 +80,24 @@ class CurrencyConversionTest extends TestCase
         });
     }
 
-    // Helper functions
-    public function createSession()
+    // Helpers
+    public function setupCurrencySession()
     {
+        // Create a session
         /** @var \Illuminate\Foundation\Testing\TestResponse $response */
         $response = $this->graphQL('
-                mutation {
-                    createSession {
-                        token
-                    }
+            mutation {
+                createSession {
+                    token
                 }
-            ');
+            }
+        ');
 
         $start = $response->decodeResponseJson();
 
         $token = $start['data']['createSession']['token'];
 
-        return $token;
-    }
-
-    public function setSessionCurency($token)
-    {
+        // Set the session currency
         $response = $this->postGraphQL(['query' => '
                 mutation {
                     setSessionCurrency(input: {
@@ -122,6 +119,8 @@ class CurrencyConversionTest extends TestCase
                 ],
             ],
         ]);
+
+        return $token;
     }
 
     /**
@@ -178,7 +177,7 @@ class CurrencyConversionTest extends TestCase
                         currency
                     }
                 }
-            '], [
+            ', ], [
             'HTTP_Authorization' => 'Bearer ' . $token,
         ]);
 
@@ -195,15 +194,12 @@ class CurrencyConversionTest extends TestCase
 
     public function testGuestUserCanViewInStockProductsWithChosenCurrency(): void
     {
-        // Create a session
-        $token = $this->createSession();
 
-        // Set the session currency
-        $this->setSessionCurency($token);
+        $token = $this->setupCurrencySession();
 
-        $response = $this->graphQL('
+        $query = '
                 query {
-                    products(count:10, input: {token: "' . $token . '"} ) {
+                    products(count:10) {
                         data {
                             id
                             title
@@ -216,7 +212,11 @@ class CurrencyConversionTest extends TestCase
                         }
                     }
                 }
-            ');
+            ';
+
+        $response = $this->postGraphQL(['query' => $query], [
+            'HTTP_Authorization' => 'Bearer ' . $token,
+        ]);
 
         $response->assertDontSee('errors');
 
@@ -241,15 +241,11 @@ class CurrencyConversionTest extends TestCase
             return ['id' => $item->id, 'title' => $item->title, 'price_cents' => $item->price_cents];
         });
 
-        // Create a session
-        $token = $this->createSession();
+        $token = $this->setupCurrencySession();
 
-        // Set the session currency
-        $this->setSessionCurency($token);
-
-        $response = $this->graphQL('
+        $query = '
                 query {
-                    products(count:10, input: {token: "' . $token . '"} ) {
+                    products(count:10) {
                         data {
                             id
                             title
@@ -262,7 +258,11 @@ class CurrencyConversionTest extends TestCase
                         }
                     }
                 }
-            ');
+            ';
+
+        $response = $this->postGraphQL(['query' => $query], [
+            'HTTP_Authorization' => 'Bearer ' . $token,
+        ]);
 
         $response->assertDontSee('errors');
 
