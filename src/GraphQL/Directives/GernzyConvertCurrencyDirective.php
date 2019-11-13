@@ -48,12 +48,16 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
             /** @var string $result */
             $result = $previousResolver($root, $args, $context, $info);
 
-            if (!isset($context->request->session) || !isset($context->request->session)) {
+            if (!isset($context->request->session)) {
                 return $result;
             }
-
             $session = $context->request->session;
-            $token = $session->token;
+
+            if (!isset($session->token)) {
+                $token = null;
+            } else {
+                $token = $session->token;
+            }
 
             // sessionCurrency is set through graphql session mutator field
             $sessionCurrency = $session['data']['currency'];
