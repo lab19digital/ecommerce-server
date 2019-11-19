@@ -1,27 +1,30 @@
 <?php
 
 namespace Lab19\Cart\Actions;
+
 use Lab19\Cart\Models\Order;
-use Lab19\Cart\Services\SessionService;
 use Lab19\Cart\Services\CartService;
+use Lab19\Cart\Services\SessionService;
 
 class CreateCheckout
 {
-    public function __construct( SessionService $session, CartService $cartService ){
-        $this->session = $session;
+    public function __construct(SessionService $sessionService, CartService $cartService)
+    {
+        $this->sessionService = $sessionService;
         $this->cartService = $cartService;
     }
 
-    public function handle( $args ){
+    public function handle($args)
+    {
 
-        if( $args['use_shipping_for_billing'] ){
+        if ($args['use_shipping_for_billing']) {
             $billing = $args['shipping_address'];
         } else {
             $billing = $args['billing_address'];
         }
 
-        $session = $this->session->raw();
-        $user = $this->session->getUser();
+        $session = $this->sessionService->raw();
+        $user = $this->sessionService->getUser();
         $cartId = $session->cart->id;
         $userId = $user->id;
 
@@ -44,7 +47,7 @@ class CreateCheckout
             "billing_address_country" => $billing["country"],
 
             "payment_method" => $args["payment_method"],
-            "agree_to_terms" => (int)$args["agree_to_terms"],
+            "agree_to_terms" => (int) $args["agree_to_terms"],
             "notes" => $args["notes"],
         ]);
 
