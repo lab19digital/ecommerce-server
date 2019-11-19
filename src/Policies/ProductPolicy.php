@@ -51,7 +51,7 @@ class ProductPolicy
      * @param  \App\User  $user
      * @return bool
      */
-    public function delete(User $me, Product $product): bool
+    public function delete(User $me): bool
     {
         return $me->isAdmin();
     }
