@@ -234,7 +234,7 @@ class TestUserAccount extends TestCase
 
         $response = $this->postGraphQL(['query' => '
                 {
-                    users(count:10) {
+                    users(first:10) {
                         data {
                             id
                         }
@@ -267,7 +267,7 @@ class TestUserAccount extends TestCase
 
         $response = $this->postGraphQL(['query' => '
                 {
-                    users(count:10) {
+                    users(first:10) {
                         data {
                             id
                         }
