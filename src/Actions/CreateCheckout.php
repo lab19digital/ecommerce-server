@@ -8,9 +8,9 @@ use Lab19\Cart\Services\SessionService;
 
 class CreateCheckout
 {
-    public function __construct(SessionService $sessionService, CartService $cartService)
+    public function __construct(SessionService $sessionServiceRawService, CartService $cartService)
     {
-        $this->sessionService = $sessionService;
+        $this->sessionService = $sessionServiceRawService;
         $this->cartService = $cartService;
     }
 
@@ -23,9 +23,9 @@ class CreateCheckout
             $billing = $args['billing_address'];
         }
 
-        $session = $this->sessionService->raw();
+        $sessionServiceRaw = $this->sessionService->raw();
         $user = $this->sessionService->getUser();
-        $cartId = $session->cart->id;
+        $cartId = $sessionServiceRaw->cart->id;
         $userId = $user->id;
 
         $order = new Order([
