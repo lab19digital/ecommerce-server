@@ -14,7 +14,6 @@ use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
 {
-
     /**
      * Name of the directive as used in the schema.
      *
