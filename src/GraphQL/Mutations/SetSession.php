@@ -5,6 +5,7 @@ namespace Lab19\Cart\GraphQL\Mutations;
 use \App;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\Cache;
+use Lab19\Cart\Exceptions\GernzyException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class SetSession
@@ -37,6 +38,29 @@ class SetSession
 
         // Clear the previous rate for the user as a new currency has been chosen
         Cache::forget($sessionService->getToken());
+
+        return $sessionService->get();
+    }
+
+    // setGeoLocation
+    public function setGeoLocation($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        $ip_address = $args['input']['ip_address'];
+
+        if (!isset($ip_address)) {
+            throw new GernzyException(
+                'IP address invalid.',
+                'You did not provide an IP address or the IP address is invalid'
+            );
+        }
+
+        print $ip_address;
+
+        $sessionService = App::make('Lab19\SessionService');
+
+        $countryCode = $sessionService->getCountryCode($ip_address);
+
+        $sessionService->update(['geolocation' => $countryCode]);
 
         return $sessionService->get();
     }

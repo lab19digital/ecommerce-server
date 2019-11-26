@@ -9,5 +9,7 @@ interface GeolocationInterface
      *
      * @param string
      */
-    public function getLocation();
+    public function lookupCountryISO($ip_address);
+    public function setLookupImplementation($implementation);
+    public function getCountryCodeISO();
 }

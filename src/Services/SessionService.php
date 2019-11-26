@@ -2,14 +2,9 @@
 
 namespace Lab19\Cart\Services;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Lab19\Cart\Models\Session;
-use Lab19\Cart\Models\User;
-
 class SessionService
 {
-    const NAMESPACE = 'cart';
+    const namespace  = 'cart';
 
     public function __construct(Request $request)
     {
@@ -18,9 +13,8 @@ class SessionService
         $this->session = new Session;
         $this->session->token = Str::random(60);
         $this->session->data = [
-            'cart_uuid' => Str::uuid()
+            'cart_uuid' => Str::uuid(),
         ];
-
 
         // If the request provides a bearer token
         // we can potentially get the session from the request
@@ -91,7 +85,6 @@ class SessionService
         return $result;
     }
 
-
     // Getters
     public function get($key = null)
     {
@@ -114,5 +107,14 @@ class SessionService
     public function raw()
     {
         return $this->session;
+    }
+
+    public function getCountryCode($ip_address)
+    {
+        $geoLocationService = App::make('Lab19\GeoLocationService');
+
+        return $geoLocationService
+            ->setLookupImplementation((new Reader(__DIR__ . '/database/maxmind/GeoLite2-Country.mmdb')))
+            ->lookupCountryISO($ip_address);
     }
 }

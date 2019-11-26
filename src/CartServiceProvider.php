@@ -58,6 +58,13 @@ class CartServiceProvider extends ServiceProvider
             'Lab19\Services\OpenExchangeRates'
         );
 
+        // Implement our default binding of the geolocation converion interface
+        // GeoLocationService
+        $this->app->bind(
+            'Lab19\Services\GeolocationInterface',
+            'Lab19\Services\MaxmindGeoIP2'
+        );
+
         $this->app->bind('GuzzleHttp\Client', function ($app) {
             return new Client([
                 'base_uri' => 'https://openexchangerates.org/api/',
