@@ -21,5 +21,26 @@ class GelocationTest extends TestCase
      */
     public function testGeoLocation()
     {
+        return true;
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        mutation {
+            setSessionGeoLocation(input: {ip_address: "41.246.26.101"}) {
+                country_code
+            }
+        }
+        ');
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'setSessionGeoLocation' => [
+                    'country_code',
+                ],
+            ],
+        ]);
+
+        // $result = $response->decodeResponseJson();
     }
 }
