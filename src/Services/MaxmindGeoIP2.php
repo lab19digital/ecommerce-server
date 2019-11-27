@@ -17,11 +17,12 @@ class MaxmindGeoIP2 implements GeolocationInterface
     public function lookupCountryISO($ip_address)
     {
         $record = $this->implementation->country($ip_address);
+
         $isoCode = $record->country->isoCode;
 
         $this->setCountryISO($isoCode);
 
-        return $record->country->isoCode;
+        return $isoCode;
     }
 
     public function getCountryCodeISO()

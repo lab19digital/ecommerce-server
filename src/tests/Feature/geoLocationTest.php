@@ -21,7 +21,6 @@ class GelocationTest extends TestCase
      */
     public function testGeoLocation()
     {
-        return true;
         /** @var \Illuminate\Foundation\Testing\TestResponse $response */
         $response = $this->graphQLWithSession('
         mutation {
@@ -41,6 +40,12 @@ class GelocationTest extends TestCase
             ],
         ]);
 
-        // $result = $response->decodeResponseJson();
+        $result = $response->decodeResponseJson();
+
+        $isoCode = $result['data']['setSessionGeoLocation']['country_code'];
+
+        $this->assertTrue(isset($isoCode) && !empty($isoCode));
+
+        $this->assertEquals($isoCode, 'ZA');
     }
 }

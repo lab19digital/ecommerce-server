@@ -2,6 +2,7 @@
 
 namespace Lab19\Cart\Services;
 
+use \App;
 use GeoIp2\Database\Reader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -120,7 +121,7 @@ class SessionService
         $geoLocationService = App::make('Lab19\GeoLocationService');
 
         return $geoLocationService
-            ->setLookupImplementation((new Reader(__DIR__ . '/database/maxmind/GeoLite2-Country.mmdb')))
+            ->setLookupImplementation((new Reader('C:/laragon/www/gernzy-server/src/database/maxmind/GeoLite2-Country.mmdb')))
             ->lookupCountryISO($ip_address);
     }
 }

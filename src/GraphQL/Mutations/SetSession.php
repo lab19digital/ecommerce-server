@@ -54,14 +54,14 @@ class SetSession
             );
         }
 
-        print $ip_address;
-
         $sessionService = App::make('Lab19\SessionService');
 
         $countryCode = $sessionService->getCountryCode($ip_address);
 
+        // dd($countryCode);
+
         $sessionService->update(['geolocation' => $countryCode]);
 
-        return $sessionService->get();
+        return ['country_code' => $countryCode];
     }
 }
