@@ -2,6 +2,12 @@
 
 namespace Lab19\Cart\Services;
 
+use GeoIp2\Database\Reader;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Lab19\Cart\Models\Session;
+use Lab19\Cart\Models\User;
+
 class SessionService
 {
     const namespace  = 'cart';
