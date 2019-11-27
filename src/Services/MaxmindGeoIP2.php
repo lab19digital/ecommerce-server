@@ -8,30 +8,18 @@ class MaxmindGeoIP2 implements GeolocationInterface
     protected $countryISO;
     protected $implementation;
 
-    public function setLookupImplementation($implementation)
+    public function setGeoRepository($implementation)
     {
         $this->implementation = $implementation;
         return $this;
     }
 
-    public function lookupCountryISO($ip_address)
+    public function geoFindCountryISO($ip_address)
     {
         $record = $this->implementation->country($ip_address);
 
         $isoCode = $record->country->isoCode;
 
-        $this->setCountryISO($isoCode);
-
         return $isoCode;
-    }
-
-    public function getCountryCodeISO()
-    {
-        return $this->countryISO;
-    }
-
-    public function setCountryISO($countryISO)
-    {
-        $this->countryISO = $countryISO;
     }
 }

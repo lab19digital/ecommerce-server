@@ -11,19 +11,14 @@ class GeoLocationService
         $this->geoLocation = $geoLocation;
     }
 
-    public function setLookupImplementation($implementation)
+    public function injectGeoRepositoryType($implementation)
     {
-        $this->geoLocation->setLookupImplementation($implementation);
+        $this->geoLocation->setGeoRepository($implementation);
         return $this;
     }
 
-    public function lookupCountryISO($ip_address)
+    public function findCountryIsoCodeByIP($ip_address)
     {
-        return $this->geoLocation->lookupCountryISO($ip_address);
-    }
-
-    public function getCountryCodeISO()
-    {
-        return $this->geoLocation->getCountryCodeISO();
+        return $this->geoLocation->geoFindCountryISO($ip_address);
     }
 }

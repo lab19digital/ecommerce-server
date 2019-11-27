@@ -99,7 +99,6 @@ class GelocationTest extends TestCase
 
         $sessionService = App::make('Lab19\SessionService');
 
-        // $session = $sessionService->getFromToken($token);
         $isoCode = $sessionService->get('geolocation');
 
         $this->assertDatabaseHas('cart_sessions', [
