@@ -58,8 +58,6 @@ class SetSession
 
         $countryCode = $sessionService->getCountryCode($ip_address);
 
-        // dd($countryCode);
-
         $sessionService->update(['geolocation' => $countryCode]);
 
         return ['country_code' => $countryCode];
