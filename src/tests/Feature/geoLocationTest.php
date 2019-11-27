@@ -28,11 +28,11 @@ class GelocationTest extends TestCase
                     }
                 }
             ');
-    
+
         $start = $response->decodeResponseJson();
-    
+
         $token = $start['data']['createSession']['token'];
-    
+
         // Set the session currency
         $response = $this->postGraphQL(['query' => '
                     mutation {
@@ -40,23 +40,23 @@ class GelocationTest extends TestCase
                             country_code
                         }
                     }
-                ', ], [
-                'HTTP_Authorization' => 'Bearer ' . $token,
-            ]);
-    
+                ',], [
+            'HTTP_Authorization' => 'Bearer ' . $token,
+        ]);
+
         $response->assertDontSee('errors');
-    
+
         $response->assertJsonStructure([
-                'data' => [
-                    'setSessionGeoLocation' => [
-                        'country_code',
-                    ],
+            'data' => [
+                'setSessionGeoLocation' => [
+                    'country_code',
                 ],
-            ]);
-    
+            ],
+        ]);
+
         return $token;
     }
-        
+
 
     /**
      * A basic feature test example.
@@ -87,6 +87,8 @@ class GelocationTest extends TestCase
         $result = $response->decodeResponseJson();
 
         $isoCode = $result['data']['setSessionGeoLocation']['country_code'];
+
+        dd($isoCode);
 
         $this->assertTrue(isset($isoCode) && !empty($isoCode));
 

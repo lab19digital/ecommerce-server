@@ -7,6 +7,7 @@ class GeoLocationService
     // $geoLocation is the specific GeoCoding service implementation injected via the interface.
     // The default service bound into laravel is Maxmind
     protected $geoLocation;
+    protected $coordinates;
 
     public function __construct(GeolocationInterface $geoLocation)
     {
