@@ -21,19 +21,23 @@ class MaxmindGeoIP2 implements GeolocationInterface
         return $this;
     }
 
+    public function setRecord($ip_address)
+    {
+        $record = $this->implementation->city($ip_address);
+
+        $this->record = $record;
+
+        return $this;
+    }
+
     /**
      * Country code lookup in Repository
      *
      * @param $var
      */
-    public function geoFindCountryISO($ip_address)
+    public function geoFindCountryISO()
     {
-        $record = $this->implementation->country($ip_address);
-
-        $this->record = $record;
-
-        $isoCode = $record->country->isoCode;
-
+        $isoCode = $this->record->country->isoCode;
         return $isoCode;
     }
 
@@ -47,14 +51,9 @@ class MaxmindGeoIP2 implements GeolocationInterface
         return $this->record->location->longitude;
     }
 
-    public function geoFindCity($ip_address)
+    public function getCity()
     {
-        $record = $this->implementation->city($ip_address);
-
-        $this->record = $record;
-
-        $cityName = $record->mostSpecificSubdivision->name;
-
+        $cityName = $this->record->mostSpecificSubdivision->name;
         return $cityName;
     }
 }

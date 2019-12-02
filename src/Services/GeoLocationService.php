@@ -25,14 +25,20 @@ class GeoLocationService
         return $this;
     }
 
+    public function findandSetRecordMatchingIpAddress($ip_address)
+    {
+        $this->geoLocation->setRecord($ip_address);
+        return $this;
+    }
+
 
     /**
      * Find the country code by the provided geocoding service
      *
      * @param object
      */
-    public function findCountryIsoCodeByIP($ip_address)
+    public function findCountryIsoCodeByIP()
     {
-        return $this->geoLocation->geoFindCountryISO($ip_address);
+        return $this->geoLocation->geoFindCountryISO();
     }
 }

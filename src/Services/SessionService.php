@@ -121,7 +121,8 @@ class SessionService
         $geoLocationService = App::make('Lab19\GeoLocationService');
 
         return $geoLocationService
-            ->injectGeoRepositoryType((new Reader('C:/laragon/www/gernzy-server/src/database/maxmind/GeoLite2-Country.mmdb')))
-            ->findCountryIsoCodeByIP($ip_address);
+            ->injectGeoRepositoryType((new Reader('C:/laragon/www/gernzy-server/src/database/maxmind/GeoLite2-City.mmdb')))
+            ->findandSetRecordMatchingIpAddress($ip_address)
+            ->findCountryIsoCodeByIP();
     }
 }

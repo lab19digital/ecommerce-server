@@ -88,8 +88,6 @@ class GelocationTest extends TestCase
 
         $isoCode = $result['data']['setSessionGeoLocation']['country_code'];
 
-        dd($isoCode);
-
         $this->assertTrue(isset($isoCode) && !empty($isoCode));
 
         $this->assertEquals($isoCode, 'ZA');
