@@ -73,8 +73,6 @@ class CartServiceProvider extends ServiceProvider
         $this->app->bind('Lab19\CartService', CartService::class);
         $this->app->bind('Lab19\GeoLocationService', GeoLocationService::class);
 
-
-
         $this->app->bind('GuzzleHttp\Client', function ($app) {
             return new Client([
                 'base_uri' => 'https://openexchangerates.org/api/',
@@ -93,6 +91,10 @@ class CartServiceProvider extends ServiceProvider
 
         // Make cache config publishment optional by merging the config from the package.
         $this->mergeConfigFrom(__DIR__ . '/config/cache.php', 'cache');
+
+
+        // Make cache config publishment optional by merging the config from the package.
+        $this->mergeConfigFrom(__DIR__ . '/config/db.php', 'db');
     }
 
     /**

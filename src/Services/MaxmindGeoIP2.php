@@ -4,10 +4,7 @@ namespace Lab19\Cart\Services;
 
 class MaxmindGeoIP2 implements GeolocationInterface
 {
-    protected $ip_address;
-    protected $countryISO;
-    protected $implementation;
-
+    protected $implementation; //This is injected as either a local DB or api service
     protected $record;
 
     /**

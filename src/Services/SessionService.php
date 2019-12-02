@@ -118,12 +118,8 @@ class SessionService
 
     public function getCountryCode($ip_address)
     {
-        $pathToDb = 'src/database/maxmind/GeoLite2-City.mmdb';
-
-        $geoLocationService = App::make('Lab19\GeoLocationService');
-
-        return $geoLocationService
-            ->injectGeoRepositoryType((new Reader($pathToDb)))
+        return (App::make('Lab19\GeoLocationService'))
+            ->injectGeoRepositoryType((new Reader(config('db.maxmind_city_db'))))
             ->findandSetRecordMatchingIpAddress($ip_address)
             ->findCountryIsoCodeByIP();
     }
