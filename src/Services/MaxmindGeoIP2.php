@@ -65,7 +65,13 @@ class MaxmindGeoIP2 implements GeolocationInterface
 
     public function getCountryName()
     {
-        $countryName = $this->country->name;
+        $countryName = $this->record->country->name;
         return $countryName;
+    }
+
+    public function getRecord()
+    {
+        $record = $this->record;
+        return $record;
     }
 }

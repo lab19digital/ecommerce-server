@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use \App;
+use GeoIp2\Database\Reader;
 use Illuminate\Foundation\Testing\WithFaker;
+use Lab19\Cart\Services\MaxmindGeoIP2;
 use Lab19\Cart\Testing\TestCase;
 
 class GelocationTest extends TestCase
@@ -106,5 +108,23 @@ class GelocationTest extends TestCase
         ]);
 
         $this->assertEquals($isoCode, 'ZA');
+    }
+
+    public function testMaxminGeoIP2()
+    {
+        $pathToDb = 'src/database/maxmind/GeoLite2-City.mmdb';
+
+        $maxmind = new MaxmindGeoIP2;
+        $maxmind
+            ->setGeoRepository((new Reader($pathToDb)))
+            ->setRecord('41.246.26.94');
+
+        $this->assertTrue(null != $maxmind->geoFindCountryISO() && !empty($maxmind->geoFindCountryISO()));
+        $this->assertTrue(null != $maxmind->getLatitude() && !empty($maxmind->getLatitude()));
+        $this->assertTrue(null != $maxmind->getLongitude() && !empty($maxmind->getLongitude()));
+        $this->assertTrue(null != $maxmind->getCityName() && !empty($maxmind->getCityName()));
+        $this->assertTrue(null != $maxmind->getCityPostalCode() && !empty($maxmind->getCityPostalCode()));
+        $this->assertTrue(null != $maxmind->getCountryName() && !empty($maxmind->getCountryName()));
+        $this->assertTrue(null != $maxmind->getRecord() && !empty($maxmind->getRecord()));
     }
 }

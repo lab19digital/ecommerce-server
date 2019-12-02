@@ -118,7 +118,7 @@ class SessionService
 
     public function getCountryCode($ip_address)
     {
-        $pathToDb = dirname(__DIR__) . '\database\maxmind\GeoLite2-City.mmdb';
+        $pathToDb = 'src/database/maxmind/GeoLite2-City.mmdb';
 
         $geoLocationService = App::make('Lab19\GeoLocationService');
 
