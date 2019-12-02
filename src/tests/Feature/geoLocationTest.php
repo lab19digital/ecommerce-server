@@ -112,11 +112,9 @@ class GelocationTest extends TestCase
 
     public function testMaxminGeoIP2()
     {
-        $pathToDb = 'src/database/maxmind/GeoLite2-City.mmdb';
-
         $maxmind = new MaxmindGeoIP2;
         $maxmind
-            ->setGeoRepository((new Reader($pathToDb)))
+            ->setGeoRepository((new Reader(config('db.maxmind_city_db'))))
             ->setRecord('41.246.26.94');
 
         $this->assertTrue(null != $maxmind->geoFindCountryISO() && !empty($maxmind->geoFindCountryISO()));
