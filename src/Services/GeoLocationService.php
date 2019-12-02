@@ -39,4 +39,11 @@ class GeoLocationService
     {
         return $this->geoLocation->geoFindCountryISO();
     }
+
+
+    public function getGeolocationRecord()
+    {
+        $record = $this->geoLocation->getRecord();
+        return $record;
+    }
 }

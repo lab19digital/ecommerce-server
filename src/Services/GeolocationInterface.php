@@ -9,4 +9,5 @@ interface GeolocationInterface
     public function getLatitude();
     public function getLongitude();
     public function getCityName();
+    public function getRecord();
 }

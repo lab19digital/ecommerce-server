@@ -2,8 +2,6 @@
 
 namespace Lab19\Cart\Services;
 
-use \App;
-use GeoIp2\Database\Reader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Lab19\Cart\Models\Session;
@@ -114,13 +112,5 @@ class SessionService
     public function raw()
     {
         return $this->session;
-    }
-
-    public function getCountryCode($ip_address)
-    {
-        return (App::make('Lab19\GeoLocationService'))
-            ->injectGeoRepositoryType((new Reader(config('db.maxmind_city_db'))))
-            ->findandSetRecordMatchingIpAddress($ip_address)
-            ->findCountryIsoCodeByIP();
     }
 }

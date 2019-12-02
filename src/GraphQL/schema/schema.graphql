@@ -86,7 +86,7 @@ input SetSessionGeoLocationInput {
 }
 
 type setSessionGeoLocationPayload {
-    country_code: String
+    geolocation_record: String
 }
 
 type Session {

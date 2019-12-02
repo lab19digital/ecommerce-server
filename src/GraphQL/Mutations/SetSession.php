@@ -3,6 +3,7 @@
 namespace Lab19\Cart\GraphQL\Mutations;
 
 use \App;
+use GeoIp2\Database\Reader;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\Cache;
 use Lab19\Cart\Exceptions\GernzyException;
@@ -54,12 +55,27 @@ class SetSession
             );
         }
 
+        // Resolve the services
         $sessionService = App::make('Lab19\SessionService');
+        $geolocationService = App::make('Lab19\GeoLocationService');
 
-        $countryCode = $sessionService->getCountryCode($ip_address);
+        // Setup geolocation dependencies
+        $geolocationService
+            ->injectGeoRepositoryType((new Reader(config('db.maxmind_city_db'))))
+            ->findandSetRecordMatchingIpAddress($ip_address);
 
-        $sessionService->update(['geolocation' => $countryCode]);
+        // Get the geolocation details
+        $countryCode = $geolocationService->findCountryIsoCodeByIP($ip_address);
+        $geolocationRecord = $geolocationService->getGeolocationRecord();
 
-        return ['country_code' => $countryCode];
+        // Update the session data
+        $sessionService->update(['country_code' => $countryCode]);
+        $sessionService->update(['geolocation_record' => $geolocationRecord]);
+
+        // Convert the record to json for response
+        $geolocationRecord = (array) $geolocationRecord;
+        $geolocationRecord = json_encode($geolocationRecord);
+
+        return ['geolocation_record' => $geolocationRecord];
     }
 }

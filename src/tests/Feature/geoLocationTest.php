@@ -39,7 +39,7 @@ class GelocationTest extends TestCase
         $response = $this->postGraphQL(['query' => '
                     mutation {
                         setSessionGeoLocation(input: {ip_address: "41.246.26.101"}) {
-                            country_code
+                            geolocation_record
                         }
                     }
                 ',], [
@@ -51,7 +51,7 @@ class GelocationTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 'setSessionGeoLocation' => [
-                    'country_code',
+                    'geolocation_record',
                 ],
             ],
         ]);
@@ -71,7 +71,7 @@ class GelocationTest extends TestCase
         $response = $this->graphQLWithSession('
         mutation {
             setSessionGeoLocation(input: {ip_address: "41.246.26.101"}) {
-                country_code
+                geolocation_record
             }
         }
         ');
@@ -81,18 +81,16 @@ class GelocationTest extends TestCase
         $response->assertJsonStructure([
             'data' => [
                 'setSessionGeoLocation' => [
-                    'country_code',
+                    'geolocation_record',
                 ],
             ],
         ]);
 
         $result = $response->decodeResponseJson();
 
-        $isoCode = $result['data']['setSessionGeoLocation']['country_code'];
+        $geoLocationRecord = $result['data']['setSessionGeoLocation']['geolocation_record'];
 
-        $this->assertTrue(isset($isoCode) && !empty($isoCode));
-
-        $this->assertEquals($isoCode, 'ZA');
+        $this->assertTrue(isset($geoLocationRecord) && !empty($geoLocationRecord));
     }
 
     public function testDatabaseHasGeocodingSessionInformation()
@@ -101,13 +99,13 @@ class GelocationTest extends TestCase
 
         $sessionService = App::make('Lab19\SessionService');
 
-        $isoCode = $sessionService->get('geolocation');
+        $geoLocationRecord = $sessionService->get('geolocation_record');
 
         $this->assertDatabaseHas('cart_sessions', [
             'token' => $token,
         ]);
 
-        $this->assertEquals($isoCode, 'ZA');
+        $this->assertTrue(isset($geoLocationRecord) && !empty($geoLocationRecord));
     }
 
     public function testMaxminGeoIP2()
