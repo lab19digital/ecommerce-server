@@ -69,6 +69,11 @@ class MaxmindGeoIP2 implements GeolocationInterface
         return $countryName;
     }
 
+    /**
+     * This returns the entire record found for the given IP
+     * which contains geolocation details.
+     * @param $var
+     */
     public function getRecord()
     {
         $record = $this->record;
