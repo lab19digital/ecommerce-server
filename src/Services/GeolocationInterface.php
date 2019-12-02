@@ -8,5 +8,5 @@ interface GeolocationInterface
     public function setGeoRepository($implementation);
     public function getLatitude();
     public function getLongitude();
-    public function getCity();
+    public function getCityName();
 }

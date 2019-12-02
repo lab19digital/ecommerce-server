@@ -51,9 +51,21 @@ class MaxmindGeoIP2 implements GeolocationInterface
         return $this->record->location->longitude;
     }
 
-    public function getCity()
+    public function getCityName()
     {
-        $cityName = $this->record->mostSpecificSubdivision->name;
+        $cityName = $this->record->city->name;
         return $cityName;
+    }
+
+    public function getCityPostalCode()
+    {
+        $cityPostalCode = $this->record->postal->code;
+        return $cityPostalCode;
+    }
+
+    public function getCountryName()
+    {
+        $countryName = $this->country->name;
+        return $countryName;
     }
 }

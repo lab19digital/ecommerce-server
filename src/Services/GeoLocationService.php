@@ -31,7 +31,6 @@ class GeoLocationService
         return $this;
     }
 
-
     /**
      * Find the country code by the provided geocoding service
      *
