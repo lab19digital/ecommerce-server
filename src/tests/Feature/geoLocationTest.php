@@ -38,7 +38,7 @@ class GelocationTest extends TestCase
         // Set the session currency
         $response = $this->postGraphQL(['query' => '
                     mutation {
-                        setSessionGeoLocation(input: {ip_address: "41.246.26.101"}) {
+                        setSessionGeoLocation {
                             geolocation_record
                         }
                     }
@@ -70,7 +70,7 @@ class GelocationTest extends TestCase
         /** @var \Illuminate\Foundation\Testing\TestResponse $response */
         $response = $this->graphQLWithSession('
         mutation {
-            setSessionGeoLocation(input: {ip_address: "41.246.26.101"}) {
+            setSessionGeoLocation {
                 geolocation_record
             }
         }

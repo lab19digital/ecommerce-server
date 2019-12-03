@@ -46,12 +46,23 @@ class SetSession
     // setGeoLocation
     public function setGeoLocation($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $ip_address = $args['input']['ip_address'];
 
+        // Determine the user's IP address
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            //ip from share internet
+            $ip_address = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            //ip pass from proxy
+            $ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+            $ip_address = $_SERVER['REMOTE_ADDR'];
+        }
+
+        // Get the address
         if (!isset($ip_address)) {
             throw new GernzyException(
                 'IP address invalid.',
-                'You did not provide an IP address or the IP address is invalid'
+                'The ip address could not be determined or the IP address is invalid'
             );
         }
 
