@@ -2,7 +2,7 @@
 
 namespace Lab19\Cart\Services;
 
-class GeoLocationService
+class GeolocationService
 {
     // $geoLocation is the specific GeoCoding service implementation injected via the interface.
     // The default service bound into laravel is Maxmind
