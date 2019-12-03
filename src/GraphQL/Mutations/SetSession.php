@@ -57,7 +57,7 @@ class SetSession
 
         // Resolve the services
         $sessionService = App::make('Lab19\SessionService');
-        $geolocationService = App::make('Lab19\GeoLocationService');
+        $geolocationService = App::make('Lab19\GeolocationService');
 
         // Setup geolocation dependencies
         $geolocationService

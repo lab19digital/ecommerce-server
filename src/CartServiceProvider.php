@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Lab19\Cart\Services\CartService;
 use Lab19\Cart\Services\CurrencyConversionInterface;
 use Lab19\Cart\Services\GeolocationInterface;
-use Lab19\Cart\Services\GeoLocationService;
+use Lab19\Cart\Services\GeolocationService;
 use Lab19\Cart\Services\MaxmindGeoIP2;
 use Lab19\Cart\Services\OpenExchangeRates;
 use Lab19\Cart\Services\OrderService;
@@ -54,7 +54,7 @@ class CartServiceProvider extends ServiceProvider
 
 
         // Implement our default binding of the geolocation converion interface
-        // GeoLocationService
+        // GeolocationService
         $this->app->bind(
             GeolocationInterface::class,
             MaxmindGeoIP2::class
@@ -71,7 +71,7 @@ class CartServiceProvider extends ServiceProvider
         $this->app->bind('Lab19\UserService', UserService::class);
         $this->app->bind('Lab19\OrderService', OrderService::class);
         $this->app->bind('Lab19\CartService', CartService::class);
-        $this->app->bind('Lab19\GeoLocationService', GeoLocationService::class);
+        $this->app->bind('Lab19\GeolocationService', GeolocationService::class);
 
         $this->app->bind('GuzzleHttp\Client', function ($app) {
             return new Client([
