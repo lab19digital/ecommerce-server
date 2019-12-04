@@ -93,6 +93,16 @@ class Product extends Model
      *
      * @var $query
      */
+    public function fixedprices()
+    {
+        return $this->hasMany(ProductPrice::class);
+    }
+
+    /**
+     * Attributes relation
+     *
+     * @var $query
+     */
     public function sizes()
     {
         return $this->hasMany(ProductAttribute::class)->sizes();
@@ -155,7 +165,7 @@ class Product extends Model
         $dimensions = $this->getAttribute('productDimensions');
         $data = [];
         foreach ($dimensions as $each) {
-            $data[ $each->key ] = $each->value;
+            $data[$each->key] = $each->value;
         }
         return $data;
     }
