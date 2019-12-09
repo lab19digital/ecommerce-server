@@ -14,37 +14,36 @@ class TestViewProducts extends TestCase
         parent::setUp();
         $this->availableCount = 5;
 
+        factory(Product::class, $this->availableCount)->create();
 
-        factory(Product::class, $this->availableCount)->create()->each(function ($product) {
-            $productFixedPrice = new ProductPrice();
-            $productFixedPrice->country_code = 'EUR';
-            $productFixedPrice->price = '899.99';
-            $product->fixedprices()->save($productFixedPrice);
-            $product->save();
-        });
-
-        // factory(ProductPrice::class, $this->availableCount)->create()->each(function ($product_price) {
-        //     $product = Product::find(1);
-        //     $product_price->product()->save($product);
-        //     $product_price->save();
-        // });
-
-
-        // $post->comments()->saveMany([
-        //     new App\Comment(['message' => 'A new comment.']),
-        //     new App\Comment(['message' => 'Another comment.']),
-        // ]);
+        $product = Product::find(1);
+        $product->fixedprices()->saveMany([
+            new ProductPrice(['country_code' => 'EUR', 'price' => '100.99',]),
+            new ProductPrice(['country_code' => 'ZAR', 'price' => '140.99',]),
+            new ProductPrice(['country_code' => 'AED', 'price' => '155.99',])
+        ]);
     }
 
-    public function testGuestUserCanViewInStockProducts(): void
+    public function testSavingOneToManyFixedPricesEloquent(): void
+    {
+        $product = Product::find(1);
+        $productFixedPrice = new ProductPrice();
+        $productFixedPrice->country_code = 'EUR';
+        $productFixedPrice->price = '899.99';
+        $product->fixedprices()->save($productFixedPrice);
+        $result = $product->save();
+        $this->assertTrue($result);
+    }
+
+    public function testRetrievingOneToManyFixedPricesList(): void
     {
         $product = Product::with('fixedprices')->find(1);
         foreach ($product->fixedprices as $fixedPrice) {
-            print 'The price' . $fixedPrice;
+            $this->assertNotEmpty($fixedPrice);
         }
     }
 
-    public function testGuestUserCanViewInStockProductsAlternative(): void
+    public function testRetrievingOneToManyProduct(): void
     {
         // Find fixed price and related product
         $productFixedPrice = ProductPrice::find(1);

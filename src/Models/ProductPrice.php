@@ -19,7 +19,10 @@ class ProductPrice extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'country_code',
+        'price',
+    ];
 
     public function product()
     {
