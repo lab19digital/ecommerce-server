@@ -7,7 +7,7 @@ use Lab19\Cart\Testing\TestCase;
 /**
  * @group Products
  */
-class TestViewProducts extends TestCase
+class TestProductFixedPrices extends TestCase
 {
     public function setUp(): void
     {
