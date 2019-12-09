@@ -26,13 +26,21 @@ class TestViewProducts extends TestCase
 
     public function testSavingOneToManyFixedPricesEloquent(): void
     {
-        $product = Product::find(1);
-        $productFixedPrice = new ProductPrice();
-        $productFixedPrice->country_code = 'EUR';
-        $productFixedPrice->price = '899.99';
+        $product = factory(Product::class)->create();
+
+        $productFixedPrice = factory(ProductPrice::class)->make();
+
+        // Create the relationship
         $product->fixedprices()->save($productFixedPrice);
-        $result = $product->save();
-        $this->assertTrue($result);
+
+        $this->assertDatabaseHas('cart_products', [
+            'id' => $product->id,
+        ]);
+
+        $this->assertDatabaseHas('cart_product_prices', [
+            'id' => $productFixedPrice->id,
+            'product_id' => $product->id
+        ]);
     }
 
     public function testRetrievingOneToManyFixedPricesList(): void
