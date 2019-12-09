@@ -17,7 +17,6 @@ use Lab19\Cart\Models\ProductPrice;
  */
 
 $factory->define(ProductPrice::class, function (Faker $faker) {
-    $rand = rand(0, 10);
     return [
         'country_code' => $faker->word(),
         'price' => $faker->numberBetween($min = 1000, $max = 9000)
