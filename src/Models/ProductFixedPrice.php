@@ -4,7 +4,7 @@ namespace Lab19\Cart\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProductPrice extends Model
+class ProductFixedPrice extends Model
 {
 
     /**

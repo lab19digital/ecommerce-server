@@ -1,7 +1,7 @@
 <?php
 
 use Lab19\Cart\Models\Product;
-use Lab19\Cart\Models\ProductPrice;
+use Lab19\Cart\Models\ProductFixedPrice;
 use Lab19\Cart\Testing\TestCase;
 
 /**
@@ -18,9 +18,9 @@ class TestProductFixedPrices extends TestCase
 
         $product = Product::find(1);
         $product->fixedprices()->saveMany([
-            new ProductPrice(['country_code' => 'EUR', 'price' => '100.99',]),
-            new ProductPrice(['country_code' => 'ZAR', 'price' => '140.99',]),
-            new ProductPrice(['country_code' => 'AED', 'price' => '155.99',])
+            new ProductFixedPrice(['country_code' => 'EUR', 'price' => '100.99',]),
+            new ProductFixedPrice(['country_code' => 'ZAR', 'price' => '140.99',]),
+            new ProductFixedPrice(['country_code' => 'AED', 'price' => '155.99',])
         ]);
     }
 
@@ -28,7 +28,7 @@ class TestProductFixedPrices extends TestCase
     {
         $product = factory(Product::class)->create();
 
-        $productFixedPrice = factory(ProductPrice::class)->make();
+        $productFixedPrice = factory(ProductFixedPrice::class)->make();
 
         // Create the relationship
         $product->fixedprices()->save($productFixedPrice);
@@ -54,8 +54,46 @@ class TestProductFixedPrices extends TestCase
     public function testRetrievingOneToManyProduct(): void
     {
         // Find fixed price and related product
-        $productFixedPrice = ProductPrice::find(1);
+        $productFixedPrice = ProductFixedPrice::find(1);
         $product = $productFixedPrice->product;
         $this->assertNotEmpty($product->title);
+    }
+
+    public function testViewProductFixedPricesGraphql(): void
+    {
+        $product = Product::find(1);
+        $productFixedPrice = ProductFixedPrice::find(1);
+
+        $response = $this->graphQL('
+                query {
+                    product(id: 1) {
+                        fixedprices {
+                            id
+                            price
+                            country_code
+                        }
+                    }
+                }
+            ');
+
+        $response->assertDontSee('errors');
+
+        $response->assertDontSee('errors');
+
+        $result = $response->decodeResponseJson();
+
+        $this->assertCount(3, $result['data']['product']['fixedprices']);
+
+        $this->assertTrue($product->fixedprices->contains('id', $productFixedPrice->id));
+
+        $response->assertJsonStructure([
+            'data' => [
+                'product' => [
+                    'fixedprices' => [
+                        ['id', 'price', 'country_code']
+                    ]
+                ]
+            ]
+        ]);
     }
 }

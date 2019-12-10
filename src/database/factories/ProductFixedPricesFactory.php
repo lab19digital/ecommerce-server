@@ -3,7 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use Faker\Generator as Faker;
-use Lab19\Cart\Models\ProductPrice;
+use Lab19\Cart\Models\ProductFixedPrice;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +16,7 @@ use Lab19\Cart\Models\ProductPrice;
 |
  */
 
-$factory->define(ProductPrice::class, function (Faker $faker) {
+$factory->define(ProductFixedPrice::class, function (Faker $faker) {
     return [
         'country_code' => $faker->word(),
         'price' => $faker->numberBetween($min = 1000, $max = 9000)

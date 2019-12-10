@@ -4,6 +4,7 @@ namespace Lab19\Cart\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -92,9 +93,9 @@ class Product extends Model
      *
      * @var $query
      */
-    public function fixedprices()
+    public function fixedprices(): HasMany
     {
-        return $this->hasMany(ProductPrice::class);
+        return $this->hasMany(ProductFixedPrice::class);
     }
 
     /**
