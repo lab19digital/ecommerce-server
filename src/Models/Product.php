@@ -93,7 +93,7 @@ class Product extends Model
      *
      * @var $query
      */
-    public function fixedprices(): HasMany
+    public function fixedPrices(): HasMany
     {
         return $this->hasMany(ProductFixedPrice::class);
     }

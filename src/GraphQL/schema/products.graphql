@@ -64,7 +64,7 @@ type Product {
     images: [Image!]
     featured_image: Image
     tags: [Tag!] @hasMany
-    fixedprices: [ProductFixedPrice!] @hasMany
+    fixedPrices: [ProductFixedPrice!] @hasMany
 }
 
 type ProductFixedPrice {

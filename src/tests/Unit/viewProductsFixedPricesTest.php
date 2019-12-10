@@ -17,7 +17,7 @@ class TestProductFixedPrices extends TestCase
         factory(Product::class, $this->availableCount)->create();
 
         $product = Product::find(1);
-        $product->fixedprices()->saveMany([
+        $product->fixedPrices()->saveMany([
             new ProductFixedPrice(['country_code' => 'EUR', 'price' => '100.99',]),
             new ProductFixedPrice(['country_code' => 'ZAR', 'price' => '140.99',]),
             new ProductFixedPrice(['country_code' => 'AED', 'price' => '155.99',])
@@ -31,7 +31,7 @@ class TestProductFixedPrices extends TestCase
         $productFixedPrice = factory(ProductFixedPrice::class)->make();
 
         // Create the relationship
-        $product->fixedprices()->save($productFixedPrice);
+        $product->fixedPrices()->save($productFixedPrice);
 
         $this->assertDatabaseHas('cart_products', [
             'id' => $product->id,
@@ -45,8 +45,8 @@ class TestProductFixedPrices extends TestCase
 
     public function testRetrievingOneToManyFixedPricesList(): void
     {
-        $product = Product::with('fixedprices')->find(1);
-        foreach ($product->fixedprices as $fixedPrice) {
+        $product = Product::with('fixedPrices')->find(1);
+        foreach ($product->fixedPrices as $fixedPrice) {
             $this->assertNotEmpty($fixedPrice);
         }
     }
@@ -67,7 +67,7 @@ class TestProductFixedPrices extends TestCase
         $response = $this->graphQL('
                 query {
                     product(id: 1) {
-                        fixedprices {
+                        fixedPrices {
                             id
                             price
                             country_code
@@ -82,14 +82,14 @@ class TestProductFixedPrices extends TestCase
 
         $result = $response->decodeResponseJson();
 
-        $this->assertCount(3, $result['data']['product']['fixedprices']);
+        $this->assertCount(3, $result['data']['product']['fixedPrices']);
 
-        $this->assertTrue($product->fixedprices->contains('id', $productFixedPrice->id));
+        $this->assertTrue($product->fixedPrices->contains('id', $productFixedPrice->id));
 
         $response->assertJsonStructure([
             'data' => [
                 'product' => [
-                    'fixedprices' => [
+                    'fixedPrices' => [
                         ['id', 'price', 'country_code']
                     ]
                 ]
