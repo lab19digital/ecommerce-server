@@ -3,6 +3,7 @@
 namespace Lab19\Cart\GraphQL\Queries;
 
 use GraphQL\Type\Definition\ResolveInfo;
+use Lab19\Cart\Exceptions\GernzyException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Currency
@@ -19,6 +20,14 @@ class Currency
 
     public function enabledCurrencies($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        return ['EUR', 'ZAR', 'USD'];
+        // Throw error when there are missing values from the config, thus no currency specified
+        if (!$enabledCurrrencies = config('currency.enabled')) {
+            throw new GernzyException(
+                'An error occured.',
+                'An error occured when determining the currency. None specified.'
+            );
+        }
+
+        return $enabledCurrrencies;
     }
 }
