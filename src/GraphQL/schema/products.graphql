@@ -25,6 +25,8 @@ extend type Query {
         @paginate(type: "paginator", builder: "Lab19\\Cart\\GraphQL\\Builders\\ProductsBuilder@productsByTags")
 
     product(id: ID @eq): Product @find(model: "Lab19\\Cart\\Models\\Product")
+
+    enabledCurrencies: [String] @field(resolver: "Lab19\\Cart\\GraphQL\\Queries\\Currency@enabledCurrencies")
 }
 
 input ProductsQueryInput {
