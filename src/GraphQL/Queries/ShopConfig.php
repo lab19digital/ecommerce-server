@@ -6,7 +6,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Lab19\Cart\Exceptions\GernzyException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
-class Currency
+class ShopConfig
 {
     /**
      * Return a value for the field.

@@ -26,7 +26,7 @@ extend type Query {
 
     product(id: ID @eq): Product @find(model: "Lab19\\Cart\\Models\\Product")
 
-    enabledCurrencies: [String] @field(resolver: "Lab19\\Cart\\GraphQL\\Queries\\Currency@enabledCurrencies")
+    enabledCurrencies: [String] @field(resolver: "Lab19\\Cart\\GraphQL\\Queries\\ShopConfig@enabledCurrencies")
 }
 
 input ProductsQueryInput {
