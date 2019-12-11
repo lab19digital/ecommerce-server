@@ -18,7 +18,7 @@ class EnabledCurrencyTest extends TestCase
     {
         $response = $this->graphQL('
                 query {
-                    enabledCurrencies
+                    shopConfig
                 }
             ');
 
@@ -26,11 +26,11 @@ class EnabledCurrencyTest extends TestCase
 
         $result = $response->decodeResponseJson();
 
-        $this->assertNotEmpty($result['data']['enabledCurrencies']);
+        $this->assertNotEmpty($result['data']['shopConfig']);
 
         $response->assertJsonStructure([
             'data' => [
-                'enabledCurrencies' => []
+                'shopConfig' => []
             ]
         ]);
     }
