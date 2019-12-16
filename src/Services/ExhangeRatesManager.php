@@ -13,6 +13,11 @@ class ExhangeRatesManager
     protected $cachedRate;
     protected $repository;
 
+    public function __construct(CurrencyConversionInterface $currencyConverter)
+    {
+        $this->currencyConverter = $currencyConverter;
+    }
+
     /*------------------Setters------------------*/
     /**
      * Set's the object result
@@ -134,7 +139,7 @@ class ExhangeRatesManager
     {
         // At this point there is no cached rate, and all variables are set so new up a currency object and convert price.
         // note that this makes the api call, thus caching the result afterwards reduces api usage
-        $currencyConverter = $this->currencyConverter::create($this->sessionCurrency, $productCurrency);
+        $currencyConverter = $this->create($this->sessionCurrency, $productCurrency);
 
         // Set the cache with the rate for the user
         if (isset($this->token)) {
@@ -153,5 +158,14 @@ class ExhangeRatesManager
     public function saveToRepository($token, $rate, $time)
     {
         $this->repository::put($token, $rate, $time);
+    }
+
+    public function create($currency, $base)
+    {
+        $this->currencyConverter->setCurrency($currency);
+        $this->currencyConverter->setBaseCurrency($base);
+        $this->currencyConverter->makeApiRequest(); //This function does the api call
+        $this->currencyConverter->setRate();
+        return $this->currencyConverter;
     }
 }
