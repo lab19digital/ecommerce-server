@@ -2,11 +2,12 @@
 
 namespace Lab19\Cart\Actions;
 
+use \App;
 use Lab19\Cart\Actions\Helpers\Attributes;
-use Lab19\Cart\Factories\OpenExchangeRatesFactory;
 use Lab19\Cart\Models\Category;
 use Lab19\Cart\Models\Product;
 use Lab19\Cart\Models\ProductFixedPrice;
+use Lab19\Cart\Services\ExhangeRatesManager;
 
 class CreateProduct
 {
@@ -61,10 +62,12 @@ class CreateProduct
 
         if ($fixCurrencies && $productPrice && $productBaseCurrency) {
             $convertedFixedPrices = array_map(function ($currencyCode) use ($productPrice, $productBaseCurrency) {
-                $converter = OpenExchangeRatesFactory::create($currencyCode, $productBaseCurrency);
-                $convertedPrice = $converter->convertCurrency($productPrice);
+                $converter = (App::make(ExhangeRatesManager::class))
+                    ->setPrices([0 => ['price_currency' =>  $productBaseCurrency, 'price_cents' => $productPrice]])
+                    ->setTargetCurrency($currencyCode)
+                    ->convertPrices();
 
-                return new ProductFixedPrice(['country_code' => $currencyCode, 'price' => $convertedPrice]);
+                return new ProductFixedPrice(['country_code' => $currencyCode, 'price' => $converter[0]['price_cents']]);
             }, $fixCurrencies);
 
             $product->fixedPrices()->saveMany($convertedFixedPrices);

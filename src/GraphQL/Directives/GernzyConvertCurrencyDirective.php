@@ -58,8 +58,8 @@ class GernzyConvertCurrencyDirective implements Directive, FieldMiddleware
             $sessionCurrency = $session['data']['currency'];
 
             return (App::make(ExhangeRatesManager::class))
-                ->setResult($result)
-                ->setSessionCurrency($sessionCurrency)
+                ->setPrices($result)
+                ->setTargetCurrency($sessionCurrency)
                 ->setToken($token)
                 ->setCachedRate(Cache::get($token, null))
                 ->setRpository((new Cache()))
