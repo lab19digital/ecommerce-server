@@ -169,7 +169,6 @@ class TestCreateProductTest extends TestCase
         $product = Product::with('fixedPrices')->find(1);
         foreach ($product->fixedPrices as $fixedPrice) {
             $this->assertNotEmpty($fixedPrice);
-            print $fixedPrice;
         }
 
         $productFixedPrice = ProductFixedPrice::find(1);
