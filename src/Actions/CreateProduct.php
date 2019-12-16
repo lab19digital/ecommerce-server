@@ -61,6 +61,8 @@ class CreateProduct
         $fixCurrencies = $args['fixprices'] ?? false;
 
         if ($fixCurrencies && $productPrice && $productBaseCurrency) {
+
+            // Map over each currency provided and fix the price for the product in that currency
             $convertedFixedPrices = array_map(function ($currencyCode) use ($productPrice, $productBaseCurrency) {
                 $converter = (App::make(ExhangeRatesManager::class))
                     ->setPrices([0 => ['price_currency' =>  $productBaseCurrency, 'price_cents' => $productPrice]])
@@ -70,6 +72,7 @@ class CreateProduct
                 return new ProductFixedPrice(['country_code' => $currencyCode, 'price' => $converter[0]['price_cents']]);
             }, $fixCurrencies);
 
+            // Create latavel relationship for the products fixed prices in the specified currencies
             $product->fixedPrices()->saveMany($convertedFixedPrices);
         }
 
