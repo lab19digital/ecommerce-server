@@ -114,6 +114,7 @@ input CreateProductInput {
     categories: [CategoryInput!]
     dimensions: ProductDimensionsInput
     weight: ProductWeightInput
+    fixprices: [String]
 }
 
 input ProductDimensionsInput {
