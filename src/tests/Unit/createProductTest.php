@@ -166,13 +166,21 @@ class TestCreateProductTest extends TestCase
             ]
         ]);
 
+        // Check from Product model side
         $product = Product::with('fixedPrices')->find(1);
         foreach ($product->fixedPrices as $fixedPrice) {
             $this->assertNotEmpty($fixedPrice);
         }
 
+        // Check from ProductFixedPrice model side
         $productFixedPrice = ProductFixedPrice::find(1);
         $product = $productFixedPrice->product;
         $this->assertNotEmpty($product->title);
+
+        // Check the database contains the info for the fixed prices
+        $this->assertDatabaseHas('cart_product_prices', [
+            'id' => $productFixedPrice->id,
+            'product_id' => $product->id
+        ]);
     }
 }
