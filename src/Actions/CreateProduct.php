@@ -63,6 +63,7 @@ class CreateProduct
         if ($fixCurrencies && $productPrice && $productBaseCurrency) {
 
             // Map over each currency provided and fix the price for the product in that currency
+            // and pass the resultant array to the save many function
             $convertedFixedPrices = array_map(function ($currencyCode) use ($productPrice, $productBaseCurrency) {
 
                 // Use the Exhange Rate manager object to convert the prices
