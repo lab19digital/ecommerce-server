@@ -64,6 +64,8 @@ class CreateProduct
 
             // Map over each currency provided and fix the price for the product in that currency
             $convertedFixedPrices = array_map(function ($currencyCode) use ($productPrice, $productBaseCurrency) {
+
+                // Use the Exhange Rate manager object to convert the prices
                 $converter = (App::make(ExhangeRatesManager::class))
                     ->setPrices([0 => ['price_currency' =>  $productBaseCurrency, 'price_cents' => $productPrice]])
                     ->setTargetCurrency($currencyCode)
