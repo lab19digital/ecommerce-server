@@ -141,6 +141,7 @@ class TestCreateProductTest extends TestCase
 
     public function testAdminUserCanCreateProductWithFixedPrices()
     {
+        // fixprices: ["EUR","AED","GBP","ZAR","AUD"]
         /** @var \Illuminate\Foundation\Testing\TestResponse $response */
         $response = $this->graphQLWithSession('
                 mutation {
@@ -148,7 +149,7 @@ class TestCreateProductTest extends TestCase
                         title:"Coffee dripper"
                         price_cents: 239
                         price_currency: "USD"
-                        fixprices: ["EUR","AED","GBP","ZAR","AUD"]
+                        fixprices: [{currency: "EUR", price: 29.99 }, { currency: "AUD", price: 24.99 },{ currency: "AED"}]
                         }) {
                         id
                         title
