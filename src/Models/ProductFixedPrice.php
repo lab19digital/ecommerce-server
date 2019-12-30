@@ -28,4 +28,17 @@ class ProductFixedPrice extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    /**
+     * This method converts price in cents to a fixed price
+     * For example 32.66 to 32.99
+     *
+     * @var array
+     */
+    public function fixPrice()
+    {
+        $this->price = (ceil($this->price / 100) - 0.01) * 100;
+
+        return $this;
+    }
 }

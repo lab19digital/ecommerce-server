@@ -72,7 +72,8 @@ class CreateProduct
                     ->setTargetCurrency($currencyCode)
                     ->convertPrices();
 
-                return new ProductFixedPrice(['country_code' => $currencyCode, 'price' => $converter[0]['price_cents']]);
+                // return a new instance of the ProductFixedPrice model and run the function that fixes the price
+                return (new ProductFixedPrice(['country_code' => $currencyCode, 'price' => $converter[0]['price_cents']]))->fixPrice();
             }, $fixCurrencies);
 
             // Create latavel relationship for the products fixed prices in the specified currencies
