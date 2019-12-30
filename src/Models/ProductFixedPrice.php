@@ -37,7 +37,10 @@ class ProductFixedPrice extends Model
      */
     public function fixPrice()
     {
-        $this->price = (ceil($this->price / 100) - 0.01) * 100;
+        if ($price = $this->price) {
+            $price = (ceil($price / 100) - 0.01) * 100;
+            $this->price = $price;
+        }
 
         return $this;
     }
