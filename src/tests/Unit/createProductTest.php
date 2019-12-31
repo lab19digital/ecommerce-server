@@ -149,7 +149,7 @@ class TestCreateProductTest extends TestCase
                         title:"Coffee dripper"
                         price_cents: 239
                         price_currency: "USD"
-                        fixprices: [{currency: "EUR", price: 29.99 }, { currency: "AUD", price: 24.99 },{ currency: "AED"}]
+                        fixprices: [{currency: "EUR", price_cents: 2999 }, { currency: "AUD", price_cents: 2499 },{ currency: "AED"}]
                         }) {
                         id
                         title
@@ -166,6 +166,9 @@ class TestCreateProductTest extends TestCase
                 ]
             ]
         ]);
+
+        $result = $response->decodeResponseJson();
+
 
         // Check from Product model side
         $product = Product::with('fixedPrices')->find(1);

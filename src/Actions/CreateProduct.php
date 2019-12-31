@@ -67,7 +67,7 @@ class CreateProduct
         // Map over $fixCurrencies and fix the price for the product in that currency
         // and pass the resultant array to the save many function
         $convertedFixedPrices = array_map(function ($pricingInput) use ($productPrice, $productBaseCurrency) {
-            $productManualOverridePrice = $pricingInput['price'] ?? false;
+            $productManualOverridePrice = $pricingInput['price_cents'] ?? false;
             $targetCurrency = $pricingInput['currency'];
 
             if (!$productManualOverridePrice) {

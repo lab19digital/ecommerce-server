@@ -119,7 +119,7 @@ input CreateProductInput {
 
 input PricingInput {
     currency: String
-    price: Float
+    price_cents: Float
 }
 
 input ProductDimensionsInput {
