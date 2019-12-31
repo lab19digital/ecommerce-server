@@ -55,34 +55,38 @@ class CreateProduct
             $attributes->toArray()
         );
 
-        // Create fixed prices if specified in the arguments
+        // Product details
         $productPrice = $args['price_cents'] ?? false;
         $productBaseCurrency = $args['price_currency'] ?? false;
         $fixCurrencies = $args['fixprices'] ?? false;
 
-        if ($fixCurrencies && $productPrice && $productBaseCurrency) {
+        if (!$fixCurrencies || !$productPrice || !$productBaseCurrency) {
+            return $product;
+        }
 
-            // Map over each currency provided and fix the price for the product in that currency
-            // and pass the resultant array to the save many function
-            $convertedFixedPrices = array_map(function ($pricingInput) use ($productPrice, $productBaseCurrency) {
+        // Map over $fixCurrencies and fix the price for the product in that currency
+        // and pass the resultant array to the save many function
+        $convertedFixedPrices = array_map(function ($pricingInput) use ($productPrice, $productBaseCurrency) {
+            $productManualOverridePrice = $pricingInput['price'] ?? false;
+            $targetCurrency = $pricingInput['currency'];
 
-                // $productPrice = $pricingInput['price'];
-                $productCurrency = $pricingInput['currency'];
+            if (!$productManualOverridePrice) {
 
-                // Use the Exhange Rate manager object to convert the prices
+                // Use the Exhange Rate manager object to convert the prices, only if no manual override is present
                 $converter = (App::make(ExhangeRatesManager::class))
                     ->setPrices([0 => ['price_currency' =>  $productBaseCurrency, 'price_cents' => $productPrice]])
-                    ->setTargetCurrency($productCurrency)
+                    ->setTargetCurrency($targetCurrency)
                     ->convertPrices();
 
                 // return a new instance of the ProductFixedPrice model and run the function that fixes the price
-                return (new ProductFixedPrice(['country_code' => $pricingInput, 'price' => $converter[0]['price_cents']]))->fixPrice();
-            }, $fixCurrencies);
+                return (new ProductFixedPrice(['country_code' => $targetCurrency, 'price' => $converter[0]['price_cents']]))->fixPrice();
+            }
 
-            // Create latavel relationship for the products fixed prices in the specified currencies
-            $product->fixedPrices()->saveMany($convertedFixedPrices);
-        }
+            return (new ProductFixedPrice(['country_code' => $targetCurrency, 'price' => $productManualOverridePrice]));
+        }, $fixCurrencies);
 
+        // Create latavel relationship for the products fixed prices in the specified currencies
+        $product->fixedPrices()->saveMany($convertedFixedPrices);
 
         return $product;
     }
