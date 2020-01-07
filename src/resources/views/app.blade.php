@@ -24,17 +24,14 @@
     <!-- JS -->
     <script>
         $(document).ready(function() {
-            console.log('init');
+
             $.ajax({
-                method: "POST",
                 url: "http://gernzy-laravel.test/graphql",
                 contentType: "application/json",
-                headers: {
-                    Authorization: "Bearer itwOx9t3r60n2fxsgmtKHEA15wCRwxmeuCgVDqX4cia3kYMBXVYtUgS2dOmi"
-                },
+                type: 'POST',
                 data: JSON.stringify({
-                    query: `{
-                    products(first:100) {
+                    query: `query {
+                    products(first:10) {
                         data {
                             id
                             title
@@ -47,16 +44,14 @@
                             currentPage
                         }
                     }
-                }`,
-                    success: function(response) {
-                        console.log(response);
-                    },
-                    error: function(response) {
-                        console.log(response);
-                    },
-                    variables: {}
-                })
-            })
+                }`
+                }),
+                success: function(result) {
+                    console.log(JSON.stringify(result))
+                }
+            });
+
+
         });
     </script>
 
