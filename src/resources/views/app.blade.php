@@ -9,10 +9,10 @@
 
 
     <!-- jQuery core -->
-    <script async src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
     <!-- jQuery UI -->
-    <script async src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 
     <!-- UIkit CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/css/uikit.min.css" />
@@ -20,6 +20,46 @@
     <!-- UIkit JS -->
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/js/uikit-icons.min.js"></script>
+
+    <!-- JS -->
+    <script>
+        $(document).ready(function() {
+            console.log('init');
+            $.ajax({
+                method: "POST",
+                url: "http://gernzy-laravel.test/graphql",
+                contentType: "application/json",
+                headers: {
+                    Authorization: "Bearer itwOx9t3r60n2fxsgmtKHEA15wCRwxmeuCgVDqX4cia3kYMBXVYtUgS2dOmi"
+                },
+                data: JSON.stringify({
+                    query: `{
+                    products(first:100) {
+                        data {
+                            id
+                            title
+                            status
+                            published
+                        }
+                        paginatorInfo {
+                            total
+                            hasMorePages
+                            currentPage
+                        }
+                    }
+                }`,
+                    success: function(response) {
+                        console.log(response);
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    },
+                    variables: {}
+                })
+            })
+        });
+    </script>
+
 </head>
 
 <body>
