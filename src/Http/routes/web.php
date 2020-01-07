@@ -20,6 +20,5 @@ Route::get(
 
 
 Route::get('shop', function () {
-    return 'Hello World';
-    ;
+    return view('lab19\cart::home');
 });
