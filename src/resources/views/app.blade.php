@@ -21,40 +21,6 @@
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/js/uikit-icons.min.js"></script>
 
-    <!-- JS -->
-    <script>
-        $(document).ready(function() {
-
-            $.ajax({
-                url: "http://gernzy-laravel.test/graphql",
-                contentType: "application/json",
-                type: 'POST',
-                data: JSON.stringify({
-                    query: `query {
-                    products(first:10) {
-                        data {
-                            id
-                            title
-                            status
-                            published
-                        }
-                        paginatorInfo {
-                            total
-                            hasMorePages
-                            currentPage
-                        }
-                    }
-                }`
-                }),
-                success: function(result) {
-                    console.log(JSON.stringify(result))
-                }
-            });
-
-
-        });
-    </script>
-
 </head>
 
 <body>
@@ -83,6 +49,7 @@
             @yield('content')
         </main>
     </div>
+    <script src="/js/gernzy.js"></script>
 </body>
 
 </html>
