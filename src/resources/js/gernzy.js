@@ -14,6 +14,7 @@ $(document).ready(function() {
                     title
                     status
                     published
+                    short_description
                 }
                 paginatorInfo {
                     total
@@ -27,12 +28,14 @@ $(document).ready(function() {
             // console.log(JSON.stringify(result.data.products.data));
             // console.log(result.data.products.data);
 
-            var container = $('<div />');
+            // var container = $('<div class="uk-grid-medium uk-child-width-expand@s" uk-grid>');
+            var container = $('<div class="uk-flex uk-flex-wrap uk-flex-wrap-around ">');
 
             result.data.products.data.forEach(function(message) {
                 console.log(message);
                 container.append(`
-                <div class="uk-card uk-card-default uk-width-1-2@m">
+            <div>
+                <div class="uk-card uk-card-default uk-margin-left uk-margin-top">
                     <div class="uk-card-header">
                         <div class="uk-grid-small uk-flex-middle" uk-grid>
                             <div class="uk-width-auto">
@@ -45,13 +48,13 @@ $(document).ready(function() {
                         </div>
                     </div>
                     <div class="uk-card-body">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
+                        <p>${message.short_description}</p>
                     </div>
                     <div class="uk-card-footer">
                         <a href="#" class="uk-button uk-button-text">Read more</a>
                     </div>
                 </div>
-                
+            </div>    
                 `);
             });
 
