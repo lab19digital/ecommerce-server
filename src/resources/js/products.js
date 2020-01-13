@@ -1,13 +1,13 @@
 class Products {
     constructor() {}
     getAllProducts() {
-        $(document).ready(function() {
-            $.ajax({
-                url: 'http://laravel-gernzy.test/graphql',
-                contentType: 'application/json',
-                type: 'POST',
-                data: JSON.stringify({
-                    query: `query {
+        $.ajax({
+            url: 'http://laravel-gernzy.test/graphql',
+            contentType: 'application/json',
+            type: 'POST',
+            context: this,
+            data: JSON.stringify({
+                query: `query {
                     products(first:10) {
                         data {
                             id
@@ -23,12 +23,12 @@ class Products {
                         }
                     }
                 }`,
-                }),
-                success: function(result) {
-                    var container = $('<div class="uk-flex uk-flex-wrap uk-flex-wrap-around ">');
+            }),
+            success: function(result) {
+                var container = $('<div class="uk-flex uk-flex-wrap uk-flex-wrap-around ">');
 
-                    result.data.products.data.forEach(function(message) {
-                        container.append(`
+                result.data.products.data.forEach(function(message) {
+                    container.append(`
                     <div>
                         <div class="uk-card uk-card-default uk-margin-left uk-margin-top">
                             <div class="uk-card-header">
@@ -52,15 +52,18 @@ class Products {
                         </div>
                     </div>
                         `);
-                    });
+                });
 
-                    $('.products-container').html(container);
+                $('.products-container').html(container);
 
-                    $('.add-to-cart').on('click', function() {
-                        console.log('CLICK!');
-                    });
-                },
-            });
+                this.addToCartClickBind();
+            },
+        });
+    }
+
+    addToCartClickBind() {
+        $('.add-to-cart').on('click', function() {
+            console.log('CLICK!');
         });
     }
 }
