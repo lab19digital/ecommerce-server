@@ -26,25 +26,41 @@
 <body>
     <div id="app">
 
-        <header class="uk-background-primary uk-padding-small">
-            <a href="#offcanvas-slide" class="uk-button uk-button-default" uk-toggle>Menu</a>
+        <div uk-sticky="media: 960" class="uk-navbar-container tm-navbar-container uk-sticky uk-sticky-fixed uk-background-primary" style="position: fixed; top: 0px; width: 1130px;">
+            <div class="uk-container uk-container-expand">
+                <nav class="uk-navbar">
+                    <div class="uk-navbar-left">
+                        <a href="#offcanvas-slide" class="uk-button uk-button-default" uk-toggle>Menu</a>
+                        <div id="offcanvas-slide" uk-offcanvas>
+                            <div class="uk-offcanvas-bar">
 
-            <div id="offcanvas-slide" uk-offcanvas>
-                <div class="uk-offcanvas-bar">
+                                <ul class="uk-nav uk-nav-default">
+                                    <li class="uk-active"><a href="#">Active</a></li>
+                                    <li><a href="#">Item</a></li>
+                                    <li class="uk-nav-header">Header</li>
+                                    <li><a href="#">Item</a></li>
+                                    <li><a href="#">Item</a></li>
+                                    <li class="uk-nav-divider"></li>
+                                    <li><a href="#">Item</a></li>
+                                </ul>
 
-                    <ul class="uk-nav uk-nav-default">
-                        <li class="uk-active"><a href="#">Active</a></li>
-                        <li><a href="#">Item</a></li>
-                        <li class="uk-nav-header">Header</li>
-                        <li><a href="#">Item</a></li>
-                        <li><a href="#">Item</a></li>
-                        <li class="uk-nav-divider"></li>
-                        <li><a href="#">Item</a></li>
-                    </ul>
-
-                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uk-navbar-right">
+                        <ul class="uk-navbar-nav uk-visible@m">
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Clearance</a></li>
+                        </ul>
+                        <div class="uk-navbar-item uk-visible@m">
+                            <a href="#" class="uk-button uk-button-default tm-button-default uk-icon" uk-icon="icon: cart">Cart </a>
+                        </div>
+                    </div>
+                </nav>
             </div>
-        </header>
+        </div>
+
         <main>
             @yield('content')
         </main>
