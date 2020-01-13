@@ -47,7 +47,7 @@ class Products {
                                 <p>${message.short_description}</p>
                             </div>
                             <div class="uk-card-footer">
-                                <a  href="#" class="uk-button uk-button-text add-to-cart" data-${message.id}>Add to cart</a>
+                                <a  href="#" class="uk-button uk-button-text add-to-cart" data-id="${message.id}">Add to cart</a>
                             </div>
                         </div>
                     </div>
@@ -56,14 +56,44 @@ class Products {
 
                 $('.products-container').html(container);
 
-                this.addToCartClickBind();
+                $('.add-to-cart').on('click', this.addItemToCart);
             },
         });
     }
 
-    addToCartClickBind() {
-        $('.add-to-cart').on('click', function() {
-            console.log('CLICK!');
+    addItemToCart(event) {
+        let productID = $(event.target).attr('data-id');
+        var userToken = localStorage.getItem('userToken');
+
+        console.log(userToken);
+
+        $.ajax({
+            url: 'http://laravel-gernzy.test/graphql',
+            contentType: 'application/json',
+            type: 'POST',
+            context: this,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer "' + userToken + '"');
+            },
+            data: JSON.stringify({
+                query: ` mutation {
+                    addToCart(input: {
+                            items: [
+                                { product_id: ${productID}, quantity: 5 }
+                            ]
+                        }) {
+                        cart {
+                            items {
+                                product_id
+                                quantity
+                            }
+                        }
+                    }
+                }`,
+            }),
+            success: function(result) {
+                console.log(result);
+            },
         });
     }
 }
