@@ -54,7 +54,7 @@
                             <li><a href="#">Clearance</a></li>
                         </ul>
                         <div class="uk-navbar-item uk-visible@m">
-                            <a href="#" class="uk-button uk-button-default tm-button-default uk-icon" uk-icon="icon: cart">Cart </a>
+                            <a href="#" class="uk-button uk-button-default tm-button-default uk-icon cart-button" uk-icon="icon: cart">Cart </a>
                         </div>
                     </div>
                 </nav>

@@ -21,7 +21,7 @@ class User {
     }
 
     addSessionTokenToLocalStorage() {
-        console.log(this.token);
+        localStorage.setItem('userToken', this.token);
     }
 }
 export { User };
