@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateCartSessionsTable extends Migration
 {
@@ -20,6 +20,7 @@ class CreateCartSessionsTable extends Migration
                 ->nullable()
                 ->default(null);
             $table->json('data')->nullable();
+            $table->string('cart_uuid')->unique();
             $table->bigInteger('cart_id')->nullable();
             $table->bigInteger('user_id')->nullable();
             $table->timestamps();

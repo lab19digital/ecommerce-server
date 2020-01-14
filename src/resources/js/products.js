@@ -65,15 +65,13 @@ class Products {
         let productID = $(event.target).attr('data-id');
         var userToken = localStorage.getItem('userToken');
 
-        console.log(userToken);
-
         $.ajax({
             url: 'http://laravel-gernzy.test/graphql',
             contentType: 'application/json',
             type: 'POST',
             context: this,
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer "' + userToken + '"');
+            headers: {
+                Authorization: `Bearer ${userToken}`,
             },
             data: JSON.stringify({
                 query: ` mutation {
