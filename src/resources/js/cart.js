@@ -52,7 +52,7 @@ class Cart {
                         `);
                 });
 
-                $('.cart-container').html(container);
+                $('.cart-products').html(container);
             },
         });
     }
