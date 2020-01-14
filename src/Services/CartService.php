@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Lab19\Cart\Models\Cart;
 use Lab19\Cart\Models\Order;
 
-
 class CartService
 {
     public function __construct(Request $request, SessionService $sessionService)
@@ -82,9 +81,7 @@ class CartService
         $cart = $this->session->cart;
 
         if (!$cart) {
-            $cart = new Cart([
-                'uuid' => $this->session->get('cart_uuid')
-            ]);
+            $cart = new Cart();
             $cart->session_id = $this->session->id;
         }
 
