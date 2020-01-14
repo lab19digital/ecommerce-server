@@ -49,12 +49,12 @@
                     </div>
                     <div class="uk-navbar-right">
                         <ul class="uk-navbar-nav uk-visible@m">
-                            <li><a href="#">About</a></li>
+                            <li><a href="/shop">Home</a></li>
                             <li><a href="#">Blog</a></li>
                             <li><a href="#">Clearance</a></li>
                         </ul>
-                        <div class="uk-navbar-item uk-visible@m">
-                            <a href="#" class="uk-button uk-button-default tm-button-default uk-icon cart-button" uk-icon="icon: cart">Cart </a>
+                        <div class="uk-navbar-item">
+                            <a href="/cart" class="uk-button uk-button-default tm-button-default uk-icon cart-button" uk-icon="icon: cart">Cart </a>
                         </div>
                     </div>
                 </nav>

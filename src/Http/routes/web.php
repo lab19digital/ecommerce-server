@@ -22,3 +22,7 @@ Route::get(
 Route::get('shop', function () {
     return view('lab19\cart::home');
 });
+
+Route::get('cart', function () {
+    return view('lab19\cart::cart');
+});
