@@ -94,5 +94,30 @@ class Products {
             },
         });
     }
+
+    getProduct(id) {
+        return new Promise(resolve => {
+            $.ajax({
+                url: 'http://laravel-gernzy.test/graphql',
+                contentType: 'application/json',
+                type: 'POST',
+                context: this,
+                data: JSON.stringify({
+                    query: `query {
+                        product(id:${id}) {
+                                title
+                                status
+                                published
+                                short_description
+                        }
+                    }`,
+                }),
+                success: function(result) {
+                    // result.data.product.data;
+                    resolve(result.data.product);
+                },
+            });
+        });
+    }
 }
 export { Products };
