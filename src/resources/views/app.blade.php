@@ -62,6 +62,7 @@
         </div>
 
         <main>
+            <span id="loadingDiv" uk-spinner="ratio: 3" class="uk-position-cover uk-overlay uk-overlay-default uk-flex uk-flex-center uk-flex-middle"></span>
             @yield('content')
         </main>
     </div>

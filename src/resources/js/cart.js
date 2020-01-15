@@ -25,7 +25,17 @@ class Cart {
                 }`,
             }),
             success: function(result) {
-                this.lookupProductsInCart(result.data.me.cart.items);
+                if (result.data.me.cart.items) {
+                    this.lookupProductsInCart(result.data.me.cart.items);
+                } else {
+                    $('.cart-products').html(`<div class="uk-alert-danger" uk-alert>
+                    <a class="uk-alert-close" uk-close></a>
+                    <p>No products in cart</p>
+                </div>`);
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                // console.log(XMLHttpRequest + textStatus + errorThrown);
             },
         });
     }
@@ -42,7 +52,7 @@ class Cart {
                 this.populateUIWithProducts(re);
             })
             .catch(error => {
-                // console.log(error);
+                console.log(error);
             });
     }
 
@@ -50,8 +60,6 @@ class Cart {
         let container = $('<div class="uk-flex uk-flex-wrap uk-flex-wrap-around ">');
 
         products.forEach(function(product) {
-            console.log(product);
-
             container.append(`
             <div>
                 <div class="uk-card uk-card-default uk-margin-left uk-margin-top">

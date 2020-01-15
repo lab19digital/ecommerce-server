@@ -26,3 +26,7 @@ Route::get('shop', function () {
 Route::get('cart', function () {
     return view('lab19\cart::cart');
 });
+
+Route::get('checkout', function () {
+    return view('lab19\cart::checkout');
+});

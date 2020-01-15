@@ -77,7 +77,7 @@ class Products {
                 query: ` mutation {
                     addToCart(input: {
                             items: [
-                                { product_id: ${productID}, quantity: 5 }
+                                { product_id: ${productID}, quantity: 1 }
                             ]
                         }) {
                         cart {
@@ -90,7 +90,13 @@ class Products {
                 }`,
             }),
             success: function(result) {
-                console.log(result);
+                result.data.addToCart.cart.items.forEach(element => {
+                    if (element.product_id == productID) {
+                        $(this)
+                            .parent()
+                            .append($(`<span class="uk-badge">${element.quantity}</span>`));
+                    }
+                });
             },
         });
     }
@@ -113,7 +119,6 @@ class Products {
                     }`,
                 }),
                 success: function(result) {
-                    // result.data.product.data;
                     resolve(result.data.product);
                 },
             });

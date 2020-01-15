@@ -1,6 +1,17 @@
 import { Products } from './products';
 import { User } from './user';
 import { Cart } from './cart';
+import { Checkout } from './checkout';
+
+// jQuery ajax spinner
+var $loading = $('#loadingDiv').hide();
+$(document)
+    .ajaxStart(function() {
+        $loading.show();
+    })
+    .ajaxStop(function() {
+        $loading.hide();
+    });
 
 // Session object in localStorage if it doesn't already exist
 let userObj = new User();
@@ -20,4 +31,10 @@ if (pathname.includes('shop')) {
 let cart = new Cart(productObj);
 if (pathname.includes('cart')) {
     cart.viewProductsInCart();
+}
+
+// Load all products on the cart page
+let checkout = new Checkout();
+if (pathname.includes('checkout')) {
+    checkout.checkout();
 }
