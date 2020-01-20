@@ -1,7 +1,7 @@
 @extends('lab19\cart::app')
 
 @section('content')
-<div class="cart-container">
+<div class="checkout-container">
     <h1 class="uk-heading-small uk-padding-small">Complete checkout</h1>
 
     <div class="uk-padding">

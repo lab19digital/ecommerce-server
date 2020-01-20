@@ -68,7 +68,10 @@ class Checkout {
                 }`,
             }),
             success: function(result) {
-                console.log(result);
+                $('.checkout-container').html(`<div class="uk-alert-success" uk-alert>
+                <a class="uk-alert-close" uk-close></a>
+                <p>Your checkout has been successful.</p>
+            </div>`);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest + textStatus + errorThrown);
