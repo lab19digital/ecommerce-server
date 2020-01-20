@@ -25,7 +25,8 @@ class Cart {
                 }`,
             }),
             success: function(result) {
-                if (result.data.me.cart.items) {
+                let items = result.data.me.cart.items;
+                if (items && items.length > 0) {
                     this.lookupProductsInCart(result.data.me.cart.items);
                 } else {
                     $('.cart-products').html(`<div class="uk-alert-danger" uk-alert>

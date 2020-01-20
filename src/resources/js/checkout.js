@@ -26,6 +26,7 @@ class Checkout {
 
     sendOfCheckoutInfo(values) {
         var userToken = localStorage.getItem('userToken');
+
         $.ajax({
             url: 'http://laravel-gernzy.test/graphql',
             contentType: 'application/json',

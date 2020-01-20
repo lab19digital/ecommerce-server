@@ -35,33 +35,33 @@
                         <input class="uk-input" name="shipping_address_state" id="frmAddressState" placeholder="State" required autocomplete="shipping address-level1">
                     </div>
                     <div class="uk-margin">
-                        <input class="uk-input" name="shipping_address_postal" id="frmAddressPostal" placeholder="Postal code" required autocomplete="shipping postal-code">
+                        <input class="uk-input" name="shipping_address_postcode" id="frmAddressPostal" placeholder="Postal code" autocomplete="shipping postal-code">
                     </div>
                     <div class="uk-margin">
                         <input class="uk-input" name="shipping_address_country" id="frmAddressCountry" placeholder="Country" required autocomplete="shipping country">
                     </div>
 
                     <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                        <label><input id="use_shipping_for_billing" name="use_shipping_for_billing" class="uk-checkbox" type="checkbox" uk-toggle="target: #billing-info;  animation: uk-animation-fade">Use shipping for billing address</label>
+                        <label><input id="use_shipping_for_billing" name="use_shipping_for_billing" class="uk-checkbox" type="checkbox">Use shipping for billing address</label>
                     </div>
                 </div>
 
                 <div id="billing-info" class="uk-card uk-card-default uk-card-body">
                     <label class="uk-form-label" for="form-horizontal-text">Billing Address</label>
                     <div class="uk-margin">
-                        <input class="uk-input" name="billing_address_line_1" id="frmAddressSBillL1" placeholder="123 Any Street" autocomplete="address-line1">
+                        <input class="uk-input" name="billing_address_line_1" id="frmAddressSBillL1" placeholder="123 Any Street" required autocomplete="address-line1">
                     </div>
                     <div class="uk-margin">
                         <input class="uk-input" name="billing_address_line_2" id="frmAddressSBillL2" placeholder="123 Any Street" autocomplete="address-line2">
                     </div>
                     <div class="uk-margin">
-                        <input class="uk-input" name="billing_address_state" id="frmAddressStateBill" placeholder="State" autocomplete="address-level1">
+                        <input class="uk-input" name="billing_address_state" id="frmAddressStateBill" placeholder="State" required autocomplete="address-level1">
                     </div>
                     <div class="uk-margin">
-                        <input class="uk-input" name="billing_address_postal" id="frmAddressPostalBill" placeholder="Postal code" autocomplete="postal-code">
+                        <input class="uk-input" name="billing_address_postcode" id="frmAddressPostalBill" placeholder="Postal code" autocomplete="postal-code">
                     </div>
                     <div class="uk-margin">
-                        <input class="uk-input" name="billing_address_country" id="frmAddressCountryBill" placeholder="Country" autocomplete="country">
+                        <input class="uk-input" name="billing_address_country" id="frmAddressCountryBill" placeholder="Country" required autocomplete="country">
                     </div>
                 </div>
 
