@@ -5,57 +5,80 @@
     <h1 class="uk-heading-small uk-padding-small">Complete checkout</h1>
 
     <div class="uk-padding">
-        <form class="uk-card uk-card-default uk-card-body uk-card-large">
+        <form id="checkout-form" class="uk-card uk-card-default uk-card-body uk-card-large">
             <fieldset class=" uk-fieldset">
 
                 <legend class="uk-legend">Your details</legend>
 
                 <div class="uk-margin">
-                    <input class="uk-input" type="text" placeholder="Name">
+                    <input name="name" class="uk-input" type="text" placeholder="Name" required autocomplete="name">
                 </div>
                 <div class="uk-margin">
-                    <input class="uk-input" type="email" placeholder="Email">
+                    <input name="email" class="uk-input" type="email" placeholder="Email" required autocomplete="email">
                 </div>
                 <div class="uk-margin">
-                    <input class="uk-input" type="tel" placeholder="Telephone">
+                    <input name="telephone" class="uk-input" type="tel" placeholder="Mobile" required autocomplete="tel">
                 </div>
                 <div class="uk-margin">
-                    <input class="uk-input" type="tel" placeholder="Mobile">
+                    <input name="mobile" class="uk-input" type="tel" placeholder="Telephone" required autocomplete="tel">
                 </div>
 
                 <div class="uk-card uk-card-default uk-card-body">
+                    <label class="uk-form-label" for="form-horizontal-text">Shipping Address</label>
+                    <div class="uk-margin">
+                        <input class="uk-input" name="shipping_address_line_1" id="frmAddressSL1" placeholder="123 Any Street" required autocomplete="shipping address-line1">
+                    </div>
+                    <div class="uk-margin">
+                        <input class="uk-input" name="shipping_address_line_2" id="frmAddressSL2" placeholder="123 Any Street" autocomplete="shipping address-line2">
+                    </div>
+                    <div class="uk-margin">
+                        <input class="uk-input" name="shipping_address_state" id="frmAddressState" placeholder="State" required autocomplete="shipping address-level1">
+                    </div>
+                    <div class="uk-margin">
+                        <input class="uk-input" name="shipping_address_postal" id="frmAddressPostal" placeholder="Postal code" required autocomplete="shipping postal-code">
+                    </div>
+
+                    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                        <label><input name="use_shipping_for_billing" class="uk-checkbox" type="checkbox" uk-toggle="target: #billing-info;  animation: uk-animation-fade">Use shipping for billing address</label>
+                    </div>
+                </div>
+
+                <div id="billing-info" class="uk-card uk-card-default uk-card-body">
                     <label class="uk-form-label" for="form-horizontal-text">Billing Address</label>
                     <div class="uk-margin">
-                        <input class="uk-input" type="tel" placeholder="Line 1">
+                        <input class="uk-input" name="billing_address_line_1" id="frmAddressSBillL1" placeholder="123 Any Street" autocomplete="address-line1">
+                    </div>
+                    <div class="uk-margin">
+                        <input class="uk-input" name="billing_address_line_2" id="frmAddressSBillL2" placeholder="123 Any Street" autocomplete="address-line2">
+                    </div>
+                    <div class="uk-margin">
+                        <input class="uk-input" name="billing_address_state" id="frmAddressStateBill" placeholder="State" autocomplete="address-level1">
+                    </div>
+                    <div class="uk-margin">
+                        <input class="uk-input" name="billing_address_postal" id="frmAddressPostalBill" placeholder="Postal code" autocomplete="postal-code">
                     </div>
                 </div>
 
                 <div class="uk-margin">
-                    <select class="uk-select">
-                        <option>Option 01</option>
-                        <option>Option 02</option>
+                    <label class="uk-form-label" for="form-horizontal-text">Payment method</label>
+                    <select name="payment_method" class="uk-select">
+                        <option>VISA</option>
+                        <option>Master Card</option>
+                        <option>PayPal</option>
+                        <option>Credit Card</option>
                     </select>
                 </div>
 
                 <div class="uk-margin">
-                    <textarea class="uk-textarea" rows="5" placeholder="Textarea"></textarea>
+                    <textarea name="notes" class="uk-textarea" rows="5" placeholder="Notes"></textarea>
                 </div>
 
                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                    <label><input class="uk-radio" type="radio" name="radio2" checked> A</label>
-                    <label><input class="uk-radio" type="radio" name="radio2"> B</label>
+                    <label><input name="agree_to_terms" class="uk-checkbox" required type="checkbox">Agree to Terms</label>
                 </div>
-
-                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                    <label><input class="uk-checkbox" type="checkbox" checked> A</label>
-                    <label><input class="uk-checkbox" type="checkbox"> B</label>
-                </div>
-
-                <div class="uk-margin">
-                    <input class="uk-range" type="range" value="2" min="0" max="10" step="0.1">
-                </div>
-
             </fieldset>
+
+            <button type="submit" class="uk-button uk-button-default">Submit</button>
         </form>
     </div>
     <div class="cart-products"></div>
