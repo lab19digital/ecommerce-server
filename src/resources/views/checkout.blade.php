@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                        <label><input name="use_shipping_for_billing" class="uk-checkbox" type="checkbox" uk-toggle="target: #billing-info;  animation: uk-animation-fade">Use shipping for billing address</label>
+                        <label><input id="use_shipping_for_billing" name="use_shipping_for_billing" class="uk-checkbox" type="checkbox" uk-toggle="target: #billing-info;  animation: uk-animation-fade">Use shipping for billing address</label>
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                         <input class="uk-input" name="billing_address_postal" id="frmAddressPostalBill" placeholder="Postal code" autocomplete="postal-code">
                     </div>
                     <div class="uk-margin">
-                        <input class="uk-input" name="billing_address_country" id="frmAddressCountryBill" placeholder="Country" required autocomplete="country">
+                        <input class="uk-input" name="billing_address_country" id="frmAddressCountryBill" placeholder="Country" autocomplete="country">
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
-                    <label><input name="agree_to_terms" class="uk-checkbox" required type="checkbox">Agree to Terms</label>
+                    <label><input id="agree_to_terms" name="agree_to_terms" class="uk-checkbox" required type="checkbox">Agree to Terms</label>
                 </div>
             </fieldset>
 

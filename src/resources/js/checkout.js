@@ -14,21 +14,26 @@ class Checkout {
             var values = {};
             inputs.each(function() {
                 values[this.name] = $(this).val();
-                // console.log(`this.name=${this.name} and $(this).val()=${$(this).val()}`);
             });
+
+            // Checkbox values
+            values['use_shipping_for_billing'] = $('#use_shipping_for_billing').prop('checked');
+            values['agree_to_terms'] = $('#agree_to_terms').prop('checked');
 
             self.sendOfCheckoutInfo(values);
         });
     }
 
     sendOfCheckoutInfo(values) {
-        console.log(values['name']);
-        return;
+        var userToken = localStorage.getItem('userToken');
         $.ajax({
             url: 'http://laravel-gernzy.test/graphql',
             contentType: 'application/json',
             type: 'POST',
             context: this,
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
             data: JSON.stringify({
                 query: `mutation {
                     checkout(input: {
