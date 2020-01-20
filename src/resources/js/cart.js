@@ -33,6 +33,9 @@ class Cart {
                     <a class="uk-alert-close" uk-close></a>
                     <p>No products in cart</p>
                 </div>`);
+
+                    // Disable checkout as there are no products in the cart
+                    $('#cart-checkout').addClass('uk-disabled');
                 }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
