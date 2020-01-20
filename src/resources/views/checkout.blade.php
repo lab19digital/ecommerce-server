@@ -37,6 +37,9 @@
                     <div class="uk-margin">
                         <input class="uk-input" name="shipping_address_postal" id="frmAddressPostal" placeholder="Postal code" required autocomplete="shipping postal-code">
                     </div>
+                    <div class="uk-margin">
+                        <input class="uk-input" name="shipping_address_country" id="frmAddressCountry" placeholder="Country" required autocomplete="shipping country">
+                    </div>
 
                     <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
                         <label><input name="use_shipping_for_billing" class="uk-checkbox" type="checkbox" uk-toggle="target: #billing-info;  animation: uk-animation-fade">Use shipping for billing address</label>
@@ -56,6 +59,9 @@
                     </div>
                     <div class="uk-margin">
                         <input class="uk-input" name="billing_address_postal" id="frmAddressPostalBill" placeholder="Postal code" autocomplete="postal-code">
+                    </div>
+                    <div class="uk-margin">
+                        <input class="uk-input" name="billing_address_country" id="frmAddressCountryBill" placeholder="Country" required autocomplete="country">
                     </div>
                 </div>
 

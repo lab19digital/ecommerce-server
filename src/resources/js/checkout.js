@@ -1,7 +1,11 @@
 class Checkout {
     constructor() {}
     checkout() {
+        // This is to keep the object context of and access it's methods
+        var self = this;
         $('#checkout-form').submit(function(event) {
+            event.preventDefault();
+
             // get all the inputs into an array.
             var inputs = $('#checkout-form :input');
 
@@ -10,16 +14,16 @@ class Checkout {
             var values = {};
             inputs.each(function() {
                 values[this.name] = $(this).val();
-                console.log(`this.name=${this.name} and $(this).val()=${$(this).val()}`);
+                // console.log(`this.name=${this.name} and $(this).val()=${$(this).val()}`);
             });
 
-            // this.sendOfCheckoutInfo(values);
-
-            event.preventDefault();
+            self.sendOfCheckoutInfo(values);
         });
     }
 
     sendOfCheckoutInfo(values) {
+        console.log(values['name']);
+        return;
         $.ajax({
             url: 'http://laravel-gernzy.test/graphql',
             contentType: 'application/json',
@@ -28,28 +32,28 @@ class Checkout {
             data: JSON.stringify({
                 query: `mutation {
                     checkout(input: {
-                        name: "Luke",
-                        email: "cart@example.com",
-                        telephone: "",
-                        mobile: "",
+                        name: "${values['name']}",
+                        email: "${values['email']}",
+                        telephone: "${values['telephone']}",
+                        mobile: "${values['mobile']}",
                         billing_address: {
-                            line_1: "1 London Way",
-                            line_2: "",
-                            state: "London",
-                            postcode: "SW1A 1AA",
-                            country: "UK"
+                            line_1: "${values['billing_address_line_1']}",
+                            line_2: "${values['billing_address_line_2']}",
+                            state: "${values['billing_address_state']}",
+                            postcode: "${values['billing_address_postcode']}",
+                            country: "${values['billing_address_country']}"
                         },
                         shipping_address: {
-                            line_1: "1 London Way",
-                            line_2: "",
-                            state: "London",
-                            postcode: "SW1A 1AA",
-                            country: "UK"
+                            line_1: "${values['shipping_address_line_1']}",
+                            line_2: "${values['shipping_address_line_2']}",
+                            state: "${values['shipping_address_state']}",
+                            postcode: "${values['shipping_address_postcode']}",
+                            country: "${values['shipping_address_country']}"
                         },
-                        use_shipping_for_billing: true,
-                        payment_method: "",
-                        agree_to_terms: true,
-                        notes: ""
+                        use_shipping_for_billing: ${values['use_shipping_for_billing']},
+                        payment_method: "${values['payment_method']}",
+                        agree_to_terms: ${values['agree_to_terms']},
+                        notes: "${values['notes']}"
                     }){
                         order {
                             id
