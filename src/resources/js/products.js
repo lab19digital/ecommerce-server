@@ -1,33 +1,32 @@
 class Products {
-    constructor() {}
+    constructor(graphqlService, cart) {
+        this.graphqlService = graphqlService;
+        this.cart = cart;
+    }
     getAllProducts() {
-        $.ajax({
-            url: 'http://laravel-gernzy.test/graphql',
-            contentType: 'application/json',
-            type: 'POST',
-            context: this,
-            data: JSON.stringify({
-                query: `query {
-                    products(first:10) {
-                        data {
-                            id
-                            title
-                            status
-                            published
-                            short_description
-                        }
-                        paginatorInfo {
-                            total
-                            hasMorePages
-                            currentPage
-                        }
-                    }
-                }`,
-            }),
-            success: function(result) {
+        let query = `query {
+            products(first:10) {
+                data {
+                    id
+                    title
+                    status
+                    published
+                    short_description
+                }
+                paginatorInfo {
+                    total
+                    hasMorePages
+                    currentPage
+                }
+            }
+        }`;
+
+        this.graphqlService
+            .sendQuery(query)
+            .then(re => {
                 var container = $('<div class="uk-flex uk-flex-wrap uk-flex-wrap-around ">');
 
-                result.data.products.data.forEach(function(message) {
+                re.data.products.data.forEach(function(message) {
                     container.append(`
                     <div>
                         <div class="uk-card uk-card-default uk-margin-left uk-margin-top">
@@ -56,73 +55,59 @@ class Products {
 
                 $('.products-container').html(container);
 
-                $('.add-to-cart').on('click', this.addItemToCart);
-            },
-        });
+                $('.add-to-cart').on('click', this.addProductToCart.bind(this));
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
-    addItemToCart(event) {
+    getProduct(id) {
+        let query = `query {
+            product(id:${id}) {
+                    title
+                    status
+                    published
+                    short_description
+            }
+        }`;
+
+        return this.graphqlService.sendQuery(query);
+    }
+
+    addProductToCart(event) {
         let productID = $(event.target).attr('data-id');
         var userToken = localStorage.getItem('userToken');
 
-        $.ajax({
-            url: 'http://laravel-gernzy.test/graphql',
-            contentType: 'application/json',
-            type: 'POST',
-            context: this,
-            headers: {
-                Authorization: `Bearer ${userToken}`,
-            },
-            data: JSON.stringify({
-                query: ` mutation {
-                    addToCart(input: {
-                            items: [
-                                { product_id: ${productID}, quantity: 1 }
-                            ]
-                        }) {
-                        cart {
-                            items {
-                                product_id
-                                quantity
-                            }
-                        }
+        let query = ` mutation {
+            addToCart(input: {
+                    items: [
+                        { product_id: ${productID}, quantity: 1 }
+                    ]
+                }) {
+                cart {
+                    items {
+                        product_id
+                        quantity
                     }
-                }`,
-            }),
-            success: function(result) {
-                result.data.addToCart.cart.items.forEach(element => {
+                }
+            }
+        }`;
+
+        this.graphqlService
+            .sendQuery(query, userToken)
+            .then(re => {
+                re.data.addToCart.cart.items.forEach(element => {
                     if (element.product_id == productID) {
-                        $(this)
+                        $(event.target)
                             .parent()
                             .append($(`<span class="uk-badge">${element.quantity}</span>`));
                     }
                 });
-            },
-        });
-    }
-
-    getProduct(id) {
-        return new Promise(resolve => {
-            $.ajax({
-                url: 'http://laravel-gernzy.test/graphql',
-                contentType: 'application/json',
-                type: 'POST',
-                context: this,
-                data: JSON.stringify({
-                    query: `query {
-                        product(id:${id}) {
-                                title
-                                status
-                                published
-                                short_description
-                        }
-                    }`,
-                }),
-                success: function(result) {
-                    resolve(result.data.product);
-                },
+            })
+            .catch(error => {
+                console.log(error);
             });
-        });
     }
 }
 export { Products };

@@ -2,6 +2,7 @@ import { Products } from './products';
 import { User } from './user';
 import { Cart } from './cart';
 import { Checkout } from './checkout';
+import { GraphqlService } from './graphqlService';
 
 // jQuery ajax spinner
 var $loading = $('#loadingDiv').hide();
@@ -22,7 +23,7 @@ if (!userObj.checkIfTokenInLocalStorage()) {
 var pathname = window.location.pathname; // Returns path only (/path/example.html)
 
 // Load all products on the home page
-let productObj = new Products();
+let productObj = new Products(new GraphqlService());
 if (pathname.includes('shop')) {
     productObj.getAllProducts();
 }

@@ -74,7 +74,7 @@ class Cart {
                                 <span uk-icon="icon: camera"></span>
                             </div>
                             <div class="uk-width-expand">
-                                <h3 class="uk-card-title uk-margin-remove-bottom">${product.title}</h3>
+                                <h3 class="uk-card-title uk-margin-remove-bottom">${product.data.product.title}</h3>
                             </div>
                         </div>
                     </div>
