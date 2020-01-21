@@ -1,23 +1,23 @@
 class User {
-    constructor() {}
+    constructor(graphqlService) {
+        this.graphqlService = graphqlService;
+    }
     createSession() {
-        $.ajax({
-            url: 'http://laravel-gernzy.test/graphql',
-            contentType: 'application/json',
-            type: 'POST',
-            context: this,
-            data: JSON.stringify({
-                query: `mutation {
-                             createSession {
-                                 token
-                             }
-                         }`,
-            }),
-            success: function(result) {
-                let token = result.data.createSession.token;
+        let query = `mutation {
+            createSession {
+                token
+            }
+        }`;
+
+        this.graphqlService
+            .sendQuery(query)
+            .then(re => {
+                let token = re.data.createSession.token;
                 this.addSessionTokenToLocalStorage(token);
-            },
-        });
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     addSessionTokenToLocalStorage(token) {

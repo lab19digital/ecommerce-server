@@ -1,33 +1,29 @@
 class Cart {
-    constructor(productObj) {
+    constructor(productObj, graphqlService) {
         this.productObj = productObj;
+        this.graphqlService = graphqlService;
     }
     viewProductsInCart() {
         var userToken = localStorage.getItem('userToken');
-        $.ajax({
-            url: 'http://laravel-gernzy.test/graphql',
-            contentType: 'application/json',
-            type: 'POST',
-            context: this,
-            headers: {
-                Authorization: `Bearer ${userToken}`,
-            },
-            data: JSON.stringify({
-                query: `{
-                        me {
-                            cart {
-                                items {
-                                    product_id
-                                    quantity
-                                }
-                            }
-                        }
-                }`,
-            }),
-            success: function(result) {
-                let items = result.data.me.cart.items;
+        var self = this;
+
+        let query = `{
+            me {
+                cart {
+                    items {
+                        product_id
+                        quantity
+                    }
+                }
+            }
+        }`;
+
+        this.graphqlService
+            .sendQuery(query, userToken)
+            .then(re => {
+                let items = re.data.me.cart.items;
                 if (items && items.length > 0) {
-                    this.lookupProductsInCart(result.data.me.cart.items);
+                    this.lookupProductsInCart(re.data.me.cart.items);
                 } else {
                     $('.cart-products').html(`<div class="uk-alert-danger" uk-alert>
                     <a class="uk-alert-close" uk-close></a>
@@ -37,11 +33,10 @@ class Cart {
                     // Disable checkout as there are no products in the cart
                     $('#cart-checkout').addClass('uk-disabled');
                 }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                // console.log(XMLHttpRequest + textStatus + errorThrown);
-            },
-        });
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     async lookupProductsInCart(products) {

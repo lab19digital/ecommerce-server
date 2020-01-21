@@ -14,28 +14,29 @@ $(document)
         $loading.hide();
     });
 
+var pathname = window.location.pathname; // Returns path only (/path/example.html)
+let graphQlService = new GraphqlService();
+
 // Session object in localStorage if it doesn't already exist
-let userObj = new User();
+let userObj = new User(graphQlService);
 if (!userObj.checkIfTokenInLocalStorage()) {
     userObj.createSession();
 }
 
-var pathname = window.location.pathname; // Returns path only (/path/example.html)
-
 // Load all products on the home page
-let productObj = new Products(new GraphqlService());
+let productObj = new Products(graphQlService);
 if (pathname.includes('shop')) {
     productObj.getAllProducts();
 }
 
 // Load all products on the cart page
-let cart = new Cart(productObj);
+let cart = new Cart(productObj, graphQlService);
 if (pathname.includes('cart')) {
     cart.viewProductsInCart();
 }
 
 // Load all products on the cart page
-let checkout = new Checkout();
+let checkout = new Checkout(graphQlService);
 if (pathname.includes('checkout')) {
     checkout.checkout();
 }
