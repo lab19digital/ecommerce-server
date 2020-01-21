@@ -1,4 +1,5 @@
 import productTemplate from './templates/productTemplate';
+import errorTemplate from './templates/errorTemplate';
 
 class Cart {
     constructor(productObj, graphqlService) {
@@ -7,7 +8,6 @@ class Cart {
     }
     viewProductsInCart() {
         var userToken = localStorage.getItem('userToken');
-        var self = this;
 
         let query = `{
             me {
@@ -27,10 +27,7 @@ class Cart {
                 if (items && items.length > 0) {
                     this.lookupProductsInCart(re.data.me.cart.items);
                 } else {
-                    $('.cart-products').html(`<div class="uk-alert-danger" uk-alert>
-                    <a class="uk-alert-close" uk-close></a>
-                    <p>No products in cart</p>
-                </div>`);
+                    $('.cart-products').html(errorTemplate);
 
                     // Disable checkout as there are no products in the cart
                     $('#cart-checkout').addClass('uk-disabled');

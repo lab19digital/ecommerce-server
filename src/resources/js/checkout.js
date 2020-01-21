@@ -1,3 +1,5 @@
+import successTemplate from './templates/successTemplate';
+
 class Checkout {
     constructor(graphqlService) {
         this.graphqlService = graphqlService;
@@ -64,10 +66,7 @@ class Checkout {
         this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
-                $('.checkout-container').html(`<div class="uk-alert-success" uk-alert>
-                <a class="uk-alert-close" uk-close></a>
-                <p>Your checkout has been successful.</p>
-            </div>`);
+                $('.checkout-container').html(successTemplate);
             })
             .catch(error => {
                 console.log(error);
