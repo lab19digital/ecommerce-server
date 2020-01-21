@@ -26,11 +26,11 @@ class Products {
         this.graphqlService
             .sendQuery(query)
             .then(re => {
-                let mappFields = re.data.products.data.map(product => {
+                let mapFields = re.data.products.data.map(product => {
                     return { title: product.title, short_description: product.short_description, id: product.id };
                 });
 
-                $('.products-container').html(mappFields.map(productTemplate).join(''));
+                $('.products-container').html(mapFields.map(productTemplate).join(''));
 
                 $('.add-to-cart').on('click', this.addProductToCart.bind(this));
             })

@@ -1,3 +1,5 @@
+import productTemplate from './templates/productTemplate';
+
 class Cart {
     constructor(productObj, graphqlService) {
         this.productObj = productObj;
@@ -56,35 +58,15 @@ class Cart {
     }
 
     populateUIWithProducts(products) {
-        let container = $('<div class="uk-flex uk-flex-wrap uk-flex-wrap-around ">');
-
-        products.forEach(function(product) {
-            container.append(`
-            <div>
-                <div class="uk-card uk-card-default uk-margin-left uk-margin-top">
-                    <div class="uk-card-header">
-                        <div class="uk-grid-small uk-flex-middle" uk-grid>
-                            <div class="uk-width-auto">
-                                <//img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">
-                                <span uk-icon="icon: camera"></span>
-                            </div>
-                            <div class="uk-width-expand">
-                                <h3 class="uk-card-title uk-margin-remove-bottom">${product.data.product.title}</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="uk-card-body">
-                        <p>Quantity: ${product.quantity}</p>
-                    </div>
-                    <div class="uk-card-footer">
-                        <a  href="#" class="uk-button uk-button-text add-to-cart" data-id="${product.product_id}">Remove</a>
-                    </div>
-                </div>
-            </div>
-                `);
+        let mapFields = products.map(product => {
+            return {
+                title: product.data.product.title,
+                short_description: product.data.product.short_description,
+                id: product.data.product.id,
+            };
         });
 
-        $('.cart-products').html(container);
+        $('.cart-products').html(mapFields.map(productTemplate).join(''));
     }
 }
 export { Cart };
