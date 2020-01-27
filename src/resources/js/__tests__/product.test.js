@@ -1,12 +1,15 @@
-// import { Products } from './products';
+import { Products } from '../products';
+import { GraphqlService } from '../graphqlService';
 
-// __tests__/user-test.js
-jest.mock('../jquery');
-
-import * as user from '../user';
+// __mocks__/jquery.js
+jest.mock('jquery');
 
 // The assertion for a promise must be returned.
 it('works with promises', () => {
+    let graphQlService = new GraphqlService();
+    let prods = new Products(graphQlService);
     expect.assertions(1);
-    return user.getUserName(4).then(data => expect(data).toEqual('Mark'));
+    return prods.getProduct(1).then(data => {
+        expect(data).toEqual('Some value');
+    });
 });

@@ -14,7 +14,7 @@ $(document)
         $loading.hide();
     });
 
-var pathname = window.location.pathname; // Returns path only (/path/example.html)
+let pathname = window.location.pathname; // Returns path only (/path/example.html)
 let graphQlService = new GraphqlService();
 
 // Session object in localStorage if it doesn't already exist

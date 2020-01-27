@@ -45,5 +45,13 @@
         "hooks": {
             "pre-commit": "lint-staged"
         }
+    },
+    "jest": {
+        "setupFiles": [
+            "./src/resources/js/setup-jest.js"
+        ]
+    },
+    "dependencies": {
+        "jquery": "^3.4.1"
     }
 }
