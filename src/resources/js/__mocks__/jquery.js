@@ -18,6 +18,9 @@ jQuery.ajax = settings => {
             if (name == 'product') {
                 resolve(product);
             }
+            if (name == 'products') {
+                resolve({ products: product });
+            }
         });
     });
 };
