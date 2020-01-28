@@ -23,7 +23,7 @@ class Products {
             }
         }`;
 
-        this.graphqlService
+        return this.graphqlService
             .sendQuery(query)
             .then(re => {
                 let mapFields = re.data.products.data.map(product => {
