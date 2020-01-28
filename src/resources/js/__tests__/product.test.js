@@ -10,6 +10,11 @@ it('works with promises', () => {
     let prods = new Products(graphQlService);
     expect.assertions(1);
     return prods.getProduct(1).then(data => {
-        expect(data).toEqual('Some value');
+        expect(data).toEqual({
+            title: 'ea',
+            status: 'IN_STOCK',
+            published: 1,
+            short_description: 'Delectus debitis eligendi',
+        });
     });
 });
