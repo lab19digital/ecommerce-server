@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 class GraphqlService {
     constructor() {}
     async sendQuery(graphqlQuery, userToken = '') {
