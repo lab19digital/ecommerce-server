@@ -1,4 +1,5 @@
 const product = {
+    id: 1,
     title: 'ea',
     status: 'IN_STOCK',
     published: 1,

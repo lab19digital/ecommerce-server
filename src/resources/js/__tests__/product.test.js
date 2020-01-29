@@ -22,7 +22,20 @@ test('query for all products', () => {
     let prods = new Products(graphQlService);
     expect.assertions(1);
     return prods.getAllProducts().then(data => {
-        console.log(`the data: ${data.data.products.data}`);
         expect(data).toEqual(products);
+    });
+});
+
+test('query for all products with DOM', () => {
+    // Set up our document body
+    document.body.innerHTML = '<div class="products-container"></div>';
+
+    let graphQlService = new GraphqlService();
+    let prods = new Products(graphQlService);
+    expect.assertions(2);
+    return prods.getAllProducts().then(data => {
+        expect(data).toEqual(products);
+        var value = document.getElementById('product-title-1').textContent;
+        expect(value).toEqual('shoes');
     });
 });
