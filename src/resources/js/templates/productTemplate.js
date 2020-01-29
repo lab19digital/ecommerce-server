@@ -1,4 +1,4 @@
-const productTemplate = ({ title, short_description, id }) => `
+const productTemplate = ({ title, short_description, id, buttonText }) => `
 <div>
     <div class="uk-card uk-card-default uk-margin-left uk-margin-top">
         <div class="uk-card-header">
@@ -17,7 +17,7 @@ const productTemplate = ({ title, short_description, id }) => `
             <p>${short_description}</p>
         </div>
         <div class="uk-card-footer">
-            <a  href="#" class="uk-button uk-button-text add-to-cart" data-id="${id}">Add to cart</a>
+            <a  href="#" class="uk-button uk-button-text add-to-cart" data-id="${id}">${buttonText}</a>
         </div>
     </div>
 </div>

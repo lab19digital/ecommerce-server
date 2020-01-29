@@ -60,6 +60,7 @@ class Cart {
                 title: product.data.product.title,
                 short_description: product.data.product.short_description,
                 id: product.data.product.id,
+                buttonText: 'Remove',
             };
         });
 

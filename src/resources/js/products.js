@@ -28,7 +28,12 @@ class Products {
             .sendQuery(query)
             .then(re => {
                 let mapFields = re.data.products.data.map(product => {
-                    return { title: product.title, short_description: product.short_description, id: product.id };
+                    return {
+                        title: product.title,
+                        short_description: product.short_description,
+                        id: product.id,
+                        buttonText: 'Add to cart',
+                    };
                 });
 
                 $('.products-container').html(mapFields.map(productTemplate).join(''));
@@ -45,6 +50,7 @@ class Products {
     getProduct(id) {
         let query = `query {
             product(id:${id}) {
+                    id
                     title
                     status
                     published
