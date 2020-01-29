@@ -35,7 +35,7 @@ test('query for all products with DOM', () => {
     expect.assertions(2);
     return prods.getAllProducts().then(data => {
         expect(data).toEqual(products);
-        var value = document.getElementById('product-title-1').textContent;
-        expect(value).toEqual('shoes');
+        var productTitle = document.getElementById('product-title-1').textContent;
+        expect(productTitle).toEqual('shoes');
     });
 });
