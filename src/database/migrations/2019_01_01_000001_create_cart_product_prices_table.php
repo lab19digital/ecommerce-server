@@ -15,7 +15,7 @@ class CreateCartProductPricesTable extends Migration
     {
         Schema::create('cart_product_prices', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('product_id')->unsigned()->nullable();
+            $table->bigInteger('product_id')->unsigned();
             $table->string('country_code');
             $table->string('price');
             $table->foreign('product_id')->references('id')->on('cart_products')->onDelete('cascade');
