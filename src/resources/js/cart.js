@@ -1,5 +1,6 @@
 import productTemplate from './templates/productTemplate';
 import errorTemplate from './templates/errorTemplate';
+import $ from 'jquery';
 
 class Cart {
     constructor(productObj, graphqlService) {
@@ -20,10 +21,11 @@ class Cart {
             }
         }`;
 
-        this.graphqlService
+        return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
                 let items = re.data.me.cart.items;
+
                 if (items && items.length > 0) {
                     this.lookupProductsInCart(re.data.me.cart.items);
                 } else {
@@ -32,6 +34,8 @@ class Cart {
                     // Disable checkout as there are no products in the cart
                     $('#cart-checkout').addClass('uk-disabled');
                 }
+
+                return re;
             })
             .catch(error => {
                 console.log(error);
@@ -55,6 +59,7 @@ class Cart {
     }
 
     populateUIWithProducts(products) {
+        console.log(products);
         let mapFields = products.map(product => {
             return {
                 title: product.data.product.title,
