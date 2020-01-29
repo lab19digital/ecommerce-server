@@ -30,17 +30,18 @@ test('DOM in cart ui', () => {
 
     cart.populateUIWithProducts([
         {
-            data: {
-                product: {
-                    id: 1,
-                    title: 'shoes',
-                    status: 'IN_STOCK',
-                    published: 1,
-                    short_description: 'Et autem libero ducimus dolorem explicabo ratione.',
-                },
-                product_id: 1,
-                quantity: 1,
-            },
+            id: 1,
+            title: 'shoes',
+            status: 'IN_STOCK',
+            published: 1,
+            short_description: 'Et autem libero ducimus dolorem explicabo ratione.',
+        },
+        {
+            id: 1,
+            title: 'Blah blah blah',
+            status: 'IN_STOCK',
+            published: 1,
+            short_description: 'Et autem libero ducimus dolorem explicabo ratione.',
         },
     ]);
 

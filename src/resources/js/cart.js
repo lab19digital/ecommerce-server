@@ -45,9 +45,9 @@ class Cart {
     async lookupProductsInCart(products) {
         await Promise.all(
             products.map(async product => {
-                const queriedProducts = await this.productObj.getProduct(product.product_id);
-                const mergedProduct = { ...queriedProducts, ...product };
-                return mergedProduct;
+                const queriedProduct = await this.productObj.getProduct(product.product_id);
+                queriedProduct.data.product.quantity = product.quantity;
+                return queriedProduct.data.product;
             }),
         )
             .then(re => {
@@ -62,9 +62,9 @@ class Cart {
         console.log(products);
         let mapFields = products.map(product => {
             return {
-                title: product.data.product.title,
-                short_description: product.data.product.short_description,
-                id: product.data.product.id,
+                title: product.title,
+                short_description: product.short_description,
+                id: product.id,
                 buttonText: 'Remove',
             };
         });
