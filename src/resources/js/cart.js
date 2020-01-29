@@ -46,6 +46,7 @@ class Cart {
         await Promise.all(
             products.map(async product => {
                 const queriedProduct = await this.productObj.getProduct(product.product_id);
+                // console.log('lookupProductsInCart ' + JSON.stringify(queriedProduct));
                 queriedProduct.data.product.quantity = product.quantity;
                 return queriedProduct.data.product;
             }),
@@ -59,7 +60,6 @@ class Cart {
     }
 
     populateUIWithProducts(products) {
-        console.log(products);
         let mapFields = products.map(product => {
             return {
                 title: product.title,
