@@ -37,7 +37,7 @@ test('DOM in cart ui', () => {
             short_description: 'Et autem libero ducimus dolorem explicabo ratione.',
         },
         {
-            id: 1,
+            id: 2,
             title: 'Blah blah blah',
             status: 'IN_STOCK',
             published: 1,

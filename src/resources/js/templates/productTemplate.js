@@ -8,7 +8,7 @@ const productTemplate = ({ title, short_description, id, buttonText }) => `
                     <span uk-icon="icon: camera"></span>
                 </div>
                 <div class="uk-width-expand">
-                    <h3 class="uk-card-title uk-margin-remove-bottom" id="product-title-${id}">${title}</h3>
+                    <h3 class="uk-card-title uk-margin-remove-bottom product-title" id="product-title-${id}">${title}</h3>
                     <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00">April 01, 2016</time></p>
                 </div>
             </div>

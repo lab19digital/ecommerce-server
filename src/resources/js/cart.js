@@ -46,7 +46,6 @@ class Cart {
         await Promise.all(
             products.map(async product => {
                 const queriedProduct = await this.productObj.getProduct(product.product_id);
-                // console.log('lookupProductsInCart ' + JSON.stringify(queriedProduct));
                 queriedProduct.data.product.quantity = product.quantity;
                 return queriedProduct.data.product;
             }),
@@ -68,6 +67,9 @@ class Cart {
                 buttonText: 'Remove',
             };
         });
+
+        // console.log(mapFields);
+        // console.log('populateUIWithProducts mapFields ' + JSON.stringify(mapFields));
 
         $('.cart-products').html(mapFields.map(productTemplate).join(''));
     }
