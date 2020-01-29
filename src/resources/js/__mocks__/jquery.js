@@ -1,12 +1,7 @@
 const jQuery = require('jquery/dist/jquery.js');
 const { parse } = require('graphql');
-
-const product = {
-    title: 'ea',
-    status: 'IN_STOCK',
-    published: 1,
-    short_description: 'Delectus debitis eligendi',
-};
+import product from '../jest_mock_objects/product';
+import products from '../jest_mock_objects/products';
 
 jQuery.ajax = settings => {
     return new Promise((resolve, reject) => {
@@ -19,7 +14,7 @@ jQuery.ajax = settings => {
                 resolve(product);
             }
             if (name == 'products') {
-                resolve({ products: product });
+                resolve(products);
             }
         });
     });

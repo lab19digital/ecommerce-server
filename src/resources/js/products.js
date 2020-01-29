@@ -1,4 +1,5 @@
 import productTemplate from './templates/productTemplate';
+import $ from 'jquery';
 
 class Products {
     constructor(graphqlService, cart) {
@@ -33,6 +34,8 @@ class Products {
                 $('.products-container').html(mapFields.map(productTemplate).join(''));
 
                 $('.add-to-cart').on('click', this.addProductToCart.bind(this));
+
+                return re;
             })
             .catch(error => {
                 console.log(error);
