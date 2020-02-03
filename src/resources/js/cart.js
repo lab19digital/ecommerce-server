@@ -68,9 +68,6 @@ class Cart {
             };
         });
 
-        // console.log(mapFields);
-        // console.log('populateUIWithProducts mapFields ' + JSON.stringify(mapFields));
-
         $('.cart-products').html(mapFields.map(productTemplate).join(''));
     }
 }
