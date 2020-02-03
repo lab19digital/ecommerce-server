@@ -12,18 +12,17 @@ test('query for single product', () => {
     let prods = new Products(graphQlService);
     expect.assertions(1);
     return prods.getProduct(1).then(data => {
-        console.log('query for single product' + data);
         expect(data).toBeObject();
     });
 });
 
 // Test all products.
-test('query for all products', () => {
+test('4095840 query for all products', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
     expect.assertions(1);
     return prods.getAllProducts().then(data => {
-        expect(data).toEqual(products);
+        expect(data).toBeObject();
     });
 });
 
@@ -35,7 +34,7 @@ test('query for all products with DOM', () => {
     let prods = new Products(graphQlService);
     expect.assertions(2);
     return prods.getAllProducts().then(data => {
-        expect(data).toEqual(products);
+        expect(data).toBeObject();
         var productTitle = document.getElementById('product-title-1').textContent;
         expect(productTitle).toEqual('shoes');
     });

@@ -1,10 +1,10 @@
 const jQuery = require('jquery/dist/jquery.js');
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { graphql } from 'graphql';
-import typeDefs from '../graphql/schema';
+import productSchema from '../graphql/schema';
 
 // Fill this in with the schema string
-const schemaString = typeDefs;
+const schemaString = productSchema;
 
 // Make a GraphQL schema with no resolvers
 const schema = makeExecutableSchema({ typeDefs: schemaString });
@@ -16,17 +16,10 @@ jQuery.ajax = settings => {
     return new Promise((resolve, reject) => {
         let query = JSON.parse(settings.data);
         query = query.query;
-        // const query = `
-        //     query tasksForUser {
-        //         user(id: 6) {
-        //             id, name
-        //         }
-        //     }
-        // `;
 
         process.nextTick(() => {
             graphql(schema, query).then(result => {
-                console.log('Got result ', result);
+                console.log('Result: ' + JSON.stringify(result));
                 resolve(result);
             });
         });

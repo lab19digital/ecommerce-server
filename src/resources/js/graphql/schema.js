@@ -1,4 +1,4 @@
-const typeDefs = `
+const productSchema = `
     schema {
         query: Query
     }
@@ -218,4 +218,4 @@ const typeDefs = `
     }
 `;
 
-export default typeDefs;
+export default productSchema;
