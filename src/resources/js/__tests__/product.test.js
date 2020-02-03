@@ -35,9 +35,10 @@ test('Iu75fv query for all products with DOM', () => {
     expect.assertions(2);
     return prods.getAllProducts().then(data => {
         expect(data).toBeObject();
-        console.log('data' + JSON.stringify(data));
 
-        var productTitle = document.getElementById('product-title-1').textContent;
-        expect(productTitle).toEqual('Hello World');
+        var productTitles = document.body.getElementsByClassName('product-title');
+
+        // Check some title has content
+        expect(productTitles[0].textContent).toEqual('Hello World');
     });
 });

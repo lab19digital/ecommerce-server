@@ -14,7 +14,7 @@ const productTemplate = ({ title, short_description, id, buttonText }) => `
             </div>
         </div>
         <div class="uk-card-body">
-            <p>${short_description}</p>
+            <p class="short-description">${short_description}</p>
         </div>
         <div class="uk-card-footer">
             <a  href="#" class="uk-button uk-button-text add-to-cart" data-id="${id}">${buttonText}</a>
