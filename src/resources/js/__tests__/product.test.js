@@ -7,7 +7,7 @@ import products from '../jest_mock_objects/products';
 jest.mock('jquery');
 
 // Test single product.
-test('query for single product', () => {
+test('9oQi5H query for single product', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
     expect.assertions(1);
@@ -17,7 +17,7 @@ test('query for single product', () => {
 });
 
 // Test all products.
-test('4095840 query for all products', () => {
+test('(dvphY5 query for all products', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
     expect.assertions(1);
@@ -26,7 +26,7 @@ test('4095840 query for all products', () => {
     });
 });
 
-test('query for all products with DOM', () => {
+test('Iu75fv query for all products with DOM', () => {
     // Set up our document body
     document.body.innerHTML = '<div class="products-container"></div>';
 
@@ -35,7 +35,9 @@ test('query for all products with DOM', () => {
     expect.assertions(2);
     return prods.getAllProducts().then(data => {
         expect(data).toBeObject();
+        console.log('data' + JSON.stringify(data));
+
         var productTitle = document.getElementById('product-title-1').textContent;
-        expect(productTitle).toEqual('shoes');
+        expect(productTitle).toEqual('Hello World');
     });
 });
