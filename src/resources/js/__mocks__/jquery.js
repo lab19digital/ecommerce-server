@@ -49,6 +49,7 @@ jQuery.ajax = settings => {
         process.nextTick(() => {
             graphql(schema, query).then(result => {
                 if (name == 'products') {
+                    // Return the expected data structure.. again this because of @paginate from lighthouse-php
                     let newOb = { data: { products: { data: result.data.products } } };
                     resolve(newOb);
                 }
