@@ -10,9 +10,10 @@ jest.mock('jquery');
 test('9oQi5H query for single product', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
-    expect.assertions(1);
+    expect.assertions(2);
     return prods.getProduct(1).then(data => {
         expect(data).toBeObject();
+        expect(data.data.product).toContainAllKeys(['id', 'published', 'short_description', 'status', 'title']);
     });
 });
 
@@ -20,9 +21,16 @@ test('9oQi5H query for single product', () => {
 test('(dvphY5 query for all products', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
-    expect.assertions(1);
+    expect.assertions(2);
     return prods.getAllProducts().then(data => {
         expect(data).toBeObject();
+        expect(data.data.products.data[0]).toContainAllKeys([
+            'id',
+            'published',
+            'short_description',
+            'status',
+            'title',
+        ]);
     });
 });
 
@@ -32,9 +40,17 @@ test('Iu75fv query for all products with DOM', () => {
 
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
-    expect.assertions(2);
+    expect.assertions(3);
     return prods.getAllProducts().then(data => {
         expect(data).toBeObject();
+
+        expect(data.data.products.data[0]).toContainAllKeys([
+            'id',
+            'published',
+            'short_description',
+            'status',
+            'title',
+        ]);
 
         var productTitles = document.body.getElementsByClassName('product-title');
 
