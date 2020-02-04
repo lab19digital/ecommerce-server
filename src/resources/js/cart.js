@@ -46,8 +46,9 @@ class Cart {
         await Promise.all(
             products.map(async product => {
                 const queriedProduct = await this.productObj.getProduct(product.product_id);
-                queriedProduct.data.product.quantity = product.quantity;
-                return queriedProduct.data.product;
+                let quantityObje = { quantity: product.quantity };
+                let mergedObj = { ...queriedProduct, ...quantityObje };
+                return mergedObj.data.product;
             }),
         )
             .then(re => {

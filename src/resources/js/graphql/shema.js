@@ -74,7 +74,7 @@ var mainSchema = `
     }
 
     type CartItem {
-        product_id: ID!
+        product_id: Int! #note this supposed to be ID! but when mock server returns ID! it is a string and then can't use that string afterwards to query product
         quantity: Int!
     }
 

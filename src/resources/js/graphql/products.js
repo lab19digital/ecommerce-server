@@ -42,7 +42,7 @@ const productSchema = `
     }
     
     type Product {
-        id: ID!
+        id: ID! 
         parent_id: ID
         title: String!
         status: String!
