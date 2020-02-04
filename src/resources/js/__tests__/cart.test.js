@@ -6,7 +6,7 @@ import cartProducts from '../jest_mock_objects/cartProducts';
 // __mocks__/jquery.js
 jest.mock('jquery');
 
-test('query for all products with DOM in cart', () => {
+test('NFC(*7cn query for all products with DOM manipulation', () => {
     // Set up our document body
     document.body.innerHTML = '<div class="cart-products"></div>';
 
@@ -20,7 +20,7 @@ test('query for all products with DOM in cart', () => {
     });
 });
 
-test('DOM in cart ui', () => {
+test('Jfi934fho populateUIWithProducts() function cart test', () => {
     // Set up our document body
     document.body.innerHTML = '<div class="cart-products"></div>';
 

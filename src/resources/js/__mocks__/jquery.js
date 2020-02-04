@@ -1,7 +1,7 @@
 const jQuery = require('jquery/dist/jquery.js');
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { graphql } from 'graphql';
-import productSchema from '../graphql/schema';
+import productSchema from '../graphql/products';
 const { parse } = require('graphql');
 
 // Fill this in with the schema string
