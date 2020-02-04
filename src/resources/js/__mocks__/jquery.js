@@ -1,14 +1,23 @@
 const jQuery = require('jquery/dist/jquery.js');
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { graphql } from 'graphql';
+// The schemas
+import mainSchema from '../graphql/shema';
 import productSchema from '../graphql/products';
+import userSchema from '../graphql/user';
+import ordersSchema from '../graphql/orders';
+import tagSchema from '../graphql/tags';
+import directives from '../graphql/directives';
+
 const { parse } = require('graphql');
 
 // Fill this in with the schema string
-const schemaString = productSchema;
+const schemaString = directives + mainSchema + userSchema + productSchema + tagSchema + ordersSchema;
 
 // Make a GraphQL schema with no resolvers
-const schema = makeExecutableSchema({ typeDefs: schemaString });
+const schema = makeExecutableSchema({
+    typeDefs: schemaString,
+});
 
 // Add mocks, modifies schema in place
 addMockFunctionsToSchema({ schema });

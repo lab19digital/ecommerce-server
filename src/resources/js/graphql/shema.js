@@ -1,14 +1,28 @@
-var schema = `
+var mainSchema = `
     #A datetime string with format Y-m-d H:i:s, e.g. 2018-01-01 13:00:00.
-    scalar DateTime @scalar(class: "Nuwave\Lighthouse\Schema\Types\Scalars\DateTime")
+    #scalar DateTime @scalar(class: "Nuwave\Lighthouse\Schema\Types\Scalars\DateTime")
 
     #A date string with format Y-m-d, e.g. 2011-05-23.
-    scalar Date @scalar(class: "Nuwave\Lighthouse\Schema\Types\Scalars\Date")
+    #scalar Date @scalar(class: "Nuwave\Lighthouse\Schema\Types\Scalars\Date")
 
     #Can be used as an argument to upload files using https://github.com/jaydenseric/graphql-multipart-request-spec
-    scalar Upload @scalar(class: "Nuwave\Lighthouse\Schema\Types\Scalars\Upload")
+    #scalar Upload @scalar(class: "Nuwave\Lighthouse\Schema\Types\Scalars\Upload")
+
+    scalar DateTime
+    
+    scalar Date
+
+    scalar Upload
+
+    schema {
+        query: Query
+    }
 
     type Query {
+        sample: String
+    }
+
+    extend type Query {
         users: [User!]!
             @paginate(type: "paginator", model: "Lab19\Cart\Models\User")
             @can(ability: "view", model: "Lab19\Cart\Models\User", policy: "Lab19\Cart\Policies\UserPolicy")
@@ -38,10 +52,6 @@ var schema = `
         session: Session
         created_at: DateTime!
         updated_at: DateTime!
-    }
-
-    type Session {
-        token: String!
     }
 
     type Order {
@@ -116,4 +126,4 @@ var schema = `
 
 `;
 
-export default schema;
+export default mainSchema;
