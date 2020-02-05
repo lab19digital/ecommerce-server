@@ -1,5 +1,5 @@
 import successTemplate from './templates/successTemplate';
-
+import $ from 'jquery';
 class Checkout {
     constructor(graphqlService) {
         this.graphqlService = graphqlService;
@@ -31,7 +31,6 @@ class Checkout {
 
     sendOfCheckoutInfo(values) {
         var userToken = localStorage.getItem('userToken');
-
         let query = ` mutation {
             checkout(input: {
                 name: "${values['name']}",
@@ -63,10 +62,20 @@ class Checkout {
             }
         }`;
 
+        // Temp query to test mutations (works on temp schema)
+        // query = `mutation {
+        //     upvotePost (postId: 1) {
+        //         id
+        //         title
+        //         votes
+        //     }
+        //   }`;
+
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
                 $('.checkout-container').html(successTemplate);
+                return re;
             })
             .catch(error => {
                 console.log(error);
