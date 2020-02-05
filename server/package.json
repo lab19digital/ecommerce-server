@@ -50,9 +50,6 @@
         }
     },
     "jest": {
-        "setupFiles": [
-            "./src/resources/js/setup-jest.js"
-        ],
         "setupFilesAfterEnv": [
             "jest-extended"
         ]

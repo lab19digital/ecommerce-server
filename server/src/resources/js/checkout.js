@@ -63,7 +63,7 @@ class Checkout {
             }
         }`;
 
-        this.graphqlService
+        return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
                 $('.checkout-container').html(successTemplate);
@@ -71,8 +71,6 @@ class Checkout {
             .catch(error => {
                 console.log(error);
             });
-
-        return;
     }
 }
 export { Checkout };
