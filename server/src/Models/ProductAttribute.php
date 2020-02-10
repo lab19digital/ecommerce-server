@@ -1,20 +1,18 @@
 <?php
 
-    namespace Lab19\Cart\Models;
+    namespace Gernzy\Server\Models;
 
     use Illuminate\Database\Eloquent\Model;
-    use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-    use Lab19\Cart\Models\Product;
-
-    class ProductAttribute extends Model {
+    class ProductAttribute extends Model
+    {
 
         /**
          * The table associated with the model.
          *
          * @var string
          */
-        protected $table = 'cart_product_attributes';
+        protected $table = 'gernzy_product_attributes';
 
         /**
          * The attributes that are mass assignable.
@@ -30,7 +28,8 @@
         /**
          * Product relation
          */
-        public function product(){
+        public function product()
+        {
             return $this->belongsTo(Product::class);
         }
 
@@ -38,7 +37,7 @@
          * Prices scope
          * $product->prices()
          */
-        public function scopePrices( $query )
+        public function scopePrices($query)
         {
             return $query->where('group', 'prices');
         }
@@ -48,7 +47,8 @@
          *
          * @var $query
          */
-        public function scopeImages( $query ){
+        public function scopeImages($query)
+        {
             return $query->where('group', 'images');
         }
 
@@ -57,7 +57,8 @@
          *
          * @var $query
          */
-        public function scopeFeaturedImage( $query ){
+        public function scopeFeaturedImage($query)
+        {
             return $query->where('group', 'featured_image');
         }
 
@@ -65,7 +66,7 @@
          * Custom product meta scope
          * $product->meta()
          */
-        public function scopeMeta( $query )
+        public function scopeMeta($query)
         {
             return $query->where('group', 'meta');
         }
@@ -74,7 +75,7 @@
          * Sizes scope
          * $product->sizes()
          */
-        public function scopeSizes( $query )
+        public function scopeSizes($query)
         {
             return $query->where('group', 'sizes');
         }
@@ -83,7 +84,7 @@
          * Dimensions scope
          * $product->dimensions()
          */
-        public function scopeDimensions( $query )
+        public function scopeDimensions($query)
         {
             return $query->where('group', 'dimensions');
         }
@@ -92,7 +93,7 @@
          * Weight scope
          * $product->weight()
          */
-        public function scopeWeight( $query )
+        public function scopeWeight($query)
         {
             return $query->where('group', 'weight');
         }
@@ -123,5 +124,4 @@
         {
             return $this->attributes['value'];
         }
-
     }

@@ -1,11 +1,9 @@
 <?php
 
-namespace Lab19\Cart\Models;
+namespace Gernzy\Server\Models;
 
-use Lab19\Cart\Models\Cart;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-
 
 class Order extends Model
 {
@@ -15,7 +13,7 @@ class Order extends Model
      *
      * @var string
      */
-    protected $table = 'cart_orders';
+    protected $table = 'gernzy_orders';
 
     /**
      * The attributes that are mass assignable.
@@ -69,6 +67,4 @@ class Order extends Model
     {
         return $this->hasOne(Cart::class);
     }
-
-
 }
