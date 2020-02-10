@@ -20,7 +20,6 @@ test('*&hyveUcdn9e user session test', () => {
 
     return userObj.createSession().then(data => {
         expect(data).toBeObject();
-        console.log(JSON.stringify(data));
         expect(data.data.createSession).toContainAllKeys(['token']);
     });
 });
