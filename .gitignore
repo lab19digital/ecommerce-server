@@ -1,3 +1,2 @@
 .dbdata
-node_modules
-vendor
+/shop

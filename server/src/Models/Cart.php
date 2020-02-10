@@ -1,6 +1,6 @@
 <?php
 
-namespace Lab19\Cart\Models;
+namespace Gernzy\Server\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,7 +13,7 @@ class Cart extends Model
      *
      * @var string
      */
-    protected $table = 'cart_carts';
+    protected $table = 'gernzy_carts';
 
     /**
      * The attributes that are mass assignable.

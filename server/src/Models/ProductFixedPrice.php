@@ -1,6 +1,6 @@
 <?php
 
-namespace Lab19\Cart\Models;
+namespace Gernzy\Server\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +12,7 @@ class ProductFixedPrice extends Model
      *
      * @var string
      */
-    protected $table = 'cart_product_prices';
+    protected $table = 'gernzy_product_prices';
 
     /**
      * The attributes that are mass assignable.

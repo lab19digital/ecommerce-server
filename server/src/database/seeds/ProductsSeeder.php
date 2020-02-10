@@ -1,6 +1,6 @@
 <?php
 
-namespace Lab19\Cart\Database\Seeds;
+namespace Gernzy\Server\Database\Seeds;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +30,7 @@ class ProductsSeeder extends Seeder
         $faker = \Faker\Factory::create();
         foreach ($this->titles as $title) {
             $rand = rand(0, 10);
-            DB::table('cart_products')->insert([
+            DB::table('gernzy_products')->insert([
                 'title' => $faker->word(),
                 'short_description' => $faker->sentence(),
                 'status' => $rand > 5 ? 'IN_STOCK' : 'OUT_OF_STOCK',

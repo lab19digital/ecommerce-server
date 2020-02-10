@@ -1,8 +1,8 @@
 <?php
 
-use Lab19\Cart\Models\Product;
-use Lab19\Cart\Models\ProductFixedPrice;
-use Lab19\Cart\Testing\TestCase;
+use Gernzy\Server\Models\Product;
+use Gernzy\Server\Models\ProductFixedPrice;
+use Gernzy\Server\Testing\TestCase;
 
 /**
  * @group Products
@@ -33,11 +33,11 @@ class TestProductFixedPrices extends TestCase
         // Create the relationship
         $product->fixedPrices()->save($productFixedPrice);
 
-        $this->assertDatabaseHas('cart_products', [
+        $this->assertDatabaseHas('gernzy_products', [
             'id' => $product->id,
         ]);
 
-        $this->assertDatabaseHas('cart_product_prices', [
+        $this->assertDatabaseHas('gernzy_product_prices', [
             'id' => $productFixedPrice->id,
             'product_id' => $product->id
         ]);

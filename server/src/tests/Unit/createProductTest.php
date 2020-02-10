@@ -1,8 +1,8 @@
 <?php
 
-use Lab19\Cart\Models\Product;
-use Lab19\Cart\Models\ProductFixedPrice;
-use Lab19\Cart\Testing\TestCase;
+use Gernzy\Server\Models\Product;
+use Gernzy\Server\Models\ProductFixedPrice;
+use Gernzy\Server\Testing\TestCase;
 
 /**
  * @group Products
@@ -182,7 +182,7 @@ class TestCreateProductTest extends TestCase
         $this->assertNotEmpty($product->title);
 
         // Check the database contains the info for the fixed prices
-        $this->assertDatabaseHas('cart_product_prices', [
+        $this->assertDatabaseHas('gernzy_product_prices', [
             'id' => $productFixedPrice->id,
             'product_id' => $product->id
         ]);

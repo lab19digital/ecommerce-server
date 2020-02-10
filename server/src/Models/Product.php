@@ -1,6 +1,6 @@
 <?php
 
-namespace Lab19\Cart\Models;
+namespace Gernzy\Server\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +21,7 @@ class Product extends Model
      *
      * @var string
      */
-    protected $table = 'cart_products';
+    protected $table = 'gernzy_products';
 
     /**
      * The attributes that are mass assignable.
@@ -55,7 +55,7 @@ class Product extends Model
      */
     public function images()
     {
-        return $this->morphToMany(Image::class, 'cart_image_attachable');
+        return $this->morphToMany(Image::class, 'gernzy_image_attachable');
     }
 
     /**
@@ -65,7 +65,7 @@ class Product extends Model
      */
     public function categories()
     {
-        return $this->morphToMany(Category::class, 'cart_categorizable');
+        return $this->morphToMany(Category::class, 'gernzy_categorizable');
     }
 
     /**
@@ -217,7 +217,7 @@ class Product extends Model
      */
     public function tags()
     {
-        return $this->morphToMany(Tag::class, 'taggable', 'cart_taggables')->withTimestamps();
+        return $this->morphToMany(Tag::class, 'taggable', 'gernzy_taggables')->withTimestamps();
     }
 
     /**

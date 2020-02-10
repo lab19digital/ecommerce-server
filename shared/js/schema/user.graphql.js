@@ -1,0 +1,162 @@
+export default `
+input CreateAccountInput {
+    name: String!
+    email: String @rules(apply: ["required", "email", "unique:gernzy_users,email"])
+    password: String!
+    token: String
+}
+
+type CreateAccountPayload {
+    token: String
+    user: User
+}
+
+input SetSessionInput {
+    products: [CartProductInput!]
+}
+
+input SetSessionCurrency {
+    currency: String!
+}
+
+input CartProductInput {
+    id: ID!
+    quantity: Int!
+}
+
+type SetSessionPayload {
+    cart_uuid: String
+    products: [CartProduct]
+}
+
+type SetSessionCurrencyPayload {
+    currency: String
+    rate: String
+}
+
+type CartProduct {
+    id: ID!
+    quantity: Int!
+}
+
+extend type Mutation {
+    logIn(input: LoginInput! @spread): LogInPayload
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\Account@logIn")
+
+    logOut: LogOutPayload @field(resolver: "Gernzy\Server\GraphQL\Mutations\Account@logOut")
+
+    addToCart(input: AddToCartInput!): CartPayload
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\Cart@addToCart")
+        @gate(ability: "add-to-cart", sessionOnly: true)
+
+    removeFromCart(input: RemoveFromCartInput!): CartPayload
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\Cart@removeFromCart")
+        @gate(ability: "remove-from-cart", sessionOnly: true)
+
+    updateCartQuantity(input: UpdateCartQuantityInput!): CartPayload
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\Cart@updateCartQuantity")
+        @gate(ability: "add-to-cart", sessionOnly: true)
+
+    createUser(input: CreateUserInput!): CreateUserPayload
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\User@create")
+        @can(ability: "create", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
+
+    updateUser(id: ID!, input: UpdateUserInput!): CreateUserPayload
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\User@update")
+        @can(ability: "update", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
+
+    deleteUser(id: ID!): DeleteResult
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\User@delete")
+        @can(ability: "delete", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
+
+    elevateUser(id: ID!): CreateUserPayload
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\User@elevate")
+        @can(ability: "update", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
+
+    demoteUser(id: ID!): CreateUserPayload
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\User@demote")
+        @can(ability: "update", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
+
+    resetUserPasswordLink(email: String!): SendResult
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\User@resetPasswordLink")
+
+    resetPassword(input: UpdatePasswordPayload): UpdatePasswordResult
+        @field(resolver: "Gernzy\Server\GraphQL\Mutations\User@resetPassword")
+}
+
+input UpdatePasswordPayload {
+    email: String!
+    token: String!
+    password: String!
+    password_confirmation: String!
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+type LogInPayload {
+    user: User
+    token: String
+}
+
+type LogOutPayload {
+    success: Boolean!
+}
+
+input AddToCartInput {
+    items: [AddToCartItemInput!]
+}
+
+input AddToCartItemInput {
+    product_id: ID!
+    quantity: Int!
+}
+
+type CartPayload {
+    cart: Cart
+}
+
+input RemoveFromCartInput {
+    product_id: ID!
+    quantity: Int!
+}
+
+input UpdateCartQuantityInput {
+    product_id: ID!
+    quantity: Int!
+}
+
+extend type Query {
+    me: User @field(resolver: "Gernzy\Server\GraphQL\Queries\Account@me")
+    myOrders: [Order!] @field(resolver: "Gernzy\Server\GraphQL\Queries\Account@myOrders")
+}
+
+input CreateUserInput {
+    name: String!
+    email: String! @rules(apply: ["required", "email", "unique:gernzy_users,email"])
+    password: String!
+}
+
+input UpdateUserInput {
+    name: String
+    email: String @rules(apply: ["email", "unique:gernzy_users,email"])
+    password: String
+}
+
+type CreateUserPayload {
+    id: ID!
+    name: String!
+    email: String!
+    is_admin: Int
+}
+
+type SendResult {
+    success: Boolean!
+}
+
+type UpdatePasswordResult {
+    success: Boolean!
+} 
+`

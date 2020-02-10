@@ -1,6 +1,6 @@
 <?php
 
-    namespace Lab19\Cart\Models;
+    namespace Gernzy\Server\Models;
 
     use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +13,7 @@
          *
          * @var string
          */
-        protected $table = 'cart_tags';
+        protected $table = 'gernzy_tags';
 
         /**
          * The attributes that are mass assignable.
@@ -49,6 +49,6 @@
          */
         public function products()
         {
-            return $this->morphedByMany(Product::class, 'taggable', 'cart_taggables')->withTimestamps();
+            return $this->morphedByMany(Product::class, 'taggable', 'gernzy_taggables')->withTimestamps();
         }
     }

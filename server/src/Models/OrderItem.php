@@ -1,6 +1,6 @@
 <?php
 
-namespace Lab19\Cart\Models;
+namespace Gernzy\Server\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +12,7 @@ class OrderItem extends Model
      *
      * @var string
      */
-    protected $table = 'cart_order_items';
+    protected $table = 'gernzy_order_items';
 
     /**
      * The attributes that are mass assignable.

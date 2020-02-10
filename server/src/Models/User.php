@@ -1,6 +1,6 @@
 <?php
 
-namespace Lab19\Cart\Models;
+namespace Gernzy\Server\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +14,7 @@ class User extends Authenticatable
      *
      * @var string
      */
-    protected $table = 'cart_users';
+    protected $table = 'gernzy_users';
 
     /**
      * The attributes that are mass assignable.

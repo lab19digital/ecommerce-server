@@ -1,18 +1,18 @@
 <?php
 
-    namespace Lab19\Cart\Models;
+    namespace Gernzy\Server\Models;
 
     use Illuminate\Database\Eloquent\Model;
-    use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-    class Image extends Model {
+    class Image extends Model
+    {
 
         /**
          * The table associated with the model.
          *
          * @var string
          */
-        protected $table = 'cart_images';
+        protected $table = 'gernzy_images';
 
         /**
          * The attributes that are mass assignable.
@@ -24,5 +24,4 @@
             'url',
             'type'
         ];
-
     }
