@@ -8,15 +8,11 @@ import userSchema from '../graphql/user';
 import ordersSchema from '../graphql/orders';
 import tagSchema from '../graphql/tags';
 import directives from '../graphql/directives';
-import temp from '../graphql/temp';
 
 const { parse } = require('graphql');
 
 // Fill this in with the schema string
 const schemaString = directives + mainSchema + userSchema + productSchema + tagSchema + ordersSchema;
-
-// This is for testing mutations by only using a temporary simple schema on the checkout test. (works)
-// const schemaString = temp;
 
 // Make a GraphQL schema with no resolvers
 const schema = makeExecutableSchema({
