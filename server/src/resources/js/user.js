@@ -9,11 +9,12 @@ class User {
             }
         }`;
 
-        this.graphqlService
+        return this.graphqlService
             .sendQuery(query)
             .then(re => {
                 let token = re.data.createSession.token;
                 this.addSessionTokenToLocalStorage(token);
+                return re;
             })
             .catch(error => {
                 console.log(error);

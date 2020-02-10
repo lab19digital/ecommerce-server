@@ -8,7 +8,6 @@ import userSchema from '../graphql/user';
 import ordersSchema from '../graphql/orders';
 import tagSchema from '../graphql/tags';
 import directives from '../graphql/directives';
-import temp from '../graphql/temp';
 
 const { parse } = require('graphql');
 
