@@ -62,15 +62,6 @@ class Checkout {
             }
         }`;
 
-        // Temp query to test mutations (works on temp schema)
-        // query = `mutation {
-        //     upvotePost (postId: 1) {
-        //         id
-        //         title
-        //         votes
-        //     }
-        //   }`;
-
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
