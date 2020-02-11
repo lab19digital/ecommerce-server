@@ -36,6 +36,8 @@ class CartTotalTest extends TestCase
                         items: [
                             { product_id: 1, quantity: 5 },
                             { product_id: 2, quantity: 4 }
+                            { product_id: 3, quantity: 4 }
+                            { product_id: 4, quantity: 4 }
                         ]
                     }) {
                     cart {
@@ -59,9 +61,6 @@ class CartTotalTest extends TestCase
 
         $response->assertDontSee('errors');
 
-        print json_encode($response);
-
-
         $response->assertJsonStructure([
             'data' => [
                 'addToCart' => [
@@ -75,9 +74,9 @@ class CartTotalTest extends TestCase
             ]
         ]);
 
-        // $result = $response->decodeResponseJson();
+        $result = $response->decodeResponseJson();
 
 
-        // $this->assertIsNumeric($result['data']['checkout']['order']['id']);
+        $this->assertNotEmpty($result['data']['addToCart']['cart']['items'][0]);
     }
 }
