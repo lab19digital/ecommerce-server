@@ -34,5 +34,20 @@ class User {
             return false;
         }
     }
+
+    checkTokenExistsInDatabase() {
+        let userTokenLocalStorage = localStorage.getItem('userToken');
+
+        let query = ` {
+            me {
+                session {
+                    id
+                    token
+                }
+            }
+        }`;
+
+        return this.graphqlService.sendQuery(query, userTokenLocalStorage);
+    }
 }
 export { User };
