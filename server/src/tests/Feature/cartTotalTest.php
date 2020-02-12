@@ -79,4 +79,39 @@ class CartTotalTest extends TestCase
 
         $this->assertNotEmpty($result['data']['addToCart']['cart']['items'][0]);
     }
+
+    public function testCartQuery()
+    {
+        $response = $this->graphQLWithSession($this->addToCartMutation);
+
+        $query = '{
+            me {
+                cart {
+                    cart_total
+                }
+            }
+        }';
+
+        $response = $this->graphQLWithSession($query);
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'me' => [
+                    'cart' => [
+                        'cart_total'
+                    ]
+                ]
+            ]
+        ]);
+
+        $result = $response->decodeResponseJson();
+
+        $total = $result['data']['me']['cart']['cart_total'];
+
+        $this->assertNotEmpty($total);
+
+        $this->assertGreaterThan(0, $total);
+    }
 }

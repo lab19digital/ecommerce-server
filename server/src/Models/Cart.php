@@ -105,4 +105,15 @@ class Cart extends Model
     {
         return $this->getAttribute('items') ?? [];
     }
+
+    public function calcCartTotal()
+    {
+        $items = $this->getAllItems();
+        $total = 0;
+        foreach ($items as &$item) {
+            $product = Product::find($item['product_id']);
+            $total += $product->price_cents * $item['quantity'];
+        }
+        return $total;
+    }
 }
