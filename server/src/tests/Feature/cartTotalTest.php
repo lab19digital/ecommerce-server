@@ -194,6 +194,9 @@ class CartTotalTest extends TestCase
         $totalAfterRemove = $result['data']['me']['cart']['cart_total'];
 
         $this->assertNotEquals($total, $totalAfterRemove);
+
+        // Check that the total has decreased after remove mutation was executed
+        $this->assertLessThan($total, $totalAfterRemove);
     }
 
     public function testUpdateCartQuantity()
