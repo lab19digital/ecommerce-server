@@ -109,18 +109,18 @@ class Cart extends Model
     public function calcCartTotal()
     {
         $items = $this->getAllItems();
+        // Get all item ids and pass to the eloquent lookup as array
         $ids = array_column($items, 'product_id');
         $products = Product::find($ids);
 
         $total = 0;
         foreach ($items as &$item) {
-            $productPriceIndex = $products->search(function ($product, $key) use ($item) {
-                return $item['product_id'] == $product->id;
-            });
+            // Find the product for the current item for the price_cents of the product
+            $product = $products->firstWhere('id', '==', $item['product_id']);
 
-            $productPrice  = $products[$productPriceIndex]->price_cents;
-            if (isset($productPrice)) {
-                $total += $productPrice * $item['quantity'];
+            // Workout the cost of the product by its quantity and add the total
+            if (isset($product->price_cents)) {
+                $total += $product->price_cents * $item['quantity'];
             }
         }
 
