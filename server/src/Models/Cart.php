@@ -112,7 +112,9 @@ class Cart extends Model
         $total = 0;
         foreach ($items as &$item) {
             $product = Product::find($item['product_id']);
-            $total += $product->price_cents * $item['quantity'];
+            if (isset($product->price_cents)) {
+                $total += $product->price_cents * $item['quantity'];
+            }
         }
         return $total;
     }
