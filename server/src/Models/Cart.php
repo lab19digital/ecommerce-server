@@ -109,13 +109,21 @@ class Cart extends Model
     public function calcCartTotal()
     {
         $items = $this->getAllItems();
+        $ids = array_column($items, 'product_id');
+        $products = Product::find($ids);
+
         $total = 0;
         foreach ($items as &$item) {
-            $product = Product::find($item['product_id']);
-            if (isset($product->price_cents)) {
-                $total += $product->price_cents * $item['quantity'];
+            $productPriceIndex = $products->search(function ($product, $key) use ($item) {
+                return $item['product_id'] == $product->id;
+            });
+
+            $productPrice  = $products[$productPriceIndex]->price_cents;
+            if (isset($productPrice)) {
+                $total += $productPrice * $item['quantity'];
             }
         }
+
         return $total;
     }
 }

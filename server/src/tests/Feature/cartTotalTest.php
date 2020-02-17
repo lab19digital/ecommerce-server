@@ -35,9 +35,11 @@ class CartTotalTest extends TestCase
                 addToCart(input: {
                         items: [
                             { product_id: 1, quantity: 5 },
-                            { product_id: 2, quantity: 4 }
-                            { product_id: 3, quantity: 4 }
-                            { product_id: 4, quantity: 4 }
+                            { product_id: 2, quantity: 1 }
+                            { product_id: 3, quantity: 9 }
+                            { product_id: 4, quantity: 2 }
+                            { product_id: 5, quantity: 3 }
+                            { product_id: 6, quantity: 3 }
                         ]
                     }) {
                     cart {
@@ -164,7 +166,7 @@ class CartTotalTest extends TestCase
         $response->assertDontSee('errors');
         $result = $response->decodeResponseJson();
 
-        $this->assertCount(3, $result['data']['removeFromCart']['cart']['items']);
+        $this->assertCount(5, $result['data']['removeFromCart']['cart']['items']);
 
         // Query cart total and check that it is not the same
         $query = '{
