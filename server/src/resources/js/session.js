@@ -6,7 +6,7 @@ class SessionService {
         this.graphqlService = graphqlService;
     }
 
-    getSessionData() {
+    setUpSessionData() {
         var userToken = localStorage.getItem('userToken');
 
         let query = `{
@@ -18,11 +18,11 @@ class SessionService {
         }`;
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
-            console.log(re);
+            localStorage.setItem('sessionData', re.data.me.session.data);
         });
     }
 
-    getShopConfig() {
+    setUpShopConfig() {
         var userToken = localStorage.getItem('userToken');
 
         let query = `
@@ -32,11 +32,11 @@ class SessionService {
         `;
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
-            console.log(re);
+            localStorage.setItem('shopConfig', re.data.shopConfig);
         });
     }
 
-    setGeoLocation() {
+    setUpGeoLocation() {
         var userToken = localStorage.getItem('userToken');
 
         let query = `
@@ -52,7 +52,7 @@ class SessionService {
         });
     }
 
-    setCurrency() {
+    setUpCurrency() {
         var userToken = localStorage.getItem('userToken');
 
         let query = `
@@ -65,9 +65,7 @@ class SessionService {
             }
         `;
 
-        return this.graphqlService.sendQuery(query, userToken).then(re => {
-            console.log(re);
-        });
+        return this.graphqlService.sendQuery(query, userToken);
     }
 
     setupUser() {
