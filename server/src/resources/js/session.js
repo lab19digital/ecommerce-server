@@ -48,8 +48,13 @@ class SessionService {
         `;
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
-            console.log(re);
-            // localStorage.setItem('setSessionGeoLocation', re.data.shopConfig);
+            let error = re.errors[0].debugMessage;
+            if (!error) {
+                localStorage.setItem('setSessionGeoLocation', re.data.setSessionGeoLocation.geolocation_record);
+            } else {
+                // handle error
+                console.log(error);
+            }
         });
     }
 
