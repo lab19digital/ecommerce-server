@@ -72,5 +72,27 @@ class Checkout {
                 console.log(error);
             });
     }
+
+    getBasketTotal() {
+        var userToken = localStorage.getItem('userToken');
+
+        let query = `{
+            me {
+                cart {
+                    cart_total
+                }
+            }
+        }`;
+
+        return this.graphqlService
+            .sendQuery(query, userToken)
+            .then(re => {
+                $('#checkout-cart-total').html(re.data.me.cart.cart_total / 100);
+                return re;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 }
 export { Checkout };

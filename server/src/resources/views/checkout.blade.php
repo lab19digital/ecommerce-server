@@ -2,6 +2,12 @@
 
 @section('content')
 <div class="checkout-container">
+    <div class="uk-flex  uk-flex-right">
+        <div class="uk-card uk-card-default uk-card-body">
+            <span class="uk-margin-small-right" uk-icon="cart">Basket total </span>
+            <span id="checkout-cart-total" class="uk-badge"></span>
+        </div>
+    </div>
     <h1 class="uk-heading-small uk-padding-small">Complete checkout</h1>
 
     <div class="uk-padding">

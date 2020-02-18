@@ -1,8 +1,8 @@
 import { Products } from './products';
-import { User } from './user';
 import { Cart } from './cart';
 import { Checkout } from './checkout';
 import { GraphqlService } from './graphqlService';
+import { SessionService } from './session';
 
 // jQuery ajax spinner
 var $loading = $('#loadingDiv').hide();
@@ -14,25 +14,12 @@ $(document)
         $loading.hide();
     });
 
-let pathname = window.location.pathname; // Returns path only (/path/example.html)
+let pathname = window.location.pathname;
 let graphQlService = new GraphqlService();
 
-// Session object in localStorage if it doesn't already exist, and verify
-let userObj = new User(graphQlService);
-if (!userObj.checkIfTokenInLocalStorage()) {
-    userObj.createSession();
-} else {
-    userObj.checkTokenExistsInDatabase().then(re => {
-        try {
-            if (re.errors[0].debugMessage == 'Cannot return null for non-nullable field Session.id.') {
-                // Recreate session object
-                userObj.createSession();
-            }
-        } catch (error) {
-            // No error exist
-        }
-    });
-}
+let sessionService = new SessionService(graphQlService);
+sessionService.setupUser();
+sessionService.setGeoLocation();
 
 // Load all products on the home page
 let productObj = new Products(graphQlService);
@@ -49,5 +36,6 @@ if (pathname.includes('cart')) {
 // Load all products on the cart page
 let checkout = new Checkout(graphQlService);
 if (pathname.includes('checkout')) {
+    checkout.getBasketTotal();
     checkout.checkout();
 }
