@@ -87,7 +87,9 @@ class Checkout {
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
-                $('#checkout-cart-total').html(re.data.me.cart.cart_total / 100);
+                let currency = localStorage.getItem('currency');
+
+                $('#checkout-cart-total').html(`${re.data.me.cart.cart_total / 100} ${currency}`);
                 return re;
             })
             .catch(error => {

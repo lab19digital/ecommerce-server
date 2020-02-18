@@ -15,6 +15,8 @@ class Products {
                     status
                     published
                     short_description
+                    price_cents
+                    price_currency
                 }
                 paginatorInfo {
                     total
@@ -28,8 +30,16 @@ class Products {
             .sendQuery(query)
             .then(re => {
                 let mapFields = re.data.products.data.map(product => {
+                    var currency = localStorage.getItem('currency');
+                    if (!currency) {
+                        currency = product.price_currency;
+                    }
+
                     return {
                         title: product.title,
+                        price_cents: product.price_cents / 100,
+                        //TODO: This should change if the user has specified a different currency
+                        price_currency: currency,
                         short_description: product.short_description,
                         id: product.id,
                         buttonText: 'Add to cart',

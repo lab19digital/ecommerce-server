@@ -19,6 +19,7 @@ class SessionService {
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
             localStorage.setItem('sessionData', re.data.me.session.data);
+            localStorage.setItem('currency', re.data.me.session.data[0]);
         });
     }
 
