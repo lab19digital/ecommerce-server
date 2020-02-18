@@ -20,8 +20,7 @@ let graphQlService = new GraphqlService();
 let sessionService = new SessionService(graphQlService);
 sessionService.setupUser();
 sessionService.setUpCurrency();
-// sessionService.setUpGeoLocation();
-sessionService.setUpSessionData();
+sessionService.setUpGeoLocation();
 sessionService.setUpSessionData();
 sessionService.setUpShopConfig();
 

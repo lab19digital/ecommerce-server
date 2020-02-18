@@ -49,6 +49,7 @@ class SessionService {
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
             console.log(re);
+            // localStorage.setItem('setSessionGeoLocation', re.data.shopConfig);
         });
     }
 
