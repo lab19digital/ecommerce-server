@@ -6,6 +6,22 @@ class SessionService {
         this.graphqlService = graphqlService;
     }
 
+    getSessionData() {
+        var userToken = localStorage.getItem('userToken');
+
+        let query = `{
+            me {
+                session {
+                    data
+                }
+            }
+        }`;
+
+        return this.graphqlService.sendQuery(query, userToken).then(re => {
+            console.log(re);
+        });
+    }
+
     getShopConfig() {
         var userToken = localStorage.getItem('userToken');
 
@@ -35,6 +51,7 @@ class SessionService {
             console.log(re);
         });
     }
+
     setCurrency() {
         var userToken = localStorage.getItem('userToken');
 
