@@ -16,28 +16,25 @@ $(document)
 
 let pathname = window.location.pathname;
 let graphQlService = new GraphqlService();
-
 let sessionService = new SessionService(graphQlService);
+let productObj = new Products(graphQlService);
+let cart = new Cart(productObj, graphQlService);
+let checkout = new Checkout(graphQlService);
+
+// Session setup
 sessionService.setupUser();
 sessionService.setUpShopConfig();
-// sessionService.setUpSessionData();
-// sessionService.setUpCurrency();
+sessionService.setUpSessionData();
 // sessionService.setUpGeoLocation();
 
-// Load all products on the home page
-let productObj = new Products(graphQlService);
 if (pathname.includes('shop')) {
     productObj.getAllProducts();
 }
 
-// Load all products on the cart page
-let cart = new Cart(productObj, graphQlService);
 if (pathname.includes('cart')) {
     cart.viewProductsInCart();
 }
 
-// Load all products on the cart page
-let checkout = new Checkout(graphQlService);
 if (pathname.includes('checkout')) {
     checkout.getBasketTotal();
     checkout.checkout();

@@ -91,6 +91,10 @@ class SessionService {
                 console.log(error);
             } catch {
                 localStorage.setItem('currency', re.data.setSessionCurrency.currency);
+
+                // A lot of state will need to change with the currency changing, and for now an easy fix is just to force
+                // a reload
+                location.reload(true);
             }
         });
     }

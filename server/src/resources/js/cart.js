@@ -61,10 +61,17 @@ class Cart {
 
     populateUIWithProducts(products) {
         let mapFields = products.map(product => {
+            var currency = localStorage.getItem('currency');
+            if (!currency) {
+                currency = product.price_currency;
+            }
+
             return {
                 title: product.title,
                 short_description: product.short_description,
                 id: product.id,
+                price_cents: product.price_cents / 100,
+                price_currency: currency,
                 buttonText: 'Remove',
             };
         });

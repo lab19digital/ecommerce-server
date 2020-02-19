@@ -64,6 +64,8 @@ class Products {
                     status
                     published
                     short_description
+                    price_cents
+                    price_currency
             }
         }`;
 
