@@ -19,7 +19,10 @@ class SessionService {
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
             localStorage.setItem('sessionData', re.data.me.session.data);
-            localStorage.setItem('currency', re.data.me.session.data[0]);
+
+            if (re.data.me.session.data[1]) {
+                localStorage.setItem('currency', re.data.me.session.data[1]);
+            }
         });
     }
 
@@ -33,6 +36,14 @@ class SessionService {
         `;
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
+            re.data.shopConfig.forEach(element => {
+                $('#available-currencies').append(
+                    `<li><a href='#' class='available-currency' data-currency="${element}">${element}</a></li>`,
+                );
+            });
+
+            $('.available-currency').on('click', this.changeUserCurrency.bind(this));
+
             localStorage.setItem('shopConfig', re.data.shopConfig);
         });
     }
@@ -59,20 +70,29 @@ class SessionService {
         });
     }
 
-    setUpCurrency() {
+    changeUserCurrency(event) {
         var userToken = localStorage.getItem('userToken');
+        let currrency = $(event.target).attr('data-currency');
 
         let query = `
             mutation {
                 setSessionCurrency(input: {
-                    currency: "EUR"
+                    currency: "${currrency}"
                 }){
                     currency
                 }
             }
         `;
 
-        return this.graphqlService.sendQuery(query, userToken);
+        return this.graphqlService.sendQuery(query, userToken).then(re => {
+            try {
+                // See if there is an error
+                let error = re.errors[0].debugMessage;
+                console.log(error);
+            } catch {
+                localStorage.setItem('currency', re.data.setSessionCurrency.currency);
+            }
+        });
     }
 
     setupUser() {

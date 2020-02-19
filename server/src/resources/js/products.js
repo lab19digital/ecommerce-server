@@ -38,7 +38,6 @@ class Products {
                     return {
                         title: product.title,
                         price_cents: product.price_cents / 100,
-                        //TODO: This should change if the user has specified a different currency
                         price_currency: currency,
                         short_description: product.short_description,
                         id: product.id,

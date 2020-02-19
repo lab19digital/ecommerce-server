@@ -89,7 +89,7 @@ type Session {
     id: ID!
     token: String!
     cart_id: ID
-    data: [String]
+    data: [String] @field(resolver: "Gernzy\\Server\\GraphQL\\Mutations\\SetSession@getData")
 }
 
 input CreateOrderInput {

@@ -89,6 +89,12 @@ class Checkout {
             .then(re => {
                 let currency = localStorage.getItem('currency');
 
+                // A naive solution for now, but if now currency was specified by user then I'll just assume the currency to be
+                // USD. This is definitely TODO: improve
+                if (!currency) {
+                    currency = 'USD';
+                }
+
                 $('#checkout-cart-total').html(`${re.data.me.cart.cart_total / 100} ${currency}`);
                 return re;
             })

@@ -46,6 +46,13 @@
                             <li><a href="#">Blog</a></li>
                             <li><a href="#">Clearance</a></li>
                         </ul>
+                        <div class="uk-inline">
+                            <button class="uk-button uk-button-default" type="button" uk-icon="icon: chevron-down">Currency</button>
+                            <div uk-dropdown>
+                                <ul id="available-currencies" class="uk-nav uk-dropdown-nav">
+                                </ul>
+                            </div>
+                        </div>
                         <div class="uk-navbar-item">
                             <a href="/cart" class="uk-button uk-button-default tm-button-default uk-icon cart-button" uk-icon="icon: cart">Cart </a>
                         </div>

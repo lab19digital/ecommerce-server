@@ -19,10 +19,10 @@ let graphQlService = new GraphqlService();
 
 let sessionService = new SessionService(graphQlService);
 sessionService.setupUser();
-sessionService.setUpCurrency();
-sessionService.setUpGeoLocation();
-sessionService.setUpSessionData();
 sessionService.setUpShopConfig();
+// sessionService.setUpSessionData();
+// sessionService.setUpCurrency();
+// sessionService.setUpGeoLocation();
 
 // Load all products on the home page
 let productObj = new Products(graphQlService);
