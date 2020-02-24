@@ -95,6 +95,18 @@ class ExhangeRatesManager
      */
     public function convertPrices()
     {
+        $result = $this->result;
+
+        // This is a check to see if we're converting the cart total
+        if (isset($result['cart']) && !empty($result['cart']->cart_total)) {
+            // Note, I am hard coding this base currency for now (USD). TODO: query which currency will be the base, set by
+            // the user
+            $result['cart']->cart_total = $this->getApiRateAndConvertPrice('USD', $result['cart']->cart_total);
+            return $result;
+        }
+
+        // To see whether to return a single object, if single product was queried
+        // or return an array if products we're queried
         $shouldReturnSingleObject = false;
 
         // Trying to reuse this function for a query on product or products. However need to ascertain if it has array of objects

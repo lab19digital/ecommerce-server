@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Gernzy\Server\Models\Cart;
 use Gernzy\Server\Models\Product;
 use Gernzy\Server\Testing\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -245,5 +246,63 @@ class CartTotalTest extends TestCase
 
         // More were added to the cart on update so the new total should be bigger than the older
         $this->assertGreaterThan($total, $totalAfterUpdate);
+    }
+
+
+    public function testCurrencyConvertOnCart()
+    {
+
+        // Add items to cart
+        $response = $this->graphQLWithSession($this->addToCartMutation);
+
+        // Setup currency
+        $currencyQuery = '
+        mutation {
+            setSessionCurrency(input: {
+                currency: "EUR"
+            }){
+                currency
+            }
+        }';
+
+        $response = $this->graphQLWithSession($currencyQuery);
+
+
+        // Query the total
+        $query = '{
+            me {
+                cart {
+                    cart_total
+                }
+            }
+        }';
+
+        $response = $this->graphQLWithSession($query);
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'me' => [
+                    'cart' => [
+                        'cart_total'
+                    ]
+                ]
+            ]
+        ]);
+
+        $result = $response->decodeResponseJson();
+
+        $total = $result['data']['me']['cart']['cart_total'];
+
+        $this->assertNotEmpty($total);
+
+        $this->assertGreaterThan(0, $total);
+
+        // Lookup cart total
+        $cart = Cart::findOrFail(1);
+
+        $this->assertNotEmpty($cart->cart_total);
+        $this->assertNotEquals($cart->cart_total, $total);
     }
 }
