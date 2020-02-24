@@ -83,7 +83,9 @@ class Products {
             }
         }`;
 
-        return this.graphqlService.sendQuery(query);
+        let userToken = localStorage.getItem('userToken');
+
+        return this.graphqlService.sendQuery(query, userToken);
     }
 
     addProductToCart(event) {

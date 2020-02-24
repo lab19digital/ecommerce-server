@@ -95,7 +95,20 @@ class ExhangeRatesManager
      */
     public function convertPrices()
     {
-        $result = $this->result;
+        $shouldReturnSingleObject = false;
+
+        // Trying to reuse this function for a query on product or products. However need to ascertain if it has array of objects
+        // or just an object
+        try {
+            if (count($this->result) > 0) {
+                $result = $this->result;
+            }
+        } catch (\Throwable $th) {
+            // Not an array of objects thus wrap in array
+            $result = [$this->result];
+            $shouldReturnSingleObject = true;
+        }
+
 
         // TODO: Probably a good scenario for a singleton object
         foreach ($result as $key => $value) {
@@ -118,7 +131,11 @@ class ExhangeRatesManager
             $result[$key]['price_cents'] = $this->getApiRateAndConvertPrice($productCurrency, $productPriceCents);
         }
 
-        return $result;
+        if ($shouldReturnSingleObject) {
+            return $result[0];
+        } else {
+            return $result;
+        }
     }
 
     /**
