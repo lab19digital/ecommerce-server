@@ -102,7 +102,8 @@ class ExhangeRatesManager
             $productCurrency = $result[$key]['price_currency']; //This becomes the base to convert from
             $productPriceCents = $result[$key]['price_cents'];
 
-            if (!isset($productCurrency) && !isset($productPriceCents)) {
+            // If either values not set then bail
+            if (!isset($productCurrency) || !isset($productPriceCents)) {
                 continue;
             }
 

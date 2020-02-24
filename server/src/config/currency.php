@@ -14,5 +14,9 @@ return [
         'AUD',
         'GBP',
         'ZAR'
+    ],
+
+    'openexchangerates' => [
+        'api_key' => env('currency_api_token', '')
     ]
 ];
