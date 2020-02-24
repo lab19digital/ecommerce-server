@@ -275,7 +275,7 @@ class CurrencyConversionTest extends TestCase
         $this->assertEquals($result['errors'][0]['message'], 'Currency is invalid.');
     }
 
-    public function testJFC7wsef5testGuestUserCanViewInStockProductWithChosenCurrency(): void
+    public function testGuestUserCanViewInStockProductWithChosenCurrency(): void
     {
         $token = $this->setupCurrencySession();
 
@@ -301,16 +301,14 @@ class CurrencyConversionTest extends TestCase
 
         $result = $response->decodeResponseJson();
 
-        // $this->assertTrue(!empty($result['data']['products']['data']));
+        $this->assertTrue(!empty($result['data']['product']));
 
-        // $response->assertJsonStructure([
-        //     'data' => [
-        //         'products' => [
-        //             'data' => [
-        //                 ['id', 'title'],
-        //             ],
-        //         ],
-        //     ],
-        // ]);
+        $response->assertJsonStructure([
+            'data' => [
+                'product' => [
+                    'id', 'title', 'status', 'published', 'short_description', 'price_cents', 'price_currency',
+                ],
+            ],
+        ]);
     }
 }
