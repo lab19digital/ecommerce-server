@@ -11,7 +11,15 @@ test('query for single product', () => {
     expect.assertions(2);
     return prods.getProduct(1).then(data => {
         expect(data).toBeObject();
-        expect(data.data.product).toContainAllKeys(['id', 'published', 'short_description', 'status', 'title']);
+        expect(data.data.product).toContainAllKeys([
+            'id',
+            'title',
+            'status',
+            'published',
+            'short_description',
+            'price_cents',
+            'price_currency',
+        ]);
     });
 });
 
