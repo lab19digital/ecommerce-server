@@ -5,7 +5,7 @@ import { GraphqlService } from '../graphqlService';
 jest.mock('jquery');
 
 // Test single product.
-test('9oQi5H query for single product', () => {
+test('query for single product', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
     expect.assertions(2);
@@ -16,7 +16,7 @@ test('9oQi5H query for single product', () => {
 });
 
 // Test all products.
-test('(dvphY5 query for all products', () => {
+test('query for all products', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
     expect.assertions(2);
@@ -32,7 +32,7 @@ test('(dvphY5 query for all products', () => {
     });
 });
 
-test('Iu75fv query for all products with DOM', () => {
+test('query for all products with DOM', () => {
     // Set up our document body
     document.body.innerHTML = '<div class="products-container"></div>';
 

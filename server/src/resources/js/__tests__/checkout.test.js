@@ -4,7 +4,7 @@ import { GraphqlService } from '../graphqlService';
 // __mocks__/jquery.js
 jest.mock('jquery');
 
-test('MJfc34Icn checkout test', () => {
+test('checkout test', () => {
     // Set up our document body
     let graphQlService = new GraphqlService();
     let checkout = new Checkout(graphQlService);
@@ -33,5 +33,19 @@ test('MJfc34Icn checkout test', () => {
     expect.assertions(1);
     return checkout.sendOfCheckoutInfo(values).then(data => {
         expect(data).toBeObject();
+    });
+});
+
+test('test cart total', () => {
+    // Set up our document body
+    document.body.innerHTML = '<div class="checkout-container"></div>';
+
+    let graphQlService = new GraphqlService();
+    let checkout = new Checkout(graphQlService);
+
+    expect.assertions(2);
+    return checkout.getBasketTotal().then(data => {
+        expect(data).toBeObject();
+        expect(data.data.me.cart.cart_total).toBeNumber();
     });
 });
