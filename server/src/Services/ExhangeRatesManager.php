@@ -99,29 +99,29 @@ class ExhangeRatesManager
 
         // This is a check to see if we're converting the cart total
         if (isset($result['cart']) && !empty($result['cart']->cart_total)) {
-            // Note, I am hard coding this base currency for now (USD). TODO: query which currency will be the base, set by
-            // the user
-            $result['cart']->cart_total = $this->getApiRateAndConvertPrice('USD', $result['cart']->cart_total);
-            return $result;
+            return $this->convertPriceCartTotal($result);
         }
 
-        // To see whether to return a single object, if single product was queried
-        // or return an array if products we're queried
-        $shouldReturnSingleObject = false;
-
-        // Trying to reuse this function for a query on product or products. However need to ascertain if it has array of objects
-        // or just an object
+        // Need to ascertain if array of objects or just an object
         try {
             if (count($this->result) > 0) {
-                $result = $this->result;
+                return $this->convertMultiplePrices($result);
             }
         } catch (\Throwable $th) {
-            // Not an array of objects thus wrap in array
-            $result = [$this->result];
-            $shouldReturnSingleObject = true;
+            return $this->convertSinglePrice($result);
         }
+    }
 
+    public function convertPriceCartTotal($result)
+    {
+        // Note, hard coding this base currency for now (USD). TODO: query which currency will be the base, set by
+        // the user
+        $result['cart']->cart_total = $this->getApiRateAndConvertPrice('USD', $result['cart']->cart_total);
+        return $result;
+    }
 
+    public function convertMultiplePrices($result)
+    {
         // TODO: Probably a good scenario for a singleton object
         foreach ($result as $key => $value) {
             $productCurrency = $result[$key]['price_currency']; //This becomes the base to convert from
@@ -143,12 +143,15 @@ class ExhangeRatesManager
             $result[$key]['price_cents'] = $this->getApiRateAndConvertPrice($productCurrency, $productPriceCents);
         }
 
-        if ($shouldReturnSingleObject) {
-            return $result[0];
-        } else {
-            return $result;
-        }
+        return $result;
     }
+
+    public function convertSinglePrice($result)
+    {
+        $result = $this->convertMultiplePrices([$result]);
+        return $result[0];
+    }
+
 
     /**
      * Convert between currency
