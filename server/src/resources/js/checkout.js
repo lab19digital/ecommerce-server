@@ -1,8 +1,10 @@
 import successTemplate from './templates/successTemplate';
 import $ from 'jquery';
+
 class Checkout {
-    constructor(graphqlService) {
+    constructor(graphqlService, cart = null) {
         this.graphqlService = graphqlService;
+        this.cart = cart;
     }
 
     checkout() {
@@ -101,6 +103,34 @@ class Checkout {
             .catch(error => {
                 console.log(error);
             });
+    }
+
+    displayLineItems() {
+        return this.cart.viewProductsInCart().then(re => {
+            try {
+                // See if there is an error
+                let error = re.errors[0].debugMessage;
+                console.log(error);
+            } catch {
+                let items = re.data.me.cart.items;
+
+                if (items && items.length > 0) {
+                    this.cart.lookupProductsInCart(items).then(re => {
+                        re.forEach(element => {
+                            $('#table-body-line-item').append(
+                                $(`<tr>
+                                    <td>${element.title}</td>
+                                    <td>${element.quantity}</td>
+                                    <td>${element.price_cents / 100}</td>
+                                </tr>`),
+                            );
+                        });
+                    });
+                } else {
+                    $('.checkout-container').html(errorTemplate('No products in cart.'));
+                }
+            }
+        });
     }
 }
 export { Checkout };

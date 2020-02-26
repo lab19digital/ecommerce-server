@@ -55,6 +55,7 @@ class Products {
                         price_currency: currency,
                         short_description: product.short_description,
                         id: product.id,
+                        quantity: 1,
                         buttonText: 'Add to cart',
                     };
                 });

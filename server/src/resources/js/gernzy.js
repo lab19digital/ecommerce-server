@@ -19,7 +19,7 @@ let graphQlService = new GraphqlService();
 let sessionService = new SessionService(graphQlService);
 let productObj = new Products(graphQlService);
 let cart = new Cart(productObj, graphQlService);
-let checkout = new Checkout(graphQlService);
+let checkout = new Checkout(graphQlService, cart);
 
 // Session setup
 sessionService.setupUser();
@@ -37,5 +37,6 @@ if (pathname.includes('cart')) {
 
 if (pathname.includes('checkout')) {
     checkout.getBasketTotal();
+    checkout.displayLineItems();
     checkout.checkout();
 }

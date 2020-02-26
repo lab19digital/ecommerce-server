@@ -43,16 +43,19 @@ class Cart {
     }
 
     async lookupProductsInCart(products) {
-        await Promise.all(
+        return await Promise.all(
             products.map(async product => {
+                // Merging quantity into the product object to use later
                 const queriedProduct = await this.productObj.getProduct(product.product_id);
                 let quantityObje = { quantity: product.quantity };
-                let mergedObj = { ...queriedProduct, ...quantityObje };
-                return mergedObj.data.product;
+                let mergedObj = { ...queriedProduct.data.product, ...quantityObje };
+
+                return mergedObj;
             }),
         )
             .then(re => {
                 this.populateUIWithProducts(re);
+                return re;
             })
             .catch(error => {
                 console.log(error);
@@ -72,6 +75,7 @@ class Cart {
                 id: product.id,
                 price_cents: product.price_cents / 100,
                 price_currency: currency,
+                quantity: product.quantity,
                 buttonText: 'Remove',
             };
         });
