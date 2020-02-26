@@ -130,6 +130,8 @@ class Checkout {
                     $('.checkout-container').html(errorTemplate('No products in cart.'));
                 }
             }
+
+            return re;
         });
     }
 }
