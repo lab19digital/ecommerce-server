@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\WithFaker;
 use Gernzy\Server\Testing\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class EnabledCurrencyTest extends TestCase
 {
@@ -18,7 +18,9 @@ class EnabledCurrencyTest extends TestCase
     {
         $response = $this->graphQL('
                 query {
-                    shopConfig
+                    shopConfig {
+                        enabledCurrencies
+                    }
                 }
             ');
 
@@ -26,11 +28,13 @@ class EnabledCurrencyTest extends TestCase
 
         $result = $response->decodeResponseJson();
 
-        $this->assertNotEmpty($result['data']['shopConfig']);
+        $this->assertNotEmpty($result['data']['shopConfig']['enabledCurrencies']);
 
         $response->assertJsonStructure([
             'data' => [
-                'shopConfig' => []
+                'shopConfig' => [
+                    'enabledCurrencies' => []
+                ]
             ]
         ]);
     }

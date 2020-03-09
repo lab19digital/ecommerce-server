@@ -114,9 +114,10 @@ class ExhangeRatesManager
 
     public function convertPriceCartTotal($result)
     {
-        // Note, hard coding this base currency for now (USD). TODO: query which currency will be the base, set by
-        // the user
-        $result['cart']->cart_total = $this->getApiRateAndConvertPrice('USD', $result['cart']->cart_total);
+        $defaultCurrency = config('currency.default_currency.iso_code');
+        $cartTotal = $result['cart']->cart_total;
+
+        $result['cart']->cart_total = $this->getApiRateAndConvertPrice($defaultCurrency, $cartTotal);
         return $result;
     }
 

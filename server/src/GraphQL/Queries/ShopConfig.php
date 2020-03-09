@@ -2,8 +2,8 @@
 
 namespace Gernzy\Server\GraphQL\Queries;
 
-use GraphQL\Type\Definition\ResolveInfo;
 use Gernzy\Server\Exceptions\GernzyException;
+use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class ShopConfig
@@ -17,6 +17,11 @@ class ShopConfig
      * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo Information about the query itself, such as the execution state, the field name, path to the field from the root, and more.
      * @return mixed
      */
+
+    public function index($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        return true;
+    }
 
     public function enabledCurrencies($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {

@@ -15,7 +15,9 @@ return [
         'GBP',
         'ZAR'
     ],
-
+    'default_currency' => [
+        'iso_code' => 'USD'
+    ],
     'openexchangerates' => [
         // Temp workaround to get tests passing, because the .env is not located and thus the api key is returning empty
         // Need to figure out why .env not accessible/findable
