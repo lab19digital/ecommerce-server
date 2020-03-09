@@ -91,10 +91,9 @@ class Checkout {
             .then(re => {
                 let currency = localStorage.getItem('currency');
 
-                // A naive solution for now, but if now currency was specified by user then I'll just assume the currency to be
-                // USD. This is definitely TODO: improve
+                // get the default currency from the shopConfig
                 if (!currency) {
-                    currency = 'USD';
+                    currency = localStorage.getItem('default_currency');
                 }
 
                 $('#checkout-cart-total').html(`${re.data.me.cart.cart_total / 100} ${currency}`);
@@ -116,12 +115,19 @@ class Checkout {
 
                 if (items && items.length > 0) {
                     this.cart.lookupProductsInCart(items).then(re => {
+                        let currency = localStorage.getItem('currency');
+
+                        // get the default currency from the shopConfig
+                        if (!currency) {
+                            currency = localStorage.getItem('default_currency');
+                        }
+
                         re.forEach(element => {
                             $('#table-body-line-item').append(
                                 $(`<tr>
                                     <td>${element.title}</td>
                                     <td>${element.quantity}</td>
-                                    <td>${element.price_cents / 100}</td>
+                                    <td>${element.price_cents / 100} ${currency}</td>
                                 </tr>`),
                             );
                         });

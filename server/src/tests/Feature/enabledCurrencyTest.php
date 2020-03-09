@@ -19,7 +19,7 @@ class EnabledCurrencyTest extends TestCase
         $response = $this->graphQL('
                 query {
                     shopConfig {
-                        enabledCurrencies
+                        enabled_currencies
                     }
                 }
             ');

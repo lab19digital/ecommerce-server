@@ -31,12 +31,15 @@ class SessionService {
 
         let query = `
             query {
-                shopConfig
+                shopConfig {
+                    enabled_currencies
+                    default_currency
+                }
             }
         `;
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
-            re.data.shopConfig.forEach(element => {
+            re.data.shopConfig.enabled_currencies.forEach(element => {
                 $('#available-currencies').append(
                     `<li><a href='#' class='available-currency' data-currency="${element}">${element}</a></li>`,
                 );
@@ -44,7 +47,7 @@ class SessionService {
 
             $('.available-currency').on('click', this.changeUserCurrency.bind(this));
 
-            localStorage.setItem('shopConfig', re.data.shopConfig);
+            localStorage.setItem('default_currency', re.data.shopConfig.default_currency);
         });
     }
 

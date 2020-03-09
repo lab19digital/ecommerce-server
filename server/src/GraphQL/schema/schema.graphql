@@ -30,7 +30,8 @@ type Query {
 }
 
 type ShopConfig {
-    enabledCurrencies: [String] @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\ShopConfig@enabledCurrencies")
+    enabled_currencies: [String] @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\ShopConfig@enabledCurrencies")
+    default_currency: String @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\ShopConfig@defaultCurrency")
 }
 
 type User {
