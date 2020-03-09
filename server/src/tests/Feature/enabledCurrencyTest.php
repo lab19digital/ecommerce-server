@@ -28,12 +28,12 @@ class EnabledCurrencyTest extends TestCase
 
         $result = $response->decodeResponseJson();
 
-        $this->assertNotEmpty($result['data']['shopConfig']['enabledCurrencies']);
+        $this->assertNotEmpty($result['data']['shopConfig']['enabled_currencies']);
 
         $response->assertJsonStructure([
             'data' => [
                 'shopConfig' => [
-                    'enabledCurrencies' => []
+                    'enabled_currencies' => []
                 ]
             ]
         ]);
