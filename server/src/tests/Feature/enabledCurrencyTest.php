@@ -28,6 +28,7 @@ class EnabledCurrencyTest extends TestCase
 
         $result = $response->decodeResponseJson();
 
+        // Check that returned array not empty
         $this->assertNotEmpty($result['data']['shopConfig']['enabled_currencies']);
 
         $response->assertJsonStructure([
