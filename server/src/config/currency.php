@@ -22,7 +22,6 @@ return [
         // Temp workaround to get tests passing, because the .env is not located and thus the api key is returning empty
         // Need to figure out why .env not accessible/findable
         // 'api_key' => env('currency_api_token', '')
-        // 'api_key' => 'This needs to be the api which is read from the config file'
-        'api_key' => '55a31ff5585646d6bffc0df123503681'
+        'api_key' => 'This needs to be the api which is read from the config file'
     ]
 ];
