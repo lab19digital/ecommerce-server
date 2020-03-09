@@ -19,17 +19,19 @@ class AdminClientSeeder extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create();
-        $admin = factory(User::class)->create();
-        $admin->email = $faker->unique()->email;
-        $admin->is_admin = 1;
-        $admin->password = Str::random(12);
-        $admin->save();
+        factory(User::class, 10)->create();
 
-        // create random user for brute force security
-        $user = factory(User::class)->create();
-        $user->email = $faker->unique()->email;
-        $user->save();
+        // $faker = \Faker\Factory::create();
+        // $admin = factory(User::class)->create();
+        // $admin->email = $faker->unique()->email;
+        // $admin->is_admin = 1;
+        // $admin->password = Str::random(12);
+        // $admin->save();
+
+        // // create random user for brute force security
+        // $user = factory(User::class)->create();
+        // $user->email = $faker->unique()->email;
+        // $user->save();
 
         // DB::table('gernzy_users')->insert([
         //     'name' => $faker->word(),
