@@ -26,6 +26,11 @@ class AdminClientSeeder extends Seeder
         $admin->password = Str::random(12);
         $admin->save();
 
+        // create random user for brute force security
+        $user = factory(User::class)->create();
+        $user->email = $faker->unique()->email;
+        $user->save();
+
         // DB::table('gernzy_users')->insert([
         //     'name' => $faker->word(),
         //     'email' => $faker->sentence(),
