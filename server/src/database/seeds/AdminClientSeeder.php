@@ -4,6 +4,7 @@ namespace Gernzy\Server\Database\Seeds;
 
 use Gernzy\Server\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 // use Illuminate\Support\Facades\DB;
@@ -19,25 +20,35 @@ class AdminClientSeeder extends Seeder
      */
     public function run()
     {
-        factory(User::class, 10)->create();
+        $userName = 'admin';
+        $email = 'admin@gernzy.com';
+        $password = Str::random(12);
 
-        // $faker = \Faker\Factory::create();
-        // $admin = factory(User::class)->create();
-        // $admin->email = $faker->unique()->email;
-        // $admin->is_admin = 1;
-        // $admin->password = Str::random(12);
-        // $admin->save();
+        // The admin client may already exist, so I am doing a firstOr to check if exist and if not create admin client
+        $user = User::where('email', $email)->firstOr(function () use ($userName, $email, $password) {
+            print 'user not found';
+            $user = User::create([
+                'name' => $userName,
+                'email' => $email,
+                'is_admin' => true,
+                'password' => Hash::make($password)
+            ]);
 
-        // // create random user for brute force security
-        // $user = factory(User::class)->create();
-        // $user->email = $faker->unique()->email;
-        // $user->save();
+            print " ******************** 
+            \n\e[32m Admin client successfully created.  \e[39m
+            \n Username: " . $user->name . " 
+            \n Email: " . $user->email . "
+            \n Password: " . $password . "  
+            \n ******************** \n";
+        });
 
-        // DB::table('gernzy_users')->insert([
-        //     'name' => $faker->word(),
-        //     'email' => $faker->sentence(),
-        //     'is_admin' => true,
-        //     'password' => 'encode'
-        // ]);
+        if (!empty($user)) {
+            print " ******************** 
+            \n\e[33m Admin client already exists.  \e[39m
+            \n Username: " . $user->name . " 
+            \n Email: " . $user->email . "
+            \n Password: *******" . "  
+            \n ******************** \n";
+        }
     }
 }
