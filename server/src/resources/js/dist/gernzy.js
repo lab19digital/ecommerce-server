@@ -50,7 +50,7 @@
             return Object.prototype.hasOwnProperty.call(e, t);
         }),
         (n.p = ''),
-        n((n.s = 1));
+        n((n.s = 8));
 })([
     function(e, t, n) {
         var r;
@@ -84,10 +84,10 @@
                 u = i.slice,
                 c = i.concat,
                 l = i.push,
-                d = i.indexOf,
-                f = {},
-                p = f.toString,
-                h = f.hasOwnProperty,
+                f = i.indexOf,
+                d = {},
+                p = d.toString,
+                h = d.hasOwnProperty,
                 g = h.toString,
                 v = g.call(Object),
                 m = {},
@@ -110,7 +110,7 @@
                 return null == e
                     ? e + ''
                     : 'object' == typeof e || 'function' == typeof e
-                    ? f[p.call(e)] || 'object'
+                    ? d[p.call(e)] || 'object'
                     : typeof e;
             }
             var k = function(e, t) {
@@ -239,7 +239,7 @@
                         );
                     },
                     inArray: function(e, t, n) {
-                        return null == t ? -1 : d.call(t, e, n);
+                        return null == t ? -1 : f.call(t, e, n);
                     },
                     merge: function(e, t) {
                         for (var n = +t.length, r = 0, o = e.length; r < n; r++) e[o++] = t[r];
@@ -266,7 +266,7 @@
                     e,
                     t,
                 ) {
-                    f['[object ' + t + ']'] = t.toLowerCase();
+                    d['[object ' + t + ']'] = t.toLowerCase();
                 });
             var E =
                 /*!
@@ -290,8 +290,8 @@
                         u,
                         c,
                         l,
-                        d,
                         f,
+                        d,
                         p,
                         h,
                         g,
@@ -308,7 +308,7 @@
                         E = ue(),
                         j = ue(),
                         A = function(e, t) {
-                            return e === t && (d = !0), 0;
+                            return e === t && (f = !0), 0;
                         },
                         D = {}.hasOwnProperty,
                         N = [],
@@ -322,61 +322,61 @@
                         },
                         O =
                             'checked|selected|async|autofocus|autoplay|controls|defer|disabled|hidden|ismap|loop|multiple|open|readonly|required|scoped',
-                        $ = '[\\x20\\t\\r\\n\\f]',
-                        H = '(?:\\\\.|[\\w-]|[^\0-\\xa0])+',
+                        H = '[\\x20\\t\\r\\n\\f]',
+                        $ = '(?:\\\\.|[\\w-]|[^\0-\\xa0])+',
                         M =
                             '\\[' +
-                            $ +
+                            H +
                             '*(' +
-                            H +
+                            $ +
                             ')(?:' +
-                            $ +
-                            '*([*^$|!~]?=)' +
-                            $ +
-                            '*(?:\'((?:\\\\.|[^\\\\\'])*)\'|"((?:\\\\.|[^\\\\"])*)"|(' +
                             H +
-                            '))|)' +
+                            '*([*^$|!~]?=)' +
+                            H +
+                            '*(?:\'((?:\\\\.|[^\\\\\'])*)\'|"((?:\\\\.|[^\\\\"])*)"|(' +
                             $ +
+                            '))|)' +
+                            H +
                             '*\\]',
                         R =
                             ':(' +
-                            H +
+                            $ +
                             ')(?:\\(((\'((?:\\\\.|[^\\\\\'])*)\'|"((?:\\\\.|[^\\\\"])*)")|((?:\\\\.|[^\\\\()[\\]]|' +
                             M +
                             ')*)|.*)\\)|)',
-                        W = new RegExp($ + '+', 'g'),
-                        B = new RegExp('^' + $ + '+|((?:^|[^\\\\])(?:\\\\.)*)' + $ + '+$', 'g'),
-                        F = new RegExp('^' + $ + '*,' + $ + '*'),
-                        U = new RegExp('^' + $ + '*([>+~]|' + $ + ')' + $ + '*'),
-                        z = new RegExp($ + '|>'),
+                        W = new RegExp(H + '+', 'g'),
+                        B = new RegExp('^' + H + '+|((?:^|[^\\\\])(?:\\\\.)*)' + H + '+$', 'g'),
+                        F = new RegExp('^' + H + '*,' + H + '*'),
+                        U = new RegExp('^' + H + '*([>+~]|' + H + ')' + H + '*'),
+                        z = new RegExp(H + '|>'),
                         X = new RegExp(R),
-                        Q = new RegExp('^' + H + '$'),
+                        Q = new RegExp('^' + $ + '$'),
                         V = {
-                            ID: new RegExp('^#(' + H + ')'),
-                            CLASS: new RegExp('^\\.(' + H + ')'),
-                            TAG: new RegExp('^(' + H + '|[*])'),
+                            ID: new RegExp('^#(' + $ + ')'),
+                            CLASS: new RegExp('^\\.(' + $ + ')'),
+                            TAG: new RegExp('^(' + $ + '|[*])'),
                             ATTR: new RegExp('^' + M),
                             PSEUDO: new RegExp('^' + R),
                             CHILD: new RegExp(
                                 '^:(only|first|last|nth|nth-last)-(child|of-type)(?:\\(' +
-                                    $ +
+                                    H +
                                     '*(even|odd|(([+-]|)(\\d*)n|)' +
-                                    $ +
+                                    H +
                                     '*(?:([+-]|)' +
-                                    $ +
+                                    H +
                                     '*(\\d+)|))' +
-                                    $ +
+                                    H +
                                     '*\\)|)',
                                 'i',
                             ),
                             bool: new RegExp('^(?:' + O + ')$', 'i'),
                             needsContext: new RegExp(
                                 '^' +
-                                    $ +
+                                    H +
                                     '*[>+~]|:(even|odd|eq|gt|lt|nth|first|last)(?:\\(' +
-                                    $ +
+                                    H +
                                     '*((?:-\\d)?\\d*)' +
-                                    $ +
+                                    H +
                                     '*\\)|)(?=[^-]|$)',
                                 'i',
                             ),
@@ -387,7 +387,7 @@
                         K = /^[^{]+\{\s*\[native \w/,
                         Z = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/,
                         ee = /[+~]/,
-                        te = new RegExp('\\\\([\\da-f]{1,6}' + $ + '?|(' + $ + ')|.)', 'ig'),
+                        te = new RegExp('\\\\([\\da-f]{1,6}' + H + '?|(' + H + ')|.)', 'ig'),
                         ne = function(e, t, n) {
                             var r = '0x' + t - 65536;
                             return r != r || n
@@ -405,7 +405,7 @@
                                 : '\\' + e;
                         },
                         ie = function() {
-                            f();
+                            d();
                         },
                         ae = be(
                             function(e) {
@@ -432,23 +432,23 @@
                             s,
                             c,
                             l,
-                            d,
+                            f,
                             h,
                             m,
                             y = t && t.ownerDocument,
                             T = t ? t.nodeType : 9;
                         if (((r = r || []), 'string' != typeof e || !e || (1 !== T && 9 !== T && 11 !== T))) return r;
-                        if (!o && ((t ? t.ownerDocument || t : w) !== p && f(t), (t = t || p), g)) {
-                            if (11 !== T && (d = Z.exec(e)))
-                                if ((i = d[1])) {
+                        if (!o && ((t ? t.ownerDocument || t : w) !== p && d(t), (t = t || p), g)) {
+                            if (11 !== T && (f = Z.exec(e)))
+                                if ((i = f[1])) {
                                     if (9 === T) {
                                         if (!(c = t.getElementById(i))) return r;
                                         if (c.id === i) return r.push(c), r;
                                     } else if (y && (c = y.getElementById(i)) && x(t, c) && c.id === i)
                                         return r.push(c), r;
                                 } else {
-                                    if (d[2]) return L.apply(r, t.getElementsByTagName(e)), r;
-                                    if ((i = d[3]) && n.getElementsByClassName && t.getElementsByClassName)
+                                    if (f[2]) return L.apply(r, t.getElementsByTagName(e)), r;
+                                    if ((i = f[3]) && n.getElementsByClassName && t.getElementsByClassName)
                                         return L.apply(r, t.getElementsByClassName(i)), r;
                                 }
                             if (
@@ -499,10 +499,10 @@
                             t.parentNode && t.parentNode.removeChild(t), (t = null);
                         }
                     }
-                    function de(e, t) {
+                    function fe(e, t) {
                         for (var n = e.split('|'), o = n.length; o--; ) r.attrHandle[n[o]] = t;
                     }
-                    function fe(e, t) {
+                    function de(e, t) {
                         var n = t && e,
                             r = n && 1 === e.nodeType && 1 === t.nodeType && e.sourceIndex - t.sourceIndex;
                         if (r) return r;
@@ -553,7 +553,7 @@
                             n = (e.ownerDocument || e).documentElement;
                         return !G.test(t || (n && n.nodeName) || 'HTML');
                     }),
-                    (f = se.setDocument = function(e) {
+                    (d = se.setDocument = function(e) {
                         var t,
                             o,
                             a = e ? e.ownerDocument || e : w;
@@ -647,9 +647,9 @@
                                           b +
                                           "-\r\\' msallowcapture=''><option selected=''></option></select>"),
                                           e.querySelectorAll("[msallowcapture^='']").length &&
-                                              v.push('[*^$]=' + $ + '*(?:\'\'|"")'),
+                                              v.push('[*^$]=' + H + '*(?:\'\'|"")'),
                                           e.querySelectorAll('[selected]').length ||
-                                              v.push('\\[' + $ + '*(?:value|' + O + ')'),
+                                              v.push('\\[' + H + '*(?:value|' + O + ')'),
                                           e.querySelectorAll('[id~=' + b + '-]').length || v.push('~='),
                                           e.querySelectorAll(':checked').length || v.push(':checked'),
                                           e.querySelectorAll('a#' + b + '+*').length || v.push('.#.+[+~]');
@@ -660,7 +660,7 @@
                                       var t = p.createElement('input');
                                       t.setAttribute('type', 'hidden'),
                                           e.appendChild(t).setAttribute('name', 'D'),
-                                          e.querySelectorAll('[name=d]').length && v.push('name' + $ + '*[*^$|!~]?='),
+                                          e.querySelectorAll('[name=d]').length && v.push('name' + H + '*[*^$|!~]?='),
                                           2 !== e.querySelectorAll(':enabled').length &&
                                               v.push(':enabled', ':disabled'),
                                           (h.appendChild(e).disabled = !0),
@@ -706,7 +706,7 @@
                                         }),
                               (A = t
                                   ? function(e, t) {
-                                        if (e === t) return (d = !0), 0;
+                                        if (e === t) return (f = !0), 0;
                                         var r = !e.compareDocumentPosition - !t.compareDocumentPosition;
                                         return (
                                             r ||
@@ -729,7 +729,7 @@
                                         );
                                     }
                                   : function(e, t) {
-                                        if (e === t) return (d = !0), 0;
+                                        if (e === t) return (f = !0), 0;
                                         var n,
                                             r = 0,
                                             o = e.parentNode,
@@ -748,11 +748,11 @@
                                                 : l
                                                 ? P(l, e) - P(l, t)
                                                 : 0;
-                                        if (o === i) return fe(e, t);
+                                        if (o === i) return de(e, t);
                                         for (n = e; (n = n.parentNode); ) a.unshift(n);
                                         for (n = t; (n = n.parentNode); ) s.unshift(n);
                                         for (; a[r] === s[r]; ) r++;
-                                        return r ? fe(a[r], s[r]) : a[r] === w ? -1 : s[r] === w ? 1 : 0;
+                                        return r ? de(a[r], s[r]) : a[r] === w ? -1 : s[r] === w ? 1 : 0;
                                     }),
                               p)
                             : p;
@@ -762,7 +762,7 @@
                     }),
                     (se.matchesSelector = function(e, t) {
                         if (
-                            ((e.ownerDocument || e) !== p && f(e),
+                            ((e.ownerDocument || e) !== p && d(e),
                             n.matchesSelector && g && !j[t + ' '] && (!m || !m.test(t)) && (!v || !v.test(t)))
                         )
                             try {
@@ -774,10 +774,10 @@
                         return se(t, p, null, [e]).length > 0;
                     }),
                     (se.contains = function(e, t) {
-                        return (e.ownerDocument || e) !== p && f(e), x(e, t);
+                        return (e.ownerDocument || e) !== p && d(e), x(e, t);
                     }),
                     (se.attr = function(e, t) {
-                        (e.ownerDocument || e) !== p && f(e);
+                        (e.ownerDocument || e) !== p && d(e);
                         var o = r.attrHandle[t.toLowerCase()],
                             i = o && D.call(r.attrHandle, t.toLowerCase()) ? o(e, t, !g) : void 0;
                         return void 0 !== i
@@ -799,7 +799,7 @@
                             r = [],
                             o = 0,
                             i = 0;
-                        if (((d = !n.detectDuplicates), (l = !n.sortStable && e.slice(0)), e.sort(A), d)) {
+                        if (((f = !n.detectDuplicates), (l = !n.sortStable && e.slice(0)), e.sort(A), f)) {
                             for (; (t = e[i++]); ) t === e[i] && (o = r.push(i));
                             for (; o--; ) e.splice(r[o], 1);
                         }
@@ -882,7 +882,7 @@
                                 var t = C[e + ' '];
                                 return (
                                     t ||
-                                    ((t = new RegExp('(^|' + $ + ')' + e + '(' + $ + '|$)')) &&
+                                    ((t = new RegExp('(^|' + H + ')' + e + '(' + H + '|$)')) &&
                                         C(e, function(e) {
                                             return t.test(
                                                 ('string' == typeof e.className && e.className) ||
@@ -925,8 +925,8 @@
                                     : function(t, n, u) {
                                           var c,
                                               l,
-                                              d,
                                               f,
+                                              d,
                                               p,
                                               h,
                                               g = i !== a ? 'nextSibling' : 'previousSibling',
@@ -937,8 +937,8 @@
                                           if (v) {
                                               if (i) {
                                                   for (; g; ) {
-                                                      for (f = t; (f = f[g]); )
-                                                          if (s ? f.nodeName.toLowerCase() === m : 1 === f.nodeType)
+                                                      for (d = t; (d = d[g]); )
+                                                          if (s ? d.nodeName.toLowerCase() === m : 1 === d.nodeType)
                                                               return !1;
                                                       h = g = 'only' === e && !h && 'nextSibling';
                                                   }
@@ -950,14 +950,14 @@
                                                           (p =
                                                               (c =
                                                                   (l =
-                                                                      (d = (f = v)[b] || (f[b] = {}))[f.uniqueID] ||
-                                                                      (d[f.uniqueID] = {}))[e] || [])[0] === T &&
+                                                                      (f = (d = v)[b] || (d[b] = {}))[d.uniqueID] ||
+                                                                      (f[d.uniqueID] = {}))[e] || [])[0] === T &&
                                                               c[1]) && c[2],
-                                                          f = p && v.childNodes[p];
-                                                      (f = (++p && f && f[g]) || (x = p = 0) || h.pop());
+                                                          d = p && v.childNodes[p];
+                                                      (d = (++p && d && d[g]) || (x = p = 0) || h.pop());
 
                                                   )
-                                                      if (1 === f.nodeType && ++x && f === t) {
+                                                      if (1 === d.nodeType && ++x && d === t) {
                                                           l[e] = [T, p, x];
                                                           break;
                                                       }
@@ -966,20 +966,20 @@
                                                       (x = p =
                                                           (c =
                                                               (l =
-                                                                  (d = (f = t)[b] || (f[b] = {}))[f.uniqueID] ||
-                                                                  (d[f.uniqueID] = {}))[e] || [])[0] === T && c[1]),
+                                                                  (f = (d = t)[b] || (d[b] = {}))[d.uniqueID] ||
+                                                                  (f[d.uniqueID] = {}))[e] || [])[0] === T && c[1]),
                                                   !1 === x)
                                               )
                                                   for (
                                                       ;
-                                                      (f = (++p && f && f[g]) || (x = p = 0) || h.pop()) &&
-                                                      ((s ? f.nodeName.toLowerCase() !== m : 1 !== f.nodeType) ||
+                                                      (d = (++p && d && d[g]) || (x = p = 0) || h.pop()) &&
+                                                      ((s ? d.nodeName.toLowerCase() !== m : 1 !== d.nodeType) ||
                                                           !++x ||
                                                           (y &&
                                                               ((l =
-                                                                  (d = f[b] || (f[b] = {}))[f.uniqueID] ||
-                                                                  (d[f.uniqueID] = {}))[e] = [T, x]),
-                                                          f !== t));
+                                                                  (f = d[b] || (d[b] = {}))[d.uniqueID] ||
+                                                                  (f[d.uniqueID] = {}))[e] = [T, x]),
+                                                          d !== t));
 
                                                   );
                                               return (x -= o) === r || (x % r == 0 && x / r >= 0);
@@ -1145,21 +1145,21 @@
                             : function(t, n, u) {
                                   var c,
                                       l,
-                                      d,
-                                      f = [T, s];
+                                      f,
+                                      d = [T, s];
                                   if (u) {
                                       for (; (t = t[r]); ) if ((1 === t.nodeType || a) && e(t, n, u)) return !0;
                                   } else
                                       for (; (t = t[r]); )
                                           if (1 === t.nodeType || a)
                                               if (
-                                                  ((l = (d = t[b] || (t[b] = {}))[t.uniqueID] || (d[t.uniqueID] = {})),
+                                                  ((l = (f = t[b] || (t[b] = {}))[t.uniqueID] || (f[t.uniqueID] = {})),
                                                   o && o === t.nodeName.toLowerCase())
                                               )
                                                   t = t[r] || t;
                                               else {
-                                                  if ((c = l[i]) && c[0] === T && c[1] === s) return (f[2] = c[2]);
-                                                  if (((l[i] = f), (f[2] = e(t, n, u)))) return !0;
+                                                  if ((c = l[i]) && c[0] === T && c[1] === s) return (d[2] = c[2]);
+                                                  if (((l[i] = d), (d[2] = e(t, n, u)))) return !0;
                                               }
                                   return !1;
                               };
@@ -1184,8 +1184,8 @@
                             ce(function(i, a, s, u) {
                                 var c,
                                     l,
-                                    d,
-                                    f = [],
+                                    f,
+                                    d = [],
                                     p = [],
                                     h = a.length,
                                     g =
@@ -1194,19 +1194,19 @@
                                             for (var r = 0, o = t.length; r < o; r++) se(e, t[r], n);
                                             return n;
                                         })(t || '*', s.nodeType ? [s] : s, []),
-                                    v = !e || (!i && t) ? g : Te(g, f, e, s, u),
+                                    v = !e || (!i && t) ? g : Te(g, d, e, s, u),
                                     m = n ? (o || (i ? e : h || r) ? [] : a) : v;
                                 if ((n && n(v, m, s, u), r))
                                     for (c = Te(m, p), r(c, [], s, u), l = c.length; l--; )
-                                        (d = c[l]) && (m[p[l]] = !(v[p[l]] = d));
+                                        (f = c[l]) && (m[p[l]] = !(v[p[l]] = f));
                                 if (i) {
                                     if (o || e) {
                                         if (o) {
-                                            for (c = [], l = m.length; l--; ) (d = m[l]) && c.push((v[l] = d));
+                                            for (c = [], l = m.length; l--; ) (f = m[l]) && c.push((v[l] = f));
                                             o(null, (m = []), c, u);
                                         }
                                         for (l = m.length; l--; )
-                                            (d = m[l]) && (c = o ? P(i, d) : f[l]) > -1 && (i[c] = !(a[c] = d));
+                                            (f = m[l]) && (c = o ? P(i, f) : d[l]) > -1 && (i[c] = !(a[c] = f));
                                     }
                                 } else (m = Te(m === a ? m.splice(h, m.length) : m)), o ? o(null, a, m, u) : L.apply(a, m);
                             })
@@ -1228,28 +1228,28 @@
                                     s,
                                     !0,
                                 ),
-                                d = be(
+                                f = be(
                                     function(e) {
                                         return P(t, e) > -1;
                                     },
                                     s,
                                     !0,
                                 ),
-                                f = [
+                                d = [
                                     function(e, n, r) {
-                                        var o = (!a && (r || n !== c)) || ((t = n).nodeType ? l(e, n, r) : d(e, n, r));
+                                        var o = (!a && (r || n !== c)) || ((t = n).nodeType ? l(e, n, r) : f(e, n, r));
                                         return (t = null), o;
                                     },
                                 ];
                             u < i;
                             u++
                         )
-                            if ((n = r.relative[e[u].type])) f = [be(we(f), n)];
+                            if ((n = r.relative[e[u].type])) d = [be(we(d), n)];
                             else {
                                 if ((n = r.filter[e[u].type].apply(null, e[u].matches))[b]) {
                                     for (o = ++u; o < i && !r.relative[e[o].type]; o++);
                                     return ke(
-                                        u > 1 && we(f),
+                                        u > 1 && we(d),
                                         u > 1 &&
                                             xe(
                                                 e.slice(0, u - 1).concat({ value: ' ' === e[u - 2].type ? '*' : '' }),
@@ -1260,9 +1260,9 @@
                                         o < i && xe(e),
                                     );
                                 }
-                                f.push(n);
+                                d.push(n);
                             }
-                        return we(f);
+                        return we(d);
                     }
                     return (
                         (ye.prototype = r.filters = r.pseudos),
@@ -1308,7 +1308,7 @@
                                         var n = t.length > 0,
                                             o = e.length > 0,
                                             i = function(i, a, s, u, l) {
-                                                var d,
+                                                var f,
                                                     h,
                                                     v,
                                                     m = 0,
@@ -1319,20 +1319,20 @@
                                                     k = i || (o && r.find.TAG('*', l)),
                                                     C = (T += null == w ? 1 : Math.random() || 0.1),
                                                     S = k.length;
-                                                for (l && (c = a === p || a || l); y !== S && null != (d = k[y]); y++) {
-                                                    if (o && d) {
+                                                for (l && (c = a === p || a || l); y !== S && null != (f = k[y]); y++) {
+                                                    if (o && f) {
                                                         for (
-                                                            h = 0, a || d.ownerDocument === p || (f(d), (s = !g));
+                                                            h = 0, a || f.ownerDocument === p || (d(f), (s = !g));
                                                             (v = e[h++]);
 
                                                         )
-                                                            if (v(d, a || p, s)) {
-                                                                u.push(d);
+                                                            if (v(f, a || p, s)) {
+                                                                u.push(f);
                                                                 break;
                                                             }
                                                         l && (T = C);
                                                     }
-                                                    n && ((d = !v && d) && m--, i && x.push(d));
+                                                    n && ((f = !v && f) && m--, i && x.push(f));
                                                 }
                                                 if (((m += y), n && y !== m)) {
                                                     for (h = 0; (v = t[h++]); ) v(x, b, a, s);
@@ -1356,9 +1356,9 @@
                                 u,
                                 c,
                                 l,
-                                d,
-                                f = 'function' == typeof e && e,
-                                p = !o && a((e = f.selector || e));
+                                f,
+                                d = 'function' == typeof e && e,
+                                p = !o && a((e = d.selector || e));
                             if (((n = n || []), 1 === p.length)) {
                                 if (
                                     (u = p[0] = p[0].slice(0)).length > 2 &&
@@ -1368,7 +1368,7 @@
                                     r.relative[u[1].type]
                                 ) {
                                     if (!(t = (r.find.ID(c.matches[0].replace(te, ne), t) || [])[0])) return n;
-                                    f && (t = t.parentNode), (e = e.slice(u.shift().value.length));
+                                    d && (t = t.parentNode), (e = e.slice(u.shift().value.length));
                                 }
                                 for (
                                     i = V.needsContext.test(e) ? 0 : u.length;
@@ -1376,8 +1376,8 @@
 
                                 )
                                     if (
-                                        (d = r.find[l]) &&
-                                        (o = d(
+                                        (f = r.find[l]) &&
+                                        (o = f(
                                             c.matches[0].replace(te, ne),
                                             (ee.test(u[0].type) && me(t.parentNode)) || t,
                                         ))
@@ -1386,22 +1386,22 @@
                                         break;
                                     }
                             }
-                            return (f || s(e, p))(o, t, !g, n, !t || (ee.test(e) && me(t.parentNode)) || t), n;
+                            return (d || s(e, p))(o, t, !g, n, !t || (ee.test(e) && me(t.parentNode)) || t), n;
                         }),
                         (n.sortStable =
                             b
                                 .split('')
                                 .sort(A)
                                 .join('') === b),
-                        (n.detectDuplicates = !!d),
-                        f(),
+                        (n.detectDuplicates = !!f),
+                        d(),
                         (n.sortDetached = le(function(e) {
                             return 1 & e.compareDocumentPosition(p.createElement('fieldset'));
                         })),
                         le(function(e) {
                             return (e.innerHTML = "<a href='#'></a>"), '#' === e.firstChild.getAttribute('href');
                         }) ||
-                            de('type|href|height|width', function(e, t, n) {
+                            fe('type|href|height|width', function(e, t, n) {
                                 if (!n) return e.getAttribute(t, 'type' === t.toLowerCase() ? 1 : 2);
                             }),
                         (n.attributes &&
@@ -1412,13 +1412,13 @@
                                     '' === e.firstChild.getAttribute('value')
                                 );
                             })) ||
-                            de('value', function(e, t, n) {
+                            fe('value', function(e, t, n) {
                                 if (!n && 'input' === e.nodeName.toLowerCase()) return e.defaultValue;
                             }),
                         le(function(e) {
                             return null == e.getAttribute('disabled');
                         }) ||
-                            de(O, function(e, t, n) {
+                            fe(O, function(e, t, n) {
                                 var r;
                                 if (!n)
                                     return !0 === e[t]
@@ -1466,7 +1466,7 @@
                       })
                     : 'string' != typeof t
                     ? k.grep(e, function(e) {
-                          return d.call(t, e) > -1 !== n;
+                          return f.call(t, e) > -1 !== n;
                       })
                     : k.filter(t, e, n);
             }
@@ -1544,7 +1544,7 @@
                 (L = k(a));
             var P = /^(?:parents|prev(?:Until|All))/,
                 O = { children: !0, contents: !0, next: !0, prev: !0 };
-            function $(e, t) {
+            function H(e, t) {
                 for (; (e = e[t]) && 1 !== e.nodeType; );
                 return e;
             }
@@ -1577,8 +1577,8 @@
                 index: function(e) {
                     return e
                         ? 'string' == typeof e
-                            ? d.call(k(e), this[0])
-                            : d.call(this, e.jquery ? e[0] : e)
+                            ? f.call(k(e), this[0])
+                            : f.call(this, e.jquery ? e[0] : e)
                         : this[0] && this[0].parentNode
                         ? this.first().prevAll().length
                         : -1;
@@ -1603,10 +1603,10 @@
                             return j(e, 'parentNode', n);
                         },
                         next: function(e) {
-                            return $(e, 'nextSibling');
+                            return H(e, 'nextSibling');
                         },
                         prev: function(e) {
-                            return $(e, 'previousSibling');
+                            return H(e, 'previousSibling');
                         },
                         nextAll: function(e) {
                             return j(e, 'nextSibling');
@@ -1644,7 +1644,7 @@
                         };
                     },
                 );
-            var H = /[^\x20\t\r\n\f]+/g;
+            var $ = /[^\x20\t\r\n\f]+/g;
             function M(e) {
                 return e;
             }
@@ -1672,7 +1672,7 @@
                         ? (function(e) {
                               var t = {};
                               return (
-                                  k.each(e.match(H) || [], function(e, n) {
+                                  k.each(e.match($) || [], function(e, n) {
                                       t[n] = !0;
                                   }),
                                   t
@@ -2015,7 +2015,7 @@
                             r = e[this.expando];
                         if (void 0 !== r) {
                             if (void 0 !== t) {
-                                n = (t = Array.isArray(t) ? t.map(G) : (t = G(t)) in r ? [t] : t.match(H) || []).length;
+                                n = (t = Array.isArray(t) ? t.map(G) : (t = G(t)) in r ? [t] : t.match($) || []).length;
                                 for (; n--; ) delete r[t[n]];
                             }
                             (void 0 === t || k.isEmptyObject(r)) &&
@@ -2216,7 +2216,7 @@
                     for (i in ((o = n.apply(e, r || [])), t)) e.style[i] = a[i];
                     return o;
                 };
-            function de(e, t, n, r) {
+            function fe(e, t, n, r) {
                 var o,
                     i,
                     a = 20,
@@ -2243,19 +2243,19 @@
                     o
                 );
             }
-            var fe = {};
+            var de = {};
             function pe(e) {
                 var t,
                     n = e.ownerDocument,
                     r = e.nodeName,
-                    o = fe[r];
+                    o = de[r];
                 return (
                     o ||
                     ((t = n.body.appendChild(n.createElement(r))),
                     (o = k.css(t, 'display')),
                     t.parentNode.removeChild(t),
                     'none' === o && (o = 'block'),
-                    (fe[r] = o),
+                    (de[r] = o),
                     o)
                 );
             }
@@ -2318,12 +2318,12 @@
                 Te,
                 ke = /<|&#?\w+;/;
             function Ce(e, t, n, r, o) {
-                for (var i, a, s, u, c, l, d = t.createDocumentFragment(), f = [], p = 0, h = e.length; p < h; p++)
+                for (var i, a, s, u, c, l, f = t.createDocumentFragment(), d = [], p = 0, h = e.length; p < h; p++)
                     if ((i = e[p]) || 0 === i)
-                        if ('object' === T(i)) k.merge(f, i.nodeType ? [i] : i);
+                        if ('object' === T(i)) k.merge(d, i.nodeType ? [i] : i);
                         else if (ke.test(i)) {
                             for (
-                                a = a || d.appendChild(t.createElement('div')),
+                                a = a || f.appendChild(t.createElement('div')),
                                     s = (ve.exec(i) || ['', ''])[1].toLowerCase(),
                                     u = ye[s] || ye._default,
                                     a.innerHTML = u[1] + k.htmlPrefilter(i) + u[2],
@@ -2332,13 +2332,13 @@
 
                             )
                                 a = a.lastChild;
-                            k.merge(f, a.childNodes), ((a = d.firstChild).textContent = '');
-                        } else f.push(t.createTextNode(i));
-                for (d.textContent = '', p = 0; (i = f[p++]); )
+                            k.merge(d, a.childNodes), ((a = f.firstChild).textContent = '');
+                        } else d.push(t.createTextNode(i));
+                for (f.textContent = '', p = 0; (i = d[p++]); )
                     if (r && k.inArray(i, r) > -1) o && o.push(i);
-                    else if (((c = se(i)), (a = xe(d.appendChild(i), 'script')), c && be(a), n))
+                    else if (((c = se(i)), (a = xe(f.appendChild(i), 'script')), c && be(a), n))
                         for (l = 0; (i = a[l++]); ) me.test(i.type || '') && n.push(i);
-                return d;
+                return f;
             }
             (we = a.createDocumentFragment().appendChild(a.createElement('div'))),
                 (Te = a.createElement('input')).setAttribute('type', 'radio'),
@@ -2433,8 +2433,8 @@
                         u,
                         c,
                         l,
-                        d,
                         f,
+                        d,
                         p,
                         h,
                         g,
@@ -2451,16 +2451,16 @@
                                             ? k.event.dispatch.apply(e, arguments)
                                             : void 0;
                                     }),
-                                c = (t = (t || '').match(H) || ['']).length;
+                                c = (t = (t || '').match($) || ['']).length;
                             c--;
 
                         )
                             (p = g = (s = je.exec(t[c]) || [])[1]),
                                 (h = (s[2] || '').split('.').sort()),
                                 p &&
-                                    ((d = k.event.special[p] || {}),
-                                    (p = (o ? d.delegateType : d.bindType) || p),
-                                    (d = k.event.special[p] || {}),
+                                    ((f = k.event.special[p] || {}),
+                                    (p = (o ? f.delegateType : f.bindType) || p),
+                                    (f = k.event.special[p] || {}),
                                     (l = k.extend(
                                         {
                                             type: p,
@@ -2474,12 +2474,12 @@
                                         },
                                         i,
                                     )),
-                                    (f = u[p]) ||
-                                        (((f = u[p] = []).delegateCount = 0),
-                                        (d.setup && !1 !== d.setup.call(e, r, h, a)) ||
+                                    (d = u[p]) ||
+                                        (((d = u[p] = []).delegateCount = 0),
+                                        (f.setup && !1 !== f.setup.call(e, r, h, a)) ||
                                             (e.addEventListener && e.addEventListener(p, a))),
-                                    d.add && (d.add.call(e, l), l.handler.guid || (l.handler.guid = n.guid)),
-                                    o ? f.splice(f.delegateCount++, 0, l) : f.push(l),
+                                    f.add && (f.add.call(e, l), l.handler.guid || (l.handler.guid = n.guid)),
+                                    o ? d.splice(d.delegateCount++, 0, l) : d.push(l),
                                     (k.event.global[p] = !0));
                 },
                 remove: function(e, t, n, r, o) {
@@ -2489,34 +2489,34 @@
                         u,
                         c,
                         l,
-                        d,
                         f,
+                        d,
                         p,
                         h,
                         g,
                         v = K.hasData(e) && K.get(e);
                     if (v && (u = v.events)) {
-                        for (c = (t = (t || '').match(H) || ['']).length; c--; )
+                        for (c = (t = (t || '').match($) || ['']).length; c--; )
                             if (((p = g = (s = je.exec(t[c]) || [])[1]), (h = (s[2] || '').split('.').sort()), p)) {
                                 for (
-                                    d = k.event.special[p] || {},
-                                        f = u[(p = (r ? d.delegateType : d.bindType) || p)] || [],
+                                    f = k.event.special[p] || {},
+                                        d = u[(p = (r ? f.delegateType : f.bindType) || p)] || [],
                                         s = s[2] && new RegExp('(^|\\.)' + h.join('\\.(?:.*\\.|)') + '(\\.|$)'),
-                                        a = i = f.length;
+                                        a = i = d.length;
                                     i--;
 
                                 )
-                                    (l = f[i]),
+                                    (l = d[i]),
                                         (!o && g !== l.origType) ||
                                             (n && n.guid !== l.guid) ||
                                             (s && !s.test(l.namespace)) ||
                                             (r && r !== l.selector && ('**' !== r || !l.selector)) ||
-                                            (f.splice(i, 1),
-                                            l.selector && f.delegateCount--,
-                                            d.remove && d.remove.call(e, l));
+                                            (d.splice(i, 1),
+                                            l.selector && d.delegateCount--,
+                                            f.remove && f.remove.call(e, l));
                                 a &&
-                                    !f.length &&
-                                    ((d.teardown && !1 !== d.teardown.call(e, h, v.handle)) ||
+                                    !d.length &&
+                                    ((f.teardown && !1 !== f.teardown.call(e, h, v.handle)) ||
                                         k.removeEvent(e, p, v.handle),
                                     delete u[p]);
                             } else for (p in u) k.event.remove(e, p + t[c], n, r, !0);
@@ -2786,12 +2786,12 @@
                 Ie = /<script|<style|<link/i,
                 Pe = /checked\s*(?:[^=]|=\s*.checked.)/i,
                 Oe = /^\s*<!(?:\[CDATA\[|--)|(?:\]\]|--)>\s*$/g;
-            function $e(e, t) {
+            function He(e, t) {
                 return (
                     (N(e, 'table') && N(11 !== t.nodeType ? t : t.firstChild, 'tr') && k(e).children('tbody')[0]) || e
                 );
             }
-            function He(e) {
+            function $e(e) {
                 return (e.type = (null !== e.getAttribute('type')) + '/' + e.type), e;
             }
             function Me(e) {
@@ -2822,29 +2822,29 @@
                     s,
                     u,
                     l,
-                    d = 0,
-                    f = e.length,
-                    p = f - 1,
+                    f = 0,
+                    d = e.length,
+                    p = d - 1,
                     h = t[0],
                     g = y(h);
-                if (g || (f > 1 && 'string' == typeof h && !m.checkClone && Pe.test(h)))
+                if (g || (d > 1 && 'string' == typeof h && !m.checkClone && Pe.test(h)))
                     return e.each(function(o) {
                         var i = e.eq(o);
                         g && (t[0] = h.call(this, o, i.html())), Be(i, t, n, r);
                     });
                 if (
-                    f &&
+                    d &&
                     ((i = (o = Ce(t, e[0].ownerDocument, !1, e, r)).firstChild),
                     1 === o.childNodes.length && (o = i),
                     i || r)
                 ) {
-                    for (s = (a = k.map(xe(o, 'script'), He)).length; d < f; d++)
+                    for (s = (a = k.map(xe(o, 'script'), $e)).length; f < d; f++)
                         (u = o),
-                            d !== p && ((u = k.clone(u, !0, !0)), s && k.merge(a, xe(u, 'script'))),
-                            n.call(e[d], u, d);
+                            f !== p && ((u = k.clone(u, !0, !0)), s && k.merge(a, xe(u, 'script'))),
+                            n.call(e[f], u, f);
                     if (s)
-                        for (l = a[a.length - 1].ownerDocument, k.map(a, Me), d = 0; d < s; d++)
-                            (u = a[d]),
+                        for (l = a[a.length - 1].ownerDocument, k.map(a, Me), f = 0; f < s; f++)
+                            (u = a[f]),
                                 me.test(u.type || '') &&
                                     !K.access(u, 'globalEval') &&
                                     k.contains(l, u) &&
@@ -2918,13 +2918,13 @@
                     append: function() {
                         return Be(this, arguments, function(e) {
                             (1 !== this.nodeType && 11 !== this.nodeType && 9 !== this.nodeType) ||
-                                $e(this, e).appendChild(e);
+                                He(this, e).appendChild(e);
                         });
                     },
                     prepend: function() {
                         return Be(this, arguments, function(e) {
                             if (1 === this.nodeType || 11 === this.nodeType || 9 === this.nodeType) {
-                                var t = $e(this, e);
+                                var t = He(this, e);
                                 t.insertBefore(e, t.firstChild);
                             }
                         });
@@ -3212,7 +3212,7 @@
                             c = e.style;
                         if ((u || (t = Ke(s)), (a = k.cssHooks[t] || k.cssHooks[s]), void 0 === n))
                             return a && 'get' in a && void 0 !== (o = a.get(e, !1, r)) ? o : c[t];
-                        'string' === (i = typeof n) && (o = oe.exec(n)) && o[1] && ((n = de(e, t, o)), (i = 'number')),
+                        'string' === (i = typeof n) && (o = oe.exec(n)) && o[1] && ((n = fe(e, t, o)), (i = 'number')),
                             null != n &&
                                 n == n &&
                                 ('number' !== i || u || (n += (o && o[3]) || (k.cssNumber[s] ? '' : 'px')),
@@ -3387,14 +3387,14 @@
                 ut,
                 ct = /^(?:toggle|show|hide)$/,
                 lt = /queueHooks$/;
-            function dt() {
+            function ft() {
                 ut &&
                     (!1 === a.hidden && n.requestAnimationFrame
-                        ? n.requestAnimationFrame(dt)
-                        : n.setTimeout(dt, k.fx.interval),
+                        ? n.requestAnimationFrame(ft)
+                        : n.setTimeout(ft, k.fx.interval),
                     k.fx.tick());
             }
-            function ft() {
+            function dt() {
                 return (
                     n.setTimeout(function() {
                         st = void 0;
@@ -3424,7 +3424,7 @@
                     u = function() {
                         if (o) return !1;
                         for (
-                            var t = st || ft(),
+                            var t = st || dt(),
                                 n = Math.max(0, c.startTime + c.duration - t),
                                 r = 1 - (n / c.duration || 0),
                                 i = 0,
@@ -3444,7 +3444,7 @@
                         opts: k.extend(!0, { specialEasing: {}, easing: k.easing._default }, n),
                         originalProperties: t,
                         originalOptions: n,
-                        startTime: st || ft(),
+                        startTime: st || dt(),
                         duration: n.duration,
                         tweens: [],
                         createTween: function(t, n) {
@@ -3499,12 +3499,12 @@
                     '*': [
                         function(e, t) {
                             var n = this.createTween(e, t);
-                            return de(n.elem, e, oe.exec(t), n), n;
+                            return fe(n.elem, e, oe.exec(t), n), n;
                         },
                     ],
                 },
                 tweener: function(e, t) {
-                    y(e) ? ((t = e), (e = ['*'])) : (e = e.match(H));
+                    y(e) ? ((t = e), (e = ['*'])) : (e = e.match($));
                     for (var n, r = 0, o = e.length; r < o; r++)
                         (n = e[r]), (gt.tweeners[n] = gt.tweeners[n] || []), gt.tweeners[n].unshift(t);
                 },
@@ -3518,8 +3518,8 @@
                             u,
                             c,
                             l,
-                            d = 'width' in t || 'height' in t,
-                            f = this,
+                            f = 'width' in t || 'height' in t,
+                            d = this,
                             p = {},
                             h = e.style,
                             g = e.nodeType && ce(e),
@@ -3532,8 +3532,8 @@
                                     a.unqueued || s();
                                 })),
                             a.unqueued++,
-                            f.always(function() {
-                                f.always(function() {
+                            d.always(function() {
+                                d.always(function() {
                                     a.unqueued--, k.queue(e, 'fx').length || a.empty.fire();
                                 });
                             })),
@@ -3546,7 +3546,7 @@
                                 p[r] = (v && v[r]) || k.style(e, r);
                             }
                         if ((u = !k.isEmptyObject(t)) || !k.isEmptyObject(p))
-                            for (r in (d &&
+                            for (r in (f &&
                                 1 === e.nodeType &&
                                 ((n.overflow = [h.overflow, h.overflowX, h.overflowY]),
                                 null == (c = v && v.display) && (c = K.get(e, 'display')),
@@ -3560,14 +3560,14 @@
                                 ('inline' === l || ('inline-block' === l && null != c)) &&
                                     'none' === k.css(e, 'float') &&
                                     (u ||
-                                        (f.done(function() {
+                                        (d.done(function() {
                                             h.display = c;
                                         }),
                                         null == c && ((l = h.display), (c = 'none' === l ? '' : l))),
                                     (h.display = 'inline-block'))),
                             n.overflow &&
                                 ((h.overflow = 'hidden'),
-                                f.always(function() {
+                                d.always(function() {
                                     (h.overflow = n.overflow[0]),
                                         (h.overflowX = n.overflow[1]),
                                         (h.overflowY = n.overflow[2]);
@@ -3578,10 +3578,10 @@
                                     (v ? 'hidden' in v && (g = v.hidden) : (v = K.access(e, 'fxshow', { display: c })),
                                     i && (v.hidden = !g),
                                     g && he([e], !0),
-                                    f.done(function() {
+                                    d.done(function() {
                                         for (r in (g || he([e]), K.remove(e, 'fxshow'), p)) k.style(e, r, p[r]);
                                     })),
-                                    (u = ht(g ? v[r] : 0, r, f)),
+                                    (u = ht(g ? v[r] : 0, r, d)),
                                     r in v || ((v[r] = u.start), g && ((u.end = u.start), (u.start = 0)));
                     },
                 ],
@@ -3714,7 +3714,7 @@
                 }),
                 (k.fx.interval = 13),
                 (k.fx.start = function() {
-                    ut || ((ut = !0), dt());
+                    ut || ((ut = !0), ft());
                 }),
                 (k.fx.stop = function() {
                     ut = null;
@@ -3789,7 +3789,7 @@
                     removeAttr: function(e, t) {
                         var n,
                             r = 0,
-                            o = t && t.match(H);
+                            o = t && t.match($);
                         if (o && 1 === e.nodeType) for (; (n = o[r++]); ) e.removeAttribute(n);
                     },
                 }),
@@ -3810,13 +3810,13 @@
             var yt = /^(?:input|select|textarea|button)$/i,
                 xt = /^(?:a|area)$/i;
             function bt(e) {
-                return (e.match(H) || []).join(' ');
+                return (e.match($) || []).join(' ');
             }
             function wt(e) {
                 return (e.getAttribute && e.getAttribute('class')) || '';
             }
             function Tt(e) {
-                return Array.isArray(e) ? e : ('string' == typeof e && e.match(H)) || [];
+                return Array.isArray(e) ? e : ('string' == typeof e && e.match($)) || [];
             }
             k.fn.extend({
                 prop: function(e, t) {
@@ -4065,8 +4065,8 @@
                         u,
                         c,
                         l,
-                        d,
                         f,
+                        d,
                         p,
                         g = [r || a],
                         v = h.call(e, 'type') ? e.type : e,
@@ -4086,27 +4086,27 @@
                             (e.result = void 0),
                             e.target || (e.target = r),
                             (t = null == t ? [e] : k.makeArray(t, [e])),
-                            (f = k.event.special[v] || {}),
-                            o || !f.trigger || !1 !== f.trigger.apply(r, t)))
+                            (d = k.event.special[v] || {}),
+                            o || !d.trigger || !1 !== d.trigger.apply(r, t)))
                     ) {
-                        if (!o && !f.noBubble && !x(r)) {
-                            for (c = f.delegateType || v, Ct.test(c + v) || (s = s.parentNode); s; s = s.parentNode)
+                        if (!o && !d.noBubble && !x(r)) {
+                            for (c = d.delegateType || v, Ct.test(c + v) || (s = s.parentNode); s; s = s.parentNode)
                                 g.push(s), (u = s);
                             u === (r.ownerDocument || a) && g.push(u.defaultView || u.parentWindow || n);
                         }
                         for (i = 0; (s = g[i++]) && !e.isPropagationStopped(); )
                             (p = s),
-                                (e.type = i > 1 ? c : f.bindType || v),
-                                (d = (K.get(s, 'events') || {})[e.type] && K.get(s, 'handle')) && d.apply(s, t),
-                                (d = l && s[l]) &&
-                                    d.apply &&
+                                (e.type = i > 1 ? c : d.bindType || v),
+                                (f = (K.get(s, 'events') || {})[e.type] && K.get(s, 'handle')) && f.apply(s, t),
+                                (f = l && s[l]) &&
+                                    f.apply &&
                                     Y(s) &&
-                                    ((e.result = d.apply(s, t)), !1 === e.result && e.preventDefault());
+                                    ((e.result = f.apply(s, t)), !1 === e.result && e.preventDefault());
                         return (
                             (e.type = v),
                             o ||
                                 e.isDefaultPrevented() ||
-                                (f._default && !1 !== f._default.apply(g.pop(), t)) ||
+                                (d._default && !1 !== d._default.apply(g.pop(), t)) ||
                                 !Y(r) ||
                                 (l &&
                                     y(r[v]) &&
@@ -4234,8 +4234,8 @@
             var It = /%20/g,
                 Pt = /#.*$/,
                 Ot = /([?&])_=[^&]*/,
-                $t = /^(.*?):[ \t]*([^\r\n]*)$/gm,
-                Ht = /^(?:GET|HEAD)$/,
+                Ht = /^(.*?):[ \t]*([^\r\n]*)$/gm,
+                $t = /^(?:GET|HEAD)$/,
                 Mt = /^\/\//,
                 Rt = {},
                 Wt = {},
@@ -4246,7 +4246,7 @@
                     'string' != typeof t && ((n = t), (t = '*'));
                     var r,
                         o = 0,
-                        i = t.toLowerCase().match(H) || [];
+                        i = t.toLowerCase().match($) || [];
                     if (y(n))
                         for (; (r = i[o++]); )
                             '+' === r[0]
@@ -4325,8 +4325,8 @@
                             u,
                             c,
                             l,
-                            d,
                             f,
+                            d,
                             p,
                             h = k.ajaxSetup({}, t),
                             g = h.context || h,
@@ -4343,7 +4343,7 @@
                                     var t;
                                     if (l) {
                                         if (!s)
-                                            for (s = {}; (t = $t.exec(i)); )
+                                            for (s = {}; (t = Ht.exec(i)); )
                                                 s[t[1].toLowerCase() + ' '] = (
                                                     s[t[1].toLowerCase() + ' '] || []
                                                 ).concat(t[2]);
@@ -4379,7 +4379,7 @@
                             (m.promise(C),
                             (h.url = ((e || h.url || Et.href) + '').replace(Mt, Et.protocol + '//')),
                             (h.type = t.method || t.type || h.method || h.type),
-                            (h.dataTypes = (h.dataType || '*').toLowerCase().match(H) || ['']),
+                            (h.dataTypes = (h.dataType || '*').toLowerCase().match($) || ['']),
                             null == h.crossDomain)
                         ) {
                             c = a.createElement('a');
@@ -4400,9 +4400,9 @@
                             l)
                         )
                             return C;
-                        for (f in ((d = k.event && h.global) && 0 == k.active++ && k.event.trigger('ajaxStart'),
+                        for (d in ((f = k.event && h.global) && 0 == k.active++ && k.event.trigger('ajaxStart'),
                         (h.type = h.type.toUpperCase()),
-                        (h.hasContent = !Ht.test(h.type)),
+                        (h.hasContent = !$t.test(h.type)),
                         (o = h.url.replace(Pt, '')),
                         h.hasContent
                             ? h.data &&
@@ -4428,7 +4428,7 @@
                                 : h.accepts['*'],
                         ),
                         h.headers))
-                            C.setRequestHeader(f, h.headers[f]);
+                            C.setRequestHeader(d, h.headers[d]);
                         if (h.beforeSend && (!1 === h.beforeSend.call(g, C, h) || l)) return C.abort();
                         if (
                             ((T = 'abort'),
@@ -4437,7 +4437,7 @@
                             C.fail(h.error),
                             (r = zt(Wt, h, t, C)))
                         ) {
-                            if (((C.readyState = 1), d && v.trigger('ajaxSend', [C, h]), l)) return C;
+                            if (((C.readyState = 1), f && v.trigger('ajaxSend', [C, h]), l)) return C;
                             h.async &&
                                 h.timeout > 0 &&
                                 (u = n.setTimeout(function() {
@@ -4452,7 +4452,7 @@
                         } else S(-1, 'No Transport');
                         function S(e, t, a, s) {
                             var c,
-                                f,
+                                d,
                                 p,
                                 b,
                                 w,
@@ -4539,16 +4539,16 @@
                                           ? (T = 'nocontent')
                                           : 304 === e
                                           ? (T = 'notmodified')
-                                          : ((T = b.state), (f = b.data), (c = !(p = b.error))))
+                                          : ((T = b.state), (d = b.data), (c = !(p = b.error))))
                                     : ((p = T), (!e && T) || ((T = 'error'), e < 0 && (e = 0))),
                                 (C.status = e),
                                 (C.statusText = (t || T) + ''),
-                                c ? m.resolveWith(g, [f, T, C]) : m.rejectWith(g, [C, T, p]),
+                                c ? m.resolveWith(g, [d, T, C]) : m.rejectWith(g, [C, T, p]),
                                 C.statusCode(x),
                                 (x = void 0),
-                                d && v.trigger(c ? 'ajaxSuccess' : 'ajaxError', [C, h, c ? f : p]),
+                                f && v.trigger(c ? 'ajaxSuccess' : 'ajaxError', [C, h, c ? d : p]),
                                 y.fireWith(g, [C, T]),
-                                d && (v.trigger('ajaxComplete', [C, h]), --k.active || k.event.trigger('ajaxStop')));
+                                f && (v.trigger('ajaxComplete', [C, h]), --k.active || k.event.trigger('ajaxStop')));
                         }
                         return C;
                     },
@@ -4863,7 +4863,7 @@
                             u,
                             c = k.css(e, 'position'),
                             l = k(e),
-                            d = {};
+                            f = {};
                         'static' === c && (e.style.position = 'relative'),
                             (s = l.offset()),
                             (i = k.css(e, 'top')),
@@ -4872,9 +4872,9 @@
                                 ? ((a = (r = l.position()).top), (o = r.left))
                                 : ((a = parseFloat(i) || 0), (o = parseFloat(u) || 0)),
                             y(t) && (t = t.call(e, n, k.extend({}, s))),
-                            null != t.top && (d.top = t.top - s.top + a),
-                            null != t.left && (d.left = t.left - s.left + o),
-                            'using' in t ? t.using.call(e, d) : l.css(d);
+                            null != t.top && (f.top = t.top - s.top + a),
+                            null != t.left && (f.left = t.left - s.left + o),
+                            'using' in t ? t.using.call(e, f) : l.css(f);
                     },
                 }),
                 k.fn.extend({
@@ -5058,24 +5058,294 @@
     },
     function(e, t, n) {
         'use strict';
-        n.r(t);
-        var r = ({
-                title: e,
-                short_description: t,
-                id: n,
-                buttonText: r,
-                price_cents: o,
-                price_currency: i,
-                quantity: a,
-            }) =>
-                `\n<div>\n    <div class="uk-card uk-card-default uk-margin-left uk-margin-top">\n        <div class="uk-card-header">\n            <div class="uk-grid-small uk-flex-middle" uk-grid>\n                <div class="uk-width-auto">\n                    <//img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">\n                    <span uk-icon="icon: camera"></span>\n                </div>\n                <div class="uk-width-expand">\n                    <h3 class="uk-card-title uk-margin-remove-bottom product-title" id="product-title-${n}">${e}</h3>\n                    <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00">April 01, 2016</time></p>\n                </div>\n            </div>\n        </div>\n        <div class="uk-card-body">\n            <p class="short-description">${t}</p>\n            <hr class="uk-divider-small">\n            <p class="product-price">${o} ${i}</p> \n            <hr class="uk-divider-small">\n            <p class="product-quantity"><span class="uk-label">quantity</span> ${a}</p>\n        </div>\n        <div class="uk-card-footer">\n            <a  href="#" class="uk-button uk-button-text add-to-cart" data-id="${n}">${r}</a>\n        </div>\n    </div>\n</div>\n`,
+        t.a = ({
+            title: e,
+            short_description: t,
+            id: n,
+            buttonText: r,
+            price_cents: o,
+            price_currency: i,
+            quantity: a,
+        }) =>
+            `\n<div>\n    <div class="uk-card uk-card-default uk-margin-left uk-margin-top">\n        <div class="uk-card-header">\n            <div class="uk-grid-small uk-flex-middle" uk-grid>\n                <div class="uk-width-auto">\n                    <//img class="uk-border-circle" width="40" height="40" src="images/avatar.jpg">\n                    <span uk-icon="icon: camera"></span>\n                </div>\n                <div class="uk-width-expand">\n                    <h3 class="uk-card-title uk-margin-remove-bottom product-title" id="product-title-${n}">${e}</h3>\n                    <p class="uk-text-meta uk-margin-remove-top"><time datetime="2016-04-01T19:00">April 01, 2016</time></p>\n                </div>\n            </div>\n        </div>\n        <div class="uk-card-body">\n            <p class="short-description">${t}</p>\n            <hr class="uk-divider-small">\n            <p class="product-price">${o} ${i}</p> \n            <hr class="uk-divider-small">\n            <p class="product-quantity"><span class="uk-label">quantity</span> ${a}</p>\n        </div>\n        <div class="uk-card-footer">\n            <a  href="#" class="uk-button uk-button-text add-to-cart" data-id="${n}">${r}</a>\n        </div>\n    </div>\n</div>\n`;
+    },
+    function(e, t, n) {
+        'use strict';
+        t.a = e =>
+            `\n<div class="uk-alert-danger" uk-alert>\n    <a class="uk-alert-close" uk-close></a>\n    <p>${e}</p>\n</div>\n`;
+    },
+    function(e, t, n) {
+        'use strict';
+        n.d(t, 'a', function() {
+            return s;
+        });
+        var r = n(1),
+            o = n(0),
+            i = n.n(o),
+            a = n(2);
+        class s {
+            constructor(e, t) {
+                (this.graphqlService = e), (this.cart = t);
+            }
+            getAllProducts() {
+                let e = localStorage.getItem('userToken');
+                return this.graphqlService
+                    .sendQuery(
+                        'query {\n            products(first:10) {\n                data {\n                    id\n                    title\n                    status\n                    published\n                    short_description\n                    price_cents\n                    price_currency\n                }\n                paginatorInfo {\n                    total\n                    hasMorePages\n                    currentPage\n                }\n            }\n        }',
+                        e,
+                    )
+                    .then(e => {
+                        let t;
+                        try {
+                            t = e.data.products.data;
+                        } catch (t) {
+                            return (
+                                console.log(e),
+                                void i()('.products-container').html(
+                                    Object(a.a)(
+                                        `There was an error loading products. <br> ${e.errors[0].extensions.reason}`,
+                                    ),
+                                )
+                            );
+                        }
+                        let n = t.map(e => {
+                            var t = localStorage.getItem('currency');
+                            return (
+                                t || (t = e.price_currency),
+                                {
+                                    title: e.title,
+                                    price_cents: e.price_cents / 100,
+                                    price_currency: t,
+                                    short_description: e.short_description,
+                                    id: e.id,
+                                    quantity: 1,
+                                    buttonText: 'Add to cart',
+                                }
+                            );
+                        });
+                        return (
+                            i()('.products-container').html(n.map(r.a).join('')),
+                            i()('.add-to-cart').on('click', this.addProductToCart.bind(this)),
+                            e
+                        );
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    });
+            }
+            getProduct(e) {
+                let t = `query {\n            product(id:${e}) {\n                    id\n                    title\n                    status\n                    published\n                    short_description\n                    price_cents\n                    price_currency\n            }\n        }`,
+                    n = localStorage.getItem('userToken');
+                return this.graphqlService.sendQuery(t, n);
+            }
+            addProductToCart(e) {
+                let t = i()(e.target).attr('data-id');
+                var n = localStorage.getItem('userToken');
+                let r = ` mutation {\n            addToCart(input: {\n                    items: [\n                        { product_id: ${t}, quantity: 1 }\n                    ]\n                }) {\n                cart {\n                    items {\n                        product_id\n                        quantity\n                    }\n                }\n            }\n        }`;
+                this.graphqlService
+                    .sendQuery(r, n)
+                    .then(n => {
+                        n.data.addToCart.cart.items.forEach(n => {
+                            n.product_id == t &&
+                                i()(e.target)
+                                    .parent()
+                                    .append(i()(`<span class="uk-badge">${n.quantity}</span>`));
+                        });
+                    })
+                    .catch(e => {
+                        console.log(`addProductToCart: ${e}`);
+                    });
+            }
+        }
+    },
+    function(e, t, n) {
+        'use strict';
+        n.d(t, 'a', function() {
+            return s;
+        });
+        var r = n(1),
+            o = n(2),
+            i = n(0),
+            a = n.n(i);
+        class s {
+            constructor(e, t) {
+                (this.productObj = e), (this.graphqlService = t);
+            }
+            viewProductsInCart() {
+                var e = localStorage.getItem('userToken');
+                return this.graphqlService
+                    .sendQuery(
+                        '{\n            me {\n                cart {\n                    items {\n                        product_id\n                        quantity\n                    }\n                }\n            }\n        }',
+                        e,
+                    )
+                    .then(e => {
+                        let t = e.data.me.cart.items;
+                        return (
+                            t && t.length > 0
+                                ? this.lookupProductsInCart(e.data.me.cart.items)
+                                : (a()('.cart-products').html(Object(o.a)('No products in cart.')),
+                                  a()('#cart-checkout').addClass('uk-disabled')),
+                            e
+                        );
+                    })
+                    .catch(e => {
+                        console.log(`viewProductsInCart: ${e}`);
+                    });
+            }
+            async lookupProductsInCart(e) {
+                return await Promise.all(
+                    e.map(async e => {
+                        const t = await this.productObj.getProduct(e.product_id);
+                        let n = { quantity: e.quantity };
+                        return { ...t.data.product, ...n };
+                    }),
+                )
+                    .then(e => (this.populateUIWithProducts(e), e))
+                    .catch(e => {
+                        console.log(e);
+                    });
+            }
+            populateUIWithProducts(e) {
+                let t = e.map(e => {
+                    var t = localStorage.getItem('currency');
+                    return (
+                        t || (t = e.price_currency),
+                        {
+                            title: e.title,
+                            short_description: e.short_description,
+                            id: e.id,
+                            price_cents: e.price_cents / 100,
+                            price_currency: t,
+                            quantity: e.quantity,
+                            buttonText: 'Remove',
+                        }
+                    );
+                });
+                a()('.cart-products').html(t.map(r.a).join(''));
+            }
+        }
+    },
+    function(e, t, n) {
+        'use strict';
+        n.d(t, 'a', function() {
+            return i;
+        });
+        var r = n(0),
+            o = n.n(r);
+        class i {
+            constructor() {
+                this.userToken = localStorage.getItem('userToken');
+            }
+            async sendQuery(e, t = '') {
+                try {
+                    return await o.a.ajax({
+                        url: 'http://laravel-gernzy.test/graphql',
+                        contentType: 'application/json',
+                        type: 'POST',
+                        headers: { Authorization: `Bearer ${t}` },
+                        data: JSON.stringify({ query: e }),
+                    });
+                } catch (e) {
+                    return e;
+                }
+            }
+        }
+    },
+    function(e, t, n) {
+        'use strict';
+        n.d(t, 'a', function() {
+            return a;
+        });
+        var r = () =>
+                '\n<div class="uk-alert-success" uk-alert>\n    <a class="uk-alert-close" uk-close></a>\n    <p>Your checkout has been successful.</p>\n</div>\n',
             o = n(0),
             i = n.n(o);
-        var a = e =>
-            `\n<div class="uk-alert-danger" uk-alert>\n    <a class="uk-alert-close" uk-close></a>\n    <p>${e}</p>\n</div>\n`;
-        var s = () =>
-            '\n<div class="uk-alert-success" uk-alert>\n    <a class="uk-alert-close" uk-close></a>\n    <p>Your checkout has been successful.</p>\n</div>\n';
-        class u {
+        class a {
+            constructor(e, t = null) {
+                (this.graphqlService = e), (this.cart = t);
+            }
+            checkout() {
+                var e = this;
+                i()('#checkout-form').submit(function(t) {
+                    t.preventDefault();
+                    var n = i()('#checkout-form :input'),
+                        r = {};
+                    n.each(function() {
+                        r[this.name] = i()(this).val();
+                    }),
+                        (r.use_shipping_for_billing = i()('#use_shipping_for_billing').prop('checked')),
+                        (r.agree_to_terms = i()('#agree_to_terms').prop('checked')),
+                        e.sendOfCheckoutInfo(r);
+                });
+            }
+            sendOfCheckoutInfo(e) {
+                var t = localStorage.getItem('userToken');
+                let n = ` mutation {\n            checkout(input: {\n                name: "${e.name}",\n                email: "${e.email}",\n                telephone: "${e.telephone}",\n                mobile: "${e.mobile}",\n                billing_address: {\n                    line_1: "${e.billing_address_line_1}",\n                    line_2: "${e.billing_address_line_2}",\n                    state: "${e.billing_address_state}",\n                    postcode: "${e.billing_address_postcode}",\n                    country: "${e.billing_address_country}"\n                },\n                shipping_address: {\n                    line_1: "${e.shipping_address_line_1}",\n                    line_2: "${e.shipping_address_line_2}",\n                    state: "${e.shipping_address_state}",\n                    postcode: "${e.shipping_address_postcode}",\n                    country: "${e.shipping_address_country}"\n                },\n                use_shipping_for_billing: ${e.use_shipping_for_billing},\n                payment_method: "${e.payment_method}",\n                agree_to_terms: ${e.agree_to_terms},\n                notes: "${e.notes}"\n            }){\n                order {\n                    id\n                }\n            }\n        }`;
+                return this.graphqlService
+                    .sendQuery(n, t)
+                    .then(e => (i()('.checkout-container').html(r), e))
+                    .catch(e => {
+                        console.log(e);
+                    });
+            }
+            getBasketTotal() {
+                var e = localStorage.getItem('userToken');
+                return this.graphqlService
+                    .sendQuery(
+                        '{\n            me {\n                cart {\n                    cart_total\n                }\n            }\n        }',
+                        e,
+                    )
+                    .then(e => {
+                        let t = localStorage.getItem('currency');
+                        return (
+                            t || (t = localStorage.getItem('default_currency')),
+                            i()('#checkout-cart-total').html(`${e.data.me.cart.cart_total / 100} ${t}`),
+                            e
+                        );
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    });
+            }
+            displayLineItems() {
+                return this.cart.viewProductsInCart().then(e => {
+                    try {
+                        let t = e.errors[0].debugMessage;
+                        console.log(t);
+                    } catch {
+                        let t = e.data.me.cart.items;
+                        t && t.length > 0
+                            ? this.cart.lookupProductsInCart(t).then(e => {
+                                  let t = localStorage.getItem('currency');
+                                  t || (t = localStorage.getItem('default_currency')),
+                                      e.forEach(e => {
+                                          i()('#table-body-line-item').append(
+                                              i()(
+                                                  `<tr>\n                                    <td>${
+                                                      e.title
+                                                  }</td>\n                                    <td>${
+                                                      e.quantity
+                                                  }</td>\n                                    <td>${e.price_cents /
+                                                      100} ${t}</td>\n                                </tr>`,
+                                              ),
+                                          );
+                                      });
+                              })
+                            : i()('.checkout-container').html(errorTemplate('No products in cart.'));
+                    }
+                    return e;
+                });
+            }
+        }
+    },
+    function(e, t, n) {
+        'use strict';
+        n.d(t, 'a', function() {
+            return a;
+        });
+        var r = n(0),
+            o = n.n(r);
+        class i {
             constructor(e) {
                 this.graphqlService = e;
             }
@@ -5106,323 +5376,114 @@
                 );
             }
         }
-        var c = $('#loadingDiv').hide();
-        $(document)
-            .ajaxStart(function() {
-                c.show();
-            })
-            .ajaxStop(function() {
-                c.hide();
-            });
-        let l = window.location.pathname,
-            d = new (class {
-                constructor() {
-                    this.userToken = localStorage.getItem('userToken');
-                }
-                async sendQuery(e, t = '') {
-                    try {
-                        return await i.a.ajax({
-                            url: 'http://laravel-gernzy.test/graphql',
-                            contentType: 'application/json',
-                            type: 'POST',
-                            headers: { Authorization: `Bearer ${t}` },
-                            data: JSON.stringify({ query: e }),
-                        });
-                    } catch (e) {
-                        return e;
-                    }
-                }
-            })(),
-            f = new (class {
-                constructor(e) {
-                    this.graphqlService = e;
-                }
-                setUpSessionData() {
-                    var e = localStorage.getItem('userToken');
-                    return this.graphqlService
-                        .sendQuery(
-                            '{\n            me {\n                session {\n                    data\n                }\n            }\n        }',
-                            e,
-                        )
-                        .then(e => {
-                            localStorage.setItem('sessionData', e.data.me.session.data),
-                                e.data.me.session.data[1] &&
-                                    localStorage.setItem('currency', e.data.me.session.data[1]);
-                        });
-                }
-                setUpShopConfig() {
-                    var e = localStorage.getItem('userToken');
-                    return this.graphqlService
-                        .sendQuery(
-                            '\n            query {\n                shopConfig {\n                    enabled_currencies\n                    default_currency\n                }\n            }\n        ',
-                            e,
-                        )
-                        .then(e => {
-                            e.data.shopConfig.enabled_currencies.forEach(e => {
-                                i()('#available-currencies').append(
-                                    `<li><a href='#' class='available-currency' data-currency="${e}">${e}</a></li>`,
-                                );
-                            }),
-                                i()('.available-currency').on('click', this.changeUserCurrency.bind(this)),
-                                localStorage.setItem('default_currency', e.data.shopConfig.default_currency);
-                        });
-                }
-                setUpGeoLocation() {
-                    var e = localStorage.getItem('userToken');
-                    return this.graphqlService
-                        .sendQuery(
-                            '\n            mutation {\n                setSessionGeoLocation {\n                    geolocation_record\n                }\n            }\n        ',
-                            e,
-                        )
-                        .then(e => {
-                            let t = e.errors[0].debugMessage;
-                            t
-                                ? console.log(t)
-                                : localStorage.setItem(
-                                      'setSessionGeoLocation',
-                                      e.data.setSessionGeoLocation.geolocation_record,
-                                  );
-                        });
-                }
-                changeUserCurrency(e) {
-                    var t = localStorage.getItem('userToken');
-                    let n = `\n            mutation {\n                setSessionCurrency(input: {\n                    currency: "${i()(
-                        e.target,
-                    ).attr(
-                        'data-currency',
-                    )}"\n                }){\n                    currency\n                }\n            }\n        `;
-                    return this.graphqlService.sendQuery(n, t).then(e => {
-                        try {
-                            let t = e.errors[0].debugMessage;
-                            console.log(t);
-                        } catch {
-                            localStorage.setItem('currency', e.data.setSessionCurrency.currency), location.reload(!0);
-                        }
-                    });
-                }
-                setupUser() {
-                    let e = new u(this.graphqlService);
-                    e.checkIfTokenInLocalStorage()
-                        ? e.checkTokenExistsInDatabase().then(t => {
-                              try {
-                                  'Cannot return null for non-nullable field Session.id.' == t.errors[0].debugMessage &&
-                                      e.createSession();
-                              } catch (e) {}
-                          })
-                        : e.createSession();
-                }
-            })(d),
-            p = new (class {
-                constructor(e, t) {
-                    (this.graphqlService = e), (this.cart = t);
-                }
-                getAllProducts() {
-                    let e = localStorage.getItem('userToken');
-                    return this.graphqlService
-                        .sendQuery(
-                            'query {\n            products(first:10) {\n                data {\n                    id\n                    title\n                    status\n                    published\n                    short_description\n                    price_cents\n                    price_currency\n                }\n                paginatorInfo {\n                    total\n                    hasMorePages\n                    currentPage\n                }\n            }\n        }',
-                            e,
-                        )
-                        .then(e => {
-                            let t;
-                            try {
-                                t = e.data.products.data;
-                            } catch (t) {
-                                return (
-                                    console.log(e),
-                                    void i()('.products-container').html(
-                                        a(`There was an error loading products. <br> ${e.errors[0].extensions.reason}`),
-                                    )
-                                );
-                            }
-                            let n = t.map(e => {
-                                var t = localStorage.getItem('currency');
-                                return (
-                                    t || (t = e.price_currency),
-                                    {
-                                        title: e.title,
-                                        price_cents: e.price_cents / 100,
-                                        price_currency: t,
-                                        short_description: e.short_description,
-                                        id: e.id,
-                                        quantity: 1,
-                                        buttonText: 'Add to cart',
-                                    }
-                                );
-                            });
-                            return (
-                                i()('.products-container').html(n.map(r).join('')),
-                                i()('.add-to-cart').on('click', this.addProductToCart.bind(this)),
-                                e
-                            );
-                        })
-                        .catch(e => {
-                            console.log(e);
-                        });
-                }
-                getProduct(e) {
-                    let t = `query {\n            product(id:${e}) {\n                    id\n                    title\n                    status\n                    published\n                    short_description\n                    price_cents\n                    price_currency\n            }\n        }`,
-                        n = localStorage.getItem('userToken');
-                    return this.graphqlService.sendQuery(t, n);
-                }
-                addProductToCart(e) {
-                    let t = i()(e.target).attr('data-id');
-                    var n = localStorage.getItem('userToken');
-                    let r = ` mutation {\n            addToCart(input: {\n                    items: [\n                        { product_id: ${t}, quantity: 1 }\n                    ]\n                }) {\n                cart {\n                    items {\n                        product_id\n                        quantity\n                    }\n                }\n            }\n        }`;
-                    this.graphqlService
-                        .sendQuery(r, n)
-                        .then(n => {
-                            n.data.addToCart.cart.items.forEach(n => {
-                                n.product_id == t &&
-                                    i()(e.target)
-                                        .parent()
-                                        .append(i()(`<span class="uk-badge">${n.quantity}</span>`));
-                            });
-                        })
-                        .catch(e => {
-                            console.log(`addProductToCart: ${e}`);
-                        });
-                }
-            })(d),
-            h = new (class {
-                constructor(e, t) {
-                    (this.productObj = e), (this.graphqlService = t);
-                }
-                viewProductsInCart() {
-                    var e = localStorage.getItem('userToken');
-                    return this.graphqlService
-                        .sendQuery(
-                            '{\n            me {\n                cart {\n                    items {\n                        product_id\n                        quantity\n                    }\n                }\n            }\n        }',
-                            e,
-                        )
-                        .then(e => {
-                            let t = e.data.me.cart.items;
-                            return (
-                                t && t.length > 0
-                                    ? this.lookupProductsInCart(e.data.me.cart.items)
-                                    : (i()('.cart-products').html(a('No products in cart.')),
-                                      i()('#cart-checkout').addClass('uk-disabled')),
-                                e
-                            );
-                        })
-                        .catch(e => {
-                            console.log(`viewProductsInCart: ${e}`);
-                        });
-                }
-                async lookupProductsInCart(e) {
-                    return await Promise.all(
-                        e.map(async e => {
-                            const t = await this.productObj.getProduct(e.product_id);
-                            let n = { quantity: e.quantity };
-                            return { ...t.data.product, ...n };
-                        }),
+        class a {
+            constructor(e) {
+                this.graphqlService = e;
+            }
+            setUpSessionData() {
+                var e = localStorage.getItem('userToken');
+                return this.graphqlService
+                    .sendQuery(
+                        '{\n            me {\n                session {\n                    data\n                }\n            }\n        }',
+                        e,
                     )
-                        .then(e => (this.populateUIWithProducts(e), e))
-                        .catch(e => {
-                            console.log(e);
-                        });
-                }
-                populateUIWithProducts(e) {
-                    let t = e.map(e => {
-                        var t = localStorage.getItem('currency');
-                        return (
-                            t || (t = e.price_currency),
-                            {
-                                title: e.title,
-                                short_description: e.short_description,
-                                id: e.id,
-                                price_cents: e.price_cents / 100,
-                                price_currency: t,
-                                quantity: e.quantity,
-                                buttonText: 'Remove',
-                            }
-                        );
+                    .then(e => {
+                        localStorage.setItem('sessionData', e.data.me.session.data),
+                            e.data.me.session.data[1] && localStorage.setItem('currency', e.data.me.session.data[1]);
                     });
-                    i()('.cart-products').html(t.map(r).join(''));
-                }
-            })(p, d),
-            g = new (class {
-                constructor(e, t = null) {
-                    (this.graphqlService = e), (this.cart = t);
-                }
-                checkout() {
-                    var e = this;
-                    i()('#checkout-form').submit(function(t) {
-                        t.preventDefault();
-                        var n = i()('#checkout-form :input'),
-                            r = {};
-                        n.each(function() {
-                            r[this.name] = i()(this).val();
-                        }),
-                            (r.use_shipping_for_billing = i()('#use_shipping_for_billing').prop('checked')),
-                            (r.agree_to_terms = i()('#agree_to_terms').prop('checked')),
-                            e.sendOfCheckoutInfo(r);
-                    });
-                }
-                sendOfCheckoutInfo(e) {
-                    var t = localStorage.getItem('userToken');
-                    let n = ` mutation {\n            checkout(input: {\n                name: "${e.name}",\n                email: "${e.email}",\n                telephone: "${e.telephone}",\n                mobile: "${e.mobile}",\n                billing_address: {\n                    line_1: "${e.billing_address_line_1}",\n                    line_2: "${e.billing_address_line_2}",\n                    state: "${e.billing_address_state}",\n                    postcode: "${e.billing_address_postcode}",\n                    country: "${e.billing_address_country}"\n                },\n                shipping_address: {\n                    line_1: "${e.shipping_address_line_1}",\n                    line_2: "${e.shipping_address_line_2}",\n                    state: "${e.shipping_address_state}",\n                    postcode: "${e.shipping_address_postcode}",\n                    country: "${e.shipping_address_country}"\n                },\n                use_shipping_for_billing: ${e.use_shipping_for_billing},\n                payment_method: "${e.payment_method}",\n                agree_to_terms: ${e.agree_to_terms},\n                notes: "${e.notes}"\n            }){\n                order {\n                    id\n                }\n            }\n        }`;
-                    return this.graphqlService
-                        .sendQuery(n, t)
-                        .then(e => (i()('.checkout-container').html(s), e))
-                        .catch(e => {
-                            console.log(e);
-                        });
-                }
-                getBasketTotal() {
-                    var e = localStorage.getItem('userToken');
-                    return this.graphqlService
-                        .sendQuery(
-                            '{\n            me {\n                cart {\n                    cart_total\n                }\n            }\n        }',
-                            e,
-                        )
-                        .then(e => {
-                            let t = localStorage.getItem('currency');
-                            return (
-                                t || (t = localStorage.getItem('default_currency')),
-                                i()('#checkout-cart-total').html(`${e.data.me.cart.cart_total / 100} ${t}`),
-                                e
+            }
+            setUpShopConfig() {
+                var e = localStorage.getItem('userToken');
+                return this.graphqlService
+                    .sendQuery(
+                        '\n            query {\n                shopConfig {\n                    enabled_currencies\n                    default_currency\n                }\n            }\n        ',
+                        e,
+                    )
+                    .then(e => {
+                        e.data.shopConfig.enabled_currencies.forEach(e => {
+                            o()('#available-currencies').append(
+                                `<li><a href='#' class='available-currency' data-currency="${e}">${e}</a></li>`,
                             );
-                        })
-                        .catch(e => {
-                            console.log(e);
-                        });
-                }
-                displayLineItems() {
-                    return this.cart.viewProductsInCart().then(e => {
-                        try {
-                            let t = e.errors[0].debugMessage;
-                            console.log(t);
-                        } catch {
-                            let t = e.data.me.cart.items;
-                            t && t.length > 0
-                                ? this.cart.lookupProductsInCart(t).then(e => {
-                                      let t = localStorage.getItem('currency');
-                                      t || (t = localStorage.getItem('default_currency')),
-                                          e.forEach(e => {
-                                              i()('#table-body-line-item').append(
-                                                  i()(
-                                                      `<tr>\n                                    <td>${
-                                                          e.title
-                                                      }</td>\n                                    <td>${
-                                                          e.quantity
-                                                      }</td>\n                                    <td>${e.price_cents /
-                                                          100} ${t}</td>\n                                </tr>`,
-                                                  ),
-                                              );
-                                          });
-                                  })
-                                : i()('.checkout-container').html(errorTemplate('No products in cart.'));
-                        }
-                        return e;
+                        }),
+                            o()('.available-currency').on('click', this.changeUserCurrency.bind(this)),
+                            localStorage.setItem('default_currency', e.data.shopConfig.default_currency);
                     });
-                }
-            })(d, h);
-        f.setupUser(),
-            f.setUpShopConfig(),
-            f.setUpSessionData(),
-            l.includes('shop') && p.getAllProducts(),
-            l.includes('cart') && h.viewProductsInCart(),
-            l.includes('checkout') && (g.getBasketTotal(), g.displayLineItems(), g.checkout());
+            }
+            setUpGeoLocation() {
+                var e = localStorage.getItem('userToken');
+                return this.graphqlService
+                    .sendQuery(
+                        '\n            mutation {\n                setSessionGeoLocation {\n                    geolocation_record\n                }\n            }\n        ',
+                        e,
+                    )
+                    .then(e => {
+                        let t = e.errors[0].debugMessage;
+                        t
+                            ? console.log(t)
+                            : localStorage.setItem(
+                                  'setSessionGeoLocation',
+                                  e.data.setSessionGeoLocation.geolocation_record,
+                              );
+                    });
+            }
+            changeUserCurrency(e) {
+                var t = localStorage.getItem('userToken');
+                let n = `\n            mutation {\n                setSessionCurrency(input: {\n                    currency: "${o()(
+                    e.target,
+                ).attr(
+                    'data-currency',
+                )}"\n                }){\n                    currency\n                }\n            }\n        `;
+                return this.graphqlService.sendQuery(n, t).then(e => {
+                    try {
+                        let t = e.errors[0].debugMessage;
+                        console.log(t);
+                    } catch {
+                        localStorage.setItem('currency', e.data.setSessionCurrency.currency), location.reload(!0);
+                    }
+                });
+            }
+            setupUser() {
+                let e = new i(this.graphqlService);
+                e.checkIfTokenInLocalStorage()
+                    ? e.checkTokenExistsInDatabase().then(t => {
+                          try {
+                              'Cannot return null for non-nullable field Session.id.' == t.errors[0].debugMessage &&
+                                  e.createSession();
+                          } catch (e) {}
+                      })
+                    : e.createSession();
+            }
+        }
+    },
+    function(e, t, n) {
+        'use strict';
+        n.r(t),
+            function(e) {
+                var t = n(3),
+                    r = n(4),
+                    o = n(6),
+                    i = n(5),
+                    a = n(7),
+                    s = e('#loadingDiv').hide();
+                e(document)
+                    .ajaxStart(function() {
+                        s.show();
+                    })
+                    .ajaxStop(function() {
+                        s.hide();
+                    });
+                let u = window.location.pathname,
+                    c = new i.a(),
+                    l = new a.a(c),
+                    f = new t.a(c),
+                    d = new r.a(f, c),
+                    p = new o.a(c, d);
+                l.setupUser(),
+                    l.setUpShopConfig(),
+                    l.setUpSessionData(),
+                    u.includes('shop') && f.getAllProducts(),
+                    u.includes('cart') && d.viewProductsInCart(),
+                    u.includes('checkout') && (p.getBasketTotal(), p.displayLineItems(), p.checkout());
+            }.call(this, n(0));
     },
 ]);

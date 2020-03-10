@@ -1,5 +1,6 @@
 const path = require('path');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
     entry: './src/resources/js/gernzy.js',
@@ -13,9 +14,9 @@ module.exports = {
                 copy: [{ source: './src/resources/js/dist/gernzy.js', destination: '../../../public/js' }],
             },
         }),
-        // new webpack.ProvidePlugin({
-        //     $: 'jquery',
-        //     jQuery: 'jquery',
-        // }),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+        }),
     ],
 };
