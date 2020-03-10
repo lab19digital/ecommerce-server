@@ -26,7 +26,6 @@ class AdminClientSeeder extends Seeder
 
         // The admin client may already exist, so I am doing a firstOr to check if exist and if not create admin client
         $user = User::where('email', $email)->firstOr(function () use ($userName, $email, $password) {
-            print 'user not found';
             $user = User::create([
                 'name' => $userName,
                 'email' => $email,
