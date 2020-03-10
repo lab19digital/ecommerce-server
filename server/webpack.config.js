@@ -4,6 +4,8 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: './src/resources/js/gernzy.js',
+    mode: 'development',
+    devtool: 'inline-source-map',
     output: {
         filename: 'gernzy.js',
         path: path.resolve(__dirname, './src/resources/js/dist'),
