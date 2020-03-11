@@ -28,10 +28,6 @@ class GernzyHookSystemTest extends TestCase
         // The third party developer will register Actions for an Event. These Actions will Listen
         // for the Event to fire and then execute.
 
-        // A global object keeping track of events
-        $eventService = new EventService();
-
-
         $eventService = EventService::triggerEvent($event = 1);
     }
 }

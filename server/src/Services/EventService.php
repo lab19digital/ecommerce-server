@@ -11,6 +11,6 @@ class EventService
     // Gernzy will fire this event at certain points in code
     public static function triggerEvent($event)
     {
-        print 'hello';
+        // Lookup in config
     }
 }

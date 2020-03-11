@@ -2,7 +2,7 @@
 
 namespace Gernzy\Server\Classes;
 
-class ActionClass
+class StripeBeforeCheckout
 {
     public function __construct()
     {
