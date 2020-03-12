@@ -2,6 +2,8 @@
 
 namespace Gernzy\Server\Services;
 
+use Gernzy\Server\Classes\ActionClass;
+
 interface ActionInterface
 {
     /**
@@ -9,5 +11,5 @@ interface ActionInterface
      *
      * @param string
      */
-    public function run();
+    public function run(ActionClass $action);
 }

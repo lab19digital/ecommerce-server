@@ -2,13 +2,19 @@
 
 namespace Gernzy\Server\Classes;
 
-class StripeBeforeCheckout
+use Gernzy\Server\Services\ActionInterface;
+
+class StripeBeforeCheckout implements ActionInterface
 {
     public function __construct()
     {
     }
 
-    public function sample()
+    public function run(ActionClass $action)
     {
+        // $data = $action->getOriginalData();
+        // $mod = $action->getModifiedData();
+        // $action->eventPreventDefault();
+        return $action;
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use Gernzy\Server\Classes\StripeBeforeCheckout;
 use Gernzy\Server\Listeners\AfterCheckout;
 use Gernzy\Server\Listeners\BeforeCheckout;
 

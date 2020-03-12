@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Services\EventService;
 use Gernzy\Server\Testing\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -28,6 +29,7 @@ class GernzyHookSystemTest extends TestCase
         // The third party developer will register Actions for an Event. These Actions will Listen
         // for the Event to fire and then execute.
 
-        $eventService = EventService::triggerEvent($event = 1);
+        // Trigger the event through EventService
+        $eventService = EventService::triggerEvent(BeforeCheckout::class);
     }
 }
