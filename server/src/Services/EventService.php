@@ -10,7 +10,13 @@ class EventService
     {
     }
 
-    public static function triggerEvent($event)
+    /**
+     * This is the main funtion to manage which actions should be executed
+     *
+     * @param string
+     * @param $var
+     */
+    public static function triggerEvent($event, $data = null)
     {
         // Lookup the event in config, and get action to set off
         $actions = config('events.' . $event);
@@ -26,7 +32,7 @@ class EventService
         // Loop through all the actions found, and call appropriate methods
         foreach ($actions as $action) {
             // This meta is keeping the name of each action that has interacted with the event.
-            $actionDataHolder->setMeta($action);
+            $actionDataHolder->setMeta($action, $data);
 
             // Fire up the actual action
             $actionInstance = new $action();

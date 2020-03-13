@@ -8,14 +8,26 @@ class ActionClass
     {
     }
 
-    public function setMeta($data)
+    public function setMeta($action, $data = null)
     {
-        $this->meta[get_class($data)] = $data;
+        array_push($this->meta, [
+            'action' => $action,
+            'data' => $data
+        ]);
     }
 
-    public function setData($data)
+    /**
+     * This is the main funtion used by third parties to attach data to the Action Place holder object
+     *
+     * @param string
+     * @param $var
+     */
+    public function attachData($action, $data)
     {
-        # code...
+        array_push($this->data, [
+            'action' => $action,
+            'data' => $data
+        ]);
     }
 
     public function getModifiedData()
