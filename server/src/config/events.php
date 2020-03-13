@@ -11,7 +11,7 @@ return [
     BeforeCheckout::class => [
         StripeBeforeCheckout::class
     ],
-    AfterCheckout::class => [
-        // StripeAfterCheckout::class
-    ]
+    // AfterCheckout::class => [
+    // StripeAfterCheckout::class
+    // ]
 ];

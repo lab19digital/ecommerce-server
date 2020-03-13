@@ -10,7 +10,12 @@ class ActionClass
 
     public function setMeta($data)
     {
-        $this->meta = $data;
+        $this->meta[get_class($data)] = $data;
+    }
+
+    public function setData($data)
+    {
+        # code...
     }
 
     public function getModifiedData()

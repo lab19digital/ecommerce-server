@@ -4,8 +4,12 @@ namespace Gernzy\Server\Listeners;
 
 class BeforeCheckout
 {
-    public function testFire($arg = null)
+    public function __construct()
     {
-        print 'BeforeCheckout event testFire()';
+    }
+
+    public function sampleFunction()
+    {
+        // # code...
     }
 }
