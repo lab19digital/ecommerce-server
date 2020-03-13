@@ -17,19 +17,16 @@ class GernzyHookSystemTest extends TestCase
     }
 
     /**
-     * A basic feature test example.
+     * Actions listen to an Event, so when an event is triggered, an Action that is listening
+     * to that event will also trigger. The third party developer will register Actions for an Event. These Actions will Listen
+     * for the Event to fire and then execute.
      *
      * @return void
      */
     public function testEventService()
     {
-        // Actions listen to an Event, so when an event is triggered, an Action that is listening
-        // to that event will also trigger
 
-        // The third party developer will register Actions for an Event. These Actions will Listen
-        // for the Event to fire and then execute.
-
-        // Trigger the event through EventService
+        // Trigger the event somewhere in code through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class);
     }
 }

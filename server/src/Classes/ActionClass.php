@@ -4,10 +4,11 @@ namespace Gernzy\Server\Classes;
 
 class ActionClass
 {
-    public function __construct()
+    public function __construct($dataOriginal = null)
     {
         $this->meta = [];
         $this->data = [];
+        $this->dataOriginal = $dataOriginal;
     }
 
     public function setMeta($action, $data = '')
@@ -34,11 +35,11 @@ class ActionClass
 
     public function getModifiedData()
     {
-        # code...
+        return $this->data;
     }
 
     public function getOriginalData()
     {
-        # code...
+        return $this->dataOriginal;
     }
 }

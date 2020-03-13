@@ -12,9 +12,14 @@ class StripeBeforeCheckout implements ActionInterface
 
     public function run(ActionClass $action)
     {
-        // $data = $action->getOriginalData();
-        // $mod = $action->getModifiedData();
+        $data = $action->getOriginalData();
+        $mod = $action->getModifiedData();
         // $action->eventPreventDefault();
         return $action;
+    }
+
+    public function preventDefault()
+    {
+        return true;
     }
 }

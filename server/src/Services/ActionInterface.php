@@ -7,9 +7,17 @@ use Gernzy\Server\Classes\ActionClass;
 interface ActionInterface
 {
     /**
-     * Sample function
+     * Main method executed on the action
      *
      * @param string
      */
     public function run(ActionClass $action);
+
+
+    /**
+     * Sample function
+     *
+     * @param string
+     */
+    public function preventDefault();
 }

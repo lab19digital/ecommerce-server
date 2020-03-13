@@ -41,10 +41,10 @@ class EventService
             $actionDataHolder = $actionInstance->run($actionDataHolder);
         }
 
-        // if (!$action->preventDefault()) {
-        //     // Do some default behaviour, e.g. redirecting to thank you page
-        // } else {
-        //     // Nothing happens
-        // }
+        if (!$action->preventDefault()) {
+            // Do some default behaviour, e.g. redirecting to thank you page
+        } else {
+            // Nothing happens
+        }
     }
 }
