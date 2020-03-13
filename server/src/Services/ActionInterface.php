@@ -12,12 +12,4 @@ interface ActionInterface
      * @param string
      */
     public function run(ActionClass $action);
-
-
-    /**
-     * Sample function
-     *
-     * @param string
-     */
-    public function preventDefault();
 }

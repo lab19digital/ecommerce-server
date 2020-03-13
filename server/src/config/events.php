@@ -9,9 +9,13 @@ use Gernzy\Server\Listeners\BeforeCheckout;
 return [
     // Add listeners to the beforecheckout event
     BeforeCheckout::class => [
-        StripeBeforeCheckout::class
+        // StripeBeforeCheckout::class,
+        // ...,
+        // ...
     ],
-    // AfterCheckout::class => [
-    // StripeAfterCheckout::class
-    // ]
+    AfterCheckout::class => [
+        // StripeAfterCheckout::class,
+        // ...,
+        // ...
+    ]
 ];

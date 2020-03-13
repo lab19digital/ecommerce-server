@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Gernzy\Server\Classes\StripeBeforeCheckout;
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Services\EventService;
 use Gernzy\Server\Testing\TestCase;
@@ -25,6 +26,8 @@ class GernzyHookSystemTest extends TestCase
      */
     public function testEventService()
     {
+        // Set actions for event
+        config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class]]);
 
         // Trigger the event somewhere in code through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class);

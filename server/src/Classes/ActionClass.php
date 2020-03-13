@@ -9,6 +9,7 @@ class ActionClass
         $this->meta = [];
         $this->data = [];
         $this->dataOriginal = $dataOriginal;
+        $this->eventPreventDefault = false;
     }
 
     public function setMeta($action, $data = '')
@@ -41,5 +42,10 @@ class ActionClass
     public function getOriginalData()
     {
         return $this->dataOriginal;
+    }
+
+    public function eventPreventDefault()
+    {
+        $this->eventPreventDefault = true;
     }
 }

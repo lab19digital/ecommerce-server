@@ -40,7 +40,7 @@ class EventService
             // Call the run function which receive the actionDataHolder and returns the modified version
             $actionDataHolder = $actionInstance->run($actionDataHolder);
 
-            if (!$actionInstance->preventDefault()) {
+            if (!$actionDataHolder->eventPreventDefault()) {
                 // Do some default behaviour, e.g. redirecting to thank you page
             } else {
                 // Nothing happens

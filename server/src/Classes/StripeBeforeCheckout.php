@@ -14,12 +14,7 @@ class StripeBeforeCheckout implements ActionInterface
     {
         $data = $action->getOriginalData();
         $mod = $action->getModifiedData();
-        // $action->eventPreventDefault();
+        $action->eventPreventDefault();
         return $action;
-    }
-
-    public function preventDefault()
-    {
-        return true;
     }
 }
