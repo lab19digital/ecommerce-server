@@ -6,9 +6,11 @@ class ActionClass
 {
     public function __construct()
     {
+        $this->meta = [];
+        $this->data = [];
     }
 
-    public function setMeta($action, $data = null)
+    public function setMeta($action, $data = '')
     {
         array_push($this->meta, [
             'action' => $action,
@@ -17,7 +19,7 @@ class ActionClass
     }
 
     /**
-     * This is the main funtion used by third parties to attach data to the Action Place holder object
+     * This is the main funtion used by third parties to attach data to the Action Place holder object, to be used by next package
      *
      * @param string
      * @param $var
