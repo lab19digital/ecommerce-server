@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use Gernzy\Server\Classes\BarBeforeCheckout;
+use Gernzy\Server\Classes\FooBeforeCheckout;
 use Gernzy\Server\Classes\StripeBeforeCheckout;
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Services\EventService;
@@ -27,9 +29,19 @@ class GernzyHookSystemTest extends TestCase
     public function testEventService()
     {
         // Set actions for event at run time, for testing purposes
-        config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class]]);
+        config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class, FooBeforeCheckout::class, BarBeforeCheckout::class]]);
 
         // Trigger the event somewhere in code through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class);
+
+        // All the actions that we're called
+        $actions = $eventService->getMeta();
+
+        // Prepare array for essertContains (flatten array)
+        $actions = array_column($actions, 'action');
+
+        $this->assertContains(StripeBeforeCheckout::class, $actions, "testArray doesn't contains value as value");
+        $this->assertContains(FooBeforeCheckout::class, $actions, "testArray doesn't contains value as value");
+        $this->assertContains(BarBeforeCheckout::class, $actions, "testArray doesn't contains value as value");
     }
 }

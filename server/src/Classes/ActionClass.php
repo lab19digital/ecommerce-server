@@ -38,6 +38,11 @@ class ActionClass
         ]);
     }
 
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+
     public function getModifiedData()
     {
         return $this->data;

@@ -46,5 +46,8 @@ class EventService
                 // Nothing happens
             }
         }
+
+        // in case history of event interaction is needed
+        return $actionDataHolder;
     }
 }
