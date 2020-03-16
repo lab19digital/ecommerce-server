@@ -29,10 +29,10 @@ class ActionClass
      * @param string
      * @param $var
      */
-    public function attachData($action = '', $data = [])
+    public function attachData($actionName, $data = [])
     {
         array_push($this->dataModified, [
-            'action' => $action,
+            'actionName' => $actionName,
             'data' => $data
         ]);
     }

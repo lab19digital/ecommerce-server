@@ -78,7 +78,7 @@ class GernzyHookSystemTest extends TestCase
         // Trigger the event somewhere in code through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class, $checkoutData);
 
-        $historyOfModifiedData = $eventService->getModifiedData();
+        $historyOfModifiedData = $eventService->getLastModifiedData();
 
         $historyOfAllModifiedData = $eventService->getAllModifiedData();
 

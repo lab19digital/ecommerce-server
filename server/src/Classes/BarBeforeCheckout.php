@@ -15,7 +15,7 @@ class BarBeforeCheckout implements ActionInterface
     {
         $data = $action->getLastModifiedData();
 
-        // At some third party specific data
+        // Add some third party specific data
         array_push($data, [
             'token' => Str::random(12),
             'date' => date("Y-m-d H:i:s")

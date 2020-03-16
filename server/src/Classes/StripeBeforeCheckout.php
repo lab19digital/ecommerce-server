@@ -15,7 +15,7 @@ class StripeBeforeCheckout implements ActionInterface
     {
         $data = $action->getOriginalData();
 
-        // At some third party specific data
+        // Add some third party specific data
         array_push($data, [
             'coupon' => Str::random(12),
             'date' => date("Y-m-d H:i:s")
