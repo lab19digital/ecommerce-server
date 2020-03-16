@@ -15,6 +15,7 @@ class FooBeforeCheckout implements ActionInterface
     {
         $data = $action->getModifiedData();
 
+        // At some third party specific data
         array_push($data, [
             'user_id_foo' => Str::random(12),
             'date' => date("Y-m-d H:i:s")

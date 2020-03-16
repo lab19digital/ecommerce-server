@@ -24,8 +24,8 @@ class ActionClass
     }
 
     /**
-     * This is the main funtion used by third parties to attach data to the Action Place holder object, to be used by next package
-     *
+     * This is the main funtion used by third parties to attach data to the Action Place holder object, to be used by next package.
+     * This data will be appended to the $dataModified array property of this object
      * @param string
      * @param $var
      */
@@ -42,6 +42,11 @@ class ActionClass
         return $this->meta;
     }
 
+    /**
+     * Returns the last element of the modified data array
+     * @param string
+     * @param $var
+     */
     public function getModifiedData()
     {
         $data = end($this->dataModified);

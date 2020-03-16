@@ -80,6 +80,9 @@ class GernzyHookSystemTest extends TestCase
 
         $historyOfModifiedData = $eventService->getModifiedData();
 
+        $historyOfAllModifiedData = $eventService->getAllModifiedData();
+
         $this->assertNotEmpty($historyOfModifiedData);
+        $this->assertNotEmpty($historyOfAllModifiedData);
     }
 }
