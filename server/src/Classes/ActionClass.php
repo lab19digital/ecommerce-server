@@ -47,7 +47,7 @@ class ActionClass
      * @param string
      * @param $var
      */
-    public function getModifiedData()
+    public function getLastModifiedData()
     {
         $data = end($this->dataModified);
         return $data['data'];

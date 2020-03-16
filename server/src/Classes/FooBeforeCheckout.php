@@ -13,7 +13,7 @@ class FooBeforeCheckout implements ActionInterface
 
     public function run(ActionClass $action)
     {
-        $data = $action->getModifiedData();
+        $data = $action->getLastModifiedData();
 
         // At some third party specific data
         array_push($data, [
@@ -23,7 +23,7 @@ class FooBeforeCheckout implements ActionInterface
 
         $action->attachData(FooBeforeCheckout::class, $data);
 
-        $mod = $action->getModifiedData();
+        $mod = $action->getLastModifiedData();
 
         $action->eventPreventDefault();
 

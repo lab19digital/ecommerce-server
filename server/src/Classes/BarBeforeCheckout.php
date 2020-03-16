@@ -13,7 +13,7 @@ class BarBeforeCheckout implements ActionInterface
 
     public function run(ActionClass $action)
     {
-        $data = $action->getModifiedData();
+        $data = $action->getLastModifiedData();
 
         // At some third party specific data
         array_push($data, [
@@ -23,7 +23,7 @@ class BarBeforeCheckout implements ActionInterface
 
         $action->attachData(BarBeforeCheckout::class, $data);
 
-        $mod = $action->getModifiedData();
+        $mod = $action->getLastModifiedData();
 
         $action->eventPreventDefault();
 

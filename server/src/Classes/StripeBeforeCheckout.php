@@ -23,7 +23,7 @@ class StripeBeforeCheckout implements ActionInterface
 
         $action->attachData(StripeBeforeCheckout::class, $data);
 
-        $mod = $action->getModifiedData();
+        $mod = $action->getLastModifiedData();
 
         $action->eventPreventDefault();
 
