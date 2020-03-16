@@ -26,7 +26,7 @@ class GernzyHookSystemTest extends TestCase
      */
     public function testEventService()
     {
-        // Set actions for event
+        // Set actions for event at run time, for testing purposes
         config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class]]);
 
         // Trigger the event somewhere in code through EventService

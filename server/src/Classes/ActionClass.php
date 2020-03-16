@@ -4,6 +4,10 @@ namespace Gernzy\Server\Classes;
 
 class ActionClass
 {
+    public $meta;
+    public $data;
+    public $dataOriginal;
+
     public function __construct($dataOriginal = null)
     {
         $this->meta = [];
