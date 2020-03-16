@@ -44,6 +44,12 @@ class ActionClass
 
     public function getModifiedData()
     {
+        $data = end($this->data);
+        return $data['data'];
+    }
+
+    public function getAllModifiedData()
+    {
         return $this->data;
     }
 
