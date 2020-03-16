@@ -40,8 +40,46 @@ class GernzyHookSystemTest extends TestCase
         // Prepare array for essertContains (flatten array)
         $actions = array_column($actions, 'action');
 
-        $this->assertContains(StripeBeforeCheckout::class, $actions, "testArray doesn't contains value as value");
-        $this->assertContains(FooBeforeCheckout::class, $actions, "testArray doesn't contains value as value");
-        $this->assertContains(BarBeforeCheckout::class, $actions, "testArray doesn't contains value as value");
+        $this->assertContains(StripeBeforeCheckout::class, $actions, "actionsArray doesn't contain StripeBeforeCheckout");
+        $this->assertContains(FooBeforeCheckout::class, $actions, "actionsArray doesn't contain FooBeforeCheckout");
+        $this->assertContains(BarBeforeCheckout::class, $actions, "actionsArray doesn't contain BarBeforeCheckout");
+    }
+
+    public function testEventServiceWithData()
+    {
+        $checkoutData = [
+            "name" => "Luke",
+            "email" => "cart@example.com",
+            "telephone" => "082456748",
+            "mobile" => "08357684758",
+            "billing_address" => [
+                "line_1" => "1 London Way",
+                "line_2" => "",
+                "state" => "London",
+                "postcode" => "SW1A 1AA",
+                "country" => "UK"
+            ],
+            "shipping_address" => [
+                "line_1" => "1 London Way",
+                "line_2" => "",
+                "state" => "London",
+                "postcode" => "SW1A 1AA",
+                "country" => "UK"
+            ],
+            "use_shipping_for_billing" => true,
+            "payment_method" => "",
+            "agree_to_terms" => true,
+            "notes" => ""
+        ];
+
+        // Set actions for event at run time, for testing purposes
+        config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class, FooBeforeCheckout::class, BarBeforeCheckout::class]]);
+
+        // Trigger the event somewhere in code through EventService
+        $eventService = EventService::triggerEvent(BeforeCheckout::class, $checkoutData);
+
+        $historyOfModifiedData = $eventService->getModifiedData();
+
+        $this->assertNotEmpty($historyOfModifiedData);
     }
 }

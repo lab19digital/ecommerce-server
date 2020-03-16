@@ -4,9 +4,9 @@ namespace Gernzy\Server\Classes;
 
 class ActionClass
 {
-    public $meta;
-    public $data;
-    public $dataOriginal;
+    protected $meta;
+    protected $data;
+    protected $dataOriginal;
 
     public function __construct($dataOriginal = null)
     {
@@ -16,11 +16,10 @@ class ActionClass
         $this->eventPreventDefault = false;
     }
 
-    public function setMeta($action, $data = '')
+    public function setMeta($action)
     {
         array_push($this->meta, [
-            'action' => $action,
-            'data' => $data
+            'action' => $action
         ]);
     }
 
@@ -30,7 +29,7 @@ class ActionClass
      * @param string
      * @param $var
      */
-    public function attachData($action, $data)
+    public function attachData($action = null, $data)
     {
         array_push($this->data, [
             'action' => $action,
@@ -51,6 +50,11 @@ class ActionClass
     public function getOriginalData()
     {
         return $this->dataOriginal;
+    }
+
+    public function attachOriginalData($data)
+    {
+        $this->dataOriginal = $data;
     }
 
     public function eventPreventDefault()

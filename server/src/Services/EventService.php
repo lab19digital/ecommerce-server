@@ -16,7 +16,7 @@ class EventService
      * @param string
      * @param $var
      */
-    public static function triggerEvent($event, $data = '')
+    public static function triggerEvent($event, $data = null)
     {
         // Lookup the event in config, and get action to set off
         $actions = config('events.' . $event);
@@ -29,10 +29,13 @@ class EventService
         // registered for the event.
         $actionDataHolder = new ActionClass();
 
+        // Set the original data on the ActionDataHolder
+        $actionDataHolder->attachOriginalData($data);
+
         // Loop through all the actions found, and call appropriate methods
         foreach ($actions as $action) {
             // This meta is keeping the name of each action that has interacted with the event.
-            $actionDataHolder->setMeta($action, $data);
+            $actionDataHolder->setMeta($action);
 
             // Fire up the actual action
             $actionInstance = new $action();
@@ -40,6 +43,7 @@ class EventService
             // Call the run function which receive the actionDataHolder and returns the modified version
             $actionDataHolder = $actionInstance->run($actionDataHolder);
 
+            // Preventing defaults
             if (!$actionDataHolder->eventPreventDefault()) {
                 // Do some default behaviour, e.g. redirecting to thank you page
             } else {
