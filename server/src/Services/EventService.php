@@ -16,7 +16,7 @@ class EventService
      * @param string
      * @param $var
      */
-    public static function triggerEvent($event, $data = null)
+    public static function triggerEvent($event, $data = [])
     {
         // Lookup the event in config, and get action to set off
         $actions = config('events.' . $event);

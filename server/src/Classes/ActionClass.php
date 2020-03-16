@@ -5,13 +5,13 @@ namespace Gernzy\Server\Classes;
 class ActionClass
 {
     protected $meta;
-    protected $data;
-    protected $dataOriginal;
+    protected $dataModified = [];
+    protected $dataOriginal = [];
 
     public function __construct($dataOriginal = null)
     {
         $this->meta = [];
-        $this->data = [];
+        $this->dataModified = [];
         $this->dataOriginal = $dataOriginal;
         $this->eventPreventDefault = false;
     }
@@ -29,9 +29,9 @@ class ActionClass
      * @param string
      * @param $var
      */
-    public function attachData($action = null, $data)
+    public function attachData($action = '', $data = [])
     {
-        array_push($this->data, [
+        array_push($this->dataModified, [
             'action' => $action,
             'data' => $data
         ]);
@@ -44,13 +44,13 @@ class ActionClass
 
     public function getModifiedData()
     {
-        $data = end($this->data);
+        $data = end($this->dataModified);
         return $data['data'];
     }
 
     public function getAllModifiedData()
     {
-        return $this->data;
+        return $this->dataModified;
     }
 
     public function getOriginalData()
