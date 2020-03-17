@@ -16,6 +16,9 @@ class ActionClass
         $this->eventPreventDefault = false;
     }
 
+    /**
+     * Set the meta of the action object, which is the name of the actions that are configure to fire on the event.
+     */
     public function setMeta($action)
     {
         array_push($this->meta, [
@@ -53,16 +56,25 @@ class ActionClass
         return $data['data'];
     }
 
+    /**
+     * Returns the entire modified data array
+     */
     public function getAllModifiedData()
     {
         return $this->dataModified;
     }
 
+    /**
+     * Returns the original data attached at the creation of the event. This data should not be modified by third parties
+     */
     public function getOriginalData()
     {
         return $this->dataOriginal;
     }
 
+    /**
+     * Set the original data attached from the event
+     */
     public function attachOriginalData($data)
     {
         $this->dataOriginal = $data;

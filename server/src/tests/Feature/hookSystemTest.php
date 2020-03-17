@@ -31,7 +31,7 @@ class GernzyHookSystemTest extends TestCase
         // Set actions for event at run time, for testing purposes
         config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class, FooBeforeCheckout::class, BarBeforeCheckout::class]]);
 
-        // Trigger the event somewhere in code through EventService
+        // Trigger the event through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class);
 
         // All the actions that we're called
@@ -40,6 +40,7 @@ class GernzyHookSystemTest extends TestCase
         // Prepare array for essertContains (flatten array)
         $actions = array_column($actions, 'action');
 
+        // Check that action names were added to the meta
         $this->assertContains(StripeBeforeCheckout::class, $actions, "actionsArray doesn't contain StripeBeforeCheckout");
         $this->assertContains(FooBeforeCheckout::class, $actions, "actionsArray doesn't contain FooBeforeCheckout");
         $this->assertContains(BarBeforeCheckout::class, $actions, "actionsArray doesn't contain BarBeforeCheckout");
@@ -47,6 +48,7 @@ class GernzyHookSystemTest extends TestCase
 
     public function testEventServiceWithData()
     {
+        // Some arbitrary data used as an example of what a third party may need, and then change
         $checkoutData = [
             "name" => "Luke",
             "email" => "cart@example.com",
@@ -75,7 +77,7 @@ class GernzyHookSystemTest extends TestCase
         // Set actions for event at run time, for testing purposes
         config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class, FooBeforeCheckout::class, BarBeforeCheckout::class]]);
 
-        // Trigger the event somewhere in code through EventService
+        // Trigger the event through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class, $checkoutData);
 
         $historyOfModifiedData = $eventService->getLastModifiedData();
