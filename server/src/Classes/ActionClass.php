@@ -2,6 +2,8 @@
 
 namespace Gernzy\Server\Classes;
 
+use Gernzy\Server\Exceptions\GernzyException;
+
 class ActionClass
 {
     protected $meta;
@@ -34,6 +36,17 @@ class ActionClass
      */
     public function attachData($actionName, $data = [])
     {
+
+        // Interface the action must implement
+        $interfaces = class_implements($actionName);
+
+        if (!isset($interfaces['Gernzy\Server\Services\ActionInterface'])) {
+            throw new GernzyException(
+                'The provided class does not implement Gernzy\Server\Services\ActionInterface.',
+                'Please provide the appropriate class name.'
+            );
+        }
+
         array_push($this->dataModified, [
             'actionName' => $actionName,
             'data' => $data
