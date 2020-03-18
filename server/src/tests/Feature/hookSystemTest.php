@@ -88,14 +88,14 @@ class GernzyHookSystemTest extends TestCase
         if (!$eventService->isEventPreventDefault()) {
         }
 
-        // Check that the last element of the array contains modified data
+        // Check that the last element of the array contains modified data from each action that associated
         $lastModifiedData = $eventService->getLastModifiedData();
         $this->assertNotEmpty($lastModifiedData);
         $this->assertArrayHasKey('coupon', $lastModifiedData[0]);
         $this->assertArrayHasKey('user_id_foo', $lastModifiedData[1]);
         $this->assertArrayHasKey('token_bar', $lastModifiedData[2]);
 
-        // Check that the 'history' array contains modified data
+        // Check that the 'history' array contains modified data  from each action that associated
         $historyOfAllModifiedData = $eventService->getAllModifiedData();
         $this->assertNotEmpty($historyOfAllModifiedData);
         $this->assertEquals(3, count($historyOfAllModifiedData));
