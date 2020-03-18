@@ -40,6 +40,7 @@ class ActionClass
         // Interface the action must implement
         $interfaces = class_implements($actionName);
 
+        // Check if the interface exists on the class
         if (!isset($interfaces['Gernzy\Server\Services\ActionInterface'])) {
             throw new GernzyException(
                 'The provided class does not implement Gernzy\Server\Services\ActionInterface.',
