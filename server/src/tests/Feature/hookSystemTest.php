@@ -34,6 +34,10 @@ class GernzyHookSystemTest extends TestCase
         // Trigger the event through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class);
 
+        // Preventing defaults
+        if (!$eventService->isEventPreventDefault()) {
+        }
+
         // All the actions that we're called
         $actions = $eventService->getMeta();
 
@@ -79,6 +83,10 @@ class GernzyHookSystemTest extends TestCase
 
         // Trigger the event through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class, $checkoutData);
+
+        // Preventing defaults
+        if (!$eventService->isEventPreventDefault()) {
+        }
 
         $historyOfModifiedData = $eventService->getLastModifiedData();
 

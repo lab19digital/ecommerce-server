@@ -84,4 +84,9 @@ class ActionClass
     {
         $this->eventPreventDefault = true;
     }
+
+    public function isEventPreventDefault()
+    {
+        return $this->eventPreventDefault;
+    }
 }
