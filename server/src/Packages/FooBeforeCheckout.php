@@ -1,7 +1,8 @@
 <?php
 
-namespace Gernzy\Server\Classes;
+namespace Gernzy\Server\Packages;
 
+use Gernzy\Server\Classes\ActionClass;
 use Gernzy\Server\Services\ActionInterface;
 use Illuminate\Support\Str;
 

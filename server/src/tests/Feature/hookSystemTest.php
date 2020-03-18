@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Gernzy\Server\Classes\BarBeforeCheckout;
-use Gernzy\Server\Classes\FooBeforeCheckout;
-use Gernzy\Server\Classes\StripeBeforeCheckout;
 use Gernzy\Server\Listeners\BeforeCheckout;
+use Gernzy\Server\Packages\BarBeforeCheckout;
+use Gernzy\Server\Packages\FooBeforeCheckout;
+use Gernzy\Server\Packages\StripeBeforeCheckout;
 use Gernzy\Server\Services\EventService;
 use Gernzy\Server\Testing\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -88,11 +88,10 @@ class GernzyHookSystemTest extends TestCase
         if (!$eventService->isEventPreventDefault()) {
         }
 
-        $historyOfModifiedData = $eventService->getLastModifiedData();
+        $lastModifiedData = $eventService->getLastModifiedData();
+        $this->assertNotEmpty($lastModifiedData);
 
         $historyOfAllModifiedData = $eventService->getAllModifiedData();
-
-        $this->assertNotEmpty($historyOfModifiedData);
         $this->assertNotEmpty($historyOfAllModifiedData);
     }
 }

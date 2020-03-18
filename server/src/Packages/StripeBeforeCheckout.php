@@ -1,11 +1,12 @@
 <?php
 
-namespace Gernzy\Server\Classes;
+namespace Gernzy\Server\Packages;
 
+use Gernzy\Server\Classes\ActionClass;
 use Gernzy\Server\Services\ActionInterface;
 use Illuminate\Support\Str;
 
-class BarBeforeCheckout implements ActionInterface
+class StripeBeforeCheckout implements ActionInterface
 {
     public function __construct()
     {
@@ -13,15 +14,15 @@ class BarBeforeCheckout implements ActionInterface
 
     public function run(ActionClass $action)
     {
-        $data = $action->getLastModifiedData();
+        $data = $action->getOriginalData();
 
         // Add some third party specific data
         array_push($data, [
-            'token' => Str::random(12),
+            'coupon' => Str::random(12),
             'date' => date("Y-m-d H:i:s")
         ]);
 
-        $action->attachData(BarBeforeCheckout::class, $data);
+        $action->attachData(StripeBeforeCheckout::class, $data);
 
         $mod = $action->getLastModifiedData();
 
