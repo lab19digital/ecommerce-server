@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Packages\BarBeforeCheckout;
+use Gernzy\Server\Packages\ExamplePackage\Actions\ExampleBeforeCheckout;
 use Gernzy\Server\Packages\FooBeforeCheckout;
 use Gernzy\Server\Packages\StripeBeforeCheckout;
 use Gernzy\Server\Services\EventService;
@@ -102,5 +103,52 @@ class GernzyHookSystemTest extends TestCase
         $this->assertArrayHasKey('coupon', $historyOfAllModifiedData[0]['data'][0]);
         $this->assertArrayHasKey('user_id_foo', $historyOfAllModifiedData[1]['data'][1]);
         $this->assertArrayHasKey('token_bar', $historyOfAllModifiedData[2]['data'][2]);
+    }
+
+
+    public function testExamplePackageProvider()
+    {
+        // Some arbitrary data used as an example of what a third party may need, and then change
+        $checkoutData = [
+            "name" => "Luke",
+            "email" => "cart@example.com",
+            "telephone" => "082456748",
+            "mobile" => "08357684758",
+            "billing_address" => [
+                "line_1" => "1 London Way",
+                "line_2" => "",
+                "state" => "London",
+                "postcode" => "SW1A 1AA",
+                "country" => "UK"
+            ],
+            "shipping_address" => [
+                "line_1" => "1 London Way",
+                "line_2" => "",
+                "state" => "London",
+                "postcode" => "SW1A 1AA",
+                "country" => "UK"
+            ],
+            "use_shipping_for_billing" => true,
+            "payment_method" => "",
+            "agree_to_terms" => true,
+            "notes" => ""
+        ];
+
+        // Set actions for event at run time, for testing purposes
+        config(['events.' . BeforeCheckout::class => [ExampleBeforeCheckout::class]]);
+
+        // Trigger the event through EventService
+        $eventService = EventService::triggerEvent(BeforeCheckout::class, $checkoutData);
+
+        // Check that the last element of the array contains modified data from each action that associated
+        $lastModifiedData = $eventService->getLastModifiedData();
+        $this->assertNotEmpty($lastModifiedData);
+        $this->assertArrayHasKey('token_bar', $lastModifiedData[2]);
+
+        // Check that the 'history' array contains modified data  from each action that associated
+        $historyOfAllModifiedData = $eventService->getAllModifiedData();
+        $this->assertNotEmpty($historyOfAllModifiedData);
+        $this->assertEquals(3, count($historyOfAllModifiedData));
+        $this->assertArrayHasKey('example_token', $historyOfAllModifiedData[2]['data'][2]);
     }
 }
