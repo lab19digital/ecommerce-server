@@ -2,6 +2,7 @@
 
 namespace Gernzy\Server\Testing;
 
+use Gernzy\Server\Testing\Seeds\UsersSeeder;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -10,7 +11,6 @@ use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestResponse;
-use Gernzy\Server\Testing\Seeds\UsersSeeder;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
@@ -41,7 +41,7 @@ abstract class TestCase extends BaseTestCase
     {
         // Setup required packages
         return [
-            'Gernzy\\Server\\GernzyServiceProvider',
+            'Gernzy\\Server\\GernzyServiceProvider'
         ];
     }
 

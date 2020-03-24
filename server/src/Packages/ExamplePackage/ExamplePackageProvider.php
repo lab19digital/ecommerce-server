@@ -2,6 +2,8 @@
 
 namespace Gernzy\Server\Packages\ExamplePackage;
 
+use Gernzy\Server\Exceptions\GernzyException;
+use Gernzy\Server\Listeners\BeforeCheckout;
 use Illuminate\Support\ServiceProvider;
 
 class ExamplePackageProvider extends ServiceProvider
@@ -26,6 +28,13 @@ class ExamplePackageProvider extends ServiceProvider
     public function boot()
     {
         // Example check if corresponding Event listener exists
-        $events = config(['events']);
+        $events = config('events');
+
+        if (isset($events) && !array_key_exists(BeforeCheckout::class, $events) && !class_exists(BeforeCheckout::class)) {
+            throw new GernzyException(
+                'The Event listener does not exist.',
+                'Please make sure the file exists in src/Listeners and the event is mapped in config/events.php.'
+            );
+        }
     }
 }
