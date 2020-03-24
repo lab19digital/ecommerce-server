@@ -3,12 +3,15 @@
 namespace Gernzy\Server\Packages\ExamplePackage;
 
 use Gernzy\Server\Exceptions\GernzyException;
+use Gernzy\Server\GernzyServiceProvider;
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Packages\ExamplePackage\Actions\ExampleBeforeCheckout;
-use Illuminate\Support\ServiceProvider;
 
-class ExamplePackageProvider extends ServiceProvider
+class ExamplePackageProvider extends GernzyServiceProvider
 {
+    public $requiredActions = [
+        BeforeCheckout::class
+    ];
     /**
      * Register any application services.
      *

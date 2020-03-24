@@ -134,4 +134,21 @@ class GernzyServiceProvider extends ServiceProvider
         // Register observable for the cart model
         Cart::observe(CartObserver::class);
     }
+
+    public function validateConfig()
+    {
+        // Example check if corresponding Event exists
+        $events = config('events');
+
+
+        foreach ($this->requiredActions as $action) {
+            // Check if config has values and the appropriate Event is present
+            if (isset($events) && !array_key_exists(BeforeCheckout::class, $events) && !class_exists(BeforeCheckout::class)) {
+                throw new GernzyException(
+                    'The Event listener does not exist.',
+                    'Please make sure the file exists in src/Listeners and the event is mapped in config/events.php.'
+                );
+            }
+        }
+    }
 }
