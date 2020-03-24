@@ -3,6 +3,7 @@
 namespace Gernzy\Server;
 
 use Fruitcake\Cors\CorsServiceProvider as CorsServiceProvider;
+use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\Cart;
 use Gernzy\Server\Observers\CartObserver;
 use Gernzy\Server\Services\CartService;
@@ -141,9 +142,9 @@ class GernzyServiceProvider extends ServiceProvider
         $events = config('events');
 
 
-        foreach ($this->requiredActions as $action) {
+        foreach ($this->requiredEvents as $action) {
             // Check if config has values and the appropriate Event is present
-            if (isset($events) && !array_key_exists(BeforeCheckout::class, $events) && !class_exists(BeforeCheckout::class)) {
+            if (isset($events) && !array_key_exists($action, $events) && !class_exists($action)) {
                 throw new GernzyException(
                     'The Event listener does not exist.',
                     'Please make sure the file exists in src/Listeners and the event is mapped in config/events.php.'
