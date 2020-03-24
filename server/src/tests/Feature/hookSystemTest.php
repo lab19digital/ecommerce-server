@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Packages\BarBeforeCheckout;
-use Gernzy\Server\Packages\ExamplePackage\Actions\ExampleBeforeCheckout;
 use Gernzy\Server\Packages\FooBeforeCheckout;
 use Gernzy\Server\Packages\StripeBeforeCheckout;
 use Gernzy\Server\Services\EventService;
@@ -133,9 +132,6 @@ class GernzyHookSystemTest extends TestCase
             "agree_to_terms" => true,
             "notes" => ""
         ];
-
-        // Set actions for event at run time, for testing purposes
-        config(['events.' . BeforeCheckout::class => [ExampleBeforeCheckout::class]]);
 
         // Trigger the event through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class, $checkoutData);

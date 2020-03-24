@@ -2,6 +2,9 @@
 
 namespace Gernzy\Server\Testing;
 
+use Gernzy\Server\Listeners\BeforeCheckout;
+use Gernzy\Server\Packages\ExamplePackage\Actions\ExampleBeforeCheckout;
+use Gernzy\Server\Packages\ExamplePackage\ExamplePackageProvider;
 use Gernzy\Server\Testing\Seeds\UsersSeeder;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -24,6 +27,9 @@ abstract class TestCase extends BaseTestCase
 
     protected function getEnvironmentSetUp($app)
     {
+        // Map an Event to an Action at run time in config, for use by the ExamplePackageProvider.php
+        config(['events.' . BeforeCheckout::class => [ExampleBeforeCheckout::class]]);
+
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
@@ -41,7 +47,9 @@ abstract class TestCase extends BaseTestCase
     {
         // Setup required packages
         return [
-            'Gernzy\\Server\\GernzyServiceProvider'
+            'Gernzy\\Server\\GernzyServiceProvider',
+            // Pull in the ExamplePackageProvider
+            ExamplePackageProvider::class
         ];
     }
 

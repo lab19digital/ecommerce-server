@@ -28,10 +28,10 @@ class ExamplePackageProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Example check if corresponding Event listener exists
+        // Example check if corresponding Event exists
         $events = config('events');
 
-        // Check if config has values and the appropriate Listener is present
+        // Check if config has values and the appropriate Event is present
         if (isset($events) && !array_key_exists(BeforeCheckout::class, $events) && !class_exists(BeforeCheckout::class)) {
             throw new GernzyException(
                 'The Event listener does not exist.',
@@ -39,9 +39,12 @@ class ExamplePackageProvider extends ServiceProvider
             );
         }
 
-        // Now check if correct action is mapped to the listener
-        $action = config('events.' . BeforeCheckout::class);
-        if (!isset($action) && $action != ExampleBeforeCheckout::class) {
+        // Now check if the correct Action is mapped to the listener
+        $actions = config('events.' . BeforeCheckout::class);
+
+        $action_exists = in_array(ExampleBeforeCheckout::class, $actions);
+
+        if (!$action_exists) {
             throw new GernzyException(
                 'The Action does not exist.',
                 'Please make sure the file exists in src/Listeners and the event is mapped in config/events.php.'
