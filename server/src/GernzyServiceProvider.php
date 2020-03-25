@@ -141,10 +141,9 @@ class GernzyServiceProvider extends ServiceProvider
         // Example check if corresponding Event exists
         $events = config('events');
 
-
-        foreach ($this->requiredEvents as $action) {
+        foreach ($this->requiredEvents as $event) {
             // Check if config has values and the appropriate Event is present
-            if (isset($events) && !array_key_exists($action, $events) && !class_exists($action)) {
+            if (empty($events) || !array_key_exists($event, $events) || !class_exists($event)) {
                 throw new GernzyException(
                     'The Event listener does not exist.',
                     'Please make sure the file exists in src/Listeners and the event is mapped in config/events.php.'
