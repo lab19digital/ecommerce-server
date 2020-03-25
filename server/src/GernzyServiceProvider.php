@@ -138,7 +138,7 @@ class GernzyServiceProvider extends ServiceProvider
 
     public function validateConfig()
     {
-        // Example check if corresponding Event exists
+        // Get events from config
         $events = config('events');
 
         foreach ($this->requiredEvents as $event) {
