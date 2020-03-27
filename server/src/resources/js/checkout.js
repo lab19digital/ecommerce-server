@@ -1,10 +1,12 @@
 import successTemplate from './templates/successTemplate';
+import stripeFormTemplate from './templates/stripeFormTemplate';
 import $ from 'jquery';
 
 class Checkout {
-    constructor(graphqlService, cart = null) {
+    constructor(graphqlService, cart = null, stripe) {
         this.graphqlService = graphqlService;
         this.cart = cart;
+        this.stripe = stripe;
     }
 
     checkout() {
@@ -68,6 +70,10 @@ class Checkout {
             .sendQuery(query, userToken)
             .then(re => {
                 $('.checkout-container').html(successTemplate);
+
+                // Now display payment
+                $('.checkout-container').html(stripeFormTemplate);
+
                 return re;
             })
             .catch(error => {
