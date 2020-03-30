@@ -69,10 +69,12 @@ class Checkout {
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
-                $('.checkout-container').html(successTemplate);
+                $('.checkout-container').html(successTemplate('Your details have been submitted.'));
 
                 // Now display payment
                 $('.checkout-container').html(stripeFormTemplate);
+                this.stripe.formLoaded();
+                this.stripe.formSubmitListener();
 
                 return re;
             })

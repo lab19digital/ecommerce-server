@@ -1,0 +1,3 @@
+extend type Query {
+    getStripeSecret: String @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\Checkout@getStripeSecret")
+}

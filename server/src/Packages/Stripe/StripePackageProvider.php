@@ -1,11 +1,11 @@
 <?php
 
-namespace Gernzy\Server\Packages\ExamplePackage;
+namespace Gernzy\Server\Packages\StripePackage;
 
 use Gernzy\Server\GernzyServiceProvider;
 use Gernzy\Server\Listeners\BeforeCheckout;
 
-class ExamplePackageProvider extends GernzyServiceProvider
+class StripePackageProvider extends GernzyServiceProvider
 {
     public $requiredEvents = [
         BeforeCheckout::class
@@ -21,6 +21,9 @@ class ExamplePackageProvider extends GernzyServiceProvider
         $this->app->bind('foo', function ($app) {
             // return new Bar();
         });
+
+        // Make cache config publishment optional by merging the config from the package.
+        $this->mergeConfigFrom(__DIR__ . '/config/events.php', 'events');
     }
 
     /**
@@ -32,5 +35,10 @@ class ExamplePackageProvider extends GernzyServiceProvider
     {
         // Check if Events are configured
         $this->validateConfig();
+
+        // Allow developers to override currency config
+        $this->publishes([
+            __DIR__ . '/config/events.php' => config_path('events.php'),
+        ]);
     }
 }

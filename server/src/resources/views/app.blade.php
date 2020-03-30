@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/js/uikit-icons.min.js"></script>
 
     <!-- Stripe -->
-    <!-- <script src="https://js.stripe.com/v3/"></script> -->
+    <script src="https://js.stripe.com/v3/"></script>
 
 
 </head>

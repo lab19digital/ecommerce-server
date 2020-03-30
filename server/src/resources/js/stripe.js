@@ -1,20 +1,24 @@
-class Stripe {
+import successTemplate from './templates/successTemplate';
+import $ from 'jquery';
+class StripeService {
     constructor(graphqlService) {
         this.graphqlService = graphqlService;
         this.stripe = Stripe('pk_test_U2JalAfKOyR5DHS7R4KFeJLh00AdOsjkgo');
         this.elements = this.stripe.elements();
+        this.card = '';
     }
 
-    createSession() {
-        let query = `mutation {
-            createSession {
-                token
-            }
+    getStripeSecret() {
+        let query = `query {
+            getStripeSecret
         }`;
 
+        let userToken = localStorage.getItem('userToken');
+
         return this.graphqlService
-            .sendQuery(query)
+            .sendQuery(query, userToken)
             .then(re => {
+                console.log(re);
                 return re;
             })
             .catch(error => {
@@ -32,6 +36,7 @@ class Stripe {
 
         var card = this.elements.create('card', { style: style });
         card.mount('#card-element');
+        this.card = card;
 
         card.addEventListener('change', ({ error }) => {
             const displayError = document.getElementById('card-errors');
@@ -45,13 +50,18 @@ class Stripe {
 
     formSubmitListener() {
         var form = document.getElementById('payment-form');
+        var self = this;
 
         form.addEventListener('submit', function(ev) {
             ev.preventDefault();
-            stripe
+
+            // Get the secret from backend
+            let clientSecret = self.getStripeSecret();
+
+            self.stripe
                 .confirmCardPayment(clientSecret, {
                     payment_method: {
-                        card: card,
+                        card: self.card,
                         billing_details: {
                             name: 'Jenny Rosen',
                         },
@@ -69,10 +79,11 @@ class Stripe {
                             // execution. Set up a webhook or plugin to listen for the
                             // payment_intent.succeeded event that handles any business critical
                             // post-payment actions.
+                            $('.checkout-container').html(successTemplate);
                         }
                     }
                 });
         });
     }
 }
-export { Stripe };
+export { StripeService };
