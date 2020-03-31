@@ -23,6 +23,9 @@ class Checkout
     public function getStripeSecret($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $sessionService = App::make('Gernzy\SessionService');
+        $cartService = App::make('Gernzy\ServerService');
+        $sessionData = $sessionService->get();
+        $cart = $cartService->getCart();
         // $me = $sessionService->getUser();
 
         // TODO:
@@ -34,8 +37,8 @@ class Checkout
             );
         } else {
             // Set off event
-            $eventService = EventService::triggerEvent(BeforeCheckout::class, $sessionService);
-            return (string) $eventService;
+            $eventService = EventService::triggerEvent(BeforeCheckout::class, ['cart' => $cart, 'session_data' => $sessionData]);
+            return json_encode($eventService->getLastModifiedData());
         }
     }
 }

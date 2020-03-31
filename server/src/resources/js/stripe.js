@@ -48,15 +48,12 @@ class StripeService {
         });
     }
 
-    formSubmitListener() {
+    formSubmitListener(clientSecret) {
         var form = document.getElementById('payment-form');
         var self = this;
 
         form.addEventListener('submit', function(ev) {
             ev.preventDefault();
-
-            // Get the secret from backend
-            let clientSecret = self.getStripeSecret();
 
             self.stripe
                 .confirmCardPayment(clientSecret, {

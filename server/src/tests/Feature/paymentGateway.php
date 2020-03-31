@@ -36,4 +36,17 @@ class PaymentGatewayTest extends TestCase
 
         $this->assertNotEmpty($intent);
     }
+
+    public function arggghhhh()
+    {
+        // Register service provider
+        // Registe event mapping
+        // Create session
+        // Add product to cart
+        // checkout
+        // Get stripe secret
+        $query = `query {
+            getStripeSecret
+        }`;
+    }
 }

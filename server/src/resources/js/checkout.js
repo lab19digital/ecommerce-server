@@ -66,6 +66,10 @@ class Checkout {
             }
         }`;
 
+        // Get the secret from backend
+        let clientSecret = this.stripe.getStripeSecret();
+        console.log(`The clientSecret ${clientSecret}`);
+
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
@@ -74,7 +78,7 @@ class Checkout {
                 // Now display payment
                 $('.checkout-container').html(stripeFormTemplate);
                 this.stripe.formLoaded();
-                this.stripe.formSubmitListener();
+                this.stripe.formSubmitListener(clientSecret);
 
                 return re;
             })

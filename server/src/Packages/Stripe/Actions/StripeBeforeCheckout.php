@@ -1,12 +1,11 @@
 <?php
 
-namespace Gernzy\Server\Packages\ExamplePackage\Actions;
+namespace Gernzy\Server\Packages\StripePackage\Actions;
 
 use Gernzy\Server\Classes\ActionClass;
 use Gernzy\Server\Services\ActionInterface;
-use Illuminate\Support\Str;
 
-class ExampleBeforeCheckout implements ActionInterface
+class StripeBeforeCheckout implements ActionInterface
 {
     public function __construct()
     {
@@ -16,9 +15,8 @@ class ExampleBeforeCheckout implements ActionInterface
     {
         $data = $action->getOriginalData();
 
-        // $me = $data->getUser();
+        $cart = $data[0];
 
-        // $me = $sessionService->getUser();
         // $cart = $me->cart();
         // $itemsTotal = $cart->calcCartTotal();
 
@@ -34,15 +32,14 @@ class ExampleBeforeCheckout implements ActionInterface
         //     'metadata' => ['integration_check' => 'accept_a_payment'],
         // ]);
 
-        // // Add some third party specific data
+        // Add some third party specific data
         // array_push($data, [
-        //     'example_token' => Str::random(12),
-        //     'example_date' => date("Y-m-d H:i:s")
+        //     'secret' => $cartTotal
         // ]);
 
-        // $action->attachData(ExampleBeforeCheckout::class, $data);
+        $action->attachData(StripeBeforeCheckout::class, ['cart' => $cart]);
 
         // return $action;
-        return 'hello from package' . $data;
+        return $action;
     }
 }
