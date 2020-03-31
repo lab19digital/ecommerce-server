@@ -23,7 +23,7 @@ class PaymentGatewayTest extends TestCase
     {
         // Set your secret key. Remember to switch to your live secret key in production!
         // See your keys here: https://dashboard.stripe.com/account/apikeys
-        \Stripe\Stripe::setApiKey('sk_test_FC4eAQOlFeVpzvvs5VVDeqVt00SdGW3dai');
+        \Stripe\Stripe::setApiKey('from_env');
 
 
         $intent = \Stripe\PaymentIntent::create([
