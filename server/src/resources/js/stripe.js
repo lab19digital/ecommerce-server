@@ -18,7 +18,6 @@ class StripeService {
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
-                console.log(re);
                 return re;
             })
             .catch(error => {
@@ -60,7 +59,7 @@ class StripeService {
                     payment_method: {
                         card: self.card,
                         billing_details: {
-                            name: 'Jenny Rosen',
+                            name: 'Bob Rosen',
                         },
                     },
                 })
@@ -76,7 +75,7 @@ class StripeService {
                             // execution. Set up a webhook or plugin to listen for the
                             // payment_intent.succeeded event that handles any business critical
                             // post-payment actions.
-                            $('.checkout-container').html(successTemplate);
+                            $('.checkout-container').html(successTemplate('Payment successful.' + result));
                         }
                     }
                 });
