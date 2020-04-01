@@ -1,6 +1,6 @@
 <?php
 
-namespace Stripe\Actions;
+namespace Gernzy\Server\Packages\Stripe\Actions;
 
 use Gernzy\Server\Classes\ActionClass;
 use Gernzy\Server\Services\ActionInterface;

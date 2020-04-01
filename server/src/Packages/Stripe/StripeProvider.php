@@ -1,10 +1,10 @@
 <?php
 
-namespace Stripe;
+namespace Gernzy\Server\Packages\Stripe;
 
 use Gernzy\Server\GernzyServiceProvider;
 use Gernzy\Server\Listeners\BeforeCheckout;
-use Stripe\Services\StripeService;
+use Gernzy\Server\Packages\Stripe\Services\StripeService;
 
 class StripeProvider extends GernzyServiceProvider
 {

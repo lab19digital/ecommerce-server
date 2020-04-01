@@ -1,6 +1,6 @@
 <?php
 
-namespace  Stripe\Services;
+namespace  Gernzy\Server\Packages\Stripe\Services;
 
 class StripeService
 {
@@ -10,6 +10,7 @@ class StripeService
 
     public function getSecret($amount, $currency)
     {
+        return $amount . ' ' . $currency . ' hello';
         // Set your secret key. Remember to switch to your live secret key in production!
         // See your keys here: https://dashboard.stripe.com/account/apikeys
         // This should live in .env through config
