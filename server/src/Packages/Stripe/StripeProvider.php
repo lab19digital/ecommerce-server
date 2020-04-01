@@ -1,11 +1,12 @@
 <?php
 
-namespace Gernzy\Server\Packages\StripePackage;
+namespace Stripe;
 
 use Gernzy\Server\GernzyServiceProvider;
 use Gernzy\Server\Listeners\BeforeCheckout;
+use Stripe\Services\StripeService;
 
-class StripePackageProvider extends GernzyServiceProvider
+class StripeProvider extends GernzyServiceProvider
 {
     public $requiredEvents = [
         BeforeCheckout::class
@@ -18,9 +19,8 @@ class StripePackageProvider extends GernzyServiceProvider
      */
     public function register()
     {
-        $this->app->bind('foo', function ($app) {
-            // return new Bar();
-        });
+        // Bind services
+        $this->app->bind('Stripe\StripeService', StripeService::class);
 
         // Make cache config publishment optional by merging the config from the package.
         $this->mergeConfigFrom(__DIR__ . '/config/events.php', 'events');

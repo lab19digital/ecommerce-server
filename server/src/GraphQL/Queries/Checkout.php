@@ -4,8 +4,6 @@ namespace Gernzy\Server\GraphQL\Queries;
 
 use \App;
 use Gernzy\Server\Exceptions\GernzyException;
-use Gernzy\Server\Listeners\BeforeCheckout;
-use Gernzy\Server\Services\EventService;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -24,21 +22,19 @@ class Checkout
     {
         $sessionService = App::make('Gernzy\SessionService');
         $cartService = App::make('Gernzy\ServerService');
-        $sessionData = $sessionService->get();
-        $cart = $cartService->getCart();
-        // $me = $sessionService->getUser();
 
-        // TODO:
-        // Should check if the user exists at this point? I.e if (!$me->id)
+
         if (empty($sessionService->get())) {
             throw new GernzyException(
-                'The data does not exist.',
+                'The session does not exist.',
                 'Please make sure the token is valid.'
             );
-        } else {
-            // Set off event
-            $eventService = EventService::triggerEvent(BeforeCheckout::class, ['cart' => $cart, 'session_data' => $sessionData]);
-            return json_encode($eventService->getLastModifiedData());
         }
+
+        $cartTotal = $cartService->getCartTotal();
+        $stripeService = App::make('Stripe\StripeService');
+        $secret = $stripeService->getSecret($cartTotal, 'usd');
+
+        return $secret;
     }
 }

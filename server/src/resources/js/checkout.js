@@ -68,7 +68,6 @@ class Checkout {
 
         // Get the secret from backend
         let clientSecret = this.stripe.getStripeSecret();
-        console.log(`The clientSecret ${clientSecret}`);
 
         return this.graphqlService
             .sendQuery(query, userToken)
