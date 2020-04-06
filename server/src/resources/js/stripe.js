@@ -75,7 +75,7 @@ class StripeService {
                             // execution. Set up a webhook or plugin to listen for the
                             // payment_intent.succeeded event that handles any business critical
                             // post-payment actions.
-                            $('.checkout-container').html(successTemplate('Payment successful.' + result));
+                            $('.checkout-container').html(successTemplate('Payment successful.'));
                         }
                     }
                 });

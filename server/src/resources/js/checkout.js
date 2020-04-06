@@ -78,14 +78,18 @@ class Checkout {
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
-                console.log('Checkout return: ' + JSON.stringify(re));
+                // This is the event data passed on from backend
+                let eventData = JSON.parse(re.data.checkout.event_data);
+
+                // Get stripe specific data from event data
+                let stripeSecretkey = eventData[0].data.stripe_data;
 
                 $('.checkout-container').html(successTemplate('Your details have been submitted.'));
 
                 // Now display payment
                 $('.checkout-container').html(stripeFormTemplate);
-                // this.stripe.formLoaded();
-                // this.stripe.formSubmitListener(self.clientSecret);
+                this.stripe.formLoaded();
+                this.stripe.formSubmitListener(stripeSecretkey);
 
                 return re;
             })
