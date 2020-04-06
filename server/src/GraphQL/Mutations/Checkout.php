@@ -2,13 +2,15 @@
 
 namespace Gernzy\Server\GraphQL\Mutations;
 
-use GraphQL\Type\Definition\ResolveInfo;
-use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use Nuwave\Lighthouse\Exceptions\GenericException;
-use Gernzy\Server\Services\CartService;
-use Gernzy\Server\Services\SessionService;
-use Gernzy\Server\Actions\CreateCheckout;
 use \App;
+use Gernzy\Server\Actions\CreateCheckout;
+use Gernzy\Server\Listeners\BeforeCheckout;
+use Gernzy\Server\Services\CartService;
+use Gernzy\Server\Services\EventService;
+use Gernzy\Server\Services\SessionService;
+use GraphQL\Type\Definition\ResolveInfo;
+use Nuwave\Lighthouse\Exceptions\GenericException;
+use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Checkout
 {
@@ -26,15 +28,22 @@ class Checkout
         $cartService = App::make(CartService::class);
         $sessionService = App::make(SessionService::class);
 
-        if( !$sessionService->exists() ){
+        if (!$sessionService->exists()) {
             return false;
         }
 
-        if( $cartService->hasItems() ){
+        if ($cartService->hasItems()) {
+            // Fire the before checkout event
+            $eventService = EventService::triggerEvent(BeforeCheckout::class);
+
+            // TODO: Should we pass all the data on at this point?
+            $eventServiceData = $eventService->getAllModifiedData();
+
             $createCheckout = App::make(CreateCheckout::class);
-            $order = $createCheckout->handle( $args['input'] );
+            $order = $createCheckout->handle($args['input']);
             return [
-                'order' => $order
+                'order' => $order,
+                'event_data' => json_encode($eventServiceData)
             ];
         } else {
             throw new GenericException(

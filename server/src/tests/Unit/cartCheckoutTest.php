@@ -1,14 +1,18 @@
 <?php
 
-    use Gernzy\Server\Testing\TestCase;
+namespace Tests\Unit;
 
-    /**
-     * @group Checkout
-     */
-    class TestCheckoutTest extends TestCase
-    {
+use Gernzy\Server\Models\Product;
+use Gernzy\Server\Testing\TestCase;
 
-        protected $checkoutMutation = '
+/**
+ * @group Checkout
+ */
+class TestCheckoutTest extends TestCase
+{
+    public $result;
+
+    protected $checkoutMutation = '
             mutation {
                 checkout(input: {
                     name: "Luke",
@@ -34,6 +38,7 @@
                     agree_to_terms: true,
                     notes: ""
                 }){
+                    event_data
                     order {
                         id
                     }
@@ -41,7 +46,7 @@
             }
         ';
 
-        protected $addToCartMutation = '
+    protected $addToCartMutation = '
             mutation {
                 addToCart(input: {
                         items: [
@@ -59,52 +64,68 @@
             }
         ';
 
-        public function setUp(): void
-        {
-            parent::setUp();
-        }
+    public function setUp(): void
+    {
+        parent::setUp();
 
-        public function testGuestCannotCheckoutWithoutSessionToken(): void
-        {
-            $response = $this->graphQL($this->checkoutMutation);
-            $response->assertSee('You need a session token');
-        }
+        // create products
+        $this->availableCount = 11;
 
-        public function testUserCannotCheckoutWithoutItemsInCart(): void
-        {
-            /** @var \Illuminate\Foundation\Testing\TestResponse $response */
-            $response = $this->graphQLWithSession($this->checkoutMutation);
-            $response->assertSee('Cannot checkout without items');
-        }
+        factory(Product::class, $this->availableCount)->create()->each(function ($product) {
+            $product->status = 'IN_STOCK';
+            $product->title = 'Coffee pod';
+            $product->published = 1;
+            $product->save();
+        });
 
-        public function testUserCanCheckoutWithItemsInCart(): void
-        {
-            /** @var \Illuminate\Foundation\Testing\TestResponse $response */
-            $response = $this->graphQLWithSession($this->addToCartMutation);
-            $response = $this->graphQLWithSession($this->checkoutMutation);
-            $response->assertDontSee('errors');
+        factory(Product::class, $this->availableCount + 10)->create()->each(function ($product) {
+            $product->status = 'OUT_OF_STOCK';
+            $product->save();
+        });
+    }
 
-            $result = $response->decodeResponseJson();
+    public function testGuestCannotCheckoutWithoutSessionToken(): void
+    {
+        $response = $this->graphQL($this->checkoutMutation);
+        $response->assertSee('You need a session token');
+    }
 
-            $response->assertJsonStructure([
-                'data' => [
-                    'checkout' => [
-                        'order' => [
-                            'id'
-                        ]
+    public function testUserCannotCheckoutWithoutItemsInCart(): void
+    {
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession($this->checkoutMutation);
+        $response->assertSee('Cannot checkout without items');
+    }
+
+    public function testUserCanCheckoutWithItemsInCart(): void
+    {
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession($this->addToCartMutation);
+        $response = $this->graphQLWithSession($this->checkoutMutation);
+        $response->assertDontSee('errors');
+
+        $result = $response->decodeResponseJson();
+        $this->result = $result;
+
+        $response->assertJsonStructure([
+            'data' => [
+                'checkout' => [
+                    'order' => [
+                        'id'
                     ]
                 ]
-            ]);
+            ]
+        ]);
 
-            $this->assertIsNumeric($result['data']['checkout']['order']['id']);
-        }
+        $this->assertIsNumeric($result['data']['checkout']['order']['id']);
+    }
 
-        public function testUserCartIsEmptyAfterCheckoutCompletes(): void
-        {
-            $this->testUserCanCheckoutWithItemsInCart();
+    public function testUserCartIsEmptyAfterCheckoutCompletes(): void
+    {
+        $this->testUserCanCheckoutWithItemsInCart();
 
-            /** @var \Illuminate\Foundation\Testing\TestResponse $response */
-            $response = $this->graphQLWithSession('
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
                 {
                     me {
                         cart {
@@ -118,27 +139,26 @@
                 }
             ');
 
-            $result = $response->decodeResponseJson();
+        $result = $response->decodeResponseJson();
 
-            $this->assertCount(0, $result['data']['me']['cart']['items']);
+        $this->assertCount(0, $result['data']['me']['cart']['items']);
+    }
 
-        }
+    /**
+     * @group Checkout1
+     */
+    public function testUserWithoutAccountCanCreateOrdersAndThenCreateAccountAndViewSavedOrder(): void
+    {
+        $this->graphQLWithSession($this->addToCartMutation);
+        $this->graphQLWithSession($this->checkoutMutation);
 
-        /**
-         * @group Checkout1
-         */
-        public function testUserWithoutAccountCanCreateOrdersAndThenCreateAccountAndViewSavedOrder(): void
-        {
-            $this->graphQLWithSession($this->addToCartMutation);
-            $this->graphQLWithSession($this->checkoutMutation);
+        $this->graphQLWithSession($this->addToCartMutation);
+        $this->graphQLWithSession($this->checkoutMutation);
 
-            $this->graphQLWithSession($this->addToCartMutation);
-            $this->graphQLWithSession($this->checkoutMutation);
+        $this->graphQLCreateAccountWithSession('order@example.com', 'password');
 
-            $this->graphQLCreateAccountWithSession('order@example.com', 'password');
-
-            /** @var \Illuminate\Foundation\Testing\TestResponse $response */
-            $response = $this->graphQLWithSession('
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
                 {
                     myOrders {
                         id
@@ -149,11 +169,10 @@
                 }
             ');
 
-            $result = $response->decodeResponseJson();
+        $result = $response->decodeResponseJson();
 
-            $response->assertDontSee('errors');
+        $response->assertDontSee('errors');
 
-            $this->assertCount(2, $result['data']['myOrders']);
-
-        }
+        $this->assertCount(2, $result['data']['myOrders']);
     }
+}

@@ -20,21 +20,21 @@ class Checkout
      */
     public function getStripeSecret($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $sessionService = App::make('Gernzy\SessionService');
-        $cartService = App::make('Gernzy\ServerService');
+        // $sessionService = App::make('Gernzy\SessionService');
+        // $cartService = App::make('Gernzy\ServerService');
 
 
-        if (empty($sessionService->get())) {
-            throw new GernzyException(
-                'The session does not exist.',
-                'Please make sure the token is valid.'
-            );
-        }
+        // if (empty($sessionService->get())) {
+        //     throw new GernzyException(
+        //         'The session does not exist.',
+        //         'Please make sure the token is valid.'
+        //     );
+        // }
 
-        $cartTotal = $cartService->getCartTotal();
-        $stripeService = App::make('Stripe\StripeService');
-        $secret = $stripeService->getSecret($cartTotal, 'usd');
+        // $cartTotal = $cartService->getCartTotal();
+        // $stripeService = App::make('Stripe\StripeService');
+        // $secret = $stripeService->getSecret($cartTotal, 'usd');
 
-        return $secret;
+        // return $secret;
     }
 }

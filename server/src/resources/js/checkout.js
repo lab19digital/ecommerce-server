@@ -8,11 +8,11 @@ class Checkout {
         this.cart = cart;
         this.stripe = stripe;
 
-        var self = this;
         // Get the stripe secret
-        stripe.getStripeSecret().then(re => {
-            self.clientSecret = re.data.getStripeSecret;
-        });
+        // var self = this;
+        // stripe.getStripeSecret().then(re => {
+        //     self.clientSecret = re.data.getStripeSecret;
+        // });
     }
 
     checkout() {
@@ -66,6 +66,7 @@ class Checkout {
                 agree_to_terms: ${values['agree_to_terms']},
                 notes: "${values['notes']}"
             }){
+                event_data
                 order {
                     id
                 }
@@ -77,12 +78,14 @@ class Checkout {
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
+                console.log('Checkout return: ' + JSON.stringify(re));
+
                 $('.checkout-container').html(successTemplate('Your details have been submitted.'));
 
                 // Now display payment
                 $('.checkout-container').html(stripeFormTemplate);
-                this.stripe.formLoaded();
-                this.stripe.formSubmitListener(self.clientSecret);
+                // this.stripe.formLoaded();
+                // this.stripe.formSubmitListener(self.clientSecret);
 
                 return re;
             })
