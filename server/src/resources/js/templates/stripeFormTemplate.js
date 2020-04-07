@@ -1,5 +1,5 @@
-const errorTemplate = message => `
-<div class="uk-container uk-container-xsmall uk-margin-large-top">
+const stripeFormTemplate = message => `
+<div id="stripeFormTemplate"  class="uk-container uk-container-xsmall uk-margin-large-top">
     <div class="uk-card uk-card-default uk-card-body uk-width-auto uk-card-hover">
 
         <form id="payment-form" >
@@ -20,4 +20,4 @@ const errorTemplate = message => `
 </div>
 `;
 
-export default errorTemplate;
+export default stripeFormTemplate;

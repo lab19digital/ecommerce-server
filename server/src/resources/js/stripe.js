@@ -1,4 +1,5 @@
 import successTemplate from './templates/successTemplate';
+import errorTemplate from './templates/errorTemplate';
 import $ from 'jquery';
 class StripeService {
     constructor(graphqlService) {
@@ -6,23 +7,6 @@ class StripeService {
         this.stripe = Stripe('pk_test_U2JalAfKOyR5DHS7R4KFeJLh00AdOsjkgo');
         this.elements = this.stripe.elements();
         this.card = '';
-    }
-
-    getStripeSecret() {
-        let query = `query {
-            getStripeSecret
-        }`;
-
-        let userToken = localStorage.getItem('userToken');
-
-        return this.graphqlService
-            .sendQuery(query, userToken)
-            .then(re => {
-                return re;
-            })
-            .catch(error => {
-                console.log(error);
-            });
     }
 
     formLoaded() {
@@ -76,6 +60,8 @@ class StripeService {
                 .then(function(result) {
                     if (result.error) {
                         // Show error to your customer (e.g., insufficient funds)
+                        $('#stripeFormTemplate').append(errorTemplate(result.error.message));
+
                         console.log(result.error.message);
                     } else {
                         // The payment has been processed!
