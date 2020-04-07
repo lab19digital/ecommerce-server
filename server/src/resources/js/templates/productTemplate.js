@@ -1,6 +1,6 @@
 const productTemplate = ({ title, short_description, id, buttonText, price_cents, price_currency, quantity }) => `
 <div>
-    <div class="uk-card uk-card-default uk-margin-left uk-margin-top">
+    <div class="uk-card uk-card-default uk-margin-left uk-margin-top uk-card-hover">
         <div class="uk-card-header">
             <div class="uk-grid-small uk-flex-middle" uk-grid>
                 <div class="uk-width-auto">

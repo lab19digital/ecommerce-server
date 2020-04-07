@@ -7,12 +7,6 @@ class Checkout {
         this.graphqlService = graphqlService;
         this.cart = cart;
         this.stripe = stripe;
-
-        // Get the stripe secret
-        // var self = this;
-        // stripe.getStripeSecret().then(re => {
-        //     self.clientSecret = re.data.getStripeSecret;
-        // });
     }
 
     checkout() {
