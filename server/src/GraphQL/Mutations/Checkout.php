@@ -33,14 +33,22 @@ class Checkout
         }
 
         if ($cartService->hasItems()) {
+
             // Fire the before checkout event
-            $eventService = EventService::triggerEvent(BeforeCheckout::class);
+            $eventService = EventService::triggerEvent(
+                BeforeCheckout::class,
+                [
+                    'session_service' => $sessionService,
+                    'cart_service' => $cartService
+                ]
+            );
 
             // TODO: Should we pass all the data on at this point?
             $eventServiceData = $eventService->getAllModifiedData();
 
             $createCheckout = App::make(CreateCheckout::class);
             $order = $createCheckout->handle($args['input']);
+
             return [
                 'order' => $order,
                 'event_data' => json_encode($eventServiceData)

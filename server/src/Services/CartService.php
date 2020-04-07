@@ -71,7 +71,7 @@ class CartService
             $this->session->load('cart');
             if ($this->session->cart) {
                 $cart = $this->session->cart;
-                return $cart->cart_total;
+                return (int) $cart->cart_total;
             }
         }
 

@@ -15,21 +15,16 @@ class StripeBeforeCheckout implements ActionInterface
 
     public function run(ActionClass $action)
     {
-        // $data = $action->getOriginalData();
+        // Get the data passed on from the event
+        $data = $action->getOriginalData();
 
-        $sessionService = App::make('Gernzy\SessionService');
-        $cartService = App::make('Gernzy\ServerService');
+        // Get the cart service to interact with cart data
+        $cartService = $data['cart_service'];
 
+        // Use the cart service methods to interact with the cart
+        $cartTotal = $cartService->getCartTotal();
 
-        if (empty($sessionService->get())) {
-            throw new GernzyException(
-                'The session does not exist.',
-                'Please make sure the token is valid.'
-            );
-        }
-
-        $cartTotal = (int) $cartService->getCartTotal();
-
+        // Safety checks
         if (!isset($cartTotal) || $cartTotal <= 0) {
             throw new GernzyException(
                 'The cart total has to be more than 0.',
@@ -37,9 +32,11 @@ class StripeBeforeCheckout implements ActionInterface
             );
         }
 
+        // Use the stripe service to interact with the api
         $stripeService = App::make('Stripe\StripeService');
         $secret = $stripeService->getSecret($cartTotal, 'usd');
 
+        // Pass on the data for later use, note the secret should not be logged or stored
         $action->attachData(StripeBeforeCheckout::class, ['stripe_data' => $secret]);
 
         return $action;

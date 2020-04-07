@@ -44,9 +44,13 @@ class StripeService {
     formSubmitListener(clientSecret) {
         var form = document.getElementById('payment-form');
         var self = this;
+        var $loading = $('#loadingDiv').hide();
 
         form.addEventListener('submit', function(ev) {
             ev.preventDefault();
+
+            // Loading
+            $loading.show();
 
             self.stripe
                 .confirmCardPayment(clientSecret, {
@@ -58,6 +62,8 @@ class StripeService {
                     },
                 })
                 .then(function(result) {
+                    $loading.hide();
+
                     if (result.error) {
                         // Show error to your customer (e.g., insufficient funds)
                         $('#stripeFormTemplate').append(errorTemplate(result.error.message));
