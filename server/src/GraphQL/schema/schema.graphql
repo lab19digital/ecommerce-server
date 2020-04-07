@@ -120,4 +120,3 @@ input UpdateCartInput {
 #import products.graphql
 #import orders.graphql
 #import tags.graphql
-#import checkout.graphql
