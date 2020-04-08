@@ -167,4 +167,46 @@ abstract class TestCase extends BaseTestCase
             ])
         );
     }
+
+    public function setupCurrencySession()
+    {
+        // Create a session
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQL('
+            mutation {
+                createSession {
+                    token
+                }
+            }
+        ');
+
+        $start = $response->decodeResponseJson();
+
+        $token = $start['data']['createSession']['token'];
+
+        // Set the session currency
+        $response = $this->postGraphQL(['query' => '
+                mutation {
+                    setSessionCurrency(input: {
+                        currency: "EUR"
+                    }){
+                        currency
+                    }
+                }
+            ',], [
+            'HTTP_Authorization' => 'Bearer ' . $token,
+        ]);
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'setSessionCurrency' => [
+                    'currency',
+                ],
+            ],
+        ]);
+
+        return $token;
+    }
 }

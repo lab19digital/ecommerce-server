@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Gernzy\Server\Listeners\BeforeCheckout;
+use Gernzy\Server\Models\Product;
 use Gernzy\Server\Packages\Stripe\Actions\StripeBeforeCheckout;
 use Gernzy\Server\Packages\Stripe\Services\StripeService;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -15,30 +16,12 @@ class PaymentGatewayTest extends TestCheckoutTest
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->availableCount = 11;
+
+        $this->productPricesArray = factory(Product::class, $this->availableCount)->create();
     }
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testBasicStripe()
-    {
-        // Set your secret key. Remember to switch to your live secret key in production!
-        // See your keys here: https://dashboard.stripe.com/account/apikeys
-        // \Stripe\Stripe::setApiKey('from_env');
-
-
-        // $intent = \Stripe\PaymentIntent::create([
-        //     'amount' => 1099,
-        //     'currency' => 'usd',
-        //     // Verify your integration in this guide by including this parameter
-        //     'metadata' => ['integration_check' => 'accept_a_payment'],
-        // ]);
-
-
-        // $this->assertNotEmpty($intent);
-    }
 
     public function testPaymentGatewayProvider()
     {
@@ -56,6 +39,41 @@ class PaymentGatewayTest extends TestCheckoutTest
 
         $eventData = json_decode($this->result['data']['checkout']['event_data']);
 
+        // Check for stripe secret
+        $this->assertNotEmpty($eventData[0]->data->stripe_data);
+    }
+
+    public function testPaymentGatewayProviderWithDifferentCurrency()
+    {
+        // Set the session currency
+        $query = '
+                mutation {
+                    setSessionCurrency(input: {
+                        currency: "EUR"
+                    }){
+                        currency
+                    }
+                }
+            ';
+
+        $response = $this->graphQLWithSession($query);
+
+        // 1. Register service provider
+        $this->app->bind('Stripe\StripeService', StripeService::class);
+
+        // 2. Registe event mapping
+        config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class,]]);
+
+        // Create session, Add product to cart,  Create checkout
+        $response = $this->graphQLWithSession($this->addToCartMutation);
+        $response = $this->graphQLWithSession($this->checkoutMutation);
+        $response->assertDontSee('errors');
+
+        $result = $response->decodeResponseJson();
+
+        $this->assertNotEmpty($result);
+
+        $eventData = json_decode($result['data']['checkout']['event_data']);
 
         // Check for stripe secret
         $this->assertNotEmpty($eventData[0]->data->stripe_data);
