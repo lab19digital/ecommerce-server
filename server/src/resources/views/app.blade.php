@@ -45,7 +45,7 @@
                         </div>
                     </div>
                     <div class="uk-navbar-right">
-                        <ul class="uk-navbar-nav uk-visible@m">
+                        <ul class="uk-navbar-nav uk-visible">
                             <li><a href="/shop">Home</a></li>
                             <li><a href="#">Blog</a></li>
                             <li><a href="#">Clearance</a></li>

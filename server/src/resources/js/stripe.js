@@ -28,8 +28,9 @@ class StripeService {
         };
 
         var card = this.elements.create('card', { style: style });
-        card.mount('#card-element');
         this.card = card;
+
+        card.mount('#card-element');
 
         card.addEventListener('change', ({ error }) => {
             const displayError = document.getElementById('card-errors');
