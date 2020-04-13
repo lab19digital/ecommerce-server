@@ -90,18 +90,11 @@ class GernzyServiceProvider extends ServiceProvider
 
         // Make mail config publishment optional by merging the config from the package.
         $this->mergeConfigFrom(__DIR__ . '/config/mail.php', 'mail');
-
-        // Make cache config publishment optional by merging the config from the package.
         $this->mergeConfigFrom(__DIR__ . '/config/cache.php', 'cache');
-
-        // Make cache config publishment optional by merging the config from the package.
         $this->mergeConfigFrom(__DIR__ . '/config/db.php', 'db');
-
-        // Make cache config publishment optional by merging the config from the package.
         $this->mergeConfigFrom(__DIR__ . '/config/currency.php', 'currency');
-
-        // Make cache config publishment optional by merging the config from the package.
         $this->mergeConfigFrom(__DIR__ . '/config/events.php', 'events');
+        $this->mergeConfigFrom(__DIR__ . '/config/api.php', 'api');
     }
 
     /**
@@ -113,20 +106,23 @@ class GernzyServiceProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
 
-        // Allow developers to override mail config
+        // Allow developers to override config
         $this->publishes([
             __DIR__ . '/config/mail.php' => config_path('mail.php'),
         ]);
 
-        // Allow developers to override cache config
         $this->publishes([
             __DIR__ . '/config/cache.php' => config_path('cache.php'),
         ]);
 
-        // Allow developers to override currency config
         $this->publishes([
             __DIR__ . '/config/currency.php' => config_path('currency.php'),
         ]);
+
+        $this->publishes([
+            __DIR__ . '/config/api.php' => config_path('api.php'),
+        ]);
+
 
         $this->loadRoutesFrom(__DIR__ . '/Http/routes/web.php');
 
