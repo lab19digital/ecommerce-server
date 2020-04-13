@@ -6,6 +6,7 @@ use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Models\Product;
 use Gernzy\Server\Packages\Stripe\Actions\StripeBeforeCheckout;
 use Gernzy\Server\Packages\Stripe\Services\StripeService;
+use Gernzy\Server\Packages\Stripe\Services\StripeServiceMock;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\Unit\TestCheckoutTest;
 
@@ -27,7 +28,8 @@ class PaymentGatewayTest extends TestCheckoutTest
     {
 
         // 1. Register service provider
-        $this->app->bind('Stripe\StripeService', StripeService::class);
+        // $this->app->bind('Stripe\StripeService', StripeService::class);
+        $this->app->bind('Stripe\StripeService', StripeServiceMock::class);
 
         // 2. Registe event mapping
         config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class,]]);
@@ -59,7 +61,8 @@ class PaymentGatewayTest extends TestCheckoutTest
         $response = $this->graphQLWithSession($query);
 
         // 1. Register service provider
-        $this->app->bind('Stripe\StripeService', StripeService::class);
+        // $this->app->bind('Stripe\StripeService', StripeService::class);
+        $this->app->bind('Stripe\StripeService', StripeServiceMock::class);
 
         // 2. Registe event mapping
         config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class,]]);

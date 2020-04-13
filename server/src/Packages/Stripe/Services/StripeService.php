@@ -2,7 +2,7 @@
 
 namespace  Gernzy\Server\Packages\Stripe\Services;
 
-class StripeService
+class StripeService implements ServiceInterface
 {
     public function __construct()
     {
