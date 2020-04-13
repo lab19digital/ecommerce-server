@@ -27,7 +27,7 @@ class PaymentGatewayTest extends TestCheckoutTest
     public function testPaymentGatewayProvider()
     {
 
-        // 1. Register service provider
+        // 1. Register service provider (mocking)
         // $this->app->bind('Stripe\StripeService', StripeService::class);
         $this->app->bind('Stripe\StripeService', StripeServiceMock::class);
 
@@ -60,7 +60,7 @@ class PaymentGatewayTest extends TestCheckoutTest
 
         $response = $this->graphQLWithSession($query);
 
-        // 1. Register service provider
+        // 1. Register service provider (mocking)
         // $this->app->bind('Stripe\StripeService', StripeService::class);
         $this->app->bind('Stripe\StripeService', StripeServiceMock::class);
 
