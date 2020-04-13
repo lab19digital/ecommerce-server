@@ -17,7 +17,7 @@ class User {
                 return re;
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
             });
     }
 

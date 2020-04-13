@@ -68,7 +68,7 @@ class SessionService {
                 localStorage.setItem('setSessionGeoLocation', re.data.setSessionGeoLocation.geolocation_record);
             } else {
                 // handle error
-                console.log(error);
+                // console.log(error);
             }
         });
     }
@@ -91,7 +91,7 @@ class SessionService {
             try {
                 // See if there is an error
                 let error = re.errors[0].debugMessage;
-                console.log(error);
+                // console.log(error);
             } catch {
                 localStorage.setItem('currency', re.data.setSessionCurrency.currency);
 

@@ -36,7 +36,7 @@ class Products {
                 try {
                     productsArray = re.data.products.data;
                 } catch (error) {
-                    console.log(re);
+                    // console.log(error);
                     $('.products-container').html(
                         errorTemplate(`There was an error loading products. <br> ${re.errors[0].extensions.reason}`),
                     );
@@ -67,7 +67,7 @@ class Products {
                 return re;
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
             });
     }
 
@@ -120,7 +120,7 @@ class Products {
                 });
             })
             .catch(error => {
-                console.log(`addProductToCart: ${error}`);
+                // console.log(`addProductToCart: ${error}`);
             });
     }
 }

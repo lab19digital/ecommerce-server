@@ -67,16 +67,22 @@ class Checkout {
             }
         }`;
 
-        var self = this;
-
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
                 // This is the event data passed on from backend
-                let eventData = JSON.parse(re.data.checkout.event_data);
+                let eventData;
+                let stripeSecretkey;
 
-                // Get stripe specific data from event data
-                let stripeSecretkey = eventData[0].data.stripe_data;
+                try {
+                    // Get the event data and parse it
+                    eventData = JSON.parse(re.data.checkout.event_data);
+
+                    // Get stripe specific data from event data
+                    stripeSecretkey = eventData[0].data.stripe_data;
+                } catch (error) {
+                    // console.log(error);
+                }
 
                 $('.checkout-container').html(successTemplate('Your details have been submitted.'));
 
@@ -88,7 +94,7 @@ class Checkout {
                 return re;
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
             });
     }
 
@@ -117,7 +123,7 @@ class Checkout {
                 return re;
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
             });
     }
 
@@ -126,7 +132,7 @@ class Checkout {
             try {
                 // See if there is an error
                 let error = re.errors[0].debugMessage;
-                console.log(error);
+                // console.log(error);
             } catch {
                 let items = re.data.me.cart.items;
 

@@ -6,9 +6,16 @@ class GraphqlService {
         this.config = config;
     }
     async sendQuery(graphqlQuery, userToken = '') {
+        let apiUrl;
+        try {
+            apiUrl = this.config.apiUrl;
+        } catch (error) {
+            apiUrl = '';
+        }
+
         try {
             const data = await $.ajax({
-                url: this.config.apiUrl,
+                url: apiUrl,
                 contentType: 'application/json',
                 type: 'POST',
                 headers: {

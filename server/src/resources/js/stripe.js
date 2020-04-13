@@ -4,9 +4,14 @@ import $ from 'jquery';
 class StripeService {
     constructor(graphqlService) {
         this.graphqlService = graphqlService;
-        this.stripe = Stripe('pk_test_U2JalAfKOyR5DHS7R4KFeJLh00AdOsjkgo');
-        this.elements = this.stripe.elements();
         this.card = '';
+
+        try {
+            this.stripe = Stripe('pk_test_U2JalAfKOyR5DHS7R4KFeJLh00AdOsjkgo');
+            this.elements = this.stripe.elements();
+        } catch (error) {
+            // console.log(error);
+        }
     }
 
     formLoaded() {
@@ -27,25 +32,34 @@ class StripeService {
             },
         };
 
-        var card = this.elements.create('card', { style: style });
-        this.card = card;
+        try {
+            var card = this.elements.create('card', { style: style });
+            this.card = card;
 
-        card.mount('#card-element');
+            card.mount('#card-element');
 
-        card.addEventListener('change', ({ error }) => {
-            const displayError = document.getElementById('card-errors');
-            if (error) {
-                displayError.textContent = error.message;
-            } else {
-                displayError.textContent = '';
-            }
-        });
+            card.addEventListener('change', ({ error }) => {
+                const displayError = document.getElementById('card-errors');
+                if (error) {
+                    displayError.textContent = error.message;
+                } else {
+                    displayError.textContent = '';
+                }
+            });
+        } catch (error) {
+            // console.log(error);
+        }
     }
 
     formSubmitListener(clientSecret) {
         var form = document.getElementById('payment-form');
         var self = this;
         var $loading = $('#loadingDiv').hide();
+
+        if (!self.stripe) {
+            console.log('Stripe is not defined.');
+            return;
+        }
 
         form.addEventListener('submit', function(ev) {
             ev.preventDefault();
@@ -69,7 +83,7 @@ class StripeService {
                         // Show error to your customer (e.g., insufficient funds)
                         $('#stripeFormTemplate').append(errorTemplate(result.error.message));
 
-                        console.log(result.error.message);
+                        // console.log(result.error.message);
                     } else {
                         // The payment has been processed!
                         if (result.paymentIntent.status === 'succeeded') {
@@ -81,6 +95,9 @@ class StripeService {
                             $('.checkout-container').html(successTemplate('Payment successful.'));
                         }
                     }
+                })
+                .catch(error => {
+                    console.log(error);
                 });
         });
     }
