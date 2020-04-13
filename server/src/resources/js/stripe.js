@@ -57,7 +57,7 @@ class StripeService {
         var $loading = $('#loadingDiv').hide();
 
         if (!self.stripe) {
-            console.log('Stripe is not defined.');
+            // console.log('Stripe is not defined.');
             return;
         }
 
@@ -97,7 +97,7 @@ class StripeService {
                     }
                 })
                 .catch(error => {
-                    console.log(error);
+                    // console.log(error);
                 });
         });
     }

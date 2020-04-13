@@ -36,9 +36,10 @@ test('checkout test', () => {
         agree_to_terms: true,
     };
 
-    expect.assertions(1);
+    expect.assertions(2);
     return checkout.sendOfCheckoutInfo(values).then(data => {
         expect(data).toBeObject();
+        expect(data.data.checkout.event_data).toBeString();
     });
 });
 
