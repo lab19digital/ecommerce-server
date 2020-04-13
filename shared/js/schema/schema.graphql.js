@@ -27,7 +27,12 @@ type Query {
     order_items: [OrderItem!]! @paginate(type: "paginator", model: "Gernzy\Server\Models\OrderItem")
     order_item(id: ID @eq): OrderItem @find(model: "Gernzy\Server\Models\OrderItem")
 
-    shopConfig: [String] @field(resolver: "Gernzy\Server\GraphQL\Queries\ShopConfig@enabledCurrencies")
+    shopConfig: ShopConfig @field(resolver: "Gernzy\Server\GraphQL\Queries\ShopConfig@index")
+}
+
+type ShopConfig {
+    enabled_currencies: [String] @field(resolver: "Gernzy\Server\GraphQL\Queries\ShopConfig@enabledCurrencies")
+    default_currency: String @field(resolver: "Gernzy\Server\GraphQL\Queries\ShopConfig@defaultCurrency")
 }
 
 type User {
@@ -90,6 +95,7 @@ type Session {
     id: ID!
     token: String!
     cart_id: ID
+    data: [String] @field(resolver: "Gernzy\Server\GraphQL\Mutations\SetSession@getData")
 }
 
 input CreateOrderInput {
