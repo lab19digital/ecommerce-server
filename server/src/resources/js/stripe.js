@@ -97,6 +97,9 @@ class StripeService {
                     }
                 })
                 .catch(error => {
+                    $loading.hide();
+                    $('.checkout-container').append(errorTemplate('Unexpected error occured. Please try again.'));
+
                     // console.log(error);
                 });
         });

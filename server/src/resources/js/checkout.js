@@ -81,6 +81,7 @@ class Checkout {
                     // Get stripe specific data from event data
                     stripeSecretkey = eventData[0].data.stripe_data;
                 } catch (error) {
+                    // Handle the case where the backend couldn't supply a secret, perhaps retry a query
                     // console.log(error);
                 }
 
