@@ -4,7 +4,6 @@ import { Cart } from './cart';
 import { Checkout } from './checkout';
 import { GraphqlService } from './graphqlService';
 import { SessionService } from './session';
-import { StripeService } from './stripe';
 
 export default {
     init: function(userConfig = {}) {
@@ -29,8 +28,7 @@ export default {
         let sessionService = new SessionService(graphQlService);
         let productObj = new Products(graphQlService);
         let cart = new Cart(productObj, graphQlService);
-        let stripe = new StripeService(graphQlService);
-        let checkout = new Checkout(graphQlService, cart, stripe);
+        let checkout = new Checkout(graphQlService, cart);
 
         // Session setup
         sessionService.setupUser();

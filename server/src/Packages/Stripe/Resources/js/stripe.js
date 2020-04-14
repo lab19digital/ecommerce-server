@@ -1,9 +1,9 @@
+import $ from 'jquery';
 import successTemplate from './templates/successTemplate';
 import errorTemplate from './templates/errorTemplate';
-import $ from 'jquery';
+
 class StripeService {
-    constructor(graphqlService) {
-        this.graphqlService = graphqlService;
+    constructor() {
         this.card = '';
 
         try {
@@ -92,7 +92,7 @@ class StripeService {
                             // execution. Set up a webhook or plugin to listen for the
                             // payment_intent.succeeded event that handles any business critical
                             // post-payment actions.
-                            $('.checkout-container').html(successTemplate('Payment successful.'));
+                            $('#stripeFormTemplate').html(successTemplate('Payment successful.'));
                         }
                     }
                 })

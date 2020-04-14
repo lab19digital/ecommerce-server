@@ -61,7 +61,7 @@ class StripeBeforeCheckout implements ActionInterface
         $secret = $stripeService->getSecret($cartTotal, $sessionCurrency);
 
         // Pass on the data for later use, note the secret should not be logged or stored
-        $action->attachData(StripeBeforeCheckout::class, ['stripe_data' => $secret]);
+        $action->attachData(StripeBeforeCheckout::class, ['stripe_data' => $secret, 'redirect_url' => url("/payment")]);
 
         return $action;
     }

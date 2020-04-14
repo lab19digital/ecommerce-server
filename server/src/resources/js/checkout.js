@@ -1,12 +1,10 @@
 import successTemplate from './templates/successTemplate';
-import stripeFormTemplate from './templates/stripeFormTemplate';
 import $ from 'jquery';
 
 class Checkout {
-    constructor(graphqlService, cart = null, stripe) {
+    constructor(graphqlService, cart = null) {
         this.graphqlService = graphqlService;
         this.cart = cart;
-        this.stripe = stripe;
     }
 
     checkout() {
@@ -70,27 +68,24 @@ class Checkout {
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
-                // This is the event data passed on from backend
                 let eventData;
-                let stripeSecretkey;
+                let redirectUrl;
 
                 try {
-                    // Get the event data and parse it
                     eventData = JSON.parse(re.data.checkout.event_data);
-
-                    // Get stripe specific data from event data
-                    stripeSecretkey = eventData[0].data.stripe_data;
+                    redirectUrl = eventData[0].data.redirect_url;
                 } catch (error) {
-                    // Handle the case where the backend couldn't supply a secret, perhaps retry a query
                     // console.log(error);
                 }
 
-                $('.checkout-container').html(successTemplate('Your details have been submitted.'));
+                if (!eventData || 0 === eventData.length) {
+                    $('.checkout-container').html(errorTemplate('An error occurred with payment processing.'));
+                    return re;
+                }
 
-                // Now display payment
-                $('.checkout-container').html(stripeFormTemplate);
-                this.stripe.formLoaded();
-                this.stripe.formSubmitListener(stripeSecretkey);
+                $('.checkout-container').html(successTemplate('Your details have been submitted.'));
+                localStorage.setItem('event_data', JSON.stringify(eventData));
+                window.location.replace(redirectUrl);
 
                 return re;
             })
