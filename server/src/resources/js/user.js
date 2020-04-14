@@ -26,12 +26,13 @@ class User {
     }
 
     checkIfTokenInLocalStorage() {
+        // Check if token in local
         let userTokenLocalStorage = localStorage.getItem('userToken');
-        // Check if token not already in local storage, and if not add to localStorage
-        if (userTokenLocalStorage) {
-            return true;
-        } else {
+
+        if (!userTokenLocalStorage || 0 === userTokenLocalStorage.length) {
             return false;
+        } else {
+            return true;
         }
     }
 

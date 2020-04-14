@@ -18,10 +18,14 @@ class SessionService {
         }`;
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
-            localStorage.setItem('sessionData', re.data.me.session.data);
+            try {
+                localStorage.setItem('sessionData', re.data.me.session.data);
 
-            if (re.data.me.session.data[1]) {
-                localStorage.setItem('currency', re.data.me.session.data[1]);
+                if (re.data.me.session.data[1]) {
+                    localStorage.setItem('currency', re.data.me.session.data[1]);
+                }
+            } catch (error) {
+                // console.log(error);
             }
         });
     }
