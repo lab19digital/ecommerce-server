@@ -16,7 +16,8 @@
         "guzzlehttp/guzzle": "~6.0",
         "geoip2/geoip2": "~2.0",
         "fzaninotto/faker": "^1.9",
-        "fruitcake/laravel-cors": "^1.0"
+        "fruitcake/laravel-cors": "^1.0",
+        "stripe/stripe-php": "^7.27"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",

@@ -28,7 +28,7 @@ abstract class TestCase extends BaseTestCase
     protected function getEnvironmentSetUp($app)
     {
         // Map an Event to an Action at run time in config, for use by the ExamplePackageProvider.php
-        config(['events.' . BeforeCheckout::class => [ExampleBeforeCheckout::class]]);
+        config(['events.' . BeforeCheckout::class => [ExampleBeforeCheckout::class,]]);
 
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testbench');
@@ -172,5 +172,47 @@ abstract class TestCase extends BaseTestCase
                 'Authorization' => 'Bearer ' . $this->sessionToken,
             ])
         );
+    }
+
+    public function setupCurrencySession()
+    {
+        // Create a session
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQL('
+            mutation {
+                createSession {
+                    token
+                }
+            }
+        ');
+
+        $start = $response->decodeResponseJson();
+
+        $token = $start['data']['createSession']['token'];
+
+        // Set the session currency
+        $response = $this->postGraphQL(['query' => '
+                mutation {
+                    setSessionCurrency(input: {
+                        currency: "EUR"
+                    }){
+                        currency
+                    }
+                }
+            ',], [
+            'HTTP_Authorization' => 'Bearer ' . $token,
+        ]);
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'setSessionCurrency' => [
+                    'currency',
+                ],
+            ],
+        ]);
+
+        return $token;
     }
 }

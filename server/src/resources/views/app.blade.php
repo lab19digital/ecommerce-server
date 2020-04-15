@@ -14,6 +14,10 @@
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/js/uikit-icons.min.js"></script>
 
+    <!-- Stripe -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+
 </head>
 
 <body>
@@ -41,7 +45,7 @@
                         </div>
                     </div>
                     <div class="uk-navbar-right">
-                        <ul class="uk-navbar-nav uk-visible@m">
+                        <ul class="uk-navbar-nav uk-visible">
                             <li><a href="/shop">Home</a></li>
                             <li><a href="#">Blog</a></li>
                             <li><a href="#">Clearance</a></li>
@@ -62,7 +66,20 @@
         </div>
 
         <main>
-            <span id="loadingDiv" uk-spinner="ratio: 3" class="uk-position-cover uk-overlay uk-overlay-default uk-flex uk-flex-center uk-flex-middle" style="z-index: 99999"></span>
+            <span id="loadingDiv" uk-spinner="ratio: 3" class="uk-position-cover uk-overlay uk-overlay-default uk-flex uk-flex-center uk-flex-middle" style="z-index: 99999;
+                    display: -webkit-box;
+                    -webkit-box-align: center;
+                    -webkit-box-pack: center;
+
+                    position: fixed;
+                    align-items: center;
+                    justify-content: center;
+                    display: flex;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;">
+            </span>
             @yield('content')
         </main>
     </div>

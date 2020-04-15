@@ -2,6 +2,7 @@ import { Checkout } from '../checkout';
 import { GraphqlService } from '../graphqlService';
 import { Products } from '../products';
 import { Cart } from '../cart';
+import { StripeService } from '../stripe';
 
 // __mocks__/jquery.js
 jest.mock('jquery');
@@ -9,7 +10,10 @@ jest.mock('jquery');
 test('checkout test', () => {
     // Set up our document body
     let graphQlService = new GraphqlService();
-    let checkout = new Checkout(graphQlService);
+    let productObj = new Products(graphQlService);
+    let cart = new Cart(productObj, graphQlService);
+    let stripe = new StripeService(graphQlService);
+    let checkout = new Checkout(graphQlService, cart, stripe);
 
     let values = {
         name: 'Joe Fox',
@@ -32,9 +36,10 @@ test('checkout test', () => {
         agree_to_terms: true,
     };
 
-    expect.assertions(1);
+    expect.assertions(2);
     return checkout.sendOfCheckoutInfo(values).then(data => {
         expect(data).toBeObject();
+        expect(data.data.checkout.event_data).toBeString();
     });
 });
 

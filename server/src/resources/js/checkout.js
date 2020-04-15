@@ -1,4 +1,5 @@
 import successTemplate from './templates/successTemplate';
+import errorTemplate from './templates/errorTemplate';
 import $ from 'jquery';
 
 class Checkout {
@@ -58,6 +59,7 @@ class Checkout {
                 agree_to_terms: ${values['agree_to_terms']},
                 notes: "${values['notes']}"
             }){
+                event_data
                 order {
                     id
                 }
@@ -67,11 +69,28 @@ class Checkout {
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
-                $('.checkout-container').html(successTemplate);
+                if (re.errors) {
+                    let errors = re.errors;
+                    let debugMessage = re.errors[0].debugMessage;
+                } else {
+                    $('.checkout-container').html(successTemplate('Your details have been submitted.'));
+                }
+
+                // Now try and do the next step
+                try {
+                    let eventData = JSON.parse(re.data.checkout.event_data);
+                    let redirectUrl = eventData[0].data.redirect_url;
+
+                    localStorage.setItem('event_data', JSON.stringify(eventData));
+                    window.location.replace(redirectUrl);
+                } catch (error) {
+                    // console.log(error);
+                }
+
                 return re;
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
             });
     }
 
@@ -100,7 +119,7 @@ class Checkout {
                 return re;
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
             });
     }
 
@@ -109,7 +128,7 @@ class Checkout {
             try {
                 // See if there is an error
                 let error = re.errors[0].debugMessage;
-                console.log(error);
+                // console.log(error);
             } catch {
                 let items = re.data.me.cart.items;
 

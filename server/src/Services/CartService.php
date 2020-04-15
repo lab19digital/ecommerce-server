@@ -2,9 +2,10 @@
 
 namespace Gernzy\Server\Services;
 
-use Illuminate\Http\Request;
+use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\Cart;
 use Gernzy\Server\Models\Order;
+use Illuminate\Http\Request;
 
 class CartService
 {
@@ -62,6 +63,22 @@ class CartService
             }
         }
         return new Cart();
+    }
+
+    public function getCartTotal()
+    {
+        if ($this->session) {
+            $this->session->load('cart');
+            if ($this->session->cart) {
+                $cart = $this->session->cart;
+                return (int) $cart->cart_total;
+            }
+        }
+
+        throw new GernzyException(
+            'The session does not exist.',
+            'Please make sure the session is valid.'
+        );
     }
 
     public function getItems()

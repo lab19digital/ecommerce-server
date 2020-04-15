@@ -38,7 +38,7 @@ class Cart {
                 return re;
             })
             .catch(error => {
-                console.log(`viewProductsInCart: ${error}`);
+                // console.log(`viewProductsInCart: ${error}`);
             });
     }
 
@@ -58,7 +58,7 @@ class Cart {
                 return re;
             })
             .catch(error => {
-                console.log(error);
+                // console.log(error);
             });
     }
 

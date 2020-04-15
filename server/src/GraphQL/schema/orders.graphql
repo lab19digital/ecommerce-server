@@ -47,6 +47,7 @@ input ShippingAddress {
 type CheckoutPayload {
     success: Boolean!
     order: Order
+    event_data: String
 }
 
 extend type Mutation {

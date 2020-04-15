@@ -1,5 +1,6 @@
 <?php
 
+use Gernzy\Server\Models\Product;
 use Gernzy\Server\Testing\TestCase;
 
 /**
@@ -61,6 +62,20 @@ class TestOrderViewTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        // create products
+        $this->availableCount = 11;
+
+        factory(Product::class, $this->availableCount)->create()->each(function ($product) {
+            $product->status = 'IN_STOCK';
+            $product->title = 'Coffee pod';
+            $product->published = 1;
+            $product->save();
+        });
+
+        factory(Product::class, $this->availableCount + 10)->create()->each(function ($product) {
+            $product->status = 'OUT_OF_STOCK';
+            $product->save();
+        });
     }
 
     public function testGuestCannotCheckoutWithoutSessionToken(): void

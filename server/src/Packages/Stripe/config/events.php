@@ -1,6 +1,5 @@
 <?php
 
-use Gernzy\Server\Listeners\AfterCheckout;
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Packages\Stripe\Actions\StripeBeforeCheckout;
 
@@ -9,13 +8,7 @@ use Gernzy\Server\Packages\Stripe\Actions\StripeBeforeCheckout;
 return [
     // Add listeners to the beforecheckout event
     BeforeCheckout::class => [
-        StripeBeforeCheckout::class,
-        // ...,
-        // ...
+        StripeBeforeCheckout::class
     ],
-    // AfterCheckout::class => [
-    // StripeAfterCheckout::class,
-    // ...,
-    // ...
-    // ]
+
 ];

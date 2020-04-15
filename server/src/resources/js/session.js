@@ -18,10 +18,14 @@ class SessionService {
         }`;
 
         return this.graphqlService.sendQuery(query, userToken).then(re => {
-            localStorage.setItem('sessionData', re.data.me.session.data);
+            try {
+                localStorage.setItem('sessionData', re.data.me.session.data);
 
-            if (re.data.me.session.data[1]) {
-                localStorage.setItem('currency', re.data.me.session.data[1]);
+                if (re.data.me.session.data[1]) {
+                    localStorage.setItem('currency', re.data.me.session.data[1]);
+                }
+            } catch (error) {
+                // console.log(error);
             }
         });
     }
@@ -68,7 +72,7 @@ class SessionService {
                 localStorage.setItem('setSessionGeoLocation', re.data.setSessionGeoLocation.geolocation_record);
             } else {
                 // handle error
-                console.log(error);
+                // console.log(error);
             }
         });
     }
@@ -91,7 +95,7 @@ class SessionService {
             try {
                 // See if there is an error
                 let error = re.errors[0].debugMessage;
-                console.log(error);
+                // console.log(error);
             } catch {
                 localStorage.setItem('currency', re.data.setSessionCurrency.currency);
 

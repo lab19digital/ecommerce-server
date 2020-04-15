@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Packages\BarBeforeCheckout;
 use Gernzy\Server\Packages\FooBeforeCheckout;
-use Gernzy\Server\Packages\StripeBeforeCheckout;
 use Gernzy\Server\Services\EventService;
 use Gernzy\Server\Testing\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -54,7 +53,7 @@ class GernzyHookSystemTest extends TestCase
     public function testEventService()
     {
         // Set actions for event at run time, for testing purposes
-        config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class, FooBeforeCheckout::class, BarBeforeCheckout::class]]);
+        config(['events.' . BeforeCheckout::class => [FooBeforeCheckout::class, BarBeforeCheckout::class]]);
 
         // Trigger the event through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class);
@@ -70,7 +69,6 @@ class GernzyHookSystemTest extends TestCase
         $actions = array_column($actions, 'action');
 
         // Check that action names were added to the meta
-        $this->assertContains(StripeBeforeCheckout::class, $actions, "actionsArray doesn't contain StripeBeforeCheckout");
         $this->assertContains(FooBeforeCheckout::class, $actions, "actionsArray doesn't contain FooBeforeCheckout");
         $this->assertContains(BarBeforeCheckout::class, $actions, "actionsArray doesn't contain BarBeforeCheckout");
     }
@@ -78,7 +76,7 @@ class GernzyHookSystemTest extends TestCase
     public function testEventServiceWithData()
     {
         // Set actions for event at run time, for testing purposes
-        config(['events.' . BeforeCheckout::class => [StripeBeforeCheckout::class, FooBeforeCheckout::class, BarBeforeCheckout::class]]);
+        config(['events.' . BeforeCheckout::class => [FooBeforeCheckout::class, BarBeforeCheckout::class]]);
 
         // Trigger the event through EventService
         $eventService = EventService::triggerEvent(BeforeCheckout::class, $this->checkoutData);
@@ -89,18 +87,16 @@ class GernzyHookSystemTest extends TestCase
 
         // Check that the last element of the array contains modified data from each action that associated
         $lastModifiedData = $eventService->getLastModifiedData();
-        $this->assertNotEmpty($lastModifiedData);
-        $this->assertArrayHasKey('coupon', $lastModifiedData[0]);
-        $this->assertArrayHasKey('user_id_foo', $lastModifiedData[1]);
-        $this->assertArrayHasKey('token_bar', $lastModifiedData[2]);
+        // $this->assertNotEmpty($lastModifiedData);
+        $this->assertArrayHasKey('user_id_foo', $lastModifiedData[0]);
+        $this->assertArrayHasKey('token_bar', $lastModifiedData[1]);
 
         // Check that the 'history' array contains modified data  from each action that associated
         $historyOfAllModifiedData = $eventService->getAllModifiedData();
         $this->assertNotEmpty($historyOfAllModifiedData);
-        $this->assertEquals(3, count($historyOfAllModifiedData));
-        $this->assertArrayHasKey('coupon', $historyOfAllModifiedData[0]['data'][0]);
-        $this->assertArrayHasKey('user_id_foo', $historyOfAllModifiedData[1]['data'][1]);
-        $this->assertArrayHasKey('token_bar', $historyOfAllModifiedData[2]['data'][2]);
+        $this->assertEquals(2, count($historyOfAllModifiedData));
+        $this->assertArrayHasKey('user_id_foo', $historyOfAllModifiedData[0]['data'][0]);
+        $this->assertArrayHasKey('token_bar', $historyOfAllModifiedData[1]['data'][1]);
     }
 
 
