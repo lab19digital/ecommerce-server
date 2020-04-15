@@ -25,6 +25,7 @@ class Checkout
      */
     public function checkout($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        $payment_method = $args['input']['payment_method'] ?? "";
         $cartService = App::make(CartService::class);
         $sessionService = App::make(SessionService::class);
 
@@ -39,7 +40,8 @@ class Checkout
                 BeforeCheckout::class,
                 [
                     'session_service' => $sessionService,
-                    'cart_service' => $cartService
+                    'cart_service' => $cartService,
+                    'payment_method' => $payment_method
                 ]
             );
 

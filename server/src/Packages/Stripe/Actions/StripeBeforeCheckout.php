@@ -19,13 +19,15 @@ class StripeBeforeCheckout implements ActionInterface
         // Get the data passed on from the event
         $data = $action->getOriginalData();
 
-        // Get the cart service to interact with cart data
+        // Check if stripe was chosen as payment provider
+        if (isset($data['payment_method']) && $data['payment_method'] == 'stripe_standard') {
+            $payment_method = $data['payment_method'];
+        } else {
+            return $action;
+        }
+
         $sessionService = $data['session_service'];
-
-        // Get the cart service to interact with cart data
         $cartService = $data['cart_service'];
-
-        // Use the cart service methods to interact with the cart
         $cartTotal = $cartService->getCartTotal();
 
         // Safety checks

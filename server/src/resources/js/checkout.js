@@ -1,4 +1,5 @@
 import successTemplate from './templates/successTemplate';
+import errorTemplate from './templates/errorTemplate';
 import $ from 'jquery';
 
 class Checkout {
@@ -68,24 +69,23 @@ class Checkout {
         return this.graphqlService
             .sendQuery(query, userToken)
             .then(re => {
-                let eventData;
-                let redirectUrl;
+                if (re.errors) {
+                    let errors = re.errors;
+                    let debugMessage = re.errors[0].debugMessage;
+                } else {
+                    $('.checkout-container').html(successTemplate('Your details have been submitted.'));
+                }
 
+                // Now try and do the next step
                 try {
-                    eventData = JSON.parse(re.data.checkout.event_data);
-                    redirectUrl = eventData[0].data.redirect_url;
+                    let eventData = JSON.parse(re.data.checkout.event_data);
+                    let redirectUrl = eventData[0].data.redirect_url;
+
+                    localStorage.setItem('event_data', JSON.stringify(eventData));
+                    window.location.replace(redirectUrl);
                 } catch (error) {
                     // console.log(error);
                 }
-
-                if (!eventData || 0 === eventData.length) {
-                    $('.checkout-container').html(errorTemplate('An error occurred with payment processing.'));
-                    return re;
-                }
-
-                $('.checkout-container').html(successTemplate('Your details have been submitted.'));
-                localStorage.setItem('event_data', JSON.stringify(eventData));
-                window.location.replace(redirectUrl);
 
                 return re;
             })
