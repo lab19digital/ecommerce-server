@@ -3,11 +3,10 @@ import successTemplate from './templates/successTemplate';
 import errorTemplate from './templates/errorTemplate';
 
 class StripeService {
-    constructor() {
+    constructor(publishableApiKey) {
         this.card = '';
-
         try {
-            this.stripe = Stripe('pk_test_U2JalAfKOyR5DHS7R4KFeJLh00AdOsjkgo');
+            this.stripe = Stripe(publishableApiKey);
             this.elements = this.stripe.elements();
         } catch (error) {
             // console.log(error);

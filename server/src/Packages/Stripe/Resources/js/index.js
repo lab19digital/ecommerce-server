@@ -1,11 +1,11 @@
 import { StripeService } from './stripe';
 
 export default {
-    init: function() {
+    init: function(userConfig = {}) {
         let pathname = window.location.pathname;
 
         if (pathname.includes('payment')) {
-            let stripe = new StripeService();
+            let stripe = new StripeService(userConfig.publishable_api_key);
             let eventData = JSON.parse(localStorage.getItem('event_data'));
             let stripeSecretkey = eventData[0].data.stripe_data;
 
