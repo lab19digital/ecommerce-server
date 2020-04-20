@@ -47,7 +47,7 @@ class StripeProvider extends GernzyServiceProvider
             __DIR__ . '/config/api.php' => config_path('api.php'),
         ]);
 
-        $this->loadRoutesFrom(__DIR__ . '/Http/routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
 
         $this->loadViewsFrom(__DIR__ . '/Resources/views', 'Stripe\Payment');
     }
