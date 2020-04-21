@@ -5,6 +5,7 @@ namespace Gernzy\Server\GraphQL\Mutations;
 use \App;
 use Gernzy\Server\Actions\CreateCheckout;
 use Gernzy\Server\Listeners\BeforeCheckout;
+use Gernzy\Server\Models\OrderTransaction;
 use Gernzy\Server\Services\CartService;
 use Gernzy\Server\Services\EventService;
 use Gernzy\Server\Services\SessionService;
@@ -45,11 +46,26 @@ class Checkout
                 ]
             );
 
-            // TODO: Should we pass all the data on at this point?
+            // Get all the data that was modified by the event service and corresponding listeners
             $eventServiceData = $eventService->getAllModifiedData();
 
             $createCheckout = App::make(CreateCheckout::class);
             $order = $createCheckout->handle($args['input']);
+
+            // ---------------------------------
+            if (isset($eventServiceData[0]['data']['transaction_data'])) {
+                // Create and associate order to transaction
+                $orderTransaction = new OrderTransaction();
+                $orderTransaction->order_id = $order->id;
+                $orderTransaction->transaction_data = $eventServiceData[0]['data']['transaction_data'];
+                $orderTransaction->status = 'pending';
+                $orderTransaction->save();
+
+                // Associate transaction to order
+                $order->orderTransaction()->save($orderTransaction);
+                $order->save();
+            }
+            // ---------------------------------
 
             return [
                 'order' => $order,

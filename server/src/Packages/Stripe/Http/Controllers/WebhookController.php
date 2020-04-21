@@ -34,6 +34,8 @@ class WebhookController extends BaseController
         switch ($event->type) {
             case 'payment_intent.succeeded':
                 $paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
+                // Use this incoming data to find the order and update it's status
+                dd($event->data->object);
                 // Then define and call a method to handle the successful payment intent.
                 // handlePaymentIntentSucceeded($paymentIntent);
                 break;

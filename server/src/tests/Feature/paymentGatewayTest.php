@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Gernzy\Server\Tests\Feature;
 
 use Gernzy\Server\Listeners\BeforeCheckout;
+use Gernzy\Server\Models\OrderTransaction;
 use Gernzy\Server\Models\Product;
 use Gernzy\Server\Packages\Stripe\Actions\StripeBeforeCheckout;
 use Gernzy\Server\Packages\Stripe\Services\StripeService;
@@ -80,5 +81,10 @@ class PaymentGatewayTest extends TestCheckoutTest
 
         // Check for stripe secret
         $this->assertNotEmpty($eventData[0]->data->stripe_secret);
+
+        $orderTransaction = OrderTransaction::find(1);
+        $this->assertNotEmpty($orderTransaction->transaction_data);
+        $this->assertNotEmpty($orderTransaction->transaction_data['id']);
+        $this->assertEquals($orderTransaction->status, 'pending');
     }
 }

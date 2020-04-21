@@ -21,7 +21,7 @@ class StripeServiceMock implements ServiceInterface
     public function createPaymentIntent($amount, $currency)
     {
         return [
-            "id" => "pi_1GT7uZBEW94QPQobBOoOAa0L",
+            "id" => "pi_1Ga0rQBEW94QPQobjQI1ab43",
             "object" => "payment_intent",
             "amount" => 13681,
             "amount_capturable" => 0,

@@ -16,6 +16,8 @@ class CreateGernzyOrderTransactionsTable extends Migration
         Schema::create('gernzy_order_transactions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('order_id')->unsigned();
+            $table->string('status');
+            $table->json('transaction_data')->nullable();
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('gernzy_orders')->onDelete('cascade');

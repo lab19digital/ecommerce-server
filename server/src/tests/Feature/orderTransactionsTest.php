@@ -1,13 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Gernzy\Server\Tests\Feature;
 
 use Gernzy\Server\Models\Order;
 use Gernzy\Server\Models\OrderTransaction;
-use Gernzy\Server\Testing\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 
-class GernzyOrderTransactionsTest extends TestCase
+class GernzyOrderTransactionsTest extends PaymentGatewayTest
 {
     use WithFaker;
 
@@ -245,5 +244,11 @@ class GernzyOrderTransactionsTest extends TestCase
 
         $response->assertStatus(200);
         $this->assertEquals('Success', $response->getContent());
+    }
+
+    public function testWebhookWithDataAndFindOrderAndOrderTransaction()
+    {
+        $this->testPaymentGatewayProviderWithDifferentCurrency();
+        $this->testWebhookForPaymentGateway();
     }
 }

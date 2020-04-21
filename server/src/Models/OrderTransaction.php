@@ -34,7 +34,9 @@ class OrderTransaction extends Model
      *
      * @var array
      */
-    protected $casts = [];
+    protected $casts = [
+        'transaction_data' => 'array',
+    ];
 
     public function order(): BelongsTo
     {
