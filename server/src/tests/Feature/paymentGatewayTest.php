@@ -42,7 +42,7 @@ class PaymentGatewayTest extends TestCheckoutTest
         $eventData = json_decode($this->result['data']['checkout']['event_data']);
 
         // Check for stripe secret
-        $this->assertNotEmpty($eventData[0]->data->stripe_data);
+        $this->assertNotEmpty($eventData[0]->data->stripe_secret);
     }
 
     public function testPaymentGatewayProviderWithDifferentCurrency()
@@ -79,6 +79,6 @@ class PaymentGatewayTest extends TestCheckoutTest
         $eventData = json_decode($result['data']['checkout']['event_data']);
 
         // Check for stripe secret
-        $this->assertNotEmpty($eventData[0]->data->stripe_data);
+        $this->assertNotEmpty($eventData[0]->data->stripe_secret);
     }
 }

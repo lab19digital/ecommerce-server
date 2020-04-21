@@ -9,5 +9,6 @@ interface ServiceInterface
      *
      * @param string
      */
-    public function getSecret($amount, $currency);
+    public function getSecret($paymentIntent);
+    public function createPaymentIntent($amount, $currency);
 }

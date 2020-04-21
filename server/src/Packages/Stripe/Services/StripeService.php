@@ -2,13 +2,27 @@
 
 namespace  Gernzy\Server\Packages\Stripe\Services;
 
+use Gernzy\Server\Exceptions\GernzyException;
+
 class StripeService implements ServiceInterface
 {
     public function __construct()
     {
     }
 
-    public function getSecret($amount, $currency)
+    public function getSecret($paymentIntent)
+    {
+        if (isset($paymentIntent->client_secret)) {
+            return $paymentIntent->client_secret;
+        }
+
+        throw new GernzyException(
+            'The response did not include a secret.',
+            'Please recreate the intent.'
+        );
+    }
+
+    public function createPaymentIntent($amount, $currency)
     {
         // Set your secret key. Remember to switch to your live secret key in production!
         // See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -21,10 +35,6 @@ class StripeService implements ServiceInterface
             // Verify your integration in this guide by including this parameter
             'metadata' => ['integration_check' => 'accept_a_payment'],
         ]);
-
-        if (isset($intent->client_secret)) {
-            return $intent->client_secret;
-        }
 
         return $intent;
     }

@@ -232,23 +232,14 @@ class GernzyOrderTransactionsTest extends TestCase
     // For now this is tightly coupled to a package that has this route
     public function testWebhookForPaymentGateway()
     {
-
-        // $response = $this->post('/receive-hook', $this->postData);
-        // $response = $this->post('/receive-hook', ['balh' => 'as foo']);
-
-        $server = $this->transformHeadersToServerVars([]);
-        $cookies = $this->prepareCookiesForRequest();
-
         // public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-
         $response = $this->call(
             'POST',
             '/receive-hook',
-            ['lah' => 'blah'],
-            $cookies,
             [],
-            $server,
-            // json_encode(['balh' => 'as foo'])
+            [],
+            [],
+            [],
             json_encode($this->postData)
         );
 

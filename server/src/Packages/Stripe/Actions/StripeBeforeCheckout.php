@@ -60,10 +60,15 @@ class StripeBeforeCheckout implements ActionInterface
 
         // Use the stripe service to interact with the api
         $stripeService = App::make('Stripe\StripeService');
-        $secret = $stripeService->getSecret($cartTotal, $sessionCurrency);
+        $paymentIntent = $stripeService->createPaymentIntent($cartTotal, $sessionCurrency);
+        $secret = $stripeService->getSecret($paymentIntent);
 
         // Pass on the data for later use, note the secret should not be logged or stored
-        $action->attachData(StripeBeforeCheckout::class, ['stripe_data' => $secret, 'redirect_url' => url("/payment")]);
+        $action->attachData(StripeBeforeCheckout::class, [
+            'stripe_secret' => $secret,
+            'redirect_url' => url("/payment"),
+            'transaction_data' => $paymentIntent
+        ]);
 
         return $action;
     }
