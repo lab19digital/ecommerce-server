@@ -213,6 +213,7 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
         factory(Order::class, 5)->create()->each(function ($order) {
             $orderTransaction = new OrderTransaction();
             $orderTransaction->order_id = $order->id;
+            $orderTransaction->status = 'pending';
             $orderTransaction->save();
 
             $order->orderTransaction()->save($orderTransaction);
@@ -229,8 +230,12 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
     }
 
     // For now this is tightly coupled to a package that has this route
-    public function testWebhookForPaymentGateway()
+    public function testWebhookWithDataAndFindOrderAndOrderTransaction()
     {
+        // Set currency, add to cart, fire events and checkout
+        $this->testPaymentGatewayProviderWithDifferentCurrency();
+
+        // Simulate stripe payment succesful event posted to gernzy webhook
         // public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         $response = $this->call(
             'POST',
@@ -244,11 +249,5 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
 
         $response->assertStatus(200);
         $this->assertEquals('Success', $response->getContent());
-    }
-
-    public function testWebhookWithDataAndFindOrderAndOrderTransaction()
-    {
-        $this->testPaymentGatewayProviderWithDifferentCurrency();
-        $this->testWebhookForPaymentGateway();
     }
 }

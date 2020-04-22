@@ -84,7 +84,7 @@ class PaymentGatewayTest extends TestCheckoutTest
 
         $orderTransaction = OrderTransaction::find(1);
         $this->assertNotEmpty($orderTransaction->transaction_data);
-        $this->assertNotEmpty($orderTransaction->transaction_data['id']);
+        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_intent']);
         $this->assertEquals($orderTransaction->status, 'pending');
     }
 }

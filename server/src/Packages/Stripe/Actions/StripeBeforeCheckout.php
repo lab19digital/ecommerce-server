@@ -67,7 +67,7 @@ class StripeBeforeCheckout implements ActionInterface
         $action->attachData(StripeBeforeCheckout::class, [
             'stripe_secret' => $secret,
             'redirect_url' => url("/payment"),
-            'transaction_data' => $paymentIntent
+            'transaction_data' => ['stripe_payment_intent' => $paymentIntent]
         ]);
 
         return $action;
