@@ -232,7 +232,7 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
     // For now this is tightly coupled to a package that has this route
     public function testWebhookWithDataAndFindOrderAndOrderTransaction()
     {
-        // Set currency, add to cart, fire events and checkout
+        // Set currency, add to cart, fire events and checkout (from PaymentGatewayTest test)
         $this->testPaymentGatewayProviderWithDifferentCurrency();
 
         // Simulate stripe payment succesful event posted to gernzy webhook
@@ -249,5 +249,15 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
 
         $response->assertStatus(200);
         $this->assertEquals('Success', $response->getContent());
+
+        $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $this->postData['data']['object']['id'])->first();
+        $this->assertNotEmpty($orderTransaction->transaction_data);
+        $this->assertEquals($orderTransaction->status, 'paid');
+
+        // Check the association
+        $order = OrderTransaction::find(1)->order;
+        $orderTransaction = Order::find(1)->orderTransaction;
+        $this->assertNotEmpty($orderTransaction->id);
+        $this->assertNotEmpty($order->id);
     }
 }
