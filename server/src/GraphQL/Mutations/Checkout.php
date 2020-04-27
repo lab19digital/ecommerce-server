@@ -52,7 +52,7 @@ class Checkout
             $createCheckout = App::make(CreateCheckout::class);
             $order = $createCheckout->handle($args['input']);
 
-            // ---------------------------------
+            // Attach the transaction data to the order_transactions table
             if (isset($eventServiceData[0]['data']['transaction_data'])) {
                 // Create and associate order to transaction
                 $orderTransaction = new OrderTransaction();
@@ -65,7 +65,6 @@ class Checkout
                 $order->orderTransaction()->save($orderTransaction);
                 $order->save();
             }
-            // ---------------------------------
 
             return [
                 'order' => $order,

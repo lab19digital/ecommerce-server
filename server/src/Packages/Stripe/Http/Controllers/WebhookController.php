@@ -53,9 +53,15 @@ class WebhookController extends BaseController
                 // Update the status of the order transaction data to paid
                 $orderTransaction->status = 'paid';
 
+                // Remove the secret from event as it will be save in the database
+                if (isset($event->data->object['client_secret'])) {
+                    $event->data->object['client_secret'] = null;
+                }
+
                 // Add the stripe event data to the json column of transaction_data table
                 $transaction_data = $orderTransaction->transaction_data;
                 $transaction_data['stripe_payment_event'] = $event;
+
                 $orderTransaction->transaction_data = $transaction_data;
                 $orderTransaction->save();
 
