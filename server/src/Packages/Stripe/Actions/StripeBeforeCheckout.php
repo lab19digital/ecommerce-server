@@ -64,7 +64,7 @@ class StripeBeforeCheckout implements ActionInterface
         $secret = $stripeService->getSecret($paymentIntent);
 
         // Remove the secret from transaction_data as it will be save in the database
-        $paymentIntent['client_secret'] = '';
+        $paymentIntent['client_secret'] = null;
 
         // Pass on the data for later use, note the secret should not be logged or stored
         $action->attachData(StripeBeforeCheckout::class, [

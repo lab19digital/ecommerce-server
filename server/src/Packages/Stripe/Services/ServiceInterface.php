@@ -11,4 +11,6 @@ interface ServiceInterface
      */
     public function getSecret($paymentIntent);
     public function createPaymentIntent($amount, $currency);
+    public function handleWebhookPaymentSucceededEvent($event);
+    public function securityChecks($payload);
 }
