@@ -254,9 +254,12 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
         $this->assertNotEmpty($orderTransaction->transaction_data);
         $this->assertEquals($orderTransaction->status, 'paid');
 
+        // Check that the client secret is not present in the db
+        $this->assertEmpty($orderTransaction->transaction_data['stripe_payment_intent']['client_secret']);
+        $this->assertEmpty($orderTransaction->transaction_data['stripe_payment_event']['data']['object']['client_secret']);
+
         // Check the association
-        $order = OrderTransaction::find(1)->order;
-        $orderTransaction = Order::find(1)->orderTransaction;
+        $order = $orderTransaction->order;
         $this->assertNotEmpty($orderTransaction->id);
         $this->assertNotEmpty($order->id);
     }
