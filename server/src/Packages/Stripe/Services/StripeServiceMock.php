@@ -269,4 +269,21 @@ class StripeServiceMock implements ServiceInterface
             "type": "payment_intent.succeeded"
         }');
     }
+
+    public function getStripeWebhookIPAdresses()
+    {
+        return [
+            0 => "3.18.12.63",
+            1 => "3.130.192.231",
+            2 => "13.235.14.237",
+            3 => "13.235.122.149",
+            4 => "35.154.171.200",
+            6 => "54.187.174.169",
+            7 => "54.187.205.235",
+            8 => "54.187.216.72",
+            9 => "54.241.31.99",
+            10 => "54.241.31.102",
+            11 => "54.241.34.107"
+        ];
+    }
 }

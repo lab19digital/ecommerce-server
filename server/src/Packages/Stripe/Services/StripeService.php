@@ -4,6 +4,7 @@ namespace  Gernzy\Server\Packages\Stripe\Services;
 
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class StripeService implements ServiceInterface
@@ -107,6 +108,25 @@ class StripeService implements ServiceInterface
             return false;
         }
 
+
+        // Now check IP address of the request is from stripe. Note this won't work behind a proxy server
+        if (!in_array($_SERVER['REMOTE_ADDR'], $this->getStripeWebhookIPAdresses())) {
+            return false;
+        }
+
         return $event;
+    }
+
+    public function getStripeWebhookIPAdresses()
+    {
+        //Save stripe info for 24 hours for performance.
+        $stripe_webhooks_ips = Cache::remember('stripe_webhooks_ips', 1440, function () {
+            $client = resolve('GuzzleHttp\Client', ['baseUri' => 'https://stripe.com/files/ips/']);
+            $response = $client->request('GET', 'ips_webhooks.json');
+            $response = json_decode($response->getBody(), true);
+            return $response['WEBHOOKS'];
+        });
+
+        return $stripe_webhooks_ips;
     }
 }

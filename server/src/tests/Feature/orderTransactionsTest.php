@@ -4,6 +4,7 @@ namespace Gernzy\Server\Tests\Feature;
 
 use Gernzy\Server\Models\Order;
 use Gernzy\Server\Models\OrderTransaction;
+use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\WithFaker;
 
 class GernzyOrderTransactionsTest extends PaymentGatewayTest
@@ -212,7 +213,7 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
             [],
             [],
             [],
-            [],
+            ['REMOTE_ADDR' => '10.1.0.1'],
             $this->postData
         );
 
@@ -284,4 +285,25 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
 
         return $orderTransaction;
     }
+
+    // public function testTempBlah()
+  // {
+
+  // $client = resolve('GuzzleHttp\Client');
+
+  // $response = $client->request('GET', $endpoint);
+  // $response = json_decode($response->getBody());
+
+  // $client = new Client();
+  // $response = $client->get('https://stripe.com/files/ips/ips_webhooks.json');
+  // $ipAddresses =  json_decode($response->getBody(), true);
+
+  // dd($ipAddresses['WEBHOOKS']);
+
+  // Resolve the guzzle instance out of the container
+  // $client = resolve('GuzzleHttp\Client', ['baseUri' => 'https://stripe.com/files/ips/']);
+  // $response = $client->request('GET', 'ips_webhooks.json');
+  // $response = json_decode($response->getBody(), true);
+  // dd($response['WEBHOOKS']);
+  // }
 }

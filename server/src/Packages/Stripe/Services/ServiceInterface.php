@@ -13,4 +13,5 @@ interface ServiceInterface
     public function createPaymentIntent($amount, $currency);
     public function handleWebhookPaymentSucceededEvent($event);
     public function securityChecks($payload);
+    public function getStripeWebhookIPAdresses();
 }
