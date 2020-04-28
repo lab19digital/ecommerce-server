@@ -202,6 +202,24 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
         "type": "payment_intent.succeeded"
       }';
 
+    public function mockStripeWebhook()
+    {
+        // Simulate stripe payment succesful event posted to gernzy webhook
+        // public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
+        $mockStripeWebhook = $this->call(
+            'POST',
+            '/receive-hook',
+            [],
+            [],
+            [],
+            [],
+            $this->postData
+        );
+
+        return $mockStripeWebhook;
+    }
+
+
 
     public function setUp(): void
     {
@@ -243,15 +261,7 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
 
         // Simulate stripe payment succesful event posted to gernzy webhook
         // public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
-        $response = $this->call(
-            'POST',
-            '/receive-hook',
-            [],
-            [],
-            [],
-            [],
-            $this->postData
-        );
+        $response = $this->mockStripeWebhook();
 
         $response->assertStatus(200);
         $this->assertEquals('Success', $response->getContent());
@@ -271,5 +281,7 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
         $order = $orderTransaction->order;
         $this->assertNotEmpty($orderTransaction->id);
         $this->assertNotEmpty($order->id);
+
+        return $orderTransaction;
     }
 }
