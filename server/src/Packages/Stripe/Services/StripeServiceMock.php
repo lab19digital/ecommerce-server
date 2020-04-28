@@ -20,6 +20,7 @@ class StripeServiceMock implements ServiceInterface
 
     public function createPaymentIntent($amount, $currency)
     {
+        /** Mock the payment intent create by  $intent = \Stripe\PaymentIntent::create([ */
         return [
             "id" => "pi_1GcXwpBEW94QPQobF8AyuYs4",
             "object" => "payment_intent",
@@ -81,6 +82,7 @@ class StripeServiceMock implements ServiceInterface
 
     public function securityChecks($payload)
     {
+        /** Mock the event created by $event = \Stripe\Webhook::constructEvent(*/
         return json_decode('{
             "id": "evt_1GcXwqBEW94QPQobxFsGJSm7",
             "object": "event",

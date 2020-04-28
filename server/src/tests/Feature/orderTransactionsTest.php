@@ -10,6 +10,7 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
 {
     use WithFaker;
 
+    /** This is mock post data that stripe sends to a webhook endpoint for the "type": "payment_intent.succeeded" event*/
     public $postData = '{
         "id": "evt_1GcXm6BEW94QPQobIlnXORHv",
         "object": "event",

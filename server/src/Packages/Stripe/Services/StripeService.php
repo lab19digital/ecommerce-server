@@ -57,6 +57,13 @@ class StripeService implements ServiceInterface
             Log::error('The transaction order data was not found for that successful payment.' + $paymentIntent);
         }
 
+        /** Stripe may send the same event for succeeded multiple times. Thus check if the order status is already set to paid
+         * and if not then continue with the flow
+         */
+        if ($orderTransaction->status === 'paid') {
+            return;
+        }
+
         // Update the status of the order transaction data to paid
         $orderTransaction->status = 'paid';
 
