@@ -259,6 +259,8 @@ class GernzyOrderTransactionsTest extends PaymentGatewayTest
         $postDataObject = json_decode($this->postData);
         $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $postDataObject->data->object->id)->first();
         $this->assertNotEmpty($orderTransaction->transaction_data);
+        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_intent']);
+        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_event']);
         $this->assertEquals($orderTransaction->status, 'paid');
 
         // Check that the client secret is not present in the db
