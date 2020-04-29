@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace Gernzy\Server\Tests\Feature;
 
 use Gernzy\Server\Listeners\BeforeCheckout;
+use Gernzy\Server\Models\OrderTransaction;
 use Gernzy\Server\Models\Product;
 use Gernzy\Server\Packages\Stripe\Actions\StripeBeforeCheckout;
 use Gernzy\Server\Packages\Stripe\Services\StripeService;
@@ -42,7 +43,7 @@ class PaymentGatewayTest extends TestCheckoutTest
         $eventData = json_decode($this->result['data']['checkout']['event_data']);
 
         // Check for stripe secret
-        $this->assertNotEmpty($eventData[0]->data->stripe_data);
+        $this->assertNotEmpty($eventData[0]->data->stripe_secret);
     }
 
     public function testPaymentGatewayProviderWithDifferentCurrency()
@@ -79,6 +80,11 @@ class PaymentGatewayTest extends TestCheckoutTest
         $eventData = json_decode($result['data']['checkout']['event_data']);
 
         // Check for stripe secret
-        $this->assertNotEmpty($eventData[0]->data->stripe_data);
+        $this->assertNotEmpty($eventData[0]->data->stripe_secret);
+
+        $orderTransaction = OrderTransaction::find(1);
+        $this->assertNotEmpty($orderTransaction->transaction_data);
+        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_intent']);
+        $this->assertEquals($orderTransaction->status, 'pending');
     }
 }

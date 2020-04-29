@@ -47,7 +47,7 @@ class OpenExchangeRates implements CurrencyConversionInterface
         $endpoint = "latest.json?app_id=" . $apiToken . "&base=" . $this->baseCurrency;
 
         // Resolve the guzzle instance out of the container
-        $client = resolve('GuzzleHttp\Client');
+        $client = resolve('GuzzleHttp\Client', ['baseUri' => self::API_BASE_PATH]);
 
         $response = $client->request('GET', $endpoint);
         $response = json_decode($response->getBody());

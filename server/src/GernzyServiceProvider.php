@@ -75,9 +75,9 @@ class GernzyServiceProvider extends ServiceProvider
         $this->app->bind('Gernzy\ServerService', CartService::class);
         $this->app->bind('Gernzy\GeolocationService', GeolocationService::class);
 
-        $this->app->bind('GuzzleHttp\Client', function ($app) {
+        $this->app->bind('GuzzleHttp\Client', function ($app, array $parameters) {
             return new Client([
-                'base_uri' => 'https://openexchangerates.org/api/',
+                'base_uri' => $parameters['baseUri'],
                 'timeout' => 2.0,
             ]);
         });

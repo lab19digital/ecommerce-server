@@ -9,5 +9,9 @@ interface ServiceInterface
      *
      * @param string
      */
-    public function getSecret($amount, $currency);
+    public function getSecret($paymentIntent);
+    public function createPaymentIntent($amount, $currency);
+    public function handleWebhookPaymentSucceededEvent($event);
+    public function securityChecks($payload);
+    public function getStripeWebhookIPAdresses();
 }

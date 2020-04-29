@@ -125,13 +125,12 @@ class ExhangeRatesManager
     {
         // TODO: Probably a good scenario for a singleton object
         foreach ($result as $key => $value) {
-            $productCurrency = $result[$key]['price_currency']; //This becomes the base to convert from
-            $productPriceCents = $result[$key]['price_cents'];
-
             // If either values not set then bail
-            if (!isset($productCurrency) || !isset($productPriceCents)) {
+            if (!isset($result[$key]['price_currency']) || !isset($result[$key]['price_cents'])) {
                 continue;
             }
+            $productCurrency = $result[$key]['price_currency']; //This becomes the base to convert from
+            $productPriceCents = $result[$key]['price_cents'];
 
             if (isset($this->cachedRate)) {
                 // Convert according to the cached rate, this does assume that each product in the

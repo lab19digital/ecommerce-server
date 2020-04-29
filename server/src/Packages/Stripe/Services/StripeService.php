@@ -2,13 +2,30 @@
 
 namespace  Gernzy\Server\Packages\Stripe\Services;
 
+use Gernzy\Server\Exceptions\GernzyException;
+use Gernzy\Server\Models\OrderTransaction;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+
 class StripeService implements ServiceInterface
 {
     public function __construct()
     {
     }
 
-    public function getSecret($amount, $currency)
+    public function getSecret($paymentIntent)
+    {
+        if (isset($paymentIntent->client_secret)) {
+            return $paymentIntent->client_secret;
+        }
+
+        throw new GernzyException(
+            'The response did not include a secret.',
+            'Please recreate the intent.'
+        );
+    }
+
+    public function createPaymentIntent($amount, $currency)
     {
         // Set your secret key. Remember to switch to your live secret key in production!
         // See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -22,10 +39,94 @@ class StripeService implements ServiceInterface
             'metadata' => ['integration_check' => 'accept_a_payment'],
         ]);
 
-        if (isset($intent->client_secret)) {
-            return $intent->client_secret;
+        return $intent;
+    }
+
+    public function handleWebhookPaymentSucceededEvent($event)
+    {
+
+        // Find the order transaction data
+        $paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
+        $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $paymentIntent->id)->first();
+
+        if (!isset($orderTransaction)) {
+            Log::error('The transaction order data was not found for that successful payment.' + $paymentIntent->id);
+            throw new GernzyException(
+                'The transaction order data was not found for that successful payment.',
+                ''
+            );
         }
 
-        return $intent;
+        /** Stripe may send the same event for succeeded multiple times. Thus check if the order status is already set to paid
+         * and if not then continue with the flow
+         */
+        if ($orderTransaction->status === 'paid') {
+            return;
+        }
+
+        // Update the status of the order transaction data to paid
+        $orderTransaction->status = 'paid';
+
+        // Remove the secret from event as it will be save in the database
+        if (isset($event->data->object->client_secret)) {
+            $event->data->object->client_secret = null;
+        }
+
+        // Add the stripe event data to the json column of transaction_data table
+        $transaction_data = $orderTransaction->transaction_data;
+        $transaction_data['stripe_payment_event'] = $event;
+
+        $orderTransaction->transaction_data = $transaction_data;
+        $orderTransaction->save();
+    }
+
+    public function securityChecks($payload)
+    {
+        $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
+
+        // Set your secret key. Remember to switch to your live secret key in production!
+        // See your keys here: https://dashboard.stripe.com/account/apikeys
+        \Stripe\Stripe::setApiKey(config('api.stripe_sk_key'));
+
+        // If you are testing your webhook locally with the Stripe CLI you
+        // can find the endpoint's secret by running `stripe listen`
+        // Otherwise, find your endpoint's secret in your webhook settings in the Developer Dashboard
+        $endpoint_secret = config('api.stripe_endpoint_secret');
+
+        try {
+            $event = \Stripe\Webhook::constructEvent(
+                $payload,
+                $sig_header,
+                $endpoint_secret
+            );
+        } catch (\UnexpectedValueException $e) {
+            // Invalid payload
+            return false;
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            // Invalid signature
+            return false;
+        }
+
+        // Now check IP address of the request is from stripe. Note this won't work behind a proxy server
+        $ipAddresses = $this->getStripeWebhookIPAdresses();
+        if (!in_array($_SERVER['REMOTE_ADDR'], $ipAddresses)) {
+            return false;
+        }
+
+        return $event;
+    }
+
+    public function getStripeWebhookIPAdresses()
+    {
+        //Save stripe info for 24 hours for performance.
+        $stripe_webhooks_ips = Cache::remember('stripe_webhooks_ips', 1440, function () {
+            $client = resolve('GuzzleHttp\Client', ['baseUri' => 'https://stripe.com/files/ips/']);
+            $response = $client->request('GET', 'ips_webhooks.json');
+            $response = json_decode($response->getBody(), true);
+
+            return $response['WEBHOOKS'];
+        });
+
+        return $stripe_webhooks_ips;
     }
 }

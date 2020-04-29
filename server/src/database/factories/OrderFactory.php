@@ -1,9 +1,9 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-use Gernzy\Server\Models\Order;
-use Illuminate\Support\Str;
+
 use Faker\Generator as Faker;
+use Gernzy\Server\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +20,8 @@ $factory->define(Order::class, function (Faker $faker) {
     return [
         'cart_id' => $faker->randomNumber(),
         'currency_id' => $faker->randomNumber(),
-        'status' => 'ORDER_PROCESSING'
+        'status' => 'ORDER_PROCESSING',
+        'agree_to_terms' => 1,
+        'notes' => $faker->paragraph()
     ];
 });
