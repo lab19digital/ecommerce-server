@@ -28,19 +28,12 @@ class WebhookController extends BaseController
             case 'payment_intent.succeeded':
                 // Then define and call a method to handle the successful payment intent.
                 $stripeService->handleWebhookPaymentSucceededEvent($event);
-
-                break;
-            case 'payment_method.attached':
-                $paymentMethod = $event->data->object; // contains a \Stripe\PaymentMethod
-                // Then define and call a method to handle the successful attachment of a PaymentMethod.
-                // handlePaymentMethodAttached($paymentMethod);
                 break;
                 // ... handle other event types
             default:
                 // Unexpected event type
                 return response('Error', 400);
         }
-
 
         return response('Success', 200);
     }

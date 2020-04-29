@@ -50,12 +50,11 @@ class StripeService implements ServiceInterface
         $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $paymentIntent->id)->first();
 
         if (!isset($orderTransaction)) {
+            Log::error('The transaction order data was not found for that successful payment.' + $paymentIntent->id);
             throw new GernzyException(
                 'The transaction order data was not found for that successful payment.',
                 ''
             );
-
-            Log::error('The transaction order data was not found for that successful payment.' + $paymentIntent);
         }
 
         /** Stripe may send the same event for succeeded multiple times. Thus check if the order status is already set to paid
