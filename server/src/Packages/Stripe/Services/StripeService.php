@@ -107,9 +107,9 @@ class StripeService implements ServiceInterface
             return false;
         }
 
-
         // Now check IP address of the request is from stripe. Note this won't work behind a proxy server
-        if (!in_array($_SERVER['REMOTE_ADDR'], $this->getStripeWebhookIPAdresses())) {
+        $ipAddresses = $this->getStripeWebhookIPAdresses();
+        if (!in_array($_SERVER['REMOTE_ADDR'], $ipAddresses)) {
             return false;
         }
 

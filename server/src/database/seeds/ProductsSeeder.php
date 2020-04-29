@@ -29,7 +29,7 @@ class ProductsSeeder extends Seeder
     {
         $faker = \Faker\Factory::create();
         foreach ($this->titles as $title) {
-            $rand = rand(0, 10);
+            $rand = rand(0, 20);
             DB::table('gernzy_products')->insert([
                 'title' => $faker->word(),
                 'short_description' => $faker->sentence(),
