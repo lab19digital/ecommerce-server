@@ -124,6 +124,7 @@ class StripeService implements ServiceInterface
             $client = resolve('GuzzleHttp\Client', ['baseUri' => 'https://stripe.com/files/ips/']);
             $response = $client->request('GET', 'ips_webhooks.json');
             $response = json_decode($response->getBody(), true);
+
             return $response['WEBHOOKS'];
         });
 
