@@ -15,3 +15,6 @@
 Route::get('payment', function () {
     return view('Stripe\Payment::payment');
 });
+
+Route::post('receive-hook', 'Gernzy\Server\Packages\Stripe\Http\Controllers\WebhookController@index')
+    ->name('webhook.receive');

@@ -67,4 +67,9 @@ class Order extends Model
     {
         return $this->hasOne(Cart::class);
     }
+
+    public function orderTransaction(): HasOne
+    {
+        return $this->hasOne(OrderTransaction::class);
+    }
 }

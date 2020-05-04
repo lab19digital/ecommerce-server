@@ -72,6 +72,7 @@ class Checkout {
                 if (re.errors) {
                     let errors = re.errors;
                     let debugMessage = re.errors[0].debugMessage;
+                    // console.log(errors);
                 } else {
                     $('.checkout-container').html(successTemplate('Your details have been submitted.'));
                 }

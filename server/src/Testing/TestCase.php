@@ -5,6 +5,7 @@ namespace Gernzy\Server\Testing;
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Packages\ExamplePackage\Actions\ExampleBeforeCheckout;
 use Gernzy\Server\Packages\ExamplePackage\ExamplePackageProvider;
+use Gernzy\Server\Packages\Stripe\StripeProvider;
 use Gernzy\Server\Testing\Seeds\UsersSeeder;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -55,7 +56,9 @@ abstract class TestCase extends BaseTestCase
         return [
             'Gernzy\\Server\\GernzyServiceProvider',
             // Pull in the ExamplePackageProvider
-            ExamplePackageProvider::class
+            ExamplePackageProvider::class,
+            StripeProvider::class
+
         ];
     }
 
@@ -70,7 +73,7 @@ abstract class TestCase extends BaseTestCase
 
 
         // Mocking the api request to openexchange rates through the guzzle mock handler
-        $this->app->bind('GuzzleHttp\Client', function ($app) {
+        $this->app->bind('GuzzleHttp\Client', function ($app, array $parameters) {
             $json = [
                 "disclaimer" => "https://openexchangerates.org/terms/",
                 "license" => "https://openexchangerates.org/license/",
@@ -85,6 +88,22 @@ abstract class TestCase extends BaseTestCase
                     "AUD" => "15.716501",
                 ],
             ];
+
+            if ($parameters['baseUri'] == 'https://stripe.com/files/ips/') {
+                $json = ['WEBHOOKS' => [
+                    0 => "3.18.12.63",
+                    1 => "3.130.192.231",
+                    2 => "13.235.14.237",
+                    3 => "13.235.122.149",
+                    4 => "35.154.171.200",
+                    6 => "54.187.174.169",
+                    7 => "54.187.205.235",
+                    8 => "54.187.216.72",
+                    9 => "54.241.31.99",
+                    10 => "54.241.31.102",
+                    11 => "54.241.34.107"
+                ]];
+            }
 
             $json = json_encode($json);
 

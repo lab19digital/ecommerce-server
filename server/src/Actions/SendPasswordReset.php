@@ -2,13 +2,14 @@
 
 namespace Gernzy\Server\Actions;
 
-use Illuminate\Support\Carbon;
-
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
+use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\PasswordResets;
+
 use Gernzy\Server\Models\User;
 use Gernzy\Server\Notifications\GernzyResetPassword;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 class SendPasswordReset
 {
@@ -24,8 +25,11 @@ class SendPasswordReset
         $user = User::where('email', $email)->first();
 
         // User not found in the database
-        if ($user === null) {
-            return false;
+        if (!isset($user) || empty($user)) {
+            throw new GernzyException(
+                'Password reset.',
+                'Error occured.'
+            );
         }
 
         $token = Password::broker()->createToken($user);

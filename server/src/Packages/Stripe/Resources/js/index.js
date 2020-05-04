@@ -7,7 +7,7 @@ export default {
         if (pathname.includes('payment')) {
             let stripe = new StripeService(userConfig.publishable_api_key);
             let eventData = JSON.parse(localStorage.getItem('event_data'));
-            let stripeSecretkey = eventData[0].data.stripe_data;
+            let stripeSecretkey = eventData[0].data.stripe_secret;
 
             if (!stripeSecretkey || 0 === stripeSecretkey.length) {
                 // error stripe key undefined
