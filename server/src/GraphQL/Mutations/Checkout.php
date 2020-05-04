@@ -26,7 +26,7 @@ class Checkout
      */
     public function checkout($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $payment_method = $args['input']['payment_method'] ?? "";
+        $payment_method = $args['input']['payment_method'] ?? "none";
         $cartService = App::make(CartService::class);
         $sessionService = App::make(SessionService::class);
 
