@@ -18,6 +18,7 @@ class CreateGernzyOrderTransactionsTable extends Migration
             $table->bigInteger('order_id')->unsigned();
             $table->string('status');
             $table->json('transaction_data')->nullable();
+            $table->string('payment_method');
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('gernzy_orders')->onDelete('cascade');

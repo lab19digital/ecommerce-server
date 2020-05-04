@@ -59,6 +59,7 @@ class Checkout
                 $orderTransaction->order_id = $order->id;
                 $orderTransaction->transaction_data = $eventServiceData[0]['data']['transaction_data'];
                 $orderTransaction->status = 'pending';
+                $orderTransaction->payment_method = $payment_method;
                 $orderTransaction->save();
 
                 // Associate transaction to order
