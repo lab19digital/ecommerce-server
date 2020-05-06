@@ -27,8 +27,8 @@ class PayPalClient
      */
     public static function environment()
     {
-        $clientId = env("CLIENT_ID") ?: "AaPIMFArYm6R5VZgKCqAeh9bTTf1g3JA8zeiWz62xPa1niqDcHk4dQVWjJLz_R3RVPraZEnT1uossdfE";
-        $clientSecret = env("CLIENT_SECRET") ?: "EK62j7HveWxzcOtYmzWjsMygAq384wRtTiWKYx48BXuVLOKNwfO7c-J2GhnIS854qGul3HUP_WSnjBaO";
+        $clientId = env("CLIENT_ID") ?: "";
+        $clientSecret = env("CLIENT_SECRET") ?: "";
         return new SandboxEnvironment($clientId, $clientSecret);
     }
 }
