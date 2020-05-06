@@ -1,6 +1,6 @@
 <?php
 
-namespace Gernzy\Server\Packages\Stripe\Actions;
+namespace Gernzy\Server\Packages\Paypal\Actions;
 
 use \App;
 use Gernzy\Server\Classes\ActionClass;
@@ -8,7 +8,7 @@ use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Services\ActionInterface;
 use Gernzy\Server\Services\ExhangeRatesManager;
 
-class StripeBeforeCheckout implements ActionInterface
+class PaypalBeforeCheckout implements ActionInterface
 {
     public function __construct()
     {
@@ -20,7 +20,7 @@ class StripeBeforeCheckout implements ActionInterface
         $data = $action->getOriginalData();
 
         // Check if stripe was chosen as payment provider
-        if (isset($data['payment_method']) && $data['payment_method'] == 'stripe_standard') {
+        if (isset($data['payment_method']) && $data['payment_method'] == 'paypal_standard') {
             $payment_method = $data['payment_method'];
         } else {
             return $action;
@@ -59,18 +59,18 @@ class StripeBeforeCheckout implements ActionInterface
         }
 
         // Use the stripe service to interact with the api
-        $stripeService = App::make('Stripe\StripeService');
-        $paymentIntent = $stripeService->createPaymentIntent($cartTotal, $sessionCurrency);
-        $secret = $stripeService->getSecret($paymentIntent);
+        $paypalService = App::make('Paypal\PaypalService');
+        // $paymentIntent = $paypalService->createPaymentIntent($cartTotal, $sessionCurrency);
+        // $secret = $paypalService->getSecret($paymentIntent);
 
         // Remove the secret from transaction_data as it will be save in the database
-        $paymentIntent['client_secret'] = null;
+        // $paymentIntent['client_secret'] = null;
 
         // Pass on the data for later use, note the secret should not be logged or stored
-        $action->attachData(StripeBeforeCheckout::class, [
-            'stripe_secret' => $secret,
-            'redirect_url' => url("/payment-stripe"),
-            'transaction_data' => ['stripe_payment_intent' => $paymentIntent]
+        $action->attachData(PaypalBeforeCheckout::class, [
+            'paypal_secret' => '$secret',
+            'redirect_url' => url("/payment-paypal"),
+            'transaction_data' => ['paypal_payment_intent' => '$paymentIntent']
         ]);
 
         return $action;

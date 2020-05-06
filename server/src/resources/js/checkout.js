@@ -8,6 +8,8 @@ class Checkout {
         this.cart = cart;
     }
 
+    populatePaymentProviders() {}
+
     checkout() {
         // This is to keep the object context of and access it's methods
         var self = this;

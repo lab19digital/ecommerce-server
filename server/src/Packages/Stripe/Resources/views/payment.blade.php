@@ -1,4 +1,4 @@
-@extends('Gernzy\Server::app')
+@extends('Stripe\Payment::app')
 
 @section('content')
 <div class="uk-container uk-container-xsmall uk-margin-large-top">
