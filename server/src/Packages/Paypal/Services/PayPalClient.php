@@ -27,8 +27,8 @@ class PayPalClient
      */
     public static function environment()
     {
-        $clientId = env("CLIENT_ID") ?: "";
-        $clientSecret = env("CLIENT_SECRET") ?: "";
+        $clientId = config("api.paypal_client_id") ?: "";
+        $clientSecret = config("api.paypal_client_secret") ?: "";
         return new SandboxEnvironment($clientId, $clientSecret);
     }
 }

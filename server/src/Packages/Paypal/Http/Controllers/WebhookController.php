@@ -2,10 +2,10 @@
 
 namespace Gernzy\Server\Packages\Paypal\Http\Controllers;
 
+use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Packages\Paypal\Services\CreateOrder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Log;
 
 class WebhookController extends BaseController
 {
@@ -26,11 +26,18 @@ class WebhookController extends BaseController
          *This is the driver function that invokes the createOrder function to create
          *a sample order.
          */
-        $response = CreateOrder::createOrder(false);
-        Log::debug(json_encode($response, JSON_PRETTY_PRINT));
+
+        $content = json_decode($request->getContent(), true);
+        if (!isset($content['userToken']) && empty($content['userToken'])) {
+            throw new GernzyException(
+                'No user token provided.',
+                'Please provide a valid user token.'
+            );
+        }
+
+        $token = $content['userToken'];
+
+        $response = CreateOrder::createOrder();
         return json_encode($response);
-        // if (!count(debug_backtrace())) {
-        //     return CreateOrder::createOrder(true);
-        // }
     }
 }

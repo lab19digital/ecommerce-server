@@ -1,19 +1,31 @@
-// import { PaypalService } from './paypal';
+import { PaypalService } from './paypal';
 
 export default {
     init: function(userConfig = {}) {
         let pathname = window.location.pathname;
 
         if (pathname.includes('payment-paypal')) {
-            // let paypal = new PaypalService(userConfig.publishable_api_key);
-            // let eventData = JSON.parse(localStorage.getItem('event_data'));
-            // let paypalSecretkey = eventData[0].data.paypal_secret;
-            // if (!paypalSecretkey || 0 === paypalSecretkey.length) {
-            //     // error paypal key undefined
-            // }
-            // paypal.formLoaded();
-            // paypal.formSubmitListener(paypalSecretkey);
-            console.log('Hello from payapal');
+            let paypalService = new PaypalService();
+            let eventData = JSON.parse(localStorage.getItem('event_data'));
+            let paypalId = eventData[0].data.transaction_data.paypal_data.result.id;
+            var userToken = localStorage.getItem('userToken');
+
+            if (!paypalId || 0 === paypalId.length) {
+                // error paypal id undefined
+                // console.log('The paypal ID is not set');
+                return;
+            }
+
+            paypal
+                .Buttons({
+                    createOrder: function() {
+                        return paypalService.creatOrder(userToken);
+                    },
+                    onApprove: function(data, actions) {
+                        return paypalService.onApprove(actions);
+                    },
+                })
+                .render('#paypal-button-container');
         }
     },
 };

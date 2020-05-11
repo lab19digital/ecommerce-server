@@ -46,32 +46,6 @@
 
     </div>
 
-    <script>
-        paypal.Buttons({
-            createOrder: function() {
-                return fetch('/create-paypal-transaction', {
-                    method: 'post',
-                    headers: {
-                        'content-type': 'application/json'
-                    }
-                }).then(function(res) {
-                    console.log('hi' + JSON.stringify(res));
-                    return res.json();
-                }).then(function(data) {
-                    return data.orderID; // Use the same key name for order ID on the client and server
-                });
-            },
-            // onApprove: function(data, actions) {
-            //     // This function captures the funds from the transaction.
-            //     return actions.order.capture().then(function(details) {
-            //         // This function shows a transaction success message to your buyer.
-            //         alert('Transaction completed by ' + details.payer.name.given_name);
-            //     });
-            // }
-        }).render('#paypal-button-container');
-        //This function displays Smart Payment Buttons on your web page.
-    </script>
-
     <script src="/js/gernzy.js"></script>
 </body>
 
