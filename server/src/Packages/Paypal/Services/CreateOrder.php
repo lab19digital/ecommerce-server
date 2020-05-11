@@ -20,11 +20,11 @@ class CreateOrder
      *This is the sample function to create an order. It uses the
      *JSON body returned by buildRequestBody() to create an order.
      */
-    public static function createOrder($debug = false)
+    public static function createOrder($debug = false, $cartTotal, $sessionCurrency)
     {
         $request = new OrdersCreateRequest();
         $request->prefer('return=representation');
-        $request->body = self::buildRequestBody();
+        $request->body = self::buildRequestBody($cartTotal, $sessionCurrency);
         // 3. Call PayPal to set up a transaction
         $client = PayPalClient::client();
         $response = $client->execute($request);
@@ -51,8 +51,10 @@ class CreateOrder
      * request body should be "AUTHORIZE" for authorize intent flow.
      *
      */
-    private static function buildRequestBody()
+    private static function buildRequestBody($cartTotal, $sessionCurrency)
     {
+        Log::debug($cartTotal . ' ' . $sessionCurrency);
+
         return [
             'intent' => 'CAPTURE',
             'application_context' =>
@@ -66,8 +68,8 @@ class CreateOrder
                 [
                     'amount' =>
                     [
-                        'currency_code' => 'USD',
-                        'value' => '220.00'
+                        'currency_code' => $sessionCurrency,
+                        'value' => $cartTotal
                     ]
                 ]
             ]

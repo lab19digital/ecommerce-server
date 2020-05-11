@@ -8,7 +8,6 @@ export default {
             let paypalService = new PaypalService();
             let eventData = JSON.parse(localStorage.getItem('event_data'));
             let paypalId = eventData[0].data.transaction_data.paypal_data.result.id;
-            var userToken = localStorage.getItem('userToken');
 
             if (!paypalId || 0 === paypalId.length) {
                 // error paypal id undefined
@@ -19,7 +18,7 @@ export default {
             paypal
                 .Buttons({
                     createOrder: function() {
-                        return paypalService.creatOrder(userToken);
+                        return paypalId;
                     },
                     onApprove: function(data, actions) {
                         return paypalService.onApprove(actions);

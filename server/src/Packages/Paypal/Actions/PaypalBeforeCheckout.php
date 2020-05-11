@@ -60,7 +60,7 @@ class PaypalBeforeCheckout implements ActionInterface
         }
 
         // Use the paypal service to interact with the api
-        $response = CreateOrder::createOrder();
+        $response = CreateOrder::createOrder(false, $cartTotal, $sessionCurrency);
 
         // Pass on the data for later use, note the secret should not be logged or stored
         $action->attachData(PaypalBeforeCheckout::class, [

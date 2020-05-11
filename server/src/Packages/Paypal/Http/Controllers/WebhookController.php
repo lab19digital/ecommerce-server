@@ -27,17 +27,17 @@ class WebhookController extends BaseController
          *a sample order.
          */
 
-        $content = json_decode($request->getContent(), true);
-        if (!isset($content['userToken']) && empty($content['userToken'])) {
-            throw new GernzyException(
-                'No user token provided.',
-                'Please provide a valid user token.'
-            );
-        }
+        // $content = json_decode($request->getContent(), true);
+        // if (!isset($content['userToken']) && empty($content['userToken'])) {
+        //     throw new GernzyException(
+        //         'No user token provided.',
+        //         'Please provide a valid user token.'
+        //     );
+        // }
 
-        $token = $content['userToken'];
+        // $token = $content['userToken'];
 
-        $response = CreateOrder::createOrder();
-        return json_encode($response);
+        // $response = CreateOrder::createOrder();
+        // return json_encode($response);
     }
 }
