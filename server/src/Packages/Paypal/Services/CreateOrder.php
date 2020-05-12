@@ -2,8 +2,6 @@
 
 namespace  Gernzy\Server\Packages\Paypal\Services;
 
-//1. Import the PayPal SDK client that was created in `Set up Server-Side SDK`.
-
 use Illuminate\Support\Facades\Log;
 
 /**I can only access PayPalCheckoutSdk\Orders\OrdersCreateRequest;
