@@ -21,10 +21,6 @@
 </head>
 
 <body>
-    <script src="https://www.paypal.com/sdk/js?client-id=AaPIMFArYm6R5VZgKCqAeh9bTTf1g3JA8zeiWz62xPa1niqDcHk4dQVWjJLz_R3RVPraZEnT1uossdfE">
-        // Required. Replace SB_CLIENT_ID with your sandbox client ID.
-    </script>
-
     <div id="paypal">
         <main>
             <span id="loadingDiv" uk-spinner="ratio: 3" class="uk-position-cover uk-overlay uk-overlay-default uk-flex uk-flex-center uk-flex-middle" style="z-index: 99999;

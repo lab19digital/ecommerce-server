@@ -53,7 +53,7 @@ class CreateOrder
      */
     private static function buildRequestBody($cartTotal, $sessionCurrency)
     {
-        Log::debug($cartTotal . ' ' . $sessionCurrency);
+        Log::debug('The total: ' . $cartTotal . ' The currency: ' . $sessionCurrency);
 
         return [
             'intent' => 'CAPTURE',
@@ -69,7 +69,7 @@ class CreateOrder
                     'amount' =>
                     [
                         'currency_code' => $sessionCurrency,
-                        'value' => $cartTotal
+                        'value' => ($cartTotal / 100)
                     ]
                 ]
             ]
