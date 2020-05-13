@@ -2,7 +2,7 @@
 
 namespace  Gernzy\Server\Packages\Paypal\Services;
 
-interface ServiceInterface
+interface PaypalServiceInterface
 {
     /**
      * Return a secret from Stripe

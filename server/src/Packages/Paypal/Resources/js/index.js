@@ -29,7 +29,7 @@ export default {
                             return pyapalOrderID;
                         },
                         onApprove: function(data, actions) {
-                            return paypalService.onApprove(actions);
+                            return paypalService.onApprove(data, actions);
                         },
                     })
                     .render('#paypal-button-container');

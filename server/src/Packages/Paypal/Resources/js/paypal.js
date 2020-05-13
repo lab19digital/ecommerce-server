@@ -5,31 +5,25 @@ import errorTemplate from './templates/errorTemplate';
 class PaypalService {
     constructor() {}
 
-    creatOrder(userToken) {
-        const data = { userToken: userToken };
+    onApprove(data, actions) {
+        var $loading = $('#loadingDiv').hide();
+        $loading.show();
         return fetch('/create-paypal-transaction', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify({
+                orderID: data.orderID,
+            }),
         })
             .then(function(res) {
-                return res.json();
+                // return res.json();
             })
-            .then(function(data) {
-                console.log(data.result.id);
-                return data.result.id; // Use the same key name for order ID on the client and server
+            .then(function(dataRes) {
+                $loading.hide();
+                $('#paypal-button-container').html(successTemplate('Payment successful'));
             });
-    }
-
-    onApprove(actions) {
-        // This function captures the funds from the transaction.
-        return actions.order.capture().then(function(details) {
-            // This function shows a transaction success message to your buyer.
-            // alert('Transaction completed by ' + details.payer.name.given_name);
-            $('#paypal-button-container').html(successTemplate('Payment successful ' + details.payer.name.given_name));
-        });
     }
 
     loadScript(url, callback) {
