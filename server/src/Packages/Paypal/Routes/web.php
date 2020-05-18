@@ -16,8 +16,8 @@ Route::get('payment-paypal', function () {
     return view('Paypal\Payment::payment');
 });
 
-Route::post('create-paypal-transaction', 'Gernzy\Server\Packages\Paypal\Http\Controllers\WebhookController@index')
+Route::post('create-paypal-transaction', 'Gernzy\Server\Packages\Paypal\Http\Controllers\CapturePaymentController@index')
     ->name('paypal.transaction');
 
-Route::post('receive-hook-paypal', 'Gernzy\Server\Packages\Paypal\Http\Controllers\WebhookController@index')
+Route::post('receive-hook-paypal', 'Gernzy\Server\Packages\Paypal\Http\Controllers\CapturePaymentController@index')
     ->name('webhook.receive');
