@@ -6,7 +6,7 @@ use \App;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
-class WebhookController extends BaseController
+class CapturePaymentController extends BaseController
 {
     /**
      * Show the profile for the given user.
