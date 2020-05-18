@@ -51,8 +51,6 @@ class CreateOrder
      */
     private static function buildRequestBody($cartTotal, $sessionCurrency)
     {
-        Log::debug('The total: ' . $cartTotal . ' The currency: ' . $sessionCurrency);
-
         return [
             'intent' => 'CAPTURE',
             'application_context' =>

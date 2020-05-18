@@ -10,7 +10,6 @@ class PaypalService
 {
     public function handleWebhookPaymentSucceededEvent($payload)
     {
-        Log::debug($payload->result->id);
         // Find the order transaction data
         $orderTransaction = OrderTransaction::where('transaction_data->paypal_data->result->id', $payload->result->id)->first();
 

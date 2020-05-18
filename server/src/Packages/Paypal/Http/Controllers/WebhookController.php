@@ -19,14 +19,14 @@ class WebhookController extends BaseController
     {
         $payload = json_decode($request->getContent());
 
-        if (!$response = CaptureOrder::captureOrder($payload->orderID, true)) {
-            return response('Error', 400);
+        if (!$response = CaptureOrder::captureOrder($payload->orderID, false)) {
+            return response()->json(['error' => 'Server error'], 400);
         }
 
         $paypalService = App::make('Paypal\PaypalService');
 
         $paypalService->handleWebhookPaymentSucceededEvent($response);
 
-        return response(json_encode($response), 200);
+        return response()->json($response, 200);
     }
 }

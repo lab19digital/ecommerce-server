@@ -18,11 +18,24 @@ class PaypalService {
             }),
         })
             .then(function(res) {
-                // return res.json();
+                try {
+                    return res.json();
+                } catch (error) {
+                    console.log(`error: ${error}`);
+                    console.log('error text:' + res.text());
+                }
             })
             .then(function(dataRes) {
+                if (dataRes.error) {
+                    console.log(dataRes.error);
+                    return;
+                }
+
                 $loading.hide();
                 $('#paypal-button-container').html(successTemplate('Payment successful'));
+            })
+            .catch(error => {
+                console.log(`.catch ${error}`);
             });
     }
 
