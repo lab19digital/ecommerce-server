@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class PaypalService
 {
-    public function handleWebhookPaymentSucceededEvent($payload)
+    public function capturePayment($payload)
     {
         // Find the order transaction data
         $orderTransaction = OrderTransaction::where('transaction_data->paypal_data->result->id', $payload->result->id)->first();

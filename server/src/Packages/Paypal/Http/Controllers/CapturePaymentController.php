@@ -25,7 +25,7 @@ class WebhookController extends BaseController
 
         $paypalService = App::make('Paypal\PaypalService');
 
-        $paypalService->handleWebhookPaymentSucceededEvent($response);
+        $paypalService->capturePayment($response);
 
         return response()->json($response, 200);
     }
