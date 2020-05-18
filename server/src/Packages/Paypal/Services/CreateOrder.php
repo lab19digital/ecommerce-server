@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Log;
 
 use PayPalCheckoutSdk\Orders\OrdersCreateRequest;
 
-class CreateOrder
+class CreateOrderPaypal
 {
 
     // 2. Set up your server to receive a call from the client

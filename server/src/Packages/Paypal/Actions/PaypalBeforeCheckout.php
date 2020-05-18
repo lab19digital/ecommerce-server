@@ -5,7 +5,6 @@ namespace Gernzy\Server\Packages\Paypal\Actions;
 use \App;
 use Gernzy\Server\Classes\ActionClass;
 use Gernzy\Server\Exceptions\GernzyException;
-use Gernzy\Server\Packages\Paypal\Services\CreateOrder;
 use Gernzy\Server\Services\ActionInterface;
 use Gernzy\Server\Services\ExhangeRatesManager;
 
@@ -60,7 +59,8 @@ class PaypalBeforeCheckout implements ActionInterface
         }
 
         // Use the paypal service to interact with the api
-        $response = CreateOrder::createOrder(false, $cartTotal, $sessionCurrency);
+        $paypalService = App::make('Paypal\PaypalService');
+        $response = $paypalService->createOrder(false, $cartTotal, $sessionCurrency);
 
         // Pass on the data for later use, note the secret should not be logged or stored
         $action->attachData(PaypalBeforeCheckout::class, [

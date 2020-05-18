@@ -6,15 +6,19 @@ use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
 use Illuminate\Support\Facades\Log;
 
-class PaypalService
+class PaypalService implements PaypalServiceInterface
 {
-    public function capturePayment($payload)
+    public function capturePayment($orderID)
     {
+        if (!$captureResponse = CaptureOrder::captureOrder($orderID, false)) {
+            return response()->json(['error' => 'Server error'], 400);
+        }
+
         // Find the order transaction data
-        $orderTransaction = OrderTransaction::where('transaction_data->paypal_data->result->id', $payload->result->id)->first();
+        $orderTransaction = OrderTransaction::where('transaction_data->paypal_data->result->id', $captureResponse->result->id)->first();
 
         if (!isset($orderTransaction)) {
-            Log::error('The transaction order data was not found for that successful payment.' + $payload->result->id);
+            Log::error('The transaction order data was not found for that successful payment.' + $captureResponse->result->id);
             throw new GernzyException(
                 'The transaction order data was not found for that successful payment.',
                 ''
@@ -32,15 +36,23 @@ class PaypalService
         $orderTransaction->status = 'paid';
 
         // Remove the secret from event as it will be save in the database
-        if (isset($payload->data->object->client_secret)) {
-            $payload->data->object->client_secret = null;
+        if (isset($captureResponse->data->object->client_secret)) {
+            $captureResponse->data->object->client_secret = null;
         }
 
         // Add the stripe event data to the json column of transaction_data table
         $transaction_data = $orderTransaction->transaction_data;
-        $transaction_data['paypal_payment_capture'] = $payload;
+        $transaction_data['paypal_payment_capture'] = $captureResponse;
 
         $orderTransaction->transaction_data = $transaction_data;
         $orderTransaction->save();
+
+        return $captureResponse;
+    }
+
+    public function createOrder($debug = false, $cartTotal, $sessionCurrency)
+    {
+        $response = CreateOrderPaypal::createOrder($debug, $cartTotal, $sessionCurrency);
+        return $response;
     }
 }
