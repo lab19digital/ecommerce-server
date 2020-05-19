@@ -7,7 +7,6 @@ use Gernzy\Server\Models\OrderTransaction;
 use Gernzy\Server\Packages\Stripe\Services\StripeService;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\WithFaker;
-use Gernzy\Server\Tests\Feature\PaymentGatewayTest;
 
 class GernzyOrderTransactionsTest extends PaymentGatewayTest
 {
