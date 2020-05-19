@@ -10,7 +10,7 @@ class PaypalService implements PaypalServiceInterface
 {
     public function capturePayment($orderID)
     {
-        if (!$captureResponse = CaptureOrder::captureOrder($orderID, false)) {
+        if (!$captureResponse = CaptureOrderPaypal::captureOrder($orderID, false)) {
             return response()->json(['error' => 'Server error'], 400);
         }
 

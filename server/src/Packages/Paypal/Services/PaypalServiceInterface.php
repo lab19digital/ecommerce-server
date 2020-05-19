@@ -9,4 +9,5 @@ interface PaypalServiceInterface
      *
      * @param string
      */
+    public function createOrder($debug, $cartTotal, $sessionCurrency);
 }

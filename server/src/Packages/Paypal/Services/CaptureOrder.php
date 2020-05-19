@@ -4,7 +4,7 @@ namespace  Gernzy\Server\Packages\Paypal\Services;
 
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 
-class CaptureOrder
+class CaptureOrderPaypal
 {
 
     // 2. Set up your server to receive a call from the client
