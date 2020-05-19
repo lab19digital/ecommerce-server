@@ -4,6 +4,8 @@ namespace Gernzy\Server\Packages\Paypal;
 
 use Gernzy\Server\GernzyServiceProvider;
 use Gernzy\Server\Listeners\BeforeCheckout;
+use Gernzy\Server\Packages\Paypal\Services\CaptureOrderPaypal;
+use Gernzy\Server\Packages\Paypal\Services\CreateOrderPaypal;
 use Gernzy\Server\Packages\Paypal\Services\PaypalService;
 
 class PaypalProvider extends GernzyServiceProvider
@@ -21,6 +23,8 @@ class PaypalProvider extends GernzyServiceProvider
     {
         // Bind services
         $this->app->bind('Paypal\PaypalService', PaypalService::class);
+        $this->app->bind('Paypal\CaptureOrderPaypal', CaptureOrderPaypal::class);
+        $this->app->bind('Paypal\CreateOrderPaypal', CreateOrderPaypal::class);
 
         // Make cache config publishment optional by merging the config from the package.
         $this->mergeConfigFrom(__DIR__ . '/config/events.php', 'events');

@@ -10,7 +10,8 @@ class PaypalService implements PaypalServiceInterface
 {
     public function capturePayment($orderID)
     {
-        if (!$captureResponse = CaptureOrderPaypal::captureOrder($orderID, false)) {
+        $captureOrderPaypal = App::make('Paypal\CaptureOrderPaypal');
+        if (!$captureResponse = $captureOrderPaypal->captureOrder($orderID, false)) {
             return response()->json(['error' => 'Server error'], 400);
         }
 
@@ -25,7 +26,7 @@ class PaypalService implements PaypalServiceInterface
             );
         }
 
-        /** Stripe may send the same event for succeeded multiple times. Thus check if the order status is already set to paid
+        /** Check if the order status is already set to paid
          * and if not then continue with the flow
          */
         if ($orderTransaction->status === 'paid') {
@@ -52,7 +53,8 @@ class PaypalService implements PaypalServiceInterface
 
     public function createOrder($debug = false, $cartTotal, $sessionCurrency)
     {
-        $response = CreateOrderPaypal::createOrder($debug, $cartTotal, $sessionCurrency);
+        $createOrderPaypal = App::make('Paypal\CreateOrderPaypal');
+        $response = $createOrderPaypal->createOrder($debug, $cartTotal, $sessionCurrency);
         return $response;
     }
 }

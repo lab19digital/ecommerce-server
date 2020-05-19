@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Gernzy\Server\Tests\Feature;
 
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Models\OrderTransaction;
