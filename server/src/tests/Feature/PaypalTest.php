@@ -68,11 +68,11 @@ class PaypalTest extends TestCheckoutTest
 
         $response = $this->graphQLWithSession($query);
 
-        // 1. Register service provider (mocking)
+        // Register service provider (mocking)
         // $this->app->bind('Paypal\PaypalService', PaypalService::class);
         $this->app->bind('Paypal\PaypalService', PaypalServiceMock::class);
 
-        // 2. Registe event mapping
+        // Register event mapping
         config(['events.' . BeforeCheckout::class => [PaypalBeforeCheckout::class,]]);
 
         // Create session, Add product to cart,  Create checkout

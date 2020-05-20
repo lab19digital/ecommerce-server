@@ -229,7 +229,7 @@ class GernzyStripeOrderTransactionsTest extends PaymentGatewayTest
 
 
     // For now this is tightly coupled to a package that has this route, so there must be a package that has this route configured
-    public function testWebhookWithDataAndFindOrderAndOrderTransaction()
+    public function testStripeWebhookWithDataAndFindOrderAndOrderTransaction()
     {
         // Set currency, add to cart, fire events and checkout (from PaymentGatewayTest test)
         $this->testPaymentGatewayProviderWithDifferentCurrency();

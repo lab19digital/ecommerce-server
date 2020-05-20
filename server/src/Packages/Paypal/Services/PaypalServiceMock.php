@@ -7,10 +7,6 @@ namespace  Gernzy\Server\Packages\Paypal\Services;
  */
 class PaypalServiceMock implements PaypalServiceInterface
 {
-    public function __construct()
-    {
-    }
-
     public function createOrder($debug, $cartTotal, $sessionCurrency)
     {
         return json_decode('{

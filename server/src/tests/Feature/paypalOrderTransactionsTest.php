@@ -3,18 +3,22 @@
 namespace Gernzy\Server\Tests\Feature;
 
 use Gernzy\Server\Models\OrderTransaction;
+use Gernzy\Server\Packages\Paypal\Services\CaptureOrderPaypalMock;
+use Gernzy\Server\Packages\Paypal\Services\PaypalService;
 use Illuminate\Foundation\Testing\WithFaker;
 
 class GernzyPaypaleOrderTransactionsTest extends PaypalTest
 {
     use WithFaker;
 
-    /** This is mock post data that stripe sends to a webhook endpoint for the "type": "payment_intent.succeeded" event*/
-    public $postData = '...';
+    /** This is mock post data that paypal sends to a webhook endpoint for the "type": "payment_intent.succeeded" event*/
+    public $postData = '{
+        "orderID": "81M70884VT025633W"
+    }';
 
     public function mockPaypalCaptureOrder()
     {
-        // Simulate stripe payment succesful event posted to gernzy webhook
+        // Simulate paypal payment succesful event posted to gernzy webhook
         // public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         $mockPaypalCaptureOrder = $this->call(
             'POST',
@@ -38,28 +42,28 @@ class GernzyPaypaleOrderTransactionsTest extends PaypalTest
 
 
     // For now this is tightly coupled to a package that has this route, so there must be a package that has this route configured
-    public function testWebhookWithDataAndFindOrderAndOrderTransaction()
+    public function testPaypalCapturePaymentDataAndFindOrderAndOrderTransaction()
     {
         // Set currency, add to cart, fire events and checkout (from PaymentGatewayTest test)
-        $this->testPaymentGatewayProviderWithDifferentCurrency();
+        $this->testPaypalPaymentGatewayProviderWithDifferentCurrency();
 
-        // Simulate stripe payment succesful event posted to gernzy webhook
+        // Now bind in the real service
+        $this->app->bind('Paypal\PaypalService', PaypalService::class);
+
+        // Mock the Paypal\CaptureOrderPaypal class, a function inside PaypalService::class
+        $this->app->bind('Paypal\CaptureOrderPaypal', CaptureOrderPaypalMock::class);
+
+        // Simulate paypal payment succesful event posted to gernzy webhook
         // public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
         $response = $this->mockPaypalCaptureOrder();
-
         $response->assertStatus(200);
-        $this->assertEquals('Success', $response->getContent());
 
         $postDataObject = json_decode($this->postData);
-        $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $postDataObject->data->object->id)->first();
+        $orderTransaction = OrderTransaction::where('transaction_data->paypal_data->result->id', $postDataObject->orderID)->first();
         $this->assertNotEmpty($orderTransaction->transaction_data);
-        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_intent']);
-        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_event']);
+        $this->assertNotEmpty($orderTransaction->transaction_data['paypal_data']);
+        $this->assertNotEmpty($orderTransaction->transaction_data['paypal_payment_capture']);
         $this->assertEquals($orderTransaction->status, 'paid');
-
-        // Check that the client secret is not present in the db
-        $this->assertEmpty($orderTransaction->transaction_data['stripe_payment_intent']['client_secret']);
-        $this->assertEmpty($orderTransaction->transaction_data['stripe_payment_event']['data']['object']['client_secret']);
 
         // Check the association
         $order = $orderTransaction->order;
