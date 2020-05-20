@@ -11,7 +11,8 @@ export default {
             if (!currency) {
                 currency = localStorage.getItem('default_currency');
             }
-            let url = `https://www.paypal.com/sdk/js?client-id=AaPIMFArYm6R5VZgKCqAeh9bTTf1g3JA8zeiWz62xPa1niqDcHk4dQVWjJLz_R3RVPraZEnT1uossdfE&currency=${currency}`;
+            //
+            let url = `https://www.paypal.com/sdk/js?client-id=${userConfig.client_id}&currency=${currency}`;
 
             let paypalService = new PaypalService();
             let eventData = JSON.parse(localStorage.getItem('event_data'));
