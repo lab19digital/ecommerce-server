@@ -34,7 +34,7 @@ class TestCheckoutTest extends TestCase
                         country: "UK"
                     },
                     use_shipping_for_billing: true,
-                    payment_method: "stripe_standard",
+                    payment_method: "$payment_method",
                     agree_to_terms: true,
                     notes: ""
                 }){

@@ -28,6 +28,10 @@ class PaymentGatewayTest extends TestCheckoutTest
     public function testPaymentGatewayProvider()
     {
 
+        // Change the payment method property of the form submission data
+        $vars = ['$payment_method' => 'stripe_standard'];
+        $this->checkoutMutation = strtr($this->checkoutMutation, $vars);
+
         // 1. Register service provider (mocking)
         // $this->app->bind('Stripe\StripeService', StripeService::class);
         $this->app->bind('Stripe\StripeService', StripeServiceMock::class);
@@ -44,10 +48,20 @@ class PaymentGatewayTest extends TestCheckoutTest
 
         // Check for stripe secret
         $this->assertNotEmpty($eventData[0]->data->stripe_secret);
+
+        $orderTransaction = OrderTransaction::find(1);
+        $this->assertNotEmpty($orderTransaction->transaction_data);
+        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_intent']);
+        $this->assertEquals($orderTransaction->status, 'pending');
+        $this->assertEquals($orderTransaction->payment_method, 'stripe_standard');
     }
 
     public function testPaymentGatewayProviderWithDifferentCurrency()
     {
+        // Change the payment method property of the form submission data
+        $vars = ['$payment_method' => 'stripe_standard'];
+        $this->checkoutMutation = strtr($this->checkoutMutation, $vars);
+
         // Set the session currency
         $query = '
                 mutation {
