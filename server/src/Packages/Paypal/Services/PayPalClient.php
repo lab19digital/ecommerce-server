@@ -2,7 +2,9 @@
 
 namespace  Gernzy\Server\Packages\Paypal\Services;
 
+use Gernzy\Server\Exceptions\GernzyException;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 
 ini_set('error_reporting', E_ALL); // or error_reporting(E_ALL);
@@ -27,8 +29,19 @@ class PayPalClient
      */
     public static function environment()
     {
+        $env = config("api.environment") ?: "development";
         $clientId = config("api.paypal_client_id") ?: "";
         $clientSecret = config("api.paypal_client_secret") ?: "";
-        return new SandboxEnvironment($clientId, $clientSecret);
+
+        if ($env == 'production') {
+            return new ProductionEnvironment($clientId, $clientSecret);
+        } elseif ($env == 'development') {
+            return new SandboxEnvironment($clientId, $clientSecret);
+        } else {
+            throw new GernzyException(
+                'The environment has not been defined.',
+                'Please define if environment is development or production'
+            );
+        }
     }
 }
