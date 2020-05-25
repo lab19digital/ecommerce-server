@@ -12,9 +12,9 @@
 */
 
 
-Route::get('payment-stripe', function () {
-    return view('Stripe\Payment::payment');
+Route::get('payment-paypal', function () {
+    return view('Paypal\Payment::payment');
 });
 
-Route::post('receive-hook', 'Gernzy\Server\Packages\Stripe\Http\Controllers\WebhookController@index')
-    ->name('webhook.receive');
+Route::post('create-paypal-transaction', 'Gernzy\Server\Packages\Paypal\Http\Controllers\CapturePaymentController@index')
+    ->name('paypal.transaction');

@@ -5,6 +5,7 @@ namespace Gernzy\Server\Testing;
 use Gernzy\Server\Listeners\BeforeCheckout;
 use Gernzy\Server\Packages\ExamplePackage\Actions\ExampleBeforeCheckout;
 use Gernzy\Server\Packages\ExamplePackage\ExamplePackageProvider;
+use Gernzy\Server\Packages\Paypal\PaypalProvider;
 use Gernzy\Server\Packages\Stripe\StripeProvider;
 use Gernzy\Server\Testing\Seeds\UsersSeeder;
 use GuzzleHttp\Client;
@@ -57,7 +58,8 @@ abstract class TestCase extends BaseTestCase
             'Gernzy\\Server\\GernzyServiceProvider',
             // Pull in the ExamplePackageProvider
             ExamplePackageProvider::class,
-            StripeProvider::class
+            StripeProvider::class,
+            PaypalProvider::class
 
         ];
     }

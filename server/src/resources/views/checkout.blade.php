@@ -94,9 +94,9 @@
                 <label class="uk-form-label" for="form-horizontal-text">Payment method</label>
                 <select name="payment_method" class="uk-select">
                     <option value="stripe_standard">Stripe</option>
+                    <option value="paypal_standard">PayPal</option>
                     <option>VISA</option>
                     <option>Master Card</option>
-                    <option>PayPal</option>
                     <option>Credit Card</option>
                 </select>
             </div>
