@@ -1,54 +1,60 @@
-import * as $ from 'jquery';
-
+import $ = require('jquery');
 import { Products } from './products';
 import { Cart } from './cart';
 import { Checkout } from './checkout';
 import { GraphqlService } from './graphqlService';
 import { SessionService } from './session';
+import 'reflect-metadata';
+import { GernzyContainer } from './container/inversify.config';
+import { TYPES } from './types/types';
+import { GernzyGraphqlService } from './interfaces/graphqlService';
+import { StoreProducts } from './interfaces/products';
 
 export default {
-    init: function(userConfig = {}) {
+    init: function (userConfig = {}) {
+        let userToken = localStorage.getItem('userToken');
         let config = {
             ...{
                 apiUrl: 'http://laravel-gernzy.test/graphql',
             },
             ...userConfig,
         };
+
         // jQuery ajax spinner
         var $loading = $('#loadingDiv').hide();
         $(document)
-            .ajaxStart(function() {
+            .ajaxStart(function () {
                 $loading.show();
             })
-            .ajaxStop(function() {
+            .ajaxStop(function () {
                 $loading.hide();
             });
 
-        let pathname = window.location.pathname;
-        let graphQlService = new GraphqlService(config);
-        let sessionService = new SessionService(graphQlService);
-        let productObj = new Products(graphQlService);
-        let cart = new Cart(productObj, graphQlService);
-        let checkout = new Checkout(graphQlService, cart);
+        let pathname: string = window.location.pathname;
+        const productObj = GernzyContainer.get<StoreProducts>(TYPES.StoreProducts);
+        // let sessionService = new SessionService(graphQlService);
+        // let cart = new Cart(productObj, graphQlService);
+        // let checkout = new Checkout(graphQlService, cart);
 
         // Session setup
-        sessionService.setupUser();
-        sessionService.setUpShopConfig();
-        sessionService.setUpSessionData();
+        // sessionService.setupUser();
+        // sessionService.setUpShopConfig();
+        // sessionService.setUpSessionData();
         // sessionService.setUpGeoLocation();
 
         if (pathname.includes('shop')) {
+            productObj.endpointUrl(config.apiUrl);
             productObj.getAllProducts();
         }
 
-        if (pathname.includes('cart')) {
-            cart.viewProductsInCart();
-        }
+        // if (pathname.includes('cart')) {
+        //     cart.viewProductsInCart();
+        // }
 
-        if (pathname.includes('checkout')) {
-            checkout.getBasketTotal();
-            checkout.displayLineItems();
-            checkout.checkout();
-        }
+        // if (pathname.includes('checkout')) {
+        //     checkout.getBasketTotal();
+        //     checkout.displayLineItems();
+        //     checkout.checkout();
+        // }
     },
 };

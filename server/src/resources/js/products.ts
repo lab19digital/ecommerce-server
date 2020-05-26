@@ -1,13 +1,22 @@
 import productTemplate from './templates/productTemplate';
-import $ from 'jquery';
+import $ = require('jquery');
 import errorTemplate from './templates/errorTemplate';
+import { injectable, inject } from 'inversify';
+// import 'reflect-metadata';
+import { StoreProducts } from './interfaces/products';
+import { GernzyGraphqlService } from './interfaces/graphqlService';
+import { TYPES } from './types/types';
 
-class Products {
-    constructor(graphqlService, cart) {
-        this.graphqlService = graphqlService;
-        this.cart = cart;
+@injectable()
+class Products implements StoreProducts {
+    @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
+    private url: string;
+
+    public endpointUrl(url: string) {
+        this.url = url;
     }
-    getAllProducts() {
+
+    public getAllProducts() {
         let query = `query {
             products(first:10) {
                 data {
@@ -30,20 +39,21 @@ class Products {
         let userToken = localStorage.getItem('userToken');
 
         return this.graphqlService
-            .sendQuery(query, userToken)
-            .then(re => {
+            .sendQuery(query, userToken, this.url)
+            .then((re) => {
                 let productsArray;
                 try {
                     productsArray = re.data.products.data;
                 } catch (error) {
-                    // console.log(error);
+                    console.log('getAllProducts() .then(  try { catch');
+                    console.log(error);
                     $('.products-container').html(
                         errorTemplate(`There was an error loading products. <br> ${re.errors[0].extensions.reason}`),
                     );
                     return;
                 }
 
-                let mapFields = productsArray.map(product => {
+                let mapFields = productsArray.map((product) => {
                     var currency = localStorage.getItem('currency');
                     if (!currency) {
                         currency = product.price_currency;
@@ -66,12 +76,13 @@ class Products {
 
                 return re;
             })
-            .catch(error => {
-                // console.log(error);
+            .catch((error) => {
+                console.log('getAllProducts() { .then .catch(');
+                console.log(error);
             });
     }
 
-    getProduct(id) {
+    public getProduct(id) {
         let query = `query {
             product(id:${id}) {
                     id
@@ -86,10 +97,10 @@ class Products {
 
         let userToken = localStorage.getItem('userToken');
 
-        return this.graphqlService.sendQuery(query, userToken);
+        return this.graphqlService.sendQuery(query, userToken, this.url);
     }
 
-    addProductToCart(event) {
+    public addProductToCart(event) {
         let productID = $(event.target).attr('data-id');
         var userToken = localStorage.getItem('userToken');
 
@@ -109,9 +120,9 @@ class Products {
         }`;
 
         this.graphqlService
-            .sendQuery(query, userToken)
-            .then(re => {
-                re.data.addToCart.cart.items.forEach(element => {
+            .sendQuery(query, userToken, this.url)
+            .then((re) => {
+                re.data.addToCart.cart.items.forEach((element) => {
                     if (element.product_id == productID) {
                         $(event.target)
                             .parent()
@@ -119,7 +130,7 @@ class Products {
                     }
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 // console.log(`addProductToCart: ${error}`);
             });
     }

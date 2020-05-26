@@ -1,21 +1,13 @@
-import $ from 'jquery';
+import $ = require('jquery');
+import { GernzyGraphqlService } from './interfaces/graphqlService';
+import { injectable } from 'inversify';
 
-class GraphqlService {
-    constructor(config) {
-        this.userToken = localStorage.getItem('userToken');
-        this.config = config;
-    }
-    async sendQuery(graphqlQuery, userToken = '') {
-        let apiUrl;
-        try {
-            apiUrl = this.config.apiUrl;
-        } catch (error) {
-            apiUrl = '';
-        }
-
+@injectable()
+class GraphqlService implements GernzyGraphqlService {
+    async sendQuery(graphqlQuery: string, userToken: string, url: string) {
         try {
             const data = await $.ajax({
-                url: apiUrl,
+                url: url,
                 contentType: 'application/json',
                 type: 'POST',
                 headers: {
@@ -27,6 +19,8 @@ class GraphqlService {
             });
             return data;
         } catch (err) {
+            console.log('async sendQuery(graphqlQuery, userToken = ){');
+            console.log(err);
             return err;
         }
     }

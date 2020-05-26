@@ -1,10 +1,11 @@
-import $ from 'jquery';
+import $ = require('jquery');
 import { User } from './user';
+import { injectable, inject } from 'inversify';
+import { GernzyGraphqlService } from './interfaces/graphqlService';
+import { TYPES } from './types/types';
 
 class SessionService {
-    constructor(graphqlService) {
-        this.graphqlService = graphqlService;
-    }
+    @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
 
     setUpSessionData() {
         var userToken = localStorage.getItem('userToken');
@@ -17,7 +18,7 @@ class SessionService {
             }
         }`;
 
-        return this.graphqlService.sendQuery(query, userToken).then(re => {
+        return this.graphqlService.sendQuery(query, userToken).then((re) => {
             try {
                 localStorage.setItem('sessionData', re.data.me.session.data);
 
@@ -42,8 +43,8 @@ class SessionService {
             }
         `;
 
-        return this.graphqlService.sendQuery(query, userToken).then(re => {
-            re.data.shopConfig.enabled_currencies.forEach(element => {
+        return this.graphqlService.sendQuery(query, userToken).then((re) => {
+            re.data.shopConfig.enabled_currencies.forEach((element) => {
                 $('#available-currencies').append(
                     `<li><a href='#' class='available-currency' data-currency="${element}">${element}</a></li>`,
                 );
@@ -66,7 +67,7 @@ class SessionService {
             }
         `;
 
-        return this.graphqlService.sendQuery(query, userToken).then(re => {
+        return this.graphqlService.sendQuery(query, userToken).then((re) => {
             let error = re.errors[0].debugMessage;
             if (!error) {
                 localStorage.setItem('setSessionGeoLocation', re.data.setSessionGeoLocation.geolocation_record);
@@ -77,7 +78,7 @@ class SessionService {
         });
     }
 
-    changeUserCurrency(event) {
+    changeUserCurrency(event: any) {
         var userToken = localStorage.getItem('userToken');
         let currrency = $(event.target).attr('data-currency');
 
@@ -91,7 +92,7 @@ class SessionService {
             }
         `;
 
-        return this.graphqlService.sendQuery(query, userToken).then(re => {
+        return this.graphqlService.sendQuery(query, userToken).then((re) => {
             try {
                 // See if there is an error
                 let error = re.errors[0].debugMessage;
@@ -112,7 +113,7 @@ class SessionService {
         if (!userObj.checkIfTokenInLocalStorage()) {
             userObj.createSession();
         } else {
-            userObj.checkTokenExistsInDatabase().then(re => {
+            userObj.checkTokenExistsInDatabase().then((re) => {
                 try {
                     if (re.errors[0].debugMessage == 'Cannot return null for non-nullable field Session.id.') {
                         // Recreate session object
