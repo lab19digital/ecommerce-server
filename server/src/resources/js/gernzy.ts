@@ -9,6 +9,7 @@ import { GernzyContainer } from './container/inversify.config';
 import { TYPES } from './types/types';
 import { GernzyGraphqlService } from './interfaces/graphqlService';
 import { StoreProducts } from './interfaces/products';
+import { GernzySession } from './interfaces/session';
 
 export default {
     init: function (userConfig = {}) {
@@ -32,15 +33,17 @@ export default {
 
         let pathname: string = window.location.pathname;
         const productObj = GernzyContainer.get<StoreProducts>(TYPES.StoreProducts);
+        const sessionService = GernzyContainer.get<GernzySession>(TYPES.GernzySession);
         // let sessionService = new SessionService(graphQlService);
         // let cart = new Cart(productObj, graphQlService);
         // let checkout = new Checkout(graphQlService, cart);
 
         // Session setup
-        // sessionService.setupUser();
-        // sessionService.setUpShopConfig();
-        // sessionService.setUpSessionData();
-        // sessionService.setUpGeoLocation();
+        sessionService.endpointUrl(config.apiUrl);
+        sessionService.setupUser();
+        sessionService.setUpShopConfig();
+        sessionService.setUpSessionData();
+        sessionService.setUpGeoLocation();
 
         if (pathname.includes('shop')) {
             productObj.endpointUrl(config.apiUrl);

@@ -1,4 +1,5 @@
 export interface GernzySession {
+    endpointUrl(url: string): void;
     setUpSessionData(): Promise<any>;
     setUpShopConfig(): Promise<any>;
     setUpGeoLocation(): Promise<any>;
