@@ -17,7 +17,31 @@ class Checkout implements GernzyCheckout {
         this.url = url;
     }
 
-    public populatePaymentProviders() {}
+    public populatePaymentProviders() {
+        var userToken = localStorage.getItem('userToken');
+
+        let query = `
+            query {
+                shopConfig {
+                    payment_providers
+                }
+            }
+        `;
+
+        return this.graphqlService.sendQuery(query, userToken, this.url).then((re) => {
+            re = JSON.parse(re.data.shopConfig.payment_providers);
+
+            re.forEach((element) => {
+                console.log(`elemn ${element.ui_option}`);
+                console.log(`elemn ${element.ui_value}`);
+                // $('#available-currencies').append(
+                //     `<li><a href='#' class='available-currency' data-currency="${element}">${element}</a></li>`,
+                // );
+            });
+
+            // $('.available-currency').on('click', this.changeUserCurrency.bind(this));
+        });
+    }
 
     public checkout() {
         // This is to keep the object context of and access it's methods

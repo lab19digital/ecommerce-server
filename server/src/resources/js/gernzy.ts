@@ -56,6 +56,7 @@ export default {
             checkout.endpointUrl(config.apiUrl);
             checkout.getBasketTotal();
             checkout.displayLineItems();
+            checkout.populatePaymentProviders();
             checkout.checkout();
         }
     },
