@@ -2,7 +2,6 @@ import productTemplate from './templates/productTemplate';
 import $ = require('jquery');
 import errorTemplate from './templates/errorTemplate';
 import { injectable, inject } from 'inversify';
-// import 'reflect-metadata';
 import { StoreProducts } from './interfaces/products';
 import { GernzyGraphqlService } from './interfaces/graphqlService';
 import { TYPES } from './types/types';

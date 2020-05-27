@@ -3,6 +3,7 @@ const TYPES = {
     GernzyGraphqlService: Symbol.for('GernzyGraphqlService'),
     GernzySession: Symbol.for('GernzySession'),
     GernzyUser: Symbol.for('GernzyUser'),
+    GernzyCart: Symbol.for('GernzyCart'),
 };
 
 export { TYPES };

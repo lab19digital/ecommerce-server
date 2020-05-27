@@ -10,6 +10,7 @@ import { TYPES } from './types/types';
 import { GernzyGraphqlService } from './interfaces/graphqlService';
 import { StoreProducts } from './interfaces/products';
 import { GernzySession } from './interfaces/session';
+import { GernzyCart } from './interfaces/cart';
 
 export default {
     init: function (userConfig = {}) {
@@ -34,7 +35,7 @@ export default {
         let pathname: string = window.location.pathname;
         const productObj = GernzyContainer.get<StoreProducts>(TYPES.StoreProducts);
         const sessionService = GernzyContainer.get<GernzySession>(TYPES.GernzySession);
-        // let cart = new Cart(productObj, graphQlService);
+        const cart = GernzyContainer.get<GernzyCart>(TYPES.GernzyCart);
         // let checkout = new Checkout(graphQlService, cart);
 
         // Session setup
@@ -49,9 +50,10 @@ export default {
             productObj.getAllProducts();
         }
 
-        // if (pathname.includes('cart')) {
-        //     cart.viewProductsInCart();
-        // }
+        if (pathname.includes('cart')) {
+            cart.endpointUrl(config.apiUrl);
+            cart.viewProductsInCart();
+        }
 
         // if (pathname.includes('checkout')) {
         //     checkout.getBasketTotal();

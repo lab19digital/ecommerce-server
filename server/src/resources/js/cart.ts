@@ -1,12 +1,21 @@
 import productTemplate from './templates/productTemplate';
 import errorTemplate from './templates/errorTemplate';
-import $ from 'jquery';
+import $ = require('jquery');
+import { injectable, inject } from 'inversify';
+import { GernzyGraphqlService } from './interfaces/graphqlService';
+import { TYPES } from './types/types';
+import { StoreProducts } from './interfaces/products';
 
+@injectable()
 class Cart {
-    constructor(productObj, graphqlService) {
-        this.productObj = productObj;
-        this.graphqlService = graphqlService;
+    @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
+    @inject(TYPES.StoreProducts) private productObj: StoreProducts;
+    private url: string;
+
+    public endpointUrl(url: string) {
+        this.url = url;
     }
+
     viewProductsInCart() {
         var userToken = localStorage.getItem('userToken');
 
@@ -22,8 +31,8 @@ class Cart {
         }`;
 
         return this.graphqlService
-            .sendQuery(query, userToken)
-            .then(re => {
+            .sendQuery(query, userToken, this.url)
+            .then((re) => {
                 let items = re.data.me.cart.items;
 
                 if (items && items.length > 0) {
@@ -37,14 +46,15 @@ class Cart {
 
                 return re;
             })
-            .catch(error => {
+            .catch((error) => {
                 // console.log(`viewProductsInCart: ${error}`);
             });
     }
 
     async lookupProductsInCart(products) {
+        this.productObj.endpointUrl(this.url);
         return await Promise.all(
-            products.map(async product => {
+            products.map(async (product) => {
                 // Merging quantity into the product object to use later
                 const queriedProduct = await this.productObj.getProduct(product.product_id);
                 let quantityObje = { quantity: product.quantity };
@@ -53,17 +63,17 @@ class Cart {
                 return mergedObj;
             }),
         )
-            .then(re => {
+            .then((re) => {
                 this.populateUIWithProducts(re);
                 return re;
             })
-            .catch(error => {
+            .catch((error) => {
                 // console.log(error);
             });
     }
 
     populateUIWithProducts(products) {
-        let mapFields = products.map(product => {
+        let mapFields = products.map((product) => {
             var currency = localStorage.getItem('currency');
             if (!currency) {
                 currency = product.price_currency;
