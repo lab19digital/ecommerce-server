@@ -4,9 +4,11 @@ import { injectable, inject } from 'inversify';
 import { GernzyGraphqlService } from './interfaces/graphqlService';
 import { TYPES } from './types/types';
 import { GernzySession } from './interfaces/session';
+import { GernzyUser } from './interfaces/user';
 
 @injectable()
 class SessionService implements GernzySession {
+    @inject(TYPES.GernzyUser) private userObj: GernzyUser;
     @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
     private url: string;
 
@@ -115,16 +117,16 @@ class SessionService implements GernzySession {
     }
 
     public setupUser() {
+        this.userObj.endpointUrl(this.url);
         // Session object in localStorage if it doesn't already exist, and verify
-        let userObj = new User(this.graphqlService);
-        if (!userObj.checkIfTokenInLocalStorage()) {
-            userObj.createSession();
+        if (!this.userObj.checkIfTokenInLocalStorage()) {
+            this.userObj.createSession();
         } else {
-            userObj.checkTokenExistsInDatabase().then((re) => {
+            this.userObj.checkTokenExistsInDatabase().then((re) => {
                 try {
                     if (re.errors[0].debugMessage == 'Cannot return null for non-nullable field Session.id.') {
                         // Recreate session object
-                        userObj.createSession();
+                        this.userObj.createSession();
                     }
                 } catch (error) {
                     // No error exist

@@ -34,7 +34,6 @@ export default {
         let pathname: string = window.location.pathname;
         const productObj = GernzyContainer.get<StoreProducts>(TYPES.StoreProducts);
         const sessionService = GernzyContainer.get<GernzySession>(TYPES.GernzySession);
-        // let sessionService = new SessionService(graphQlService);
         // let cart = new Cart(productObj, graphQlService);
         // let checkout = new Checkout(graphQlService, cart);
 
@@ -43,7 +42,7 @@ export default {
         sessionService.setupUser();
         sessionService.setUpShopConfig();
         sessionService.setUpSessionData();
-        sessionService.setUpGeoLocation();
+        // sessionService.setUpGeoLocation();
 
         if (pathname.includes('shop')) {
             productObj.endpointUrl(config.apiUrl);

@@ -1,7 +1,16 @@
+import { injectable, inject } from 'inversify';
+import { GernzyGraphqlService } from './interfaces/graphqlService';
+import { TYPES } from './types/types';
+
+@injectable()
 class User {
-    constructor(graphqlService) {
-        this.graphqlService = graphqlService;
+    @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
+    private url: string;
+
+    public endpointUrl(url: string) {
+        this.url = url;
     }
+
     createSession() {
         let query = `mutation {
             createSession {
@@ -10,13 +19,13 @@ class User {
         }`;
 
         return this.graphqlService
-            .sendQuery(query)
-            .then(re => {
+            .sendQuery(query, null, this.url)
+            .then((re) => {
                 let token = re.data.createSession.token;
                 this.addSessionTokenToLocalStorage(token);
                 return re;
             })
-            .catch(error => {
+            .catch((error) => {
                 // console.log(error);
             });
     }
@@ -48,7 +57,7 @@ class User {
             }
         }`;
 
-        return this.graphqlService.sendQuery(query, userTokenLocalStorage);
+        return this.graphqlService.sendQuery(query, userTokenLocalStorage, this.url);
     }
 }
 export { User };
