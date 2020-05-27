@@ -5,9 +5,10 @@ import { injectable, inject } from 'inversify';
 import { GernzyGraphqlService } from './interfaces/graphqlService';
 import { TYPES } from './types/types';
 import { StoreProducts } from './interfaces/products';
+import { GernzyCart } from './interfaces/cart';
 
 @injectable()
-class Cart {
+class Cart implements GernzyCart {
     @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
     @inject(TYPES.StoreProducts) private productObj: StoreProducts;
     private url: string;
@@ -16,7 +17,7 @@ class Cart {
         this.url = url;
     }
 
-    viewProductsInCart() {
+    public viewProductsInCart() {
         var userToken = localStorage.getItem('userToken');
 
         let query = `{
@@ -51,7 +52,7 @@ class Cart {
             });
     }
 
-    async lookupProductsInCart(products) {
+    public async lookupProductsInCart(products) {
         this.productObj.endpointUrl(this.url);
         return await Promise.all(
             products.map(async (product) => {
@@ -72,7 +73,7 @@ class Cart {
             });
     }
 
-    populateUIWithProducts(products) {
+    public populateUIWithProducts(products) {
         let mapFields = products.map((product) => {
             var currency = localStorage.getItem('currency');
             if (!currency) {

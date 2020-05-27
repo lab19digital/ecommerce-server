@@ -1,29 +1,37 @@
 import successTemplate from './templates/successTemplate';
 import errorTemplate from './templates/errorTemplate';
 import $ from 'jquery';
+import { TYPES } from './types/types';
+import { inject, injectable } from 'inversify';
+import { GernzyGraphqlService } from './interfaces/graphqlService';
+import { GernzyCart } from './interfaces/cart';
+import { GernzyCheckout } from './interfaces/checkout';
 
-class Checkout {
-    constructor(graphqlService, cart = null) {
-        this.graphqlService = graphqlService;
-        this.cart = cart;
+@injectable()
+class Checkout implements GernzyCheckout {
+    @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
+    @inject(TYPES.GernzyCart) private cart: GernzyCart;
+    private url: string;
+
+    public endpointUrl(url: string) {
+        this.url = url;
     }
 
-    populatePaymentProviders() {}
+    public populatePaymentProviders() {}
 
-    checkout() {
+    public checkout() {
         // This is to keep the object context of and access it's methods
         var self = this;
-        $('#checkout-form').submit(function(event) {
+        $('#checkout-form').submit(function (event) {
             event.preventDefault();
 
             // get all the inputs into an array.
             var inputs = $('#checkout-form :input');
 
-            // not sure if you wanted this, but I thought I'd add it.
             // get an associative array of just the values.
             var values = {};
-            inputs.each(function() {
-                values[this.name] = $(this).val();
+            inputs.each((i, ele) => {
+                values[$(ele).attr('name')] = $(ele).val();
             });
 
             // Checkbox values
@@ -34,7 +42,7 @@ class Checkout {
         });
     }
 
-    sendOfCheckoutInfo(values) {
+    public sendOfCheckoutInfo(values) {
         var userToken = localStorage.getItem('userToken');
         let query = ` mutation {
             checkout(input: {
@@ -69,8 +77,8 @@ class Checkout {
         }`;
 
         return this.graphqlService
-            .sendQuery(query, userToken)
-            .then(re => {
+            .sendQuery(query, userToken, this.url)
+            .then((re) => {
                 if (re.errors) {
                     let errors = re.errors;
                     let debugMessage = re.errors[0].debugMessage;
@@ -92,12 +100,12 @@ class Checkout {
 
                 return re;
             })
-            .catch(error => {
+            .catch((error) => {
                 // console.log(error);
             });
     }
 
-    getBasketTotal() {
+    public getBasketTotal() {
         var userToken = localStorage.getItem('userToken');
 
         let query = `{
@@ -109,8 +117,8 @@ class Checkout {
         }`;
 
         return this.graphqlService
-            .sendQuery(query, userToken)
-            .then(re => {
+            .sendQuery(query, userToken, this.url)
+            .then((re) => {
                 let currency = localStorage.getItem('currency');
 
                 // get the default currency from the shopConfig
@@ -121,13 +129,15 @@ class Checkout {
                 $('#checkout-cart-total').html(`${re.data.me.cart.cart_total / 100} ${currency}`);
                 return re;
             })
-            .catch(error => {
+            .catch((error) => {
                 // console.log(error);
             });
     }
 
-    displayLineItems() {
-        return this.cart.viewProductsInCart().then(re => {
+    public displayLineItems() {
+        this.cart.endpointUrl(this.url);
+
+        return this.cart.viewProductsInCart().then((re) => {
             try {
                 // See if there is an error
                 let error = re.errors[0].debugMessage;
@@ -136,7 +146,7 @@ class Checkout {
                 let items = re.data.me.cart.items;
 
                 if (items && items.length > 0) {
-                    this.cart.lookupProductsInCart(items).then(re => {
+                    this.cart.lookupProductsInCart(items).then((re) => {
                         let currency = localStorage.getItem('currency');
 
                         // get the default currency from the shopConfig
@@ -144,7 +154,7 @@ class Checkout {
                             currency = localStorage.getItem('default_currency');
                         }
 
-                        re.forEach(element => {
+                        re.forEach((element) => {
                             $('#table-body-line-item').append(
                                 $(`<tr>
                                     <td>${element.title}</td>
