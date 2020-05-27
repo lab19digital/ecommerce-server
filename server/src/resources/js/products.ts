@@ -44,8 +44,8 @@ class Products implements StoreProducts {
                 try {
                     productsArray = re.data.products.data;
                 } catch (error) {
-                    console.log('getAllProducts() .then(  try { catch');
-                    console.log(error);
+                    // console.log('getAllProducts() .then(  try { catch');
+                    // console.log(error);
                     $('.products-container').html(
                         errorTemplate(`There was an error loading products. <br> ${re.errors[0].extensions.reason}`),
                     );
