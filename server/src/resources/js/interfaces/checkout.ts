@@ -4,4 +4,5 @@ export interface GernzyCheckout {
     sendOfCheckoutInfo(values): Promise<any>;
     getBasketTotal(): Promise<any>;
     displayLineItems(): void;
+    populatePaymentProviders(): Promise<any>;
 }
