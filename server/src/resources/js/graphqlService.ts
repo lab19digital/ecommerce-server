@@ -19,8 +19,8 @@ class GraphqlService implements GernzyGraphqlService {
             });
             return data;
         } catch (err) {
-            console.log('async sendQuery(graphqlQuery, userToken = ){');
-            console.log(err);
+            // console.log('async sendQuery(graphqlQuery, userToken = ){');
+            // console.log(err);
             return err;
         }
     }
