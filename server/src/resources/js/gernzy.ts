@@ -1,13 +1,7 @@
 import $ = require('jquery');
-import { Products } from './products';
-import { Cart } from './cart';
-import { Checkout } from './checkout';
-import { GraphqlService } from './graphqlService';
-import { SessionService } from './session';
 import 'reflect-metadata';
 import { GernzyContainer } from './container/inversify.config';
 import { TYPES } from './types/types';
-import { GernzyGraphqlService } from './interfaces/graphqlService';
 import { StoreProducts } from './interfaces/products';
 import { GernzySession } from './interfaces/session';
 import { GernzyCart } from './interfaces/cart';
@@ -15,7 +9,6 @@ import { GernzyCheckout } from './interfaces/checkout';
 
 export default {
     init: function (userConfig = {}) {
-        let userToken = localStorage.getItem('userToken');
         let config = {
             ...{
                 apiUrl: 'http://laravel-gernzy.test/graphql',
@@ -34,6 +27,8 @@ export default {
             });
 
         let pathname: string = window.location.pathname;
+
+        // New up instances for use
         const productObj = GernzyContainer.get<StoreProducts>(TYPES.StoreProducts);
         const sessionService = GernzyContainer.get<GernzySession>(TYPES.GernzySession);
         const cart = GernzyContainer.get<GernzyCart>(TYPES.GernzyCart);
@@ -46,6 +41,7 @@ export default {
         sessionService.setUpSessionData();
         // sessionService.setUpGeoLocation();
 
+        // Switch on page url
         if (pathname.includes('shop')) {
             productObj.endpointUrl(config.apiUrl);
             productObj.getAllProducts();
