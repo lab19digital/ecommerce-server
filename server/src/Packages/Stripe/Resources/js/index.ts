@@ -1,7 +1,7 @@
 import { StripeService } from './stripe';
 
 export default {
-    init: function(userConfig = {}) {
+    init: function (userConfig: any = {}) {
         let pathname = window.location.pathname;
 
         if (pathname.includes('payment-stripe')) {

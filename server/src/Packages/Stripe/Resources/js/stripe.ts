@@ -3,9 +3,19 @@ import successTemplate from './templates/successTemplate';
 import errorTemplate from './templates/errorTemplate';
 
 class StripeService {
+    public card: string;
+    public stripe: any;
+    public elements: any;
+
     constructor(publishableApiKey) {
         this.card = '';
         try {
+            /**
+             * Stripe client side doesn't seem to have types yet
+             * The 'Stripe(publishableApiKey);' comes from
+             * <script src="https://js.stripe.com/v3/"></script> in the head of app.blade of this package
+             */
+            // @ts-ignore
             this.stripe = Stripe(publishableApiKey);
             this.elements = this.stripe.elements();
         } catch (error) {
@@ -13,7 +23,7 @@ class StripeService {
         }
     }
 
-    formLoaded() {
+    public formLoaded() {
         // Set up Stripe.js and Elements to use in checkout form
         var style = {
             base: {
@@ -50,7 +60,7 @@ class StripeService {
         }
     }
 
-    formSubmitListener(clientSecret) {
+    public formSubmitListener(clientSecret) {
         var form = document.getElementById('payment-form');
         var self = this;
         var $loading = $('#loadingDiv').hide();
@@ -60,7 +70,7 @@ class StripeService {
             return;
         }
 
-        form.addEventListener('submit', function(ev) {
+        form.addEventListener('submit', function (ev) {
             ev.preventDefault();
 
             // Loading
@@ -75,7 +85,7 @@ class StripeService {
                         },
                     },
                 })
-                .then(function(result) {
+                .then(function (result) {
                     $loading.hide();
 
                     if (result.error) {
@@ -95,7 +105,7 @@ class StripeService {
                         }
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     $loading.hide();
                     $('.checkout-container').append(errorTemplate('Unexpected error occured. Please try again.'));
 
