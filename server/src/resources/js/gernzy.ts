@@ -8,7 +8,7 @@ import { GernzyCart } from './interfaces/cart';
 import { GernzyCheckout } from './interfaces/checkout';
 
 export default {
-    init: function (userConfig = {}) {
+    init: function (userConfig: Gernzy.GernzyConfig) {
         let config = {
             ...{
                 apiUrl: 'http://laravel-gernzy.test/graphql',
