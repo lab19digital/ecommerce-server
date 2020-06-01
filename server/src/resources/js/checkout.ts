@@ -29,17 +29,21 @@ class Checkout implements GernzyCheckout {
         `;
 
         return this.graphqlService.sendQuery(query, userToken, this.url).then((re) => {
-            re = JSON.parse(re.data.shopConfig.payment_providers);
+            let paymentProviders = JSON.parse(re.data.shopConfig.payment_providers);
 
-            re.forEach((element) => {
-                console.log(`elemn ${element.ui_option}`);
-                console.log(`elemn ${element.ui_value}`);
-                // $('#available-currencies').append(
-                //     `<li><a href='#' class='available-currency' data-currency="${element}">${element}</a></li>`,
-                // );
+            // If no payment providers where specified, error out
+            if (paymentProviders.length == 0) {
+                $('#checkout-form').html(errorTemplate('No payment option has been configure in the backend.'));
+                return re;
+            }
+
+            paymentProviders.forEach((element) => {
+                $('#checkout_payment_method').append(
+                    `<option value="${element.ui_value}">${element.ui_option}</option>`,
+                );
             });
 
-            // $('.available-currency').on('click', this.changeUserCurrency.bind(this));
+            return re;
         });
     }
 

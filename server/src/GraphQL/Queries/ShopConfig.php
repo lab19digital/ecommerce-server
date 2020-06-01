@@ -51,7 +51,7 @@ class ShopConfig
     public function paymentProviders($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         // Throw error when there are missing values from the config, thus no currency specified
-        if (!$paymentProviders = config('package')) {
+        if (!$paymentProviders = config('gernzy-packages')) {
             throw new GernzyException(
                 'An error occured.',
                 'An error occured when determining the payment provider. None specified.'

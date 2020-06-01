@@ -92,12 +92,8 @@
 
             <div class="uk-margin">
                 <label class="uk-form-label" for="form-horizontal-text">Payment method</label>
-                <select name="payment_method" class="uk-select">
-                    <option value="stripe_standard">Stripe</option>
-                    <option value="paypal_standard">PayPal</option>
-                    <option>VISA</option>
-                    <option>Master Card</option>
-                    <option>Credit Card</option>
+                <select id="checkout_payment_method" name="payment_method" class="uk-select">
+                    <!-- Jquery generated -->
                 </select>
             </div>
 
