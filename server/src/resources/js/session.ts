@@ -134,5 +134,26 @@ class SessionService implements GernzySession {
             });
         }
     }
+
+    public setupSessionFactory(url: string) {
+        this.loaderInit();
+        this.endpointUrl(url);
+        this.setupUser();
+        this.setUpShopConfig();
+        this.setUpSessionData();
+        // this.setUpGeoLocation();
+    }
+
+    public loaderInit() {
+        // jQuery ajax spinner
+        var $loading = $('#loadingDiv').hide();
+        $(document)
+            .ajaxStart(function () {
+                $loading.show();
+            })
+            .ajaxStop(function () {
+                $loading.hide();
+            });
+    }
 }
 export { SessionService };

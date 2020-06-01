@@ -5,4 +5,5 @@ export interface GernzySession {
     setUpGeoLocation(): Promise<any>;
     changeUserCurrency(event: any): Promise<any>;
     setupUser(): void;
+    setupSessionFactory(url: string): void;
 }

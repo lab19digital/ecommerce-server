@@ -16,16 +16,6 @@ export default {
             ...userConfig,
         };
 
-        // jQuery ajax spinner
-        var $loading = $('#loadingDiv').hide();
-        $(document)
-            .ajaxStart(function () {
-                $loading.show();
-            })
-            .ajaxStop(function () {
-                $loading.hide();
-            });
-
         let pathname: string = window.location.pathname;
 
         // New up instances for use
@@ -35,11 +25,7 @@ export default {
         const checkout = GernzyContainer.get<GernzyCheckout>(TYPES.GernzyCheckout);
 
         // Session setup
-        sessionService.endpointUrl(config.apiUrl);
-        sessionService.setupUser();
-        sessionService.setUpShopConfig();
-        sessionService.setUpSessionData();
-        // sessionService.setUpGeoLocation();
+        sessionService.setupSessionFactory(config.apiUrl);
 
         // Switch on page url
         if (pathname.includes('shop')) {
