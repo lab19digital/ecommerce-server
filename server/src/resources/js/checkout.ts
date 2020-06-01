@@ -200,5 +200,13 @@ class Checkout implements GernzyCheckout {
             return re;
         });
     }
+
+    public setupCheckoutFactory(url: string) {
+        this.endpointUrl(url);
+        this.getBasketTotal();
+        this.displayLineItems();
+        this.populatePaymentProviders();
+        this.checkout();
+    }
 }
 export { Checkout };

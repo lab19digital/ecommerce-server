@@ -39,11 +39,7 @@ export default {
         }
 
         if (pathname.includes('checkout')) {
-            checkout.endpointUrl(config.apiUrl);
-            checkout.getBasketTotal();
-            checkout.displayLineItems();
-            checkout.populatePaymentProviders();
-            checkout.checkout();
+            checkout.setupCheckoutFactory(config.apiUrl);
         }
     },
 };
