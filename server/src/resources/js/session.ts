@@ -87,7 +87,7 @@ class SessionService implements GernzySession {
         });
     }
 
-    public changeUserCurrency(event: any) {
+    public changeUserCurrency(event) {
         var userToken = localStorage.getItem('userToken');
         let currrency = $(event.target).attr('data-currency');
 
