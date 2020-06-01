@@ -1,7 +1,7 @@
 import { PaypalService } from './paypal';
 
 export default {
-    init: function(userConfig = {}) {
+    init: function (userConfig: any = {}) {
         let pathname = window.location.pathname;
 
         if (pathname.includes('payment-paypal')) {
@@ -23,13 +23,14 @@ export default {
                 return;
             }
 
-            paypalService.loadScript(url, function() {
+            paypalService.loadScript(url, function () {
+                // @ts-ignore
                 paypal_sdk
                     .Buttons({
-                        createOrder: function() {
+                        createOrder: function () {
                             return pyapalOrderID;
                         },
-                        onApprove: function(data, actions) {
+                        onApprove: function (data, actions) {
                             return paypalService.onApprove(data, actions);
                         },
                     })
