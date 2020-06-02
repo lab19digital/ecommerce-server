@@ -35,7 +35,7 @@ class Cart implements GernzyCart {
             const re = await this.graphqlService.sendQuery(query, userToken, this.url);
             let items = re.data.me.cart.items;
             if (items && items.length > 0) {
-                this.lookupProductsInCart(re.data.me.cart.items);
+                this.getProductInCart(re.data.me.cart.items);
             } else {
                 $('.cart-products').html(errorTemplate('No products in cart.'));
                 // Disable checkout as there are no products in the cart
@@ -45,7 +45,7 @@ class Cart implements GernzyCart {
         } catch (error) {}
     }
 
-    public async lookupProductsInCart(products: []) {
+    public async getProductInCart(products: []) {
         this.productObj.endpointUrl(this.url);
         return await Promise.all(
             products.map(async (product: Gernzy.Product) => {

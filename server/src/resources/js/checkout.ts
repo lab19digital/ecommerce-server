@@ -165,7 +165,7 @@ class Checkout implements GernzyCheckout {
     public displayLineItems() {
         this.cart.endpointUrl(this.url);
 
-        return this.cart.viewProductsInCart().then((re) => {
+        return this.cart.viewProductsInCart().then((re: Gernzy.reViewProductsInCart) => {
             try {
                 // See if there is an error
                 let error = re.errors[0].debugMessage;
@@ -174,7 +174,7 @@ class Checkout implements GernzyCheckout {
                 let items = re.data.me.cart.items;
 
                 if (items && items.length > 0) {
-                    this.cart.lookupProductsInCart(items).then((re) => {
+                    this.cart.getProductInCart(items).then((re) => {
                         let currency = localStorage.getItem('currency');
 
                         // get the default currency from the shopConfig
@@ -182,7 +182,7 @@ class Checkout implements GernzyCheckout {
                             currency = localStorage.getItem('default_currency');
                         }
 
-                        re.forEach((element) => {
+                        re.forEach((element: Gernzy.Product) => {
                             $('#table-body-line-item').append(
                                 $(`<tr>
                                     <td>${element.title}</td>

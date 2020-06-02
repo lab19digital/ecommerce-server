@@ -19,6 +19,7 @@ declare namespace Gernzy {
     interface EventTarget {
         target: HTMLInputElement;
     }
+
     interface reViewProductsInCart {
         errors: [{ debugMessage: string }];
         data: { me: { cart: { items: [] } } };
