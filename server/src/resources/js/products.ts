@@ -99,7 +99,7 @@ class Products implements StoreProducts {
         return this.graphqlService.sendQuery(query, userToken, this.url);
     }
 
-    public addProductToCart(event) {
+    public addProductToCart(event: Gernzy.EventTarget) {
         let productID = $(event.target).attr('data-id');
         var userToken = localStorage.getItem('userToken');
 

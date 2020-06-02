@@ -1,6 +1,6 @@
 export interface GernzyCart {
     endpointUrl(url: string): void;
-    viewProductsInCart(): Promise<any>;
+    viewProductsInCart(): Promise<Gernzy.reViewProductsInCart>;
     lookupProductsInCart(products: []): Promise<any>;
-    populateUIWithProducts(products: any): any;
+    populateUIWithProducts(products: any): void;
 }

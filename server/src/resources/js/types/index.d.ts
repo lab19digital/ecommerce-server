@@ -15,4 +15,12 @@ declare namespace Gernzy {
         quantity: number;
         buttonText: string;
     }
+
+    interface EventTarget {
+        target: HTMLInputElement;
+    }
+    interface reViewProductsInCart {
+        errors: [{ debugMessage: string }];
+        data: { me: { cart: { items: [] } } };
+    }
 }
