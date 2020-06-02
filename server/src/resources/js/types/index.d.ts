@@ -1,9 +1,9 @@
 declare namespace Gernzy {
-    type GernzyConfig = {
+    interface GernzyConfig {
         apiUrl?: string;
-    };
+    }
 
-    type Product = {
+    interface Product {
         product_id: number;
         title: string;
         price_cents: number;
@@ -12,18 +12,18 @@ declare namespace Gernzy {
         id: number;
         quantity: number;
         buttonText: string;
-    };
+    }
 
-    type EventTarget = {
+    interface EventTarget {
         target: HTMLInputElement;
-    };
+    }
 
-    type reViewProductsInCart = {
+    interface reViewProductsInCart {
         errors: [{ debugMessage: string }];
         data: { me: { cart: { items: [] } } };
-    };
-    type reSendOfCheckoutInfo = {
+    }
+    interface reSendOfCheckoutInfo {
         errors: [{ debugMessage: string }];
         data: { checkout: { event_data: string } };
-    };
+    }
 }

@@ -1,7 +1,7 @@
 import { StripeService } from './stripe';
 
 export default {
-    init: function (userConfig: any = {}) {
+    init: function (userConfig: GernzyStripe.StripeConfig) {
         let pathname = window.location.pathname;
 
         if (pathname.includes('payment-stripe')) {

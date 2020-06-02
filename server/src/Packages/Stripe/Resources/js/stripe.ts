@@ -60,7 +60,7 @@ class StripeService {
         }
     }
 
-    public formSubmitListener(clientSecret) {
+    public formSubmitListener(clientSecret: string) {
         var form = document.getElementById('payment-form');
         var self = this;
         var $loading = $('#loadingDiv').hide();
