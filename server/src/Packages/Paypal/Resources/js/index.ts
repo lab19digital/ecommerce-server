@@ -1,7 +1,7 @@
 import { PaypalService } from './paypal';
 
 export default {
-    init: function (userConfig: any = {}) {
+    init: function (userConfig: GernzyPaypal.PaypalConfig) {
         let pathname = window.location.pathname;
 
         if (pathname.includes('payment-paypal')) {
