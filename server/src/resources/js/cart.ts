@@ -55,8 +55,12 @@ class Cart implements GernzyCart {
     public async lookupProductsInCart(products) {
         this.productObj.endpointUrl(this.url);
         return await Promise.all(
-            products.map(async (product) => {
+            products.map(async (product: Gernzy.Product) => {
                 // Merging quantity into the product object to use later
+                /** Note that this fires a new query for each product, so will produce
+                 * n+1 query problem. Refactor in backend to lookup all info required
+                 * and in cart send back.
+                 */
                 const queriedProduct = await this.productObj.getProduct(product.product_id);
                 let quantityObje = { quantity: product.quantity };
                 let mergedObj = { ...queriedProduct.data.product, ...quantityObje };

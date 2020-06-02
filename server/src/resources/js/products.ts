@@ -52,7 +52,7 @@ class Products implements StoreProducts {
                     return;
                 }
 
-                let mapFields = productsArray.map((product) => {
+                let mapFields = productsArray.map((product: Gernzy.Product) => {
                     var currency = localStorage.getItem('currency');
                     if (!currency) {
                         currency = product.price_currency;
@@ -81,7 +81,7 @@ class Products implements StoreProducts {
             });
     }
 
-    public getProduct(id) {
+    public getProduct(id: number) {
         let query = `query {
             product(id:${id}) {
                     id
