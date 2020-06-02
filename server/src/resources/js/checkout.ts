@@ -70,7 +70,7 @@ class Checkout implements GernzyCheckout {
         });
     }
 
-    public sendOfCheckoutInfo(values) {
+    public sendOfCheckoutInfo(values: {}) {
         var userToken = localStorage.getItem('userToken');
         let query = ` mutation {
             checkout(input: {
@@ -106,7 +106,7 @@ class Checkout implements GernzyCheckout {
 
         return this.graphqlService
             .sendQuery(query, userToken, this.url)
-            .then((re) => {
+            .then((re: Gernzy.reSendOfCheckoutInfo) => {
                 if (re.errors) {
                     let errors = re.errors;
                     let debugMessage = re.errors[0].debugMessage;
@@ -117,7 +117,7 @@ class Checkout implements GernzyCheckout {
 
                 // Now try and do the next step
                 try {
-                    let eventData = JSON.parse(re.data.checkout.event_data);
+                    let eventData: {} = JSON.parse(re.data.checkout.event_data);
                     let redirectUrl = eventData[0].data.redirect_url;
 
                     localStorage.setItem('event_data', JSON.stringify(eventData));
