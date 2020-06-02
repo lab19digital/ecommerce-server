@@ -17,7 +17,7 @@ class Cart implements GernzyCart {
         this.url = url;
     }
 
-    public viewProductsInCart() {
+    public async viewProductsInCart() {
         var userToken = localStorage.getItem('userToken');
 
         let query = `{
@@ -31,28 +31,21 @@ class Cart implements GernzyCart {
             }
         }`;
 
-        return this.graphqlService
-            .sendQuery(query, userToken, this.url)
-            .then((re) => {
-                let items = re.data.me.cart.items;
-
-                if (items && items.length > 0) {
-                    this.lookupProductsInCart(re.data.me.cart.items);
-                } else {
-                    $('.cart-products').html(errorTemplate('No products in cart.'));
-
-                    // Disable checkout as there are no products in the cart
-                    $('#cart-checkout').addClass('uk-disabled');
-                }
-
-                return re;
-            })
-            .catch((error) => {
-                // console.log(`viewProductsInCart: ${error}`);
-            });
+        try {
+            const re = await this.graphqlService.sendQuery(query, userToken, this.url);
+            let items = re.data.me.cart.items;
+            if (items && items.length > 0) {
+                this.lookupProductsInCart(re.data.me.cart.items);
+            } else {
+                $('.cart-products').html(errorTemplate('No products in cart.'));
+                // Disable checkout as there are no products in the cart
+                $('#cart-checkout').addClass('uk-disabled');
+            }
+            return re;
+        } catch (error) {}
     }
 
-    public async lookupProductsInCart(products) {
+    public async lookupProductsInCart(products: []) {
         this.productObj.endpointUrl(this.url);
         return await Promise.all(
             products.map(async (product: Gernzy.Product) => {
@@ -68,7 +61,7 @@ class Cart implements GernzyCart {
                 return mergedObj;
             }),
         )
-            .then((re) => {
+            .then((re: []) => {
                 this.populateUIWithProducts(re);
                 return re;
             })
@@ -77,8 +70,8 @@ class Cart implements GernzyCart {
             });
     }
 
-    public populateUIWithProducts(products) {
-        let mapFields = products.map((product) => {
+    public populateUIWithProducts(products: []) {
+        let mapFields = products.map((product: Gernzy.Product) => {
             var currency = localStorage.getItem('currency');
             if (!currency) {
                 currency = product.price_currency;

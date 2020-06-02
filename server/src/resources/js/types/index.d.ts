@@ -3,9 +3,7 @@ declare namespace Gernzy {
         apiUrl?: string;
     }
 
-    interface Products {
-        apiUrl?: string;
-    }
+    interface Products {}
 
     interface Product {
         product_id: number;
