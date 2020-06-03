@@ -41,7 +41,7 @@ class SessionService implements GernzySession {
     }
 
     public setUpShopConfig() {
-        var userToken = localStorage.getItem('userToken');
+        let userToken = localStorage.getItem('userToken') ?? '';
 
         let query = `
             query {
@@ -53,7 +53,7 @@ class SessionService implements GernzySession {
         `;
 
         return this.graphqlService.sendQuery(query, userToken, this.url).then((re) => {
-            re.data.shopConfig.enabled_currencies.forEach((element) => {
+            re.data.shopConfig.enabled_currencies.forEach((element: string) => {
                 $('#available-currencies').append(
                     `<li><a href='#' class='available-currency' data-currency="${element}">${element}</a></li>`,
                 );

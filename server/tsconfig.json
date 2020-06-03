@@ -5,7 +5,7 @@
         "noImplicitAny": true,
         "strictNullChecks": true,
         "allowJs": true,
-        "target": "es2017",
+        "target": "ESNext",
         "lib": ["es5", "es6", "dom"],
         "types": ["reflect-metadata"],
         "module": "commonjs",

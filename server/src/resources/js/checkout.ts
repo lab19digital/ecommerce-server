@@ -54,12 +54,16 @@ class Checkout implements GernzyCheckout {
             event.preventDefault();
 
             // get all the inputs into an array.
-            var inputs = $('#checkout-form :input');
+            let inputs = $('#checkout-form :input');
 
             // get an associative array of just the values.
-            var values = {};
+            let values: Gernzy.CheckoutInfo = {};
+
             inputs.each((i, ele) => {
-                values[$(ele).attr('name')] = $(ele).val();
+                let key = $(ele).attr('name');
+                let value = $(ele).val();
+
+                typeof key !== 'undefined' ? (values[key] = value) : {};
             });
 
             // Checkbox values
@@ -70,7 +74,7 @@ class Checkout implements GernzyCheckout {
         });
     }
 
-    public sendOfCheckoutInfo(values: {}) {
+    public sendOfCheckoutInfo(values: Gernzy.CheckoutInfo) {
         var userToken = localStorage.getItem('userToken');
         let query = ` mutation {
             checkout(input: {

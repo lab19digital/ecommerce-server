@@ -26,4 +26,8 @@ declare namespace Gernzy {
         errors: [{ debugMessage: string }];
         data: { checkout: { event_data: string } };
     }
+
+    interface CheckoutInfo {
+        [key: string]: string | boolean | number | string[] | undefined;
+    }
 }
