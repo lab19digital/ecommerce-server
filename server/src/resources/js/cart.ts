@@ -9,16 +9,24 @@ import { GernzyCart } from './interfaces/cart';
 
 @injectable()
 class Cart implements GernzyCart {
-    @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
-    @inject(TYPES.StoreProducts) private productObj: StoreProducts;
-    private url: string;
+    private graphqlService: GernzyGraphqlService;
+    private productObj: StoreProducts;
+    private url: string = '';
+
+    public constructor(
+        @inject(TYPES.GernzyGraphqlService) private _graphqlService: GernzyGraphqlService,
+        @inject(TYPES.StoreProducts) private _productObj: StoreProducts,
+    ) {
+        this.graphqlService = _graphqlService;
+        this.productObj = _productObj;
+    }
 
     public endpointUrl(url: string) {
         this.url = url;
     }
 
     public async viewProductsInCart() {
-        var userToken = localStorage.getItem('userToken');
+        var userToken = localStorage.getItem('userToken') ?? '';
 
         let query = `{
             me {

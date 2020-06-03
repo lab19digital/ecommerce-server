@@ -5,7 +5,7 @@ import errorTemplate from './templates/errorTemplate';
 class PaypalService {
     constructor() {}
 
-    public onApprove(data, actions) {
+    public onApprove(data: { orderID: number }, actions: {}) {
         var $loading = $('#loadingDiv').hide();
         $loading.show();
         return fetch('/create-paypal-transaction', {
@@ -39,7 +39,7 @@ class PaypalService {
             });
     }
 
-    public loadScript(url, callback) {
+    public loadScript(url: string, callback: any) {
         var script: any = document.createElement('script');
         script.type = 'text/javascript';
         script.setAttribute('data-namespace', 'paypal_sdk');

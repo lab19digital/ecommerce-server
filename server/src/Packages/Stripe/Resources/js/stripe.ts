@@ -7,7 +7,7 @@ class StripeService {
     public stripe: any;
     public elements: any;
 
-    constructor(publishableApiKey) {
+    constructor(publishableApiKey: string) {
         this.card = '';
         try {
             /**
@@ -47,8 +47,8 @@ class StripeService {
 
             card.mount('#card-element');
 
-            card.addEventListener('change', ({ error }) => {
-                const displayError = document.getElementById('card-errors');
+            card.addEventListener('change', ({ error }: { error: { message: string } }) => {
+                const displayError = document.getElementById('card-errors') ?? { textContent: 'An error occured.' };
                 if (error) {
                     displayError.textContent = error.message;
                 } else {
@@ -65,7 +65,7 @@ class StripeService {
         var self = this;
         var $loading = $('#loadingDiv').hide();
 
-        if (!self.stripe) {
+        if (!self.stripe || !form) {
             // console.log('Stripe is not defined.');
             return;
         }
@@ -85,7 +85,7 @@ class StripeService {
                         },
                     },
                 })
-                .then(function (result) {
+                .then(function (result: { error: { message: string }; paymentIntent: { status: string } }) {
                     $loading.hide();
 
                     if (result.error) {
@@ -105,7 +105,7 @@ class StripeService {
                         }
                     }
                 })
-                .catch((error) => {
+                .catch((error: {}) => {
                     $loading.hide();
                     $('.checkout-container').append(errorTemplate('Unexpected error occured. Please try again.'));
 

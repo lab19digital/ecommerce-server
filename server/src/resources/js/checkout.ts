@@ -9,16 +9,16 @@ import { GernzyCheckout } from './interfaces/checkout';
 
 @injectable()
 class Checkout implements GernzyCheckout {
-    @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
-    @inject(TYPES.GernzyCart) private cart: GernzyCart;
-    private url: string;
+    @inject(TYPES.GernzyGraphqlService) private graphqlService!: GernzyGraphqlService;
+    @inject(TYPES.GernzyCart) private cart!: GernzyCart;
+    private url!: string;
 
     public endpointUrl(url: string) {
         this.url = url;
     }
 
     public populatePaymentProviders() {
-        var userToken = localStorage.getItem('userToken');
+        var userToken = localStorage.getItem('userToken') ?? '';
 
         let query = `
             query {
@@ -75,7 +75,7 @@ class Checkout implements GernzyCheckout {
     }
 
     public sendOfCheckoutInfo(values: Gernzy.CheckoutInfo) {
-        var userToken = localStorage.getItem('userToken');
+        var userToken = localStorage.getItem('userToken') ?? '';
         let query = ` mutation {
             checkout(input: {
                 name: "${values['name']}",
@@ -121,7 +121,7 @@ class Checkout implements GernzyCheckout {
 
                 // Now try and do the next step
                 try {
-                    let eventData: {} = JSON.parse(re.data.checkout.event_data);
+                    let eventData: [{ data: { redirect_url: string } }] = JSON.parse(re.data.checkout.event_data);
                     let redirectUrl = eventData[0].data.redirect_url;
 
                     localStorage.setItem('event_data', JSON.stringify(eventData));
@@ -138,7 +138,7 @@ class Checkout implements GernzyCheckout {
     }
 
     public getBasketTotal() {
-        var userToken = localStorage.getItem('userToken');
+        var userToken = localStorage.getItem('userToken') ?? '';
 
         let query = `{
             me {

@@ -8,8 +8,8 @@ import { TYPES } from './types/types';
 
 @injectable()
 class Products implements StoreProducts {
-    @inject(TYPES.GernzyGraphqlService) private graphqlService: GernzyGraphqlService;
-    private url: string;
+    @inject(TYPES.GernzyGraphqlService) private graphqlService!: GernzyGraphqlService;
+    private url!: string;
 
     public endpointUrl(url: string) {
         this.url = url;
@@ -121,7 +121,7 @@ class Products implements StoreProducts {
         this.graphqlService
             .sendQuery(query, userToken, this.url)
             .then((re) => {
-                re.data.addToCart.cart.items.forEach((element) => {
+                re.data.addToCart.cart.items.forEach((element: { product_id: string; quantity: number }) => {
                     if (element.product_id == productID) {
                         $(event.target)
                             .parent()
