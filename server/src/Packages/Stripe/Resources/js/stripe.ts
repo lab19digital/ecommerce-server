@@ -48,7 +48,7 @@ class StripeService {
             card.mount('#card-element');
 
             card.addEventListener('change', ({ error }: { error: { message: string } }) => {
-                const displayError = document.getElementById('card-errors') ?? { textContent: 'An error occured.' };
+                const displayError = document.getElementById('card-errors') || { textContent: 'An error occured.' };
                 if (error) {
                     displayError.textContent = error.message;
                 } else {

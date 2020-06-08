@@ -4,7 +4,7 @@ declare namespace Gernzy {
     }
 
     interface Product {
-        product_id: number;
+        product_id?: number | null;
         title: string;
         price_cents: number;
         price_currency: string;
@@ -15,7 +15,7 @@ declare namespace Gernzy {
     }
 
     interface EventTarget {
-        target: HTMLInputElement;
+        target: EventTarget;
     }
 
     interface reViewProductsInCart {

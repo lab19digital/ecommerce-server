@@ -17,7 +17,7 @@ class SessionService implements GernzySession {
     }
 
     public setUpSessionData() {
-        var userToken = localStorage.getItem('userToken') ?? '';
+        var userToken = localStorage.getItem('userToken') || '';
 
         let query = `{
             me {
@@ -41,7 +41,7 @@ class SessionService implements GernzySession {
     }
 
     public setUpShopConfig() {
-        let userToken = localStorage.getItem('userToken') ?? '';
+        let userToken = localStorage.getItem('userToken') || '';
 
         let query = `
             query {
@@ -66,7 +66,7 @@ class SessionService implements GernzySession {
     }
 
     public setUpGeoLocation() {
-        var userToken = localStorage.getItem('userToken') ?? '';
+        var userToken = localStorage.getItem('userToken') || '';
 
         let query = `
             mutation {
@@ -87,8 +87,8 @@ class SessionService implements GernzySession {
         });
     }
 
-    public changeUserCurrency(event: { target: string }) {
-        var userToken = localStorage.getItem('userToken') ?? '';
+    public changeUserCurrency(event: { target: EventTarget }) {
+        var userToken = localStorage.getItem('userToken') || '';
         let currrency = $(event.target).attr('data-currency');
 
         let query = `

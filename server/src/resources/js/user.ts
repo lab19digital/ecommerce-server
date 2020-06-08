@@ -19,7 +19,7 @@ class User {
         }`;
 
         return this.graphqlService
-            .sendQuery(query, null, this.url)
+            .sendQuery(query, '', this.url)
             .then((re) => {
                 let token = re.data.createSession.token;
                 this.addSessionTokenToLocalStorage(token);
@@ -36,7 +36,7 @@ class User {
 
     checkIfTokenInLocalStorage() {
         // Check if token in local
-        let userTokenLocalStorage = localStorage.getItem('userToken') ?? '';
+        let userTokenLocalStorage = localStorage.getItem('userToken') || '';
 
         if (!userTokenLocalStorage || 0 === userTokenLocalStorage.length) {
             return false;
@@ -46,7 +46,7 @@ class User {
     }
 
     checkTokenExistsInDatabase() {
-        let userTokenLocalStorage = localStorage.getItem('userToken') ?? '';
+        let userTokenLocalStorage = localStorage.getItem('userToken') || '';
 
         let query = ` {
             me {

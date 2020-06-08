@@ -26,7 +26,7 @@ class Cart implements GernzyCart {
     }
 
     public async viewProductsInCart() {
-        var userToken = localStorage.getItem('userToken') ?? '';
+        var userToken = localStorage.getItem('userToken') || '';
 
         let query = `{
             me {
@@ -62,14 +62,14 @@ class Cart implements GernzyCart {
                  * n+1 query problem. Refactor in backend to lookup all info required
                  * and in cart send back.
                  */
-                const queriedProduct = await this.productObj.getProduct(product.product_id);
+                const queriedProduct = await this.productObj.getProduct(product.product_id || 0);
                 let quantityObje = { quantity: product.quantity };
                 let mergedObj = { ...queriedProduct.data.product, ...quantityObje };
 
                 return mergedObj;
             }),
         )
-            .then((re: []) => {
+            .then((re) => {
                 this.populateUIWithProducts(re);
                 return re;
             })
@@ -78,7 +78,7 @@ class Cart implements GernzyCart {
             });
     }
 
-    public populateUIWithProducts(products: []) {
+    public populateUIWithProducts(products: any[]) {
         let mapFields = products.map((product: Gernzy.Product) => {
             var currency = localStorage.getItem('currency');
             if (!currency) {

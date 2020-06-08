@@ -18,7 +18,7 @@ class Checkout implements GernzyCheckout {
     }
 
     public populatePaymentProviders() {
-        var userToken = localStorage.getItem('userToken') ?? '';
+        var userToken = localStorage.getItem('userToken') || '';
 
         let query = `
             query {
@@ -37,7 +37,7 @@ class Checkout implements GernzyCheckout {
                 return re;
             }
 
-            paymentProviders.forEach((element) => {
+            paymentProviders.forEach((element: { ui_value: string; ui_option: string }) => {
                 $('#checkout_payment_method').append(
                     `<option value="${element.ui_value}">${element.ui_option}</option>`,
                 );
@@ -75,7 +75,7 @@ class Checkout implements GernzyCheckout {
     }
 
     public sendOfCheckoutInfo(values: Gernzy.CheckoutInfo) {
-        var userToken = localStorage.getItem('userToken') ?? '';
+        var userToken = localStorage.getItem('userToken') || '';
         let query = ` mutation {
             checkout(input: {
                 name: "${values['name']}",
@@ -138,7 +138,7 @@ class Checkout implements GernzyCheckout {
     }
 
     public getBasketTotal() {
-        var userToken = localStorage.getItem('userToken') ?? '';
+        var userToken = localStorage.getItem('userToken') || '';
 
         let query = `{
             me {

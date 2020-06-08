@@ -35,7 +35,7 @@ class Products implements StoreProducts {
             }
         }`;
 
-        let userToken = localStorage.getItem('userToken') ?? '';
+        let userToken = localStorage.getItem('userToken') || '';
 
         return this.graphqlService
             .sendQuery(query, userToken, this.url)
@@ -94,14 +94,14 @@ class Products implements StoreProducts {
             }
         }`;
 
-        let userToken = localStorage.getItem('userToken') ?? '';
+        let userToken = localStorage.getItem('userToken') || '';
 
         return this.graphqlService.sendQuery(query, userToken, this.url);
     }
 
-    public addProductToCart(event: Gernzy.EventTarget) {
+    public addProductToCart(event: { target: EventTarget }) {
         let productID = $(event.target).attr('data-id');
-        var userToken = localStorage.getItem('userToken') ?? '';
+        var userToken = localStorage.getItem('userToken') || '';
 
         let query = ` mutation {
             addToCart(input: {
