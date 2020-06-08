@@ -6,6 +6,7 @@ import { StoreProducts } from './interfaces/products';
 import { GernzySession } from './interfaces/session';
 import { GernzyCart } from './interfaces/cart';
 import { GernzyCheckout } from './interfaces/checkout';
+import 'alpinejs';
 
 export default {
     init: function (userConfig: Gernzy.GernzyConfig) {

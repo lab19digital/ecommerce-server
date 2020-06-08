@@ -73,6 +73,7 @@
         ]
     },
     "dependencies": {
+        "alpinejs": "^2.3.5",
         "inversify": "^5.0.1",
         "jquery": "^3.5.1",
         "reflect-metadata": "^0.1.13"

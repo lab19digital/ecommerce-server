@@ -69,7 +69,7 @@ class Products implements StoreProducts {
                     };
                 });
 
-                $('.products-container').html(mapFields.map(productTemplate).join(''));
+                // $('.products-container').html(mapFields.map(productTemplate).join(''));
 
                 $('.add-to-cart').on('click', this.addProductToCart.bind(this));
 
