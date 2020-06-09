@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "strict": true,
+        "strictFunctionTypes": true,
+        "strictBindCallApply": true,
         "sourceMap": true,
         "noImplicitAny": true,
         "strictNullChecks": true,
