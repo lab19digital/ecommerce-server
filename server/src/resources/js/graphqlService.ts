@@ -6,18 +6,17 @@ import { injectable } from 'inversify';
 class GraphqlService implements GernzyGraphqlService {
     async sendQuery(graphqlQuery: string, userToken: string, url: string) {
         try {
-            const data = await $.ajax({
-                url: url,
-                contentType: 'application/json',
-                type: 'POST',
+            const response = await fetch(url, {
+                method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${userToken}`,
                 },
-                data: JSON.stringify({
+                body: JSON.stringify({
                     query: graphqlQuery,
                 }),
             });
-            return data;
+            return response.json();
         } catch (err) {
             // console.log('async sendQuery(graphqlQuery, userToken = ){');
             // console.log(err);

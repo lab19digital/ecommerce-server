@@ -24,7 +24,7 @@
                         <p class="product-quantity"><span class="uk-label">quantity</span>1</p>
                     </div>
                     <div class="uk-card-footer">
-                        <a href="#" class="uk-button uk-button-text add-to-cart" :data-id="product.id">Add to cart</a>
+                        <a href="#" class="uk-button uk-button-text add-to-cart" :data-id="product.id" x-on:click="addToCartButtonClick">Add to cart</a>
                     </div>
                 </div>
             </div>

@@ -16,25 +16,27 @@ class Products implements StoreProducts {
     }
 
     public productsComponent() {
-        // let query = `query {
-        //     products(first:10) {
-        //         data {
-        //             id
-        //             title
-        //             status
-        //             published
-        //             short_description
-        //             price_cents
-        //             price_currency
-        //         }
-        //         paginatorInfo {
-        //             total
-        //             hasMorePages
-        //             currentPage
-        //         }
-        //     }
-        // }`;
-        // let userToken = localStorage.getItem('userToken') || '';
+        let query = `query {
+            products(first:10) {
+                data {
+                    id
+                    title
+                    status
+                    published
+                    short_description
+                    price_cents
+                    price_currency
+                }
+                paginatorInfo {
+                    total
+                    hasMorePages
+                    currentPage
+                }
+            }
+        }`;
+
+        let userToken = localStorage.getItem('userToken') || '';
+        var self = this;
 
         window.products = () => {
             return {
@@ -43,58 +45,21 @@ class Products implements StoreProducts {
                     return cents / 100 + ' ' + currency;
                 },
                 fetch() {
-                    fetch('http://laravel-gernzy.test/graphql', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            query:
-                                '{ products(first:10) { data { id title status published short_description price_cents price_currency } } }',
-                        }),
-                    })
-                        .then((response) => response.json())
-                        .then((data) => (this.products = data.data.products.data));
+                    self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
+                        try {
+                            this.products = data.data.products.data;
+                        } catch (error) {
+                            // console.log('productsComponent() .then(  try { catch');
+                            // console.log(error);
+                        }
+                        $('.add-to-cart').on('click', self.addProductToCart.bind(self));
+                    });
+                },
+                addToCartButtonClick($event: { target: EventTarget }) {
+                    self.addProductToCart($event);
                 },
             };
         };
-        // return this.graphqlService
-        //     .sendQuery(query, userToken, this.url)
-        //     .then((re) => {
-        //         let productsArray;
-        //         try {
-        //             productsArray = re.data.products.data;
-        //         } catch (error) {
-        //             // console.log('productsComponent() .then(  try { catch');
-        //             // console.log(error);
-        //             $('.products-container').html(
-        //                 errorTemplate(`There was an error loading products. <br> ${re.errors[0].extensions.reason}`),
-        //             );
-        //             return;
-        //         }
-        //         let mapFields = productsArray.map((product: Gernzy.Product) => {
-        //             var currency = localStorage.getItem('currency');
-        //             if (!currency) {
-        //                 currency = product.price_currency;
-        //             }
-        //             return {
-        //                 title: product.title,
-        //                 price_cents: product.price_cents / 100,
-        //                 price_currency: currency,
-        //                 short_description: product.short_description,
-        //                 id: product.id,
-        //                 quantity: 1,
-        //                 buttonText: 'Add to cart',
-        //             };
-        //         });
-        //         // $('.products-container').html(mapFields.map(productTemplate).join(''));
-        //         $('.add-to-cart').on('click', this.addProductToCart.bind(this));
-        //         return re;
-        //     })
-        //     .catch((error) => {
-        //         console.log('productsComponent() { .then .catch(');
-        //         console.log(error);
-        //     });
     }
 
     public getProduct(id: number) {
@@ -116,6 +81,7 @@ class Products implements StoreProducts {
     }
 
     public addProductToCart(event: { target: EventTarget }) {
+        // let id = event.target.getAttribute('data-id');
         let productID = $(event.target).attr('data-id');
         var userToken = localStorage.getItem('userToken') || '';
 
