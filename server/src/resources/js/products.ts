@@ -52,7 +52,6 @@ class Products implements StoreProducts {
                             // console.log('productsComponent() .then(  try { catch');
                             // console.log(error);
                         }
-                        $('.add-to-cart').on('click', self.addProductToCart.bind(self));
                     });
                 },
                 addToCartButtonClick($event: { target: EventTarget }) {
