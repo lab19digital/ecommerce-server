@@ -136,11 +136,17 @@ class SessionService implements GernzySession {
     }
 
     public setupSessionFactory(url: string) {
+        this.loaderInit();
         this.endpointUrl(url);
         this.setupUser();
         this.setUpShopConfig();
         this.setUpSessionData();
         // this.setUpGeoLocation();
+    }
+
+    public loaderInit() {
+        let loading = document.getElementById('loadingDiv');
+        if (loading) loading.style.display = 'none';
     }
 }
 export { SessionService };

@@ -63,7 +63,9 @@ class StripeService {
     public formSubmitListener(clientSecret: string) {
         var form = document.getElementById('payment-form');
         var self = this;
-        var $loading = $('#loadingDiv').hide();
+
+        let loading = document.getElementById('loadingDiv');
+        if (loading) loading.style.display = 'none';
 
         if (!self.stripe || !form) {
             // console.log('Stripe is not defined.');
@@ -74,7 +76,7 @@ class StripeService {
             ev.preventDefault();
 
             // Loading
-            $loading.show();
+            if (loading) loading.style.display = 'flex';
 
             self.stripe
                 .confirmCardPayment(clientSecret, {
@@ -86,7 +88,7 @@ class StripeService {
                     },
                 })
                 .then(function (result: { error: { message: string }; paymentIntent: { status: string } }) {
-                    $loading.hide();
+                    if (loading) loading.style.display = 'none';
 
                     if (result.error) {
                         // Show error to your customer (e.g., insufficient funds)
@@ -106,7 +108,8 @@ class StripeService {
                     }
                 })
                 .catch((error: {}) => {
-                    $loading.hide();
+                    if (loading) loading.style.display = 'none';
+
                     $('.checkout-container').append(errorTemplate('Unexpected error occured. Please try again.'));
 
                     // console.log(error);

@@ -6,8 +6,8 @@ class PaypalService {
     constructor() {}
 
     public onApprove(data: { orderID: number }, actions: {}) {
-        var $loading = $('#loadingDiv').hide();
-        $loading.show();
+        let loading = document.getElementById('loadingDiv');
+        if (loading) loading.style.display = 'flex';
         return fetch('/create-paypal-transaction', {
             method: 'POST',
             headers: {
@@ -31,7 +31,7 @@ class PaypalService {
                     return;
                 }
 
-                $loading.hide();
+                if (loading) loading.style.display = 'none';
                 $('#paypal-button-container').html(successTemplate('Payment successful'));
             })
             .catch((error) => {
