@@ -28,11 +28,8 @@ export default {
         // Session setup
         sessionService.setupSessionFactory(config.apiUrl);
 
-        // Switch on page url
-        if (pathname.includes('shop')) {
-            productObj.endpointUrl(config.apiUrl);
-            productObj.getAllProducts();
-        }
+        productObj.endpointUrl(config.apiUrl);
+        productObj.productsComponent();
 
         if (pathname.includes('cart')) {
             cart.endpointUrl(config.apiUrl);

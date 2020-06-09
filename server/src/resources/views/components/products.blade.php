@@ -31,27 +31,3 @@
         </template>
     </div>
 </div>
-
-<script>
-    function products() {
-        return {
-            products: [],
-            formatPriceAndCurrency(cents, currency) {
-                return (cents / 100) + ' ' + currency;
-            },
-            fetch() {
-                fetch('http://laravel-gernzy.test/graphql', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            query: '{ products(first:10) { data { id title status published short_description price_cents price_currency } } }'
-                        }),
-                    })
-                    .then(response => response.json())
-                    .then(data => this.products = data.data.products.data)
-            }
-        }
-    }
-</script>

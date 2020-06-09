@@ -23,6 +23,6 @@ class Product extends Component
      */
     public function render()
     {
-        return view('Gernzy\Server::components.product');
+        return view('Gernzy\Server::components.products');
     }
 }
