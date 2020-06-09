@@ -3,6 +3,7 @@
 namespace Gernzy\Server;
 
 use Fruitcake\Cors\CorsServiceProvider as CorsServiceProvider;
+use Gernzy\Server\App\View\Components\Product as ProductComponent;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\Cart;
 use Gernzy\Server\Observers\CartObserver;
@@ -17,6 +18,7 @@ use Gernzy\Server\Services\SessionService;
 use Gernzy\Server\Services\UserService;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Nuwave\Lighthouse\LighthouseServiceProvider;
 
@@ -130,6 +132,9 @@ class GernzyServiceProvider extends ServiceProvider
 
         // Register observable for the cart model
         Cart::observe(CartObserver::class);
+
+        // Register blade components
+        Blade::component('gernzy-product', ProductComponent::class);
     }
 
     public function validateConfig()
