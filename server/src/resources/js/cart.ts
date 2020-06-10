@@ -85,7 +85,7 @@ class Cart implements GernzyCart {
                         }
                     });
                 },
-                // addToCartButtonClick($event: { target: EventTarget }) {
+                // removeFromCartButtonClick($event: { target: EventTarget }) {
                 //     self.addProductToCart($event);
                 // },
             };

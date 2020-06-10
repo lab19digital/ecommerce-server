@@ -12,6 +12,13 @@
                 </tr>
             </thead>
             <tbody id="table-body-line-item">
+                <!-- <template x-for="product in products" :key="product.id">
+                    <tr>
+                        <td>${product.title}</td>
+                        <td>${product.quantity}</td>
+                        <td>${product.price_cents / 100} ${currency}</td>
+                    </tr>
+                </template> -->
             </tbody>
         </table>
     </div>

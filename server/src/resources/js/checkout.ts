@@ -168,7 +168,37 @@ class Checkout implements GernzyCheckout {
 
     public displayLineItems() {
         this.cart.endpointUrl(this.url);
+        let self = this;
+        let userToken = localStorage.getItem('userToken') || '';
+        let query = `{
+            me {
+                cart {
+                    items {
+                        product_id
+                        quantity
+                    }
+                }
+            }
+        }`;
 
+        window.lineItems = () => {
+            return {
+                products: [],
+                formatPriceAndCurrency(cents: number, currency: string) {
+                    return cents / 100 + ' ' + currency;
+                },
+                fetch() {
+                    self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
+                        try {
+                            this.products = data.data.products.data;
+                        } catch (error) {
+                            // console.log('productsComponent() .then(  try { catch');
+                            // console.log(error);
+                        }
+                    });
+                },
+            };
+        };
         // return this.cart.viewProductsInCart().then((re: Gernzy.reViewProductsInCart) => {
         //     try {
         //         // See if there is an error
