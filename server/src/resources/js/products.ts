@@ -114,5 +114,30 @@ class Products implements StoreProducts {
                 // console.log(`addProductToCart: ${error}`);
             });
     }
+
+    public getProductsByIDs(productIDs: number[]) {
+        console.log(this.url);
+        var userToken = localStorage.getItem('userToken') || '';
+        let query = `{
+            productsByIds(includeIds:${productIDs}, first:10){
+                data {
+                    id
+                    title
+                    status
+                    published
+                    short_description
+                    price_cents
+                    price_currency
+                }
+                paginatorInfo {
+                    total
+                    hasMorePages
+                    currentPage
+                }
+              }
+        }`;
+
+        return this.graphqlService.sendQuery(query, userToken, this.url);
+    }
 }
 export { Products };

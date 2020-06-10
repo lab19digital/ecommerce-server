@@ -63,6 +63,7 @@ type Cart {
     items: [CartItem!]
     products: Int
     cart_total: Int
+    hello_there: String
 }
 
 type CartItem {

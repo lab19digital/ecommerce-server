@@ -25,8 +25,9 @@ class Cart implements GernzyCart {
         this.url = url;
     }
 
-    public async viewProductsInCart() {
+    public cartSetup() {
         var userToken = localStorage.getItem('userToken') || '';
+        var self = this;
 
         let query = `{
             me {
@@ -39,64 +40,56 @@ class Cart implements GernzyCart {
             }
         }`;
 
-        try {
-            const re = await this.graphqlService.sendQuery(query, userToken, this.url);
-            let items = re.data.me.cart.items;
-            if (items && items.length > 0) {
-                this.getProductInCart(re.data.me.cart.items);
-            } else {
-                $('.cart-products').html(errorTemplate('No products in cart.'));
-                // Disable checkout as there are no products in the cart
-                $('#cart-checkout').addClass('uk-disabled');
-            }
-            return re;
-        } catch (error) {}
-    }
-
-    public async getProductInCart(products: []) {
-        this.productObj.endpointUrl(this.url);
-        return await Promise.all(
-            products.map(async (product: Gernzy.Product) => {
-                // Merging quantity into the product object to use later
-                /** Note that this fires a new query for each product, so will produce
-                 * n+1 query problem. Refactor in backend to lookup all info required
-                 * and in cart send back.
-                 */
-                const queriedProduct = await this.productObj.getProduct(product.product_id || 0);
-                let quantityObje = { quantity: product.quantity };
-                let mergedObj = { ...queriedProduct.data.product, ...quantityObje };
-
-                return mergedObj;
-            }),
-        )
-            .then((re) => {
-                this.populateUIWithProducts(re);
-                return re;
-            })
-            .catch((error) => {
-                // console.log(error);
-            });
-    }
-
-    public populateUIWithProducts(products: any[]) {
-        let mapFields = products.map((product: Gernzy.Product) => {
-            var currency = localStorage.getItem('currency');
-            if (!currency) {
-                currency = product.price_currency;
-            }
-
+        window.cartProducts = () => {
             return {
-                title: product.title,
-                short_description: product.short_description,
-                id: product.id,
-                price_cents: product.price_cents / 100,
-                price_currency: currency,
-                quantity: product.quantity,
-                buttonText: 'Remove',
-            };
-        });
+                products: [],
+                formatPriceAndCurrency(cents: number, currency: string) {
+                    return cents / 100 + ' ' + currency;
+                },
+                fetch() {
+                    self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
+                        try {
+                            // 1
+                            let itemsInCart = re.data.me.cart.items;
+                            let productIds: number[] = [];
 
-        $('.cart-products').html(mapFields.map(productTemplate).join(''));
+                            // 2
+                            itemsInCart.forEach((element: { product_id: number }) => {
+                                productIds.push(element.product_id);
+                            });
+
+                            // 3
+                            self.productObj.endpointUrl(self.url);
+                            let cartProductsDetails = self.productObj.getProductsByIDs(productIds).then((re) => {
+                                let products = re.data.productsByIds.data;
+
+                                const productsWithQuantity = products.map((element: any) => {
+                                    let result = itemsInCart.filter((obj: any) => {
+                                        return obj.product_id === element.id;
+                                    });
+                                    try {
+                                        let mergedObj = { ...element, ...result[0] };
+                                        return mergedObj;
+                                    } catch (error) {
+                                        // console.log('cartSetup() .then(  try { catch');
+                                        // console.log(error);
+                                    }
+                                });
+
+                                // set the reactive products property
+                                this.products = productsWithQuantity;
+                            });
+                        } catch (error) {
+                            // console.log('cartSetup() .then(  try { catch');
+                            // console.log(error);
+                        }
+                    });
+                },
+                // addToCartButtonClick($event: { target: EventTarget }) {
+                //     self.addProductToCart($event);
+                // },
+            };
+        };
     }
 }
 export { Cart };

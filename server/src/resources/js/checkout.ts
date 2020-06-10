@@ -169,40 +169,40 @@ class Checkout implements GernzyCheckout {
     public displayLineItems() {
         this.cart.endpointUrl(this.url);
 
-        return this.cart.viewProductsInCart().then((re: Gernzy.reViewProductsInCart) => {
-            try {
-                // See if there is an error
-                let error = re.errors[0].debugMessage;
-                // console.log(error);
-            } catch {
-                let items = re.data.me.cart.items;
+        // return this.cart.viewProductsInCart().then((re: Gernzy.reViewProductsInCart) => {
+        //     try {
+        //         // See if there is an error
+        //         let error = re.errors[0].debugMessage;
+        //         // console.log(error);
+        //     } catch {
+        //         let items = re.data.me.cart.items;
 
-                if (items && items.length > 0) {
-                    this.cart.getProductInCart(items).then((re) => {
-                        let currency = localStorage.getItem('currency');
+        //         if (items && items.length > 0) {
+        //             this.cart.getProductInCart(items).then((re) => {
+        //                 let currency = localStorage.getItem('currency');
 
-                        // get the default currency from the shopConfig
-                        if (!currency) {
-                            currency = localStorage.getItem('default_currency');
-                        }
+        //                 // get the default currency from the shopConfig
+        //                 if (!currency) {
+        //                     currency = localStorage.getItem('default_currency');
+        //                 }
 
-                        re.forEach((element: Gernzy.Product) => {
-                            $('#table-body-line-item').append(
-                                $(`<tr>
-                                    <td>${element.title}</td>
-                                    <td>${element.quantity}</td>
-                                    <td>${element.price_cents / 100} ${currency}</td>
-                                </tr>`),
-                            );
-                        });
-                    });
-                } else {
-                    $('.checkout-container').html(errorTemplate('No products in cart.'));
-                }
-            }
+        //                 re.forEach((element: Gernzy.Product) => {
+        //                     $('#table-body-line-item').append(
+        //                         $(`<tr>
+        //                             <td>${element.title}</td>
+        //                             <td>${element.quantity}</td>
+        //                             <td>${element.price_cents / 100} ${currency}</td>
+        //                         </tr>`),
+        //                     );
+        //                 });
+        //             });
+        //         } else {
+        //             $('.checkout-container').html(errorTemplate('No products in cart.'));
+        //         }
+        //     }
 
-            return re;
-        });
+        //     return re;
+        // });
     }
 
     public setupCheckoutFactory(url: string) {

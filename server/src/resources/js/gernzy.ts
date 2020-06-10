@@ -33,7 +33,7 @@ export default {
 
         if (pathname.includes('cart')) {
             cart.endpointUrl(config.apiUrl);
-            cart.viewProductsInCart();
+            cart.cartSetup();
         }
 
         if (pathname.includes('checkout')) {
