@@ -31,10 +31,8 @@ export default {
         productObj.endpointUrl(config.apiUrl);
         productObj.productsComponent();
 
-        if (pathname.includes('cart')) {
-            cart.endpointUrl(config.apiUrl);
-            cart.cartSetup();
-        }
+        cart.endpointUrl(config.apiUrl);
+        cart.cartSetup();
 
         if (pathname.includes('checkout')) {
             checkout.setupCheckoutFactory(config.apiUrl);

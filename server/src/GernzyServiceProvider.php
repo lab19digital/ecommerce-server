@@ -4,6 +4,8 @@ namespace Gernzy\Server;
 
 use Fruitcake\Cors\CorsServiceProvider as CorsServiceProvider;
 use Gernzy\Server\App\View\Components\Cart as CartComponent;
+use Gernzy\Server\App\View\Components\Checkout as CheckoutComponent;
+use Gernzy\Server\App\View\Components\LineItems as LineItemsComponent;
 use Gernzy\Server\App\View\Components\Product as ProductComponent;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\Cart;
@@ -137,6 +139,8 @@ class GernzyServiceProvider extends ServiceProvider
         // Register blade components
         Blade::component('gernzy-product', ProductComponent::class);
         Blade::component('gernzy-cart', CartComponent::class);
+        Blade::component('gernzy-checkout', CheckoutComponent::class);
+        Blade::component('gernzy-line-items', LineItemsComponent::class);
     }
 
     public function validateConfig()
