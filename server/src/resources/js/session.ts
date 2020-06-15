@@ -1,4 +1,3 @@
-import $ = require('jquery');
 import { User } from './user';
 import { injectable, inject } from 'inversify';
 import { GernzyGraphqlService } from './interfaces/graphqlService';
@@ -77,8 +76,8 @@ class SessionService implements GernzySession {
                         this.currencies = re.data.shopConfig.enabled_currencies;
                     });
                 },
-                changeCurrencyClick($event: { target: EventTarget }) {
-                    self.changeUserCurrency($event);
+                changeCurrencyClick(event: { target: EventTarget }) {
+                    self.changeUserCurrency(event);
                 },
             };
         };
@@ -106,9 +105,9 @@ class SessionService implements GernzySession {
         });
     }
 
-    public changeUserCurrency(event: { target: EventTarget }) {
+    public changeUserCurrency(event: { target: any }) {
         var userToken = localStorage.getItem('userToken') || '';
-        let currrency = $(event.target).attr('data-currency');
+        let currrency = event.target.getAttribute('data-currency');
 
         let query = `
             mutation {

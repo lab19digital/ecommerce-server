@@ -20,11 +20,12 @@
                         <p class="short-description" x-text="product.short_description"></p>
                         <hr class="uk-divider-small">
                         <p class="product-price" x-text="formatPriceAndCurrency(product.price_cents, product.price_currency)"></p>
-                        <hr class="uk-divider-small">
-                        <p class="product-quantity"><span class="uk-label">quantity</span>1</p>
+                        <!-- <hr class="uk-divider-small">
+                        <p class="product-quantity"><span class="uk-label">quantity</span>1</p> -->
                     </div>
                     <div class="uk-card-footer">
-                        <a href="#" class="uk-button uk-button-text add-to-cart" :data-id="product.id" x-on:click="addToCartButtonClick">Add to cart</a>
+                        <a x-show.transition="!product.addedToCart" href="#" class="uk-button uk-button-text add-to-cart" :data-id="product.id" x-on:click="addToCartButtonClick">Add to cart</a>
+                        <span x-show.transition="product.addedToCart" class="uk-margin-small-right uk-badge" uk-icon="check"></span>
                     </div>
                 </div>
             </div>

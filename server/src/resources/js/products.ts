@@ -54,15 +54,33 @@ class Products implements StoreProducts {
                 fetch() {
                     self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                         try {
-                            this.products = data.data.products.data;
+                            let products = data.data.products.data.map((item: {}) => ({ ...item, addedToCart: false }));
+                            this.products = products;
                         } catch (error) {
                             // console.log('productsComponent() .then(  try { catch');
                             // console.log(error);
                         }
                     });
                 },
-                addToCartButtonClick($event: { target: EventTarget }) {
-                    self.addProductToCart($event);
+                addToCartButtonClick(event: { target: any }) {
+                    let productID = event.target.getAttribute('data-id');
+
+                    self.addProductToCart(productID)
+                        .then((re) => {
+                            re.data.addToCart.cart.items.forEach(
+                                (element: { product_id: string; quantity: number }) => {
+                                    if (element.product_id == productID) {
+                                        // @ts-ignore
+                                        let index = this.products.findIndex((x) => x.id === productID);
+                                        // @ts-ignore
+                                        this.products[index].addedToCart = true;
+                                    }
+                                },
+                            );
+                        })
+                        .catch((error) => {
+                            // console.log(`addProductToCart: ${error}`);
+                        });
                 },
             };
         };
@@ -86,9 +104,7 @@ class Products implements StoreProducts {
         return this.graphqlService.sendQuery(query, userToken, this.url);
     }
 
-    public addProductToCart(event: { target: EventTarget }) {
-        // let id = event.target.getAttribute('data-id');
-        let productID = $(event.target).attr('data-id');
+    public addProductToCart(productID: string) {
         var userToken = localStorage.getItem('userToken') || '';
 
         let query = ` mutation {
@@ -106,20 +122,20 @@ class Products implements StoreProducts {
             }
         }`;
 
-        this.graphqlService
-            .sendQuery(query, userToken, this.url)
-            .then((re) => {
-                re.data.addToCart.cart.items.forEach((element: { product_id: string; quantity: number }) => {
-                    if (element.product_id == productID) {
-                        $(event.target)
-                            .parent()
-                            .append($(`<span class="uk-badge">${element.quantity}</span>`));
-                    }
-                });
-            })
-            .catch((error) => {
-                // console.log(`addProductToCart: ${error}`);
-            });
+        return this.graphqlService.sendQuery(query, userToken, this.url);
+        // .then((re) => {
+        //     re.data.addToCart.cart.items.forEach((element: { product_id: string; quantity: number }) => {
+        //         if (element.product_id == productID) {
+        //             // $(event.target)
+        //             //     .parent()
+        //             //     // .append($(`<span class="uk-badge">${element.quantity}</span>`));
+        //             //     .html('<span class="uk-margin-small-right uk-badge" uk-icon="check"></span>');
+        //         }
+        //     });
+        // })
+        // .catch((error) => {
+        //     // console.log(`addProductToCart: ${error}`);
+        // });
     }
 
     public getProductsByIDs(productIDs: number[]) {
