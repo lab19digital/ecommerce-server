@@ -116,10 +116,9 @@ class Products implements StoreProducts {
     }
 
     public getProductsByIDs(productIDs: number[]) {
-        console.log(this.url);
         var userToken = localStorage.getItem('userToken') || '';
         let query = `{
-            productsByIds(includeIds:${productIDs}, first:10){
+            productsByIds(includeIds:[${productIDs}], first:10){
                 data {
                     id
                     title
