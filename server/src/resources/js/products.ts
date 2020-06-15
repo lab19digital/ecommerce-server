@@ -123,19 +123,6 @@ class Products implements StoreProducts {
         }`;
 
         return this.graphqlService.sendQuery(query, userToken, this.url);
-        // .then((re) => {
-        //     re.data.addToCart.cart.items.forEach((element: { product_id: string; quantity: number }) => {
-        //         if (element.product_id == productID) {
-        //             // $(event.target)
-        //             //     .parent()
-        //             //     // .append($(`<span class="uk-badge">${element.quantity}</span>`));
-        //             //     .html('<span class="uk-margin-small-right uk-badge" uk-icon="check"></span>');
-        //         }
-        //     });
-        // })
-        // .catch((error) => {
-        //     // console.log(`addProductToCart: ${error}`);
-        // });
     }
 
     public getProductsByIDs(productIDs: number[]) {
