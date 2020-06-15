@@ -50,18 +50,12 @@ class Cart implements GernzyCart {
                     self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
                         try {
                             let itemsInCart = re.data.me.cart.items;
-                            let productIds: number[] = [];
-
-                            itemsInCart.forEach((element: { product_id: number }) => {
-                                productIds.push(element.product_id);
-                            });
-
+                            let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
                             self.cartProductsDetails(itemsInCart, productIds).then((re) => {
                                 this.products = re;
                             });
                         } catch (error) {
-                            // console.log('cartSetup() .then(  try { catch');
-                            // console.log(error);
+                            console.log('cartSetup() .then(  try { catch ' + error);
                         }
                     });
                 },
@@ -94,6 +88,16 @@ class Cart implements GernzyCart {
             // set the reactive products property
             return productsWithQuantity;
         });
+    }
+
+    public extractIDsFromItemsInCart(itemsInCart: []) {
+        let productIds: number[] = [];
+
+        itemsInCart.forEach((element: { product_id: number }) => {
+            productIds.push(element.product_id);
+        });
+
+        return productIds;
     }
 }
 export { Cart };

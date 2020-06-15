@@ -190,13 +190,15 @@ class Checkout implements GernzyCheckout {
                 fetch() {
                     self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
                         try {
-                            let products = re.data.me.cart.items;
-                            console.log(products);
+                            let itemsInCart = re.data.me.cart.items;
+                            let productIds: number[] = self.cart.extractIDsFromItemsInCart(itemsInCart);
+                            self.cart.cartProductsDetails(itemsInCart, productIds).then((re: []) => {
+                                this.products = re;
+                            });
 
                             // this.products = data.data.products.data;
                         } catch (error) {
-                            // console.log('productsComponent() .then(  try { catch');
-                            // console.log(error);
+                            console.log('productsComponent() .then(  try { catch' + error);
                         }
                     });
                 },
