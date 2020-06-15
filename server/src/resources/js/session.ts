@@ -46,23 +46,42 @@ class SessionService implements GernzySession {
         let query = `
             query {
                 shopConfig {
-                    enabled_currencies
                     default_currency
                 }
             }
         `;
 
         return this.graphqlService.sendQuery(query, userToken, this.url).then((re) => {
-            re.data.shopConfig.enabled_currencies.forEach((element: string) => {
-                $('#available-currencies').append(
-                    `<li><a href='#' class='available-currency' data-currency="${element}">${element}</a></li>`,
-                );
-            });
-
-            $('.available-currency').on('click', this.changeUserCurrency.bind(this));
-
             localStorage.setItem('default_currency', re.data.shopConfig.default_currency);
         });
+    }
+
+    public setupCurrency() {
+        let userToken = localStorage.getItem('userToken') || '';
+        var self = this;
+
+        let query = `
+            query {
+                shopConfig {
+                    enabled_currencies
+                    default_currency
+                }
+            }
+        `;
+
+        window.availableCurrencies = () => {
+            return {
+                currencies: [],
+                fetch() {
+                    self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
+                        this.currencies = re.data.shopConfig.enabled_currencies;
+                    });
+                },
+                changeCurrencyClick($event: { target: EventTarget }) {
+                    self.changeUserCurrency($event);
+                },
+            };
+        };
     }
 
     public setUpGeoLocation() {
@@ -141,6 +160,7 @@ class SessionService implements GernzySession {
         this.setupUser();
         this.setUpShopConfig();
         this.setUpSessionData();
+        this.setupCurrency();
         // this.setUpGeoLocation();
     }
 

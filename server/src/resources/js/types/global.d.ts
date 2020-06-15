@@ -5,5 +5,6 @@ declare global {
         products: Function;
         cartProducts: Function;
         lineItems: Function;
+        availableCurrencies: Function;
     }
 }

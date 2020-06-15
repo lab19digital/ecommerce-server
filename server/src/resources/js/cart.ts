@@ -44,6 +44,13 @@ class Cart implements GernzyCart {
             return {
                 products: [],
                 formatPriceAndCurrency(cents: number, currency: string) {
+                    let currencyLocalStorage = localStorage.getItem('currency') || '';
+
+                    // Check to see if the user has specified a different currency
+                    if (currencyLocalStorage) {
+                        currency = currencyLocalStorage;
+                    }
+
                     return cents / 100 + ' ' + currency;
                 },
                 fetch() {

@@ -52,8 +52,11 @@
                         </ul>
                         <div class="uk-inline">
                             <button class="uk-button uk-button-default" type="button" uk-icon="icon: chevron-down">Currency</button>
-                            <div uk-dropdown>
+                            <div uk-dropdown x-data="availableCurrencies()" x-init="fetch()">
                                 <ul id="available-currencies" class="uk-nav uk-dropdown-nav">
+                                    <template x-for="currency in currencies" :key="currency">
+                                        <li><a href='#' class='available-currency' :data-currency="currency" x-text="currency" x-on:click="changeCurrencyClick"></a></li>
+                                    </template>
                                 </ul>
                             </div>
                         </div>
