@@ -49,35 +49,15 @@ class Cart implements GernzyCart {
                 fetch() {
                     self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
                         try {
-                            // 1
                             let itemsInCart = re.data.me.cart.items;
                             let productIds: number[] = [];
 
-                            // 2
                             itemsInCart.forEach((element: { product_id: number }) => {
                                 productIds.push(element.product_id);
                             });
 
-                            // 3
-                            self.productObj.endpointUrl(self.url);
-                            let cartProductsDetails = self.productObj.getProductsByIDs(productIds).then((re) => {
-                                let products = re.data.productsByIds.data;
-
-                                const productsWithQuantity = products.map((element: any) => {
-                                    let result = itemsInCart.filter((obj: any) => {
-                                        return obj.product_id === element.id;
-                                    });
-                                    try {
-                                        let mergedObj = { ...element, ...result[0] };
-                                        return mergedObj;
-                                    } catch (error) {
-                                        // console.log('cartSetup() .then(  try { catch');
-                                        // console.log(error);
-                                    }
-                                });
-
-                                // set the reactive products property
-                                this.products = productsWithQuantity;
+                            self.cartProductsDetails(itemsInCart, productIds).then((re) => {
+                                this.products = re;
                             });
                         } catch (error) {
                             // console.log('cartSetup() .then(  try { catch');
@@ -86,10 +66,34 @@ class Cart implements GernzyCart {
                     });
                 },
                 // removeFromCartButtonClick($event: { target: EventTarget }) {
-                //     self.addProductToCart($event);
+                //     self.removeProductToCart($event);
                 // },
             };
         };
+    }
+
+    public async cartProductsDetails(itemsInCart: [{}], productIds: number[]) {
+        this.productObj.endpointUrl(this.url);
+
+        return this.productObj.getProductsByIDs(productIds).then((re) => {
+            let products = re.data.productsByIds.data;
+
+            const productsWithQuantity = products.map((element: any) => {
+                let result = itemsInCart.filter((obj: any) => {
+                    return obj.product_id === element.id;
+                });
+                try {
+                    let mergedObj = { ...element, ...result[0] };
+                    return mergedObj;
+                } catch (error) {
+                    // console.log('cartSetup() .then(  try { catch');
+                    // console.log(error);
+                }
+            });
+
+            // set the reactive products property
+            return productsWithQuantity;
+        });
     }
 }
 export { Cart };

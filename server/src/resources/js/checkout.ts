@@ -188,9 +188,12 @@ class Checkout implements GernzyCheckout {
                     return cents / 100 + ' ' + currency;
                 },
                 fetch() {
-                    self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
+                    self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
                         try {
-                            this.products = data.data.products.data;
+                            let products = re.data.me.cart.items;
+                            console.log(products);
+
+                            // this.products = data.data.products.data;
                         } catch (error) {
                             // console.log('productsComponent() .then(  try { catch');
                             // console.log(error);
