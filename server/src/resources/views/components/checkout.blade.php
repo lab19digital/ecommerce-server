@@ -62,8 +62,10 @@
 
         <div class="uk-margin">
             <label class="uk-form-label" for="form-horizontal-text">Payment method</label>
-            <select id="checkout_payment_method" name="payment_method" class="uk-select">
-                <!-- Jquery generated -->
+            <select id="checkout_payment_method" name="payment_method" class="uk-select" x-data="populatePaymentProviders()" x-init="fetch()">
+                <template x-for="provider in paymentProviders" :key="provider">
+                    <option :value="provider.ui_value" x-text="provider.ui_option"></option>
+                </template>
             </select>
         </div>
 

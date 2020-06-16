@@ -1,6 +1,5 @@
 import productTemplate from './templates/productTemplate';
 import errorTemplate from './templates/errorTemplate';
-import $ = require('jquery');
 import { injectable, inject } from 'inversify';
 import { GernzyGraphqlService } from './interfaces/graphqlService';
 import { TYPES } from './types/types';

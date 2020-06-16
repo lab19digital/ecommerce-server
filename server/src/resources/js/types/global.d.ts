@@ -6,5 +6,7 @@ declare global {
         cartProducts: Function;
         lineItems: Function;
         availableCurrencies: Function;
+        populatePaymentProviders: Function;
+        checkoutCartTotal: Function;
     }
 }

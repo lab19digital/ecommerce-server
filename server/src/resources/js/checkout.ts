@@ -19,7 +19,7 @@ class Checkout implements GernzyCheckout {
 
     public populatePaymentProviders() {
         var userToken = localStorage.getItem('userToken') || '';
-
+        var self = this;
         let query = `
             query {
                 shopConfig {
@@ -28,23 +28,17 @@ class Checkout implements GernzyCheckout {
             }
         `;
 
-        return this.graphqlService.sendQuery(query, userToken, this.url).then((re) => {
-            let paymentProviders = JSON.parse(re.data.shopConfig.payment_providers);
-
-            // If no payment providers where specified, error out
-            if (paymentProviders.length == 0) {
-                $('#checkout-form').html(errorTemplate('No payment option has been configure in the backend.'));
-                return re;
-            }
-
-            paymentProviders.forEach((element: { ui_value: string; ui_option: string }) => {
-                $('#checkout_payment_method').append(
-                    `<option value="${element.ui_value}">${element.ui_option}</option>`,
-                );
-            });
-
-            return re;
-        });
+        window.populatePaymentProviders = () => {
+            return {
+                paymentProviders: [],
+                fetch() {
+                    self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
+                        let paymentProviders = JSON.parse(re.data.shopConfig.payment_providers);
+                        this.paymentProviders = paymentProviders;
+                    });
+                },
+            };
+        };
     }
 
     public checkout() {
@@ -139,6 +133,7 @@ class Checkout implements GernzyCheckout {
 
     public getBasketTotal() {
         var userToken = localStorage.getItem('userToken') || '';
+        var self = this;
 
         let query = `{
             me {
@@ -148,22 +143,27 @@ class Checkout implements GernzyCheckout {
             }
         }`;
 
-        return this.graphqlService
-            .sendQuery(query, userToken, this.url)
-            .then((re) => {
-                let currency = localStorage.getItem('currency');
+        window.checkoutCartTotal = () => {
+            return {
+                total: [],
+                fetch() {
+                    self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
+                        let total = re.data.me.cart.cart_total;
+                        this.total = total;
+                    });
+                },
+                formatPriceAndCurrency(cents: number) {
+                    let currency = localStorage.getItem('currency');
 
-                // get the default currency from the shopConfig
-                if (!currency) {
-                    currency = localStorage.getItem('default_currency');
-                }
+                    // get the default currency from the shopConfig
+                    if (!currency) {
+                        currency = localStorage.getItem('default_currency');
+                    }
 
-                $('#checkout-cart-total').html(`${re.data.me.cart.cart_total / 100} ${currency}`);
-                return re;
-            })
-            .catch((error) => {
-                // console.log(error);
-            });
+                    return cents / 100 + ' ' + currency;
+                },
+            };
+        };
     }
 
     public displayLineItems() {

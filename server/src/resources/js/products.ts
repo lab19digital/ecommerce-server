@@ -1,5 +1,4 @@
 import productTemplate from './templates/productTemplate';
-import $ = require('jquery');
 import errorTemplate from './templates/errorTemplate';
 import { injectable, inject } from 'inversify';
 import { StoreProducts } from './interfaces/products';
