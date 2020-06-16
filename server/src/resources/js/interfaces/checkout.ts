@@ -4,6 +4,5 @@ export interface GernzyCheckout {
     sendOfCheckoutInfo(values: {}): Promise<any>;
     getBasketTotal(): any;
     displayLineItems(): void;
-    populatePaymentProviders(): void;
     setupCheckoutFactory(url: string): void;
 }

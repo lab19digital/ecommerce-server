@@ -17,7 +17,7 @@ class Checkout implements GernzyCheckout {
         this.url = url;
     }
 
-    public populatePaymentProviders() {
+    public checkout() {
         var userToken = localStorage.getItem('userToken') || '';
         var self = this;
         let query = `
@@ -27,45 +27,65 @@ class Checkout implements GernzyCheckout {
                 }
             }
         `;
+        // $('#checkout-form').submit(function (event) {
+        //     event.preventDefault();
 
-        window.populatePaymentProviders = () => {
+        //     // get all the inputs into an array.
+        //     let inputs = $('#checkout-form :input');
+
+        //     // get an associative array of just the values.
+        //     let values: Gernzy.CheckoutInfo = {};
+
+        //     inputs.each((i, ele) => {
+        //         let key = $(ele).attr('name');
+        //         let value = $(ele).val();
+
+        //         typeof key !== 'undefined' ? (values[key] = value) : {};
+        //     });
+
+        //     // Checkbox values
+        //     values['use_shipping_for_billing'] = $('#use_shipping_for_billing').prop('checked');
+        //     values['agree_to_terms'] = $('#agree_to_terms').prop('checked');
+
+        //     self.sendOfCheckoutInfo(values);
+        // });
+
+        window.checkoutForm = () => {
             return {
+                values: {},
                 paymentProviders: [],
-                fetch() {
+                initValues() {
+                    // get all the inputs into an array.
+                    let inputs = $('#checkout-form :input');
+                    // get an associative array of just the values.
+                    let values: Gernzy.CheckoutInfo = {};
+                    inputs.each((i, ele) => {
+                        let key = $(ele).attr('name');
+                        let value = $(ele).val();
+                        typeof key !== 'undefined' ? (values[key] = value) : {};
+                    });
+                    // Checkbox values
+                    values['use_shipping_for_billing'] = $('#use_shipping_for_billing').prop('checked');
+                    values['agree_to_terms'] = $('#agree_to_terms').prop('checked');
+
+                    this.values = values;
+
+                    // Now populate payment providers
+                    this.fetchPaymentProviders();
+                },
+                fetchPaymentProviders() {
                     self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
                         let paymentProviders = JSON.parse(re.data.shopConfig.payment_providers);
+                        paymentProviders.unshift({ ui_option: 'Select a payment method', ui_value: 'null' });
                         this.paymentProviders = paymentProviders;
                     });
                 },
+                submitClick(event: { target: EventTarget; preventDefault: Function }) {
+                    event.preventDefault();
+                    self.sendOfCheckoutInfo(this.values);
+                },
             };
         };
-    }
-
-    public checkout() {
-        // This is to keep the object context of and access it's methods
-        var self = this;
-        $('#checkout-form').submit(function (event) {
-            event.preventDefault();
-
-            // get all the inputs into an array.
-            let inputs = $('#checkout-form :input');
-
-            // get an associative array of just the values.
-            let values: Gernzy.CheckoutInfo = {};
-
-            inputs.each((i, ele) => {
-                let key = $(ele).attr('name');
-                let value = $(ele).val();
-
-                typeof key !== 'undefined' ? (values[key] = value) : {};
-            });
-
-            // Checkbox values
-            values['use_shipping_for_billing'] = $('#use_shipping_for_billing').prop('checked');
-            values['agree_to_terms'] = $('#agree_to_terms').prop('checked');
-
-            self.sendOfCheckoutInfo(values);
-        });
     }
 
     public sendOfCheckoutInfo(values: Gernzy.CheckoutInfo) {
@@ -102,26 +122,30 @@ class Checkout implements GernzyCheckout {
             }
         }`;
 
+        console.log(query);
+
         return this.graphqlService
             .sendQuery(query, userToken, this.url)
             .then((re: Gernzy.reSendOfCheckoutInfo) => {
                 if (re.errors) {
                     let errors = re.errors;
                     let debugMessage = re.errors[0].debugMessage;
-                    // console.log(errors);
+                    console.log(errors);
                 } else {
                     $('.checkout-container').html(successTemplate('Your details have been submitted.'));
                 }
 
                 // Now try and do the next step
                 try {
+                    console.log(re);
+
                     let eventData: [{ data: { redirect_url: string } }] = JSON.parse(re.data.checkout.event_data);
                     let redirectUrl = eventData[0].data.redirect_url;
 
                     localStorage.setItem('event_data', JSON.stringify(eventData));
                     window.location.replace(redirectUrl);
                 } catch (error) {
-                    // console.log(error);
+                    console.log(error);
                 }
 
                 return re;
@@ -208,7 +232,6 @@ class Checkout implements GernzyCheckout {
         this.endpointUrl(url);
         this.getBasketTotal();
         this.displayLineItems();
-        this.populatePaymentProviders();
         this.checkout();
     }
 }
