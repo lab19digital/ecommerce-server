@@ -55,15 +55,19 @@ class Checkout implements GernzyCheckout {
                 values: {},
                 paymentProviders: [],
                 initValues() {
-                    // get all the inputs into an array.
-                    let inputs = $('#checkout-form :input');
                     // get an associative array of just the values.
                     let values: Gernzy.CheckoutInfo = {};
-                    inputs.each((i, ele) => {
-                        let key = $(ele).attr('name');
-                        let value = $(ele).val();
+
+                    //@ts-ignore
+                    let elements = document.getElementById('checkout-form')!.elements;
+
+                    // Iterate over the form controls
+                    for (let i = 0; i < elements.length; i++) {
+                        let key = elements[i].name;
+                        let value = elements[i].value;
                         typeof key !== 'undefined' ? (values[key] = value) : {};
-                    });
+                    }
+
                     // Checkbox values
                     values['use_shipping_for_billing'] = $('#use_shipping_for_billing').prop('checked');
                     values['agree_to_terms'] = $('#agree_to_terms').prop('checked');
