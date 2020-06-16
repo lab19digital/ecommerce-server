@@ -65,12 +65,11 @@ class Checkout implements GernzyCheckout {
                     for (let i = 0; i < elements.length; i++) {
                         let key = elements[i].name;
                         let value = elements[i].value;
+                        if (elements[i].type == 'checkbox') {
+                            value = elements[i].checked;
+                        }
                         typeof key !== 'undefined' ? (values[key] = value) : {};
                     }
-
-                    // Checkbox values
-                    values['use_shipping_for_billing'] = $('#use_shipping_for_billing').prop('checked');
-                    values['agree_to_terms'] = $('#agree_to_terms').prop('checked');
 
                     this.values = values;
 
