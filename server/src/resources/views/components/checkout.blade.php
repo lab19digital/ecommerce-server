@@ -62,7 +62,7 @@
 
         <div class="uk-margin">
             <label class="uk-form-label" for="form-horizontal-text">Payment method</label>
-            <select x-model="values.payment_method" id="checkout_payment_method" name="payment_method" class="uk-select">
+            <select x-model="values.payment_method" id="checkout_payment_method" name="payment_method" class="uk-select" required>
                 <template x-for="provider in paymentProviders" :key="provider">
                     <option :value="provider.ui_value" x-text="provider.ui_option"></option>
                 </template>
@@ -78,5 +78,5 @@
         </div>
     </fieldset>
 
-    <button type="submit " class="uk-button uk-button-default uk-box-shadow-hover-small" x-on:click="submitClick">Submit</button>
+    <button type="submit" class="uk-button uk-button-default uk-box-shadow-hover-small" x-on:click="submitClick">Submit</button>
 </form>

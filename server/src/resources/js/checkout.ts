@@ -81,6 +81,13 @@ class Checkout implements GernzyCheckout {
                     });
                 },
                 submitClick(event: { target: EventTarget; preventDefault: Function }) {
+                    document
+                        .getElementById('checkout-form')!
+                        .querySelectorAll('[required]')
+                        .forEach(function (i: any) {
+                            if (!i.value) throw new Error('All required fields are not filled in.');
+                        });
+
                     event.preventDefault();
                     self.sendOfCheckoutInfo(this.values);
                 },
@@ -122,15 +129,13 @@ class Checkout implements GernzyCheckout {
             }
         }`;
 
-        console.log(query);
-
         return this.graphqlService
             .sendQuery(query, userToken, this.url)
             .then((re: Gernzy.reSendOfCheckoutInfo) => {
                 if (re.errors) {
                     let errors = re.errors;
                     let debugMessage = re.errors[0].debugMessage;
-                    console.log(errors);
+                    // console.log(errors);
                 } else {
                     $('.checkout-container').html(successTemplate('Your details have been submitted.'));
                 }
