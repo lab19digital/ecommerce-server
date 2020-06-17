@@ -135,8 +135,10 @@ class Cart implements GernzyCart {
                     `;
 
                     self.graphqlService.sendQuery(updateQuantityMutation, userToken, self.url).then((re) => {
+                        console.log(re);
+
                         try {
-                            let itemsInCart = re.data.removeFromCart.cart.items;
+                            let itemsInCart = re.data.updateCartQuantity.cart.items;
                             let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
                             self.cartProductsDetails(itemsInCart, productIds).then((re) => {
                                 this.products = re;
@@ -148,7 +150,7 @@ class Cart implements GernzyCart {
                                 top: 100,
                                 behavior: 'smooth', //
                             });
-                            // console.log('removeFromCartButtonClick() .then(  try { catch ' + error);
+                            console.log('removeFromCartButtonClick() .then(  try { catch ' + error);
                         }
                     });
                 },
