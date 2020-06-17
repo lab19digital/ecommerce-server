@@ -42,6 +42,10 @@ class Cart implements GernzyCart {
         window.cartProducts = () => {
             return {
                 products: [],
+                showSuccess: false,
+                successText: 'Success!',
+                showError: false,
+                errorText: 'An error occured.',
                 formatPriceAndCurrency(cents: number, currency: string) {
                     let currencyLocalStorage = localStorage.getItem('currency') || '';
 
@@ -61,7 +65,13 @@ class Cart implements GernzyCart {
                                 this.products = re;
                             });
                         } catch (error) {
-                            console.log('cartSetup() .then(  try { catch ' + error);
+                            this.showError = true;
+                            this.errorText = 'An error occured while loading products in cart. Please try again';
+                            window.scroll({
+                                top: 100,
+                                behavior: 'smooth', //
+                            });
+                            // console.log('cartSetup() .then(  try { catch ' + error);
                         }
                     });
                 },

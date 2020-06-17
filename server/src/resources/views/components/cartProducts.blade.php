@@ -1,5 +1,7 @@
 <!-- product component -->
 <div x-data="cartProducts()" x-init="fetch()">
+    <x-gernzy-success-alert />
+    <x-gernzy-error-alert />
     <div class="products-container uk-flex uk-flex-wrap uk-flex-wrap-around ">
         <template x-for="product in products" :key="product.id">
             <div>
