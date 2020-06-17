@@ -1,5 +1,7 @@
 <!-- product component -->
 <div x-data="products()" x-init="fetch()">
+    <x-gernzy-success-alert />
+    <x-gernzy-error-alert />
     <div class="products-container uk-flex uk-flex-wrap uk-flex-wrap-around ">
         <template x-for="product in products" :key="product.id">
             <div>
@@ -22,7 +24,7 @@
                         <p class="product-price" x-text="formatPriceAndCurrency(product.price_cents, product.price_currency)"></p>
                     </div>
                     <div class="uk-card-footer">
-                        <a x-show.transition="!product.addedToCart" href="#" class="uk-button uk-button-text add-to-cart" :data-id="product.id" x-on:click="addToCartButtonClick">Add to cart</a>
+                        <a x-show.transition="!product.addedToCart" href="#/" class="uk-button uk-button-text add-to-cart" :data-id="product.id" x-on:click="addToCartButtonClick">Add to cart</a>
                         <span x-show.transition="product.addedToCart" class="uk-margin-small-right uk-badge" uk-icon="check"></span>
                     </div>
                 </div>

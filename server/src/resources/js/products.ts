@@ -40,6 +40,10 @@ class Products implements StoreProducts {
         window.products = () => {
             return {
                 products: [],
+                showSuccess: false,
+                successText: 'Success!',
+                showError: false,
+                errorText: 'An error occured.',
                 formatPriceAndCurrency(cents: number, currency: string) {
                     let currencyLocalStorage = localStorage.getItem('currency') || '';
 
@@ -56,6 +60,8 @@ class Products implements StoreProducts {
                             let products = data.data.products.data.map((item: {}) => ({ ...item, addedToCart: false }));
                             this.products = products;
                         } catch (error) {
+                            this.showError = true;
+                            this.errorText = 'An error occured while loading product. Please try again';
                             // console.log('productsComponent() .then(  try { catch');
                             // console.log(error);
                         }
@@ -66,6 +72,18 @@ class Products implements StoreProducts {
 
                     self.addProductToCart(productID)
                         .then((re) => {
+                            if (re.errors) {
+                                let errors = re.errors;
+                                let debugMessage = re.errors[0].debugMessage;
+
+                                this.showError = true;
+                                this.errorText = 'An error occured while adding product to cart. Please try again';
+                                window.scroll({
+                                    top: 100,
+                                    behavior: 'smooth', //
+                                });
+                            }
+
                             re.data.addToCart.cart.items.forEach(
                                 (element: { product_id: string; quantity: number }) => {
                                     if (element.product_id == productID) {
@@ -78,6 +96,8 @@ class Products implements StoreProducts {
                             );
                         })
                         .catch((error) => {
+                            this.showError = true;
+                            this.errorText = 'An error occured while adding product to cart. Please try again';
                             // console.log(`addProductToCart: ${error}`);
                         });
                 },
