@@ -28,17 +28,6 @@ class Cart implements GernzyCart {
         var userToken = localStorage.getItem('userToken') || '';
         var self = this;
 
-        let query = `{
-            me {
-                cart {
-                    items {
-                        product_id
-                        quantity
-                    }
-                }
-            }
-        }`;
-
         window.cartProducts = () => {
             return {
                 products: [],
@@ -57,6 +46,17 @@ class Cart implements GernzyCart {
                     return cents / 100 + ' ' + currency;
                 },
                 fetch() {
+                    let query = `{
+                        me {
+                            cart {
+                                items {
+                                    product_id
+                                    quantity
+                                }
+                            }
+                        }
+                    }`;
+
                     self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
                         try {
                             let itemsInCart = re.data.me.cart.items;
@@ -75,9 +75,42 @@ class Cart implements GernzyCart {
                         }
                     });
                 },
-                // removeFromCartButtonClick($event: { target: EventTarget }) {
-                //     self.removeProductToCart($event);
-                // },
+                removeFromCartButtonClick(event: { target: HTMLInputElement }) {
+                    let productID = event.target.getAttribute('data-id');
+                    let query = `
+                        mutation {
+                            removeFromCart(input: {
+                                product_id: ${productID},
+                                quantity: 1
+                                }) {
+                                cart {
+                                    items {
+                                        product_id
+                                        quantity
+                                    }
+                                }
+                            }
+                        }
+                    `;
+
+                    self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
+                        try {
+                            let itemsInCart = re.data.removeFromCart.cart.items;
+                            let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
+                            self.cartProductsDetails(itemsInCart, productIds).then((re) => {
+                                this.products = re;
+                            });
+                        } catch (error) {
+                            this.showError = true;
+                            this.errorText = 'An error occured while loading products in cart. Please try again';
+                            window.scroll({
+                                top: 100,
+                                behavior: 'smooth', //
+                            });
+                            // console.log('removeFromCartButtonClick() .then(  try { catch ' + error);
+                        }
+                    });
+                },
             };
         };
     }
