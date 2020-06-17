@@ -82,16 +82,15 @@ class Cart implements GernzyCart {
         };
     }
 
-    public async cartProductsDetails(itemsInCart: [{}], productIds: number[]) {
+    public async cartProductsDetails(itemsInCart: object[], productIds: number[]) {
         this.productObj.endpointUrl(this.url);
 
         return this.productObj.getProductsByIDs(productIds).then((re) => {
             let products = re.data.productsByIds.data;
 
-            const productsWithQuantity = products.map((element: any) => {
-                let result = itemsInCart.filter((obj: any) => {
-                    return obj.product_id === element.id;
-                });
+            const productsWithQuantity = products.map((element: { id: string }) => {
+                let result = itemsInCart.filter((item: any) => item.product_id === element.id);
+
                 try {
                     let mergedObj = { ...element, ...result[0] };
                     return mergedObj;

@@ -39,7 +39,7 @@ class Products implements StoreProducts {
 
         window.products = () => {
             return {
-                products: [],
+                products: [{ addedToCart: false, id: '' }],
                 showSuccess: false,
                 successText: 'Success!',
                 showError: false,
@@ -57,7 +57,10 @@ class Products implements StoreProducts {
                 fetch() {
                     self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                         try {
-                            let products = data.data.products.data.map((item: {}) => ({ ...item, addedToCart: false }));
+                            let products = data.data.products.data.map((item: {}) => ({
+                                ...item,
+                                addedToCart: false,
+                            }));
                             this.products = products;
                         } catch (error) {
                             this.showError = true;
@@ -67,7 +70,7 @@ class Products implements StoreProducts {
                         }
                     });
                 },
-                addToCartButtonClick(event: { target: any }) {
+                addToCartButtonClick(event: { target: HTMLInputElement }) {
                     let productID = event.target.getAttribute('data-id');
 
                     self.addProductToCart(productID)
@@ -87,9 +90,8 @@ class Products implements StoreProducts {
                             re.data.addToCart.cart.items.forEach(
                                 (element: { product_id: string; quantity: number }) => {
                                     if (element.product_id == productID) {
-                                        // @ts-ignore
-                                        let index = this.products.findIndex((x) => x.id === productID);
-                                        // @ts-ignore
+                                        let index = this.products.findIndex((x: { id: string }) => x.id === productID);
+
                                         this.products[index].addedToCart = true;
                                     }
                                 },
@@ -123,7 +125,7 @@ class Products implements StoreProducts {
         return this.graphqlService.sendQuery(query, userToken, this.url);
     }
 
-    public addProductToCart(productID: string) {
+    public addProductToCart(productID: string | null) {
         var userToken = localStorage.getItem('userToken') || '';
 
         let query = ` mutation {

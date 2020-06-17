@@ -76,7 +76,7 @@ class SessionService implements GernzySession {
                         this.currencies = re.data.shopConfig.enabled_currencies;
                     });
                 },
-                changeCurrencyClick(event: { target: EventTarget }) {
+                changeCurrencyClick(event: { target: HTMLInputElement }) {
                     self.changeUserCurrency(event);
                 },
             };
@@ -105,7 +105,7 @@ class SessionService implements GernzySession {
         });
     }
 
-    public changeUserCurrency(event: { target: any }) {
+    public changeUserCurrency(event: { target: HTMLInputElement }) {
         var userToken = localStorage.getItem('userToken') || '';
         let currrency = event.target.getAttribute('data-currency');
 

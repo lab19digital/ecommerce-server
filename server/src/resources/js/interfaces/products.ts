@@ -1,7 +1,7 @@
 export interface StoreProducts {
-    productsComponent(): any;
+    productsComponent(): void;
     getProduct(id: number): Promise<any>;
     getProductsByIDs(productIDs: number[]): Promise<any>;
-    addProductToCart(event: any): void;
+    addProductToCart(productID: string): void;
     endpointUrl(url: string): void;
 }
