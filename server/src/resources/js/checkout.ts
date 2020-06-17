@@ -31,6 +31,10 @@ class Checkout implements GernzyCheckout {
         window.checkoutForm = () => {
             return {
                 values: {},
+                showSuccess: false,
+                successText: 'Success!',
+                showError: false,
+                errorText: 'An error occured.',
                 paymentProviders: [],
                 initValues() {
                     // get an associative array of just the values.
@@ -70,7 +74,37 @@ class Checkout implements GernzyCheckout {
                         });
 
                     event.preventDefault();
-                    self.sendOfCheckoutInfo(this.values);
+
+                    self.sendOfCheckoutInfo(this.values).then((re: Gernzy.reSendOfCheckoutInfo) => {
+                        if (re.errors) {
+                            let errors = re.errors;
+                            let debugMessage = re.errors[0].debugMessage;
+
+                            this.showError = true;
+                            this.errorText = 'An error occured when submitting your details, please try again.';
+                            window.scrollTo(500, 0);
+                            // console.log(errors);
+                        } else {
+                            this.showSuccess = true;
+                            this.successText =
+                                'Your details has successfully been submitted. You wil now be redirected to the payment page.';
+
+                            setTimeout(() => {
+                                console.log('redirect');
+                                try {
+                                    let eventData: [{ data: { redirect_url: string } }] = JSON.parse(
+                                        re.data.checkout.event_data,
+                                    );
+                                    let redirectUrl = eventData[0].data.redirect_url;
+
+                                    localStorage.setItem('event_data', JSON.stringify(eventData));
+                                    window.location.replace(redirectUrl);
+                                } catch (error) {
+                                    console.log(error);
+                                }
+                            }, 4000);
+                        }
+                    });
                 },
             };
         };
@@ -110,32 +144,7 @@ class Checkout implements GernzyCheckout {
             }
         }`;
 
-        return this.graphqlService
-            .sendQuery(query, userToken, this.url)
-            .then((re: Gernzy.reSendOfCheckoutInfo) => {
-                if (re.errors) {
-                    let errors = re.errors;
-                    let debugMessage = re.errors[0].debugMessage;
-                    // console.log(errors);
-                } else {
-                    $('.checkout-container').html(successTemplate('Your details have been submitted.'));
-                }
-
-                try {
-                    let eventData: [{ data: { redirect_url: string } }] = JSON.parse(re.data.checkout.event_data);
-                    let redirectUrl = eventData[0].data.redirect_url;
-
-                    localStorage.setItem('event_data', JSON.stringify(eventData));
-                    window.location.replace(redirectUrl);
-                } catch (error) {
-                    console.log(error);
-                }
-
-                return re;
-            })
-            .catch((error) => {
-                // console.log(error);
-            });
+        return this.graphqlService.sendQuery(query, userToken, this.url);
     }
 
     public getBasketTotal() {

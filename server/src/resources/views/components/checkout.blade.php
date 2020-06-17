@@ -1,5 +1,5 @@
 <!-- checkout component -->
-<form id="checkout-form" class="uk-card uk-card-default uk-card-body uk-card-large" x-data="checkoutForm()" x-init="initValues()">
+<form x-show.transition="!showSuccess" id="checkout-form" class="uk-card uk-card-default uk-card-body uk-card-large">
     <h1 class="uk-heading-small">Complete checkout</h1>
     <fieldset class=" uk-fieldset">
 
