@@ -10,7 +10,9 @@ return [
     | the user to select a paymet method
     |
     */
-    'ui_option' => 'Credit Card',
-    'ui_value' => 'stripe_standard'
+    [
+        'ui_option' => 'Stripe',
+        'ui_value' => 'stripe_standard'
+    ]
 
 ];

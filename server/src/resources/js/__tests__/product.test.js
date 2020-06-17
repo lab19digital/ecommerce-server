@@ -9,7 +9,7 @@ test('query for single product', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
     expect.assertions(2);
-    return prods.getProduct(1).then(data => {
+    return prods.getProduct(1).then((data) => {
         expect(data).toBeObject();
         expect(data.data.product).toContainAllKeys([
             'id',
@@ -28,7 +28,7 @@ test('query for all products', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
     expect.assertions(2);
-    return prods.getAllProducts().then(data => {
+    return prods.productsComponent().then((data) => {
         expect(data).toBeObject();
         expect(data.data.products.data[0]).toContainAllKeys([
             'id',
@@ -47,7 +47,7 @@ test('query for all products with DOM', () => {
     let graphQlService = new GraphqlService();
     let prods = new Products(graphQlService);
     expect.assertions(3);
-    return prods.getAllProducts().then(data => {
+    return prods.productsComponent().then((data) => {
         expect(data).toBeObject();
 
         expect(data.data.products.data[0]).toContainAllKeys([
