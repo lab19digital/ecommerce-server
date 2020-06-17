@@ -82,7 +82,10 @@ class Checkout implements GernzyCheckout {
 
                             this.showError = true;
                             this.errorText = 'An error occured when submitting your details, please try again.';
-                            window.scrollTo(500, 0);
+                            window.scroll({
+                                top: 100,
+                                behavior: 'smooth', //
+                            });
                             // console.log(errors);
                         } else {
                             this.showSuccess = true;
