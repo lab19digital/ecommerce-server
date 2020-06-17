@@ -25,6 +25,7 @@ class StripeProvider extends GernzyServiceProvider
         // Make cache config publishment optional by merging the config from the package.
         $this->mergeConfigFrom(__DIR__ . '/config/events.php', 'events');
         $this->mergeConfigFrom(__DIR__ . '/config/api.php', 'api');
+        $this->mergeConfigFrom(__DIR__ . '/config/package.php', 'gernzy-packages');
     }
 
     /**
@@ -41,11 +42,13 @@ class StripeProvider extends GernzyServiceProvider
         $this->publishes([
             __DIR__ . '/config/events.php' => config_path('events.php'),
         ]);
-
-        // Allow developers to override currency config
         $this->publishes([
             __DIR__ . '/config/api.php' => config_path('api.php'),
         ]);
+        $this->publishes([
+            __DIR__ . '/config/package.php' => config_path('gernzy-packages.php'),
+        ]);
+
 
         $this->loadRoutesFrom(__DIR__ . '/Routes/web.php');
 

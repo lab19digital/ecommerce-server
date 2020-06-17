@@ -3,6 +3,12 @@
 namespace Gernzy\Server;
 
 use Fruitcake\Cors\CorsServiceProvider as CorsServiceProvider;
+use Gernzy\Server\App\View\Components\Cart as CartComponent;
+use Gernzy\Server\App\View\Components\Checkout as CheckoutComponent;
+use Gernzy\Server\App\View\Components\ErrorAlert as ErrorAlertComponent;
+use Gernzy\Server\App\View\Components\LineItems as LineItemsComponent;
+use Gernzy\Server\App\View\Components\Product as ProductComponent;
+use Gernzy\Server\App\View\Components\SuccessAlert as SuccessAlertComponent;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\Cart;
 use Gernzy\Server\Observers\CartObserver;
@@ -17,6 +23,7 @@ use Gernzy\Server\Services\SessionService;
 use Gernzy\Server\Services\UserService;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Nuwave\Lighthouse\LighthouseServiceProvider;
 
@@ -130,6 +137,14 @@ class GernzyServiceProvider extends ServiceProvider
 
         // Register observable for the cart model
         Cart::observe(CartObserver::class);
+
+        // Register blade components
+        Blade::component('gernzy-product', ProductComponent::class);
+        Blade::component('gernzy-cart', CartComponent::class);
+        Blade::component('gernzy-checkout', CheckoutComponent::class);
+        Blade::component('gernzy-line-items', LineItemsComponent::class);
+        Blade::component('gernzy-success-alert', SuccessAlertComponent::class);
+        Blade::component('gernzy-error-alert', ErrorAlertComponent::class);
     }
 
     public function validateConfig()
