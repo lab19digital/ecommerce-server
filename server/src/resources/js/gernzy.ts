@@ -1,4 +1,3 @@
-import $ = require('jquery');
 import 'reflect-metadata';
 import { GernzyContainer } from './container/inversify.config';
 import { TYPES } from './types/types';

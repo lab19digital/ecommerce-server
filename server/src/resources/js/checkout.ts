@@ -27,28 +27,6 @@ class Checkout implements GernzyCheckout {
                 }
             }
         `;
-        // $('#checkout-form').submit(function (event) {
-        //     event.preventDefault();
-
-        //     // get all the inputs into an array.
-        //     let inputs = $('#checkout-form :input');
-
-        //     // get an associative array of just the values.
-        //     let values: Gernzy.CheckoutInfo = {};
-
-        //     inputs.each((i, ele) => {
-        //         let key = $(ele).attr('name');
-        //         let value = $(ele).val();
-
-        //         typeof key !== 'undefined' ? (values[key] = value) : {};
-        //     });
-
-        //     // Checkbox values
-        //     values['use_shipping_for_billing'] = $('#use_shipping_for_billing').prop('checked');
-        //     values['agree_to_terms'] = $('#agree_to_terms').prop('checked');
-
-        //     self.sendOfCheckoutInfo(values);
-        // });
 
         window.checkoutForm = () => {
             return {
@@ -143,10 +121,7 @@ class Checkout implements GernzyCheckout {
                     $('.checkout-container').html(successTemplate('Your details have been submitted.'));
                 }
 
-                // Now try and do the next step
                 try {
-                    console.log(re);
-
                     let eventData: [{ data: { redirect_url: string } }] = JSON.parse(re.data.checkout.event_data);
                     let redirectUrl = eventData[0].data.redirect_url;
 
