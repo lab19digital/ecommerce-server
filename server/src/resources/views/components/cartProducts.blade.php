@@ -23,7 +23,11 @@
                         <hr class="uk-divider-small">
                         <p class="product-price" x-text="formatPriceAndCurrency(product.price_cents, product.price_currency)"></p>
                         <hr class="uk-divider-small">
-                        <p class="product-quantity"><span class="uk-label">quantity</span>1</p>
+                        <p class="product-quantity"><span class="uk-label">quantity</span>
+                            <div class="uk-margin">
+                                <input class="uk-input" type="text" :data-id="product.id" :placeholder="product.quantity" x-model="product.quantity" x-on:change="updateCartQuantity">
+                            </div>
+                        </p>
                     </div>
                     <div class="uk-card-footer">
                         <a href="#/" class="uk-button uk-button-text add-to-cart" :data-id="product.id" x-on:click="removeFromCartButtonClick">Remove from cart</a>

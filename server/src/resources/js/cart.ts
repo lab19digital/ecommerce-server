@@ -111,6 +111,47 @@ class Cart implements GernzyCart {
                         }
                     });
                 },
+                updateCartQuantity(event: { target: HTMLInputElement }) {
+                    let productID = event.target.getAttribute('data-id');
+                    let result: any = this.products.filter((item: any) => {
+                        return item.product_id === productID;
+                    });
+                    let updatedQuantity = result[0].quantity;
+
+                    let updateQuantityMutation = `
+                        mutation {
+                            updateCartQuantity(input: {
+                                product_id: ${productID},
+                                quantity: ${updatedQuantity}
+                                }) {
+                                cart {
+                                    items {
+                                        product_id
+                                        quantity
+                                    }
+                                }
+                            }
+                        }
+                    `;
+
+                    self.graphqlService.sendQuery(updateQuantityMutation, userToken, self.url).then((re) => {
+                        try {
+                            let itemsInCart = re.data.removeFromCart.cart.items;
+                            let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
+                            self.cartProductsDetails(itemsInCart, productIds).then((re) => {
+                                this.products = re;
+                            });
+                        } catch (error) {
+                            this.showError = true;
+                            this.errorText = 'An error occured while loading products in cart. Please try again';
+                            window.scroll({
+                                top: 100,
+                                behavior: 'smooth', //
+                            });
+                            // console.log('removeFromCartButtonClick() .then(  try { catch ' + error);
+                        }
+                    });
+                },
             };
         };
     }
