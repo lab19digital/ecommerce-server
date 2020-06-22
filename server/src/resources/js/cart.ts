@@ -25,29 +25,67 @@ class Cart implements GernzyCart {
     }
 
     public cartSetup() {
+        window.cartProducts = this.createPublicInterface.bind(this);
+    }
+
+    public createPublicInterface() {
         var userToken = localStorage.getItem('userToken') || '';
         var self = this;
 
-        window.cartProducts = () => {
-            return {
-                products: [],
-                showSuccess: false,
-                successText: 'Success!',
-                showError: false,
-                errorText: 'An error occured.',
-                formatPriceAndCurrency(cents: number, currency: string) {
-                    let currencyLocalStorage = localStorage.getItem('currency') || '';
+        return {
+            products: [],
+            showSuccess: false,
+            successText: 'Success!',
+            showError: false,
+            errorText: 'An error occured.',
+            formatPriceAndCurrency(cents: number, currency: string) {
+                let currencyLocalStorage = localStorage.getItem('currency') || '';
 
-                    // Check to see if the user has specified a different currency
-                    if (currencyLocalStorage) {
-                        currency = currencyLocalStorage;
+                // Check to see if the user has specified a different currency
+                if (currencyLocalStorage) {
+                    currency = currencyLocalStorage;
+                }
+
+                return cents / 100 + ' ' + currency;
+            },
+            fetch() {
+                let query = `{
+                    me {
+                        cart {
+                            items {
+                                product_id
+                                quantity
+                            }
+                        }
                     }
+                }`;
 
-                    return cents / 100 + ' ' + currency;
-                },
-                fetch() {
-                    let query = `{
-                        me {
+                self.graphqlService.sendQuery(query, userToken, self.url).then((re: any) => {
+                    try {
+                        let itemsInCart = re.data.me.cart.items;
+                        let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
+                        self.cartProductsDetails(itemsInCart, productIds).then((re: any) => {
+                            this.products = re;
+                        });
+                    } catch (error) {
+                        this.showError = true;
+                        this.errorText = 'An error occured while loading products in cart. Please try again';
+                        window.scroll({
+                            top: 100,
+                            behavior: 'smooth', //
+                        });
+                        // console.log('cartSetup() .then(  try { catch ' + error);
+                    }
+                });
+            },
+            removeFromCartButtonClick(event: { target: HTMLInputElement }) {
+                let productID = event.target.getAttribute('data-id');
+                let query = `
+                    mutation {
+                        removeFromCart(input: {
+                            product_id: ${productID},
+                            quantity: 1
+                            }) {
                             cart {
                                 items {
                                     product_id
@@ -55,106 +93,68 @@ class Cart implements GernzyCart {
                                 }
                             }
                         }
-                    }`;
+                    }
+                `;
 
-                    self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
-                        try {
-                            let itemsInCart = re.data.me.cart.items;
-                            let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
-                            self.cartProductsDetails(itemsInCart, productIds).then((re) => {
-                                this.products = re;
-                            });
-                        } catch (error) {
-                            this.showError = true;
-                            this.errorText = 'An error occured while loading products in cart. Please try again';
-                            window.scroll({
-                                top: 100,
-                                behavior: 'smooth', //
-                            });
-                            // console.log('cartSetup() .then(  try { catch ' + error);
-                        }
-                    });
-                },
-                removeFromCartButtonClick(event: { target: HTMLInputElement }) {
-                    let productID = event.target.getAttribute('data-id');
-                    let query = `
-                        mutation {
-                            removeFromCart(input: {
-                                product_id: ${productID},
-                                quantity: 1
-                                }) {
-                                cart {
-                                    items {
-                                        product_id
-                                        quantity
-                                    }
+                self.graphqlService.sendQuery(query, userToken, self.url).then((re: any) => {
+                    try {
+                        let itemsInCart = re.data.removeFromCart.cart.items;
+                        let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
+                        self.cartProductsDetails(itemsInCart, productIds).then((re: any) => {
+                            this.products = re;
+                        });
+                    } catch (error) {
+                        this.showError = true;
+                        this.errorText = 'An error occured while loading products in cart. Please try again';
+                        window.scroll({
+                            top: 100,
+                            behavior: 'smooth', //
+                        });
+                        // console.log('removeFromCartButtonClick() .then(  try { catch ' + error);
+                    }
+                });
+            },
+            updateCartQuantity(event: { target: HTMLInputElement }) {
+                let productID = event.target.getAttribute('data-id');
+                let result: any = this.products.filter((item: any) => {
+                    return item.product_id === productID;
+                });
+                let updatedQuantity = result[0].quantity;
+
+                let updateQuantityMutation = `
+                    mutation {
+                        updateCartQuantity(input: {
+                            product_id: ${productID},
+                            quantity: ${updatedQuantity}
+                            }) {
+                            cart {
+                                items {
+                                    product_id
+                                    quantity
                                 }
                             }
                         }
-                    `;
+                    }
+                `;
 
-                    self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
-                        try {
-                            let itemsInCart = re.data.removeFromCart.cart.items;
-                            let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
-                            self.cartProductsDetails(itemsInCart, productIds).then((re) => {
-                                this.products = re;
-                            });
-                        } catch (error) {
-                            this.showError = true;
-                            this.errorText = 'An error occured while loading products in cart. Please try again';
-                            window.scroll({
-                                top: 100,
-                                behavior: 'smooth', //
-                            });
-                            // console.log('removeFromCartButtonClick() .then(  try { catch ' + error);
-                        }
-                    });
-                },
-                updateCartQuantity(event: { target: HTMLInputElement }) {
-                    let productID = event.target.getAttribute('data-id');
-                    let result: any = this.products.filter((item: any) => {
-                        return item.product_id === productID;
-                    });
-                    let updatedQuantity = result[0].quantity;
-
-                    let updateQuantityMutation = `
-                        mutation {
-                            updateCartQuantity(input: {
-                                product_id: ${productID},
-                                quantity: ${updatedQuantity}
-                                }) {
-                                cart {
-                                    items {
-                                        product_id
-                                        quantity
-                                    }
-                                }
-                            }
-                        }
-                    `;
-
-                    self.graphqlService.sendQuery(updateQuantityMutation, userToken, self.url).then((re) => {
-                        console.log(re);
-
-                        try {
-                            let itemsInCart = re.data.updateCartQuantity.cart.items;
-                            let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
-                            self.cartProductsDetails(itemsInCart, productIds).then((re) => {
-                                this.products = re;
-                            });
-                        } catch (error) {
-                            this.showError = true;
-                            this.errorText = 'An error occured while loading products in cart. Please try again';
-                            window.scroll({
-                                top: 100,
-                                behavior: 'smooth', //
-                            });
-                            console.log('removeFromCartButtonClick() .then(  try { catch ' + error);
-                        }
-                    });
-                },
-            };
+                self.graphqlService.sendQuery(updateQuantityMutation, userToken, self.url).then((re: any) => {
+                    try {
+                        let itemsInCart = re.data.updateCartQuantity.cart.items;
+                        let productIds: number[] = self.extractIDsFromItemsInCart(itemsInCart);
+                        self.cartProductsDetails(itemsInCart, productIds).then((re: any) => {
+                            this.products = re;
+                        });
+                    } catch (error) {
+                        this.showError = true;
+                        this.errorText = 'An error occured while loading products in cart. Please try again';
+                        window.scroll({
+                            top: 100,
+                            behavior: 'smooth', //
+                        });
+                        console.log('removeFromCartButtonClick() .then(  try { catch ' + error);
+                    }
+                });
+            },
         };
     }
 

@@ -56,6 +56,9 @@ class SessionService implements GernzySession {
     }
 
     public setupCurrency() {
+        window.availableCurrencies = this.createPublicInterface.bind(this);
+    }
+    public createPublicInterface() {
         let userToken = localStorage.getItem('userToken') || '';
         var self = this;
 
@@ -67,19 +70,16 @@ class SessionService implements GernzySession {
                 }
             }
         `;
-
-        window.availableCurrencies = () => {
-            return {
-                currencies: [],
-                fetch() {
-                    self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
-                        this.currencies = re.data.shopConfig.enabled_currencies;
-                    });
-                },
-                changeCurrencyClick(event: { target: HTMLInputElement }) {
-                    self.changeUserCurrency(event);
-                },
-            };
+        return {
+            currencies: [],
+            fetch() {
+                self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
+                    this.currencies = re.data.shopConfig.enabled_currencies;
+                });
+            },
+            changeCurrencyClick(event: { target: HTMLInputElement }) {
+                self.changeUserCurrency(event);
+            },
         };
     }
 
