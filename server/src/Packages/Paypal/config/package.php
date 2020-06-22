@@ -10,7 +10,7 @@ return [
     | the user to select a paymet method
     |
     */
-    "ui_options" => [
+    [
         'ui_option' => 'Paypal',
         'ui_value' => 'paypal_standard'
     ]
