@@ -30,6 +30,7 @@ class PaypalProvider extends GernzyServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/config/events.php', 'events');
         $this->mergeConfigFrom(__DIR__ . '/config/api.php', 'api');
         $this->mergeConfigFrom(__DIR__ . '/config/package.php', 'gernzy-packages');
+        $this->mergeConfigFrom(__DIR__ . '/config/app.php', 'gernzy-app');
     }
 
     /**
@@ -51,6 +52,9 @@ class PaypalProvider extends GernzyServiceProvider
         ]);
         $this->publishes([
             __DIR__ . '/config/package.php' => config_path('gernzy-packages.php'),
+        ]);
+        $this->publishes([
+            __DIR__ . '/config/app.php' => config_path('app.php'),
         ]);
 
 

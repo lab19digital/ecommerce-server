@@ -65,6 +65,7 @@ class Checkout implements GernzyCheckout {
 
                 self.graphqlService.sendQuery(query, userToken, self.url).then((re) => {
                     let paymentProviders = JSON.parse(re.data.shopConfig.payment_providers);
+
                     paymentProviders.unshift({ ui_option: 'Select a payment method', ui_value: 'null' });
                     this.paymentProviders = paymentProviders;
                 });
