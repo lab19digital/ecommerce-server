@@ -16,8 +16,8 @@ export default {
 
             let paypalService = new PaypalService();
             let eventData = JSON.parse(localStorage.getItem('event_data') || '');
-            let pyapalOrderID = eventData[0].data.transaction_data.paypal_data.result.id;
-            if (!pyapalOrderID || 0 === pyapalOrderID.length) {
+            let paypalOrderID = eventData[0].data.transaction_data.paypal_data.result.id;
+            if (!paypalOrderID || 0 === paypalOrderID.length) {
                 // error paypal id undefined
                 // console.log('The paypal ID is not set');
                 return;
@@ -28,7 +28,7 @@ export default {
                 paypal_sdk
                     .Buttons({
                         createOrder: function () {
-                            return pyapalOrderID;
+                            return paypalOrderID;
                         },
                         onApprove: function (data: { orderID: number }, actions: {}) {
                             return paypalService.onApprove(data, actions);
