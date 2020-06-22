@@ -1,5 +1,5 @@
 declare namespace GernzyPaypal {
     type PaypalConfig = {
-        client_id?: string;
+        client_id: string;
     };
 }
