@@ -40,7 +40,7 @@ class PaypalService {
     }
 
     public loadScript(url: string, callback: any) {
-        var script: any = document.createElement('script');
+        let script: any = document.createElement('script');
         script.type = 'text/javascript';
         script.setAttribute('data-namespace', 'paypal_sdk');
 
