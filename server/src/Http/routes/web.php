@@ -30,3 +30,8 @@ Route::get('cart', function () {
 Route::get('checkout', function () {
     return view('Gernzy\Server::checkout');
 });
+
+
+Route::get('inspector', function () {
+    return view('Gernzy\Server::inspector');
+});
