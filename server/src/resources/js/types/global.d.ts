@@ -8,5 +8,6 @@ declare global {
         availableCurrencies: Function;
         checkoutCartTotal: Function;
         checkoutForm: Function;
+        inspector: Function;
     }
 }

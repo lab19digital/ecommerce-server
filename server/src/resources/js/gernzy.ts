@@ -5,6 +5,7 @@ import { StoreProducts } from './interfaces/products';
 import { GernzySession } from './interfaces/session';
 import { GernzyCart } from './interfaces/cart';
 import { GernzyCheckout } from './interfaces/checkout';
+import { GernzyInspector } from './interfaces/inspector';
 import 'alpinejs';
 
 export default {
@@ -23,6 +24,7 @@ export default {
         const sessionService = GernzyContainer.get<GernzySession>(TYPES.GernzySession);
         const cart = GernzyContainer.get<GernzyCart>(TYPES.GernzyCart);
         const checkout = GernzyContainer.get<GernzyCheckout>(TYPES.GernzyCheckout);
+        const inspector = GernzyContainer.get<GernzyInspector>(TYPES.GernzyInspector);
 
         // Session setup
         sessionService.setupSessionFactory(config.apiUrl);
@@ -32,6 +34,9 @@ export default {
 
         cart.endpointUrl(config.apiUrl);
         cart.cartSetup();
+
+        inspector.endpointUrl(config.apiUrl);
+        inspector.inspectorSetup();
 
         if (pathname.includes('checkout')) {
             checkout.setupCheckoutFactory(config.apiUrl);
