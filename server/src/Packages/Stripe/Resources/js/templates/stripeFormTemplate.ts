@@ -1,4 +1,4 @@
-const stripeFormTemplate = message => `
+const stripeFormTemplate = () => `
 <div id="stripeFormTemplate"  class="uk-container uk-container-xsmall uk-margin-large-top">
     <div class="uk-card uk-card-default uk-card-body uk-width-auto uk-card-hover">
 

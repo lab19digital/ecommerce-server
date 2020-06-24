@@ -32,6 +32,7 @@ type Query {
 type ShopConfig {
     enabled_currencies: [String] @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\ShopConfig@enabledCurrencies")
     default_currency: String @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\ShopConfig@defaultCurrency")
+    payment_providers: String @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\ShopConfig@paymentProviders")
 }
 
 type User {
@@ -62,6 +63,7 @@ type Cart {
     items: [CartItem!]
     products: Int
     cart_total: Int
+    hello_there: String
 }
 
 type CartItem {

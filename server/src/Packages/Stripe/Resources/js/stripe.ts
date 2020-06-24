@@ -3,9 +3,19 @@ import successTemplate from './templates/successTemplate';
 import errorTemplate from './templates/errorTemplate';
 
 class StripeService {
-    constructor(publishableApiKey) {
+    public card: string;
+    public stripe: any;
+    public elements: any;
+
+    constructor(publishableApiKey: string) {
         this.card = '';
         try {
+            /**
+             * Stripe client side doesn't seem to have types yet
+             * The 'Stripe(publishableApiKey);' comes from
+             * <script src="https://js.stripe.com/v3/"></script> in the head of app.blade of this package
+             */
+            // @ts-ignore
             this.stripe = Stripe(publishableApiKey);
             this.elements = this.stripe.elements();
         } catch (error) {
@@ -13,7 +23,7 @@ class StripeService {
         }
     }
 
-    formLoaded() {
+    public formLoaded() {
         // Set up Stripe.js and Elements to use in checkout form
         var style = {
             base: {
@@ -37,8 +47,8 @@ class StripeService {
 
             card.mount('#card-element');
 
-            card.addEventListener('change', ({ error }) => {
-                const displayError = document.getElementById('card-errors');
+            card.addEventListener('change', ({ error }: { error: { message: string } }) => {
+                const displayError = document.getElementById('card-errors') || { textContent: 'An error occured.' };
                 if (error) {
                     displayError.textContent = error.message;
                 } else {
@@ -50,21 +60,23 @@ class StripeService {
         }
     }
 
-    formSubmitListener(clientSecret) {
+    public formSubmitListener(clientSecret: string) {
         var form = document.getElementById('payment-form');
         var self = this;
-        var $loading = $('#loadingDiv').hide();
 
-        if (!self.stripe) {
+        let loading = document.getElementById('loadingDiv');
+        if (loading) loading.style.display = 'none';
+
+        if (!self.stripe || !form) {
             // console.log('Stripe is not defined.');
             return;
         }
 
-        form.addEventListener('submit', function(ev) {
+        form.addEventListener('submit', function (ev) {
             ev.preventDefault();
 
             // Loading
-            $loading.show();
+            if (loading) loading.style.display = 'flex';
 
             self.stripe
                 .confirmCardPayment(clientSecret, {
@@ -75,8 +87,8 @@ class StripeService {
                         },
                     },
                 })
-                .then(function(result) {
-                    $loading.hide();
+                .then(function (result: { error: { message: string }; paymentIntent: { status: string } }) {
+                    if (loading) loading.style.display = 'none';
 
                     if (result.error) {
                         // Show error to your customer (e.g., insufficient funds)
@@ -95,8 +107,9 @@ class StripeService {
                         }
                     }
                 })
-                .catch(error => {
-                    $loading.hide();
+                .catch((error: {}) => {
+                    if (loading) loading.style.display = 'none';
+
                     $('.checkout-container').append(errorTemplate('Unexpected error occured. Please try again.'));
 
                     // console.log(error);

@@ -9,6 +9,8 @@
         </div>
     </div>
     <h1 class="uk-heading-small uk-padding-small">Your cart items</h1>
-    <div class="cart-products uk-flex uk-flex-wrap uk-flex-wrap-around"></div>
+    <!-- <div class="cart-products uk-flex uk-flex-wrap uk-flex-wrap-around"></div> -->
+    <x-gernzy-cart />
+
 </div>
 @endsection

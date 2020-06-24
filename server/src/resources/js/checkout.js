@@ -13,7 +13,7 @@ class Checkout {
     checkout() {
         // This is to keep the object context of and access it's methods
         var self = this;
-        $('#checkout-form').submit(function(event) {
+        $('#checkout-form').submit(function (event) {
             event.preventDefault();
 
             // get all the inputs into an array.
@@ -22,7 +22,7 @@ class Checkout {
             // not sure if you wanted this, but I thought I'd add it.
             // get an associative array of just the values.
             var values = {};
-            inputs.each(function() {
+            inputs.each(function () {
                 values[this.name] = $(this).val();
             });
 
@@ -70,7 +70,7 @@ class Checkout {
 
         return this.graphqlService
             .sendQuery(query, userToken)
-            .then(re => {
+            .then((re) => {
                 if (re.errors) {
                     let errors = re.errors;
                     let debugMessage = re.errors[0].debugMessage;
@@ -92,7 +92,7 @@ class Checkout {
 
                 return re;
             })
-            .catch(error => {
+            .catch((error) => {
                 // console.log(error);
             });
     }
@@ -110,7 +110,7 @@ class Checkout {
 
         return this.graphqlService
             .sendQuery(query, userToken)
-            .then(re => {
+            .then((re) => {
                 let currency = localStorage.getItem('currency');
 
                 // get the default currency from the shopConfig
@@ -121,13 +121,13 @@ class Checkout {
                 $('#checkout-cart-total').html(`${re.data.me.cart.cart_total / 100} ${currency}`);
                 return re;
             })
-            .catch(error => {
+            .catch((error) => {
                 // console.log(error);
             });
     }
 
     displayLineItems() {
-        return this.cart.viewProductsInCart().then(re => {
+        return this.cart.viewProductsInCart().then((re) => {
             try {
                 // See if there is an error
                 let error = re.errors[0].debugMessage;
@@ -136,7 +136,7 @@ class Checkout {
                 let items = re.data.me.cart.items;
 
                 if (items && items.length > 0) {
-                    this.cart.lookupProductsInCart(items).then(re => {
+                    this.cart.lookupProductsInCart(items).then((re) => {
                         let currency = localStorage.getItem('currency');
 
                         // get the default currency from the shopConfig
@@ -144,7 +144,7 @@ class Checkout {
                             currency = localStorage.getItem('default_currency');
                         }
 
-                        re.forEach(element => {
+                        re.forEach((element) => {
                             $('#table-body-line-item').append(
                                 $(`<tr>
                                     <td>${element.title}</td>

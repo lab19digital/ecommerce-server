@@ -1,7 +1,16 @@
+import { injectable, inject } from 'inversify';
+import { GernzyGraphqlService } from './interfaces/graphqlService';
+import { TYPES } from './types/types';
+
+@injectable()
 class User {
-    constructor(graphqlService) {
-        this.graphqlService = graphqlService;
+    @inject(TYPES.GernzyGraphqlService) private graphqlService!: GernzyGraphqlService;
+    private url!: string;
+
+    public endpointUrl(url: string) {
+        this.url = url;
     }
+
     createSession() {
         let query = `mutation {
             createSession {
@@ -10,24 +19,24 @@ class User {
         }`;
 
         return this.graphqlService
-            .sendQuery(query)
-            .then(re => {
+            .sendQuery(query, '', this.url)
+            .then((re) => {
                 let token = re.data.createSession.token;
                 this.addSessionTokenToLocalStorage(token);
                 return re;
             })
-            .catch(error => {
+            .catch((error) => {
                 // console.log(error);
             });
     }
 
-    addSessionTokenToLocalStorage(token) {
+    addSessionTokenToLocalStorage(token: string) {
         localStorage.setItem('userToken', token);
     }
 
     checkIfTokenInLocalStorage() {
         // Check if token in local
-        let userTokenLocalStorage = localStorage.getItem('userToken');
+        let userTokenLocalStorage = localStorage.getItem('userToken') || '';
 
         if (!userTokenLocalStorage || 0 === userTokenLocalStorage.length) {
             return false;
@@ -37,7 +46,7 @@ class User {
     }
 
     checkTokenExistsInDatabase() {
-        let userTokenLocalStorage = localStorage.getItem('userToken');
+        let userTokenLocalStorage = localStorage.getItem('userToken') || '';
 
         let query = ` {
             me {
@@ -48,7 +57,7 @@ class User {
             }
         }`;
 
-        return this.graphqlService.sendQuery(query, userTokenLocalStorage);
+        return this.graphqlService.sendQuery(query, userTokenLocalStorage, this.url);
     }
 }
 export { User };

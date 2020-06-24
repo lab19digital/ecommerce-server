@@ -17,7 +17,7 @@ class PaypalService {
                 orderID: data.orderID,
             }),
         })
-            .then(function(res) {
+            .then(function (res) {
                 try {
                     return res.json();
                 } catch (error) {
@@ -25,7 +25,7 @@ class PaypalService {
                     console.log('error text:' + res.text());
                 }
             })
-            .then(function(dataRes) {
+            .then(function (dataRes) {
                 if (dataRes.error) {
                     console.log(dataRes.error);
                     return;
@@ -34,7 +34,7 @@ class PaypalService {
                 $loading.hide();
                 $('#paypal-button-container').html(successTemplate('Payment successful'));
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(`.catch ${error}`);
             });
     }
@@ -46,7 +46,7 @@ class PaypalService {
 
         if (script.readyState) {
             //IE
-            script.onreadystatechange = function() {
+            script.onreadystatechange = function () {
                 if (script.readyState == 'loaded' || script.readyState == 'complete') {
                     script.onreadystatechange = null;
                     callback();
@@ -54,7 +54,7 @@ class PaypalService {
             };
         } else {
             //Others
-            script.onload = function() {
+            script.onload = function () {
                 callback();
             };
         }
