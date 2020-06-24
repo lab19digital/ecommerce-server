@@ -12,6 +12,9 @@ class GernzyDevDebugUITest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        // Mock local mode
+        config(['app.env' => 'local']);
     }
 
     /**

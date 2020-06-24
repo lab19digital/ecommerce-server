@@ -33,5 +33,8 @@ Route::get('checkout', function () {
 
 
 Route::get('inspector', function () {
-    return view('Gernzy\Server::inspector');
+    if (config('app.env') == 'local') {
+        return view('Gernzy\Server::inspector');
+    }
+    abort(404, 'Page not found.');
 });
