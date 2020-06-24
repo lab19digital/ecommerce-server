@@ -2,7 +2,7 @@
 
 @section('content')
 <h1 class="uk-heading-medium">Dev tools</h1>
-<div class="uk-child-width-1-2@s" uk-grid>
+<div class="uk-child-width-1-2@s" uk-grid x-data="inspector()" x-init="fetch()">
     <div>
         <div uk-grid>
             <div class="uk-width-auto@m">
@@ -15,7 +15,9 @@
             </div>
             <div class="uk-width-expand@m">
                 <ul id="component-tab-left" class="uk-switcher">
-                    <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
+                    <!-- <template x-for="package in packages" :key="package">
+                        <li x-text="package"></li>
+                    </template> -->
                     <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
                     <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed do eiusmod.</li>
                     <li>Coite en de riit in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed do eiusmod.</li>
