@@ -15,7 +15,8 @@ use GuzzleHttp\Psr7\Response;
 use Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\TestResponse;
+// use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Testing\TestResponse as TestingTestResponse;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
@@ -180,7 +181,7 @@ abstract class TestCase extends BaseTestCase
      * @param  mixed[]  $files
      * @return \Illuminate\Foundation\Testing\TestResponse
      */
-    protected function multipartGraphQLWithSession(array $parameters, array $files): TestResponse
+    protected function multipartGraphQLWithSession(array $parameters, array $files): TestingTestResponse
     {
         return $this->call(
             'POST',

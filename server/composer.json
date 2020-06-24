@@ -12,7 +12,7 @@
         }
     },
     "require": {
-        "nuwave/lighthouse": "^4.6",
+        "nuwave/lighthouse": "^4.14",
         "guzzlehttp/guzzle": "~6.0",
         "geoip2/geoip2": "~2.0",
         "fzaninotto/faker": "^1.9",
@@ -20,7 +20,7 @@
         "stripe/stripe-php": "^7.27"
     },
     "require-dev": {
-        "orchestra/testbench": "^4.0",
+        "orchestra/testbench": "^5.3.0",
         "friendsofphp/php-cs-fixer": "^2.15"
     },
     "scripts": {
