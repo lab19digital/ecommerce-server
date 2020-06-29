@@ -15,11 +15,20 @@
             </div>
             <div class="uk-width-expand@m">
                 <ul id="component-tab-left" class="uk-switcher">
-                    <!-- <template x-for="package in packages" :key="package">
+                    <li>Coite en de riit in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed do eiusmod.</li>
+
+                    <li>
+                        <em>require</em>
+                        <template x-for="package in requirePackages">
+                    <li x-text="package">
+                    </li>
+                    </template>
+                    <em>require-dev</em>
+                    <template x-for="package in requireDevPackages">
                         <li x-text="package"></li>
-                    </template> -->
-                    <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                    <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed do eiusmod.</li>
+                    </template>
+                    </li>
+
                     <li>Coite en de riit in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed do eiusmod.</li>
                 </ul>
             </div>

@@ -26,7 +26,8 @@ class Inspector implements GernzyInspector {
         let userToken = localStorage.getItem('userToken') || '';
         var self = this;
         return {
-            packages: {},
+            requireDevPackages: [['', '']],
+            requirePackages: [['', '']],
             showSuccess: false,
             successText: 'Success!',
             showError: false,
@@ -35,14 +36,8 @@ class Inspector implements GernzyInspector {
                 self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                     try {
                         let packages = JSON.parse(data.data.packages);
-                        console.log(packages.require_dev_packages);
-                        console.log(Object.entries(packages.require_dev_packages));
-
-                        // packages.require_dev_packages.forEach((element: any) => {
-                        //     console.log('Hi' + element);
-                        // });
-
-                        this.packages = packages;
+                        this.requireDevPackages = Object.entries(packages.require_dev_packages);
+                        this.requirePackages = Object.entries(packages.require_packages);
                     } catch (error) {
                         this.showError = true;
                         this.errorText = 'An error occured while loading product. Please try again';
