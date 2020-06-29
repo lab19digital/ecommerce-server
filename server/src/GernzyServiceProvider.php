@@ -42,6 +42,7 @@ class GernzyServiceProvider extends ServiceProvider
 
         // Register core packages
         $this->app->register(AuthServiceProvider::class);
+        $this->app->register(GernzyPaymentProvider::class);
 
         // Some configuration needs to be overriden by the cart
         // plugin, rather than from within the Laravel app itself

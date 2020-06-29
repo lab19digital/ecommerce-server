@@ -40,7 +40,7 @@
 
                     <li>
                         <template x-for="event in events">
-                            <div>
+                            <div class="uk-margin-bottom">
                                 <div class="uk-flex">
                                     <strong class="uk-width-1-3">event</strong>
                                     <em x-text="event.event" class="uk-width-1-2"></em>
