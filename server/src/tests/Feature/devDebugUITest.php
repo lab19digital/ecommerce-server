@@ -2,6 +2,7 @@
 
 namespace Gernzy\Server\Tests\Feature;
 
+use \App;
 use Gernzy\Server\Testing\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 
@@ -41,26 +42,21 @@ class GernzyDevDebugUITest extends TestCase
         $requirePackages = json_decode(file_get_contents($file), true)['require'];
         $requireDevPackages = json_decode(file_get_contents($file), true)['require-dev'];
 
-        print  "\nrequire" . "\n";
-        foreach ($packages as $package) {
-            //print  $package['name'] . ": " . $package['version'];
-        }
-
-        foreach ($requirePackages as $key => $value) {
-            //print  $key . ": " . $value . "\n";
-        }
-
-        print  "\nrequire-dev" . "\n";
-        foreach ($requireDevPackages as $key => $value) {
-            //print  $key . ": " . $value . "\n";
-        }
-
+        $this->assertNotEmpty($packages);
         $this->assertNotEmpty($requirePackages);
         $this->assertNotEmpty($requireDevPackages);
     }
 
-    public function testFirstPartyPackagesDevUITools()
+    public function testPaymentProvidersInfo()
     {
-        $providers = config('app.providers');
+        $stripeService = App::make('Stripe\StripeService');
+        $paypalService = App::make('Paypal\PaypalService');
+
+
+        $this->assertNotEmpty($stripeService->providerName());
+        $this->assertNotEmpty($stripeService->logFile());
+
+        $this->assertNotEmpty($paypalService->providerName());
+        $this->assertNotEmpty($paypalService->logFile());
     }
 }

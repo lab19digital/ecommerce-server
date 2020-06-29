@@ -4,10 +4,11 @@ namespace  Gernzy\Server\Packages\Stripe\Services;
 
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
+use Gernzy\Server\Services\PaymentProviderInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
-class StripeService implements ServiceInterface
+class StripeService implements ServiceInterface, PaymentProviderInterface
 {
     public function __construct()
     {
@@ -128,5 +129,16 @@ class StripeService implements ServiceInterface
         });
 
         return $stripe_webhooks_ips;
+    }
+
+    public function providerName()
+    {
+        return 'Stripe';
+    }
+
+
+    public function logFile()
+    {
+        return '../stripeLog.txt';
     }
 }

@@ -5,9 +5,10 @@ namespace  Gernzy\Server\Packages\Paypal\Services;
 use \App;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
+use Gernzy\Server\Services\PaymentProviderInterface;
 use Illuminate\Support\Facades\Log;
 
-class PaypalService implements PaypalServiceInterface
+class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
 {
     public function capturePayment($orderID)
     {
@@ -57,5 +58,17 @@ class PaypalService implements PaypalServiceInterface
         $createOrderPaypal = App::make('Paypal\CreateOrderPaypal');
         $response = $createOrderPaypal->createOrder($debug, $cartTotal, $sessionCurrency);
         return $response;
+    }
+
+
+    public function providerName()
+    {
+        return 'Paypal';
+    }
+
+
+    public function logFile()
+    {
+        return '../paypalLog.txt';
     }
 }
