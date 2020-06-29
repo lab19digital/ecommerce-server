@@ -29,6 +29,8 @@ class Inspector implements GernzyInspector {
             requireDevPackages: [['', '']],
             requirePackages: [['', '']],
             providers: [],
+            events: [],
+            paymentProviders: [],
             showSuccess: false,
             successText: 'Success!',
             showError: false,
@@ -46,14 +48,22 @@ class Inspector implements GernzyInspector {
                             }
                         });
 
+                        let eventObjects = Object.entries(packages.events).map((event: any) => {
+                            return { event: event[0], actions: event[1] };
+                        });
+
                         this.requireDevPackages = Object.entries(packages.require_dev_packages);
                         this.requirePackages = Object.entries(packages.require_packages);
                         this.providers = packagesProviders;
+                        this.paymentProviders = packages.payment_providers;
+                        this.paymentProviders = packages.payment_providers;
+                        //@ts-ignore
+                        this.events = eventObjects;
                     } catch (error) {
                         this.showError = true;
                         this.errorText = 'An error occured while loading product. Please try again';
                         // console.log('productsComponent() .then(  try { catch');
-                        console.log(error);
+                        // console.log(error);
                     }
                 });
             },

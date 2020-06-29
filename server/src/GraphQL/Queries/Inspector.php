@@ -2,6 +2,7 @@
 
 namespace Gernzy\Server\GraphQL\Queries;
 
+use Gernzy\Server\Exceptions\GernzyException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -31,12 +32,27 @@ class Inspector
         $requirePackages = json_decode(file_get_contents($file), true)['require'];
         $requireDevPackages = json_decode(file_get_contents($file), true)['require-dev'];
 
+        if (!$paymentProviders = config('gernzy-packages')) {
+            throw new GernzyException(
+                'An error occured.',
+                'An error occured when determining the payment provider. None specified.'
+            );
+        }
+
+        if (!$eventMapping = config('events')) {
+            throw new GernzyException(
+                'An error occured.',
+                'An error occured when determining the eventMapping. None specified.'
+            );
+        }
 
         $packageDataStructure = [
             // "packages_lock" => $packages,
             "require_packages" =>  $requirePackages,
             "require_dev_packages" =>  $requireDevPackages,
-            "providers" =>  config('app.providers')
+            "providers" =>  config('app.providers'),
+            "payment_providers" => $paymentProviders,
+            "events" => $eventMapping
         ];
 
         return json_encode($packageDataStructure);

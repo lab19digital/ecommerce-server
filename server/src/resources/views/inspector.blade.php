@@ -24,17 +24,39 @@
                     <li>
                         <em>require</em>
                         <template x-for="(item, index) in requirePackages" :key="index">
-                            <!-- You can also reference "index" inside the iteration if you need. -->
                             <div x-text="item"></div>
                         </template>
                         <em>require-dev</em>
                         <template x-for="(item, index) in requireDevPackages" :key="index">
-                            <!-- You can also reference "index" inside the iteration if you need. -->
                             <div x-text="item"></div>
                         </template>
                     </li>
 
-                    <li>Coite en de riit in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed do eiusmod.</li>
+                    <li>
+                        <template x-for="(item, index) in paymentProviders" :key="index">
+                            <div x-text="item.ui_option"></div>
+                        </template>
+                    </li>
+
+                    <li>
+                        <template x-for="event in events">
+                            <div>
+                                <div class="uk-flex">
+                                    <strong class="uk-width-1-3">event</strong>
+                                    <em x-text="event.event" class="uk-width-1-2"></em>
+                                </div>
+
+                                <div class="uk-flex">
+                                    <strong class="uk-width-1-3">actions</strong>
+                                    <div class="uk-width-1-2">
+                                        <template x-for="action in event.actions">
+                                            <div x-text="action"></div>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </li>
                 </ul>
             </div>
         </div>
