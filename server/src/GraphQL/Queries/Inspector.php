@@ -35,7 +35,8 @@ class Inspector
         $packageDataStructure = [
             // "packages_lock" => $packages,
             "require_packages" =>  $requirePackages,
-            "require_dev_packages" =>  $requireDevPackages
+            "require_dev_packages" =>  $requireDevPackages,
+            "providers" =>  config('app.providers')
         ];
 
         return json_encode($packageDataStructure);

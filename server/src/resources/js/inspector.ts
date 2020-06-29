@@ -28,6 +28,7 @@ class Inspector implements GernzyInspector {
         return {
             requireDevPackages: [['', '']],
             requirePackages: [['', '']],
+            providers: [],
             showSuccess: false,
             successText: 'Success!',
             showError: false,
@@ -36,8 +37,18 @@ class Inspector implements GernzyInspector {
                 self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                     try {
                         let packages = JSON.parse(data.data.packages);
+
+                        let packagesProviders = packages.providers.map((item: '') => {
+                            if (new RegExp('\\b' + 'Gernzy' + '\\b', 'i').test(item)) {
+                                return { item: item, class: true };
+                            } else {
+                                return { item: item, class: false };
+                            }
+                        });
+
                         this.requireDevPackages = Object.entries(packages.require_dev_packages);
                         this.requirePackages = Object.entries(packages.require_packages);
+                        this.providers = packagesProviders;
                     } catch (error) {
                         this.showError = true;
                         this.errorText = 'An error occured while loading product. Please try again';

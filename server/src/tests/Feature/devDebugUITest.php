@@ -33,7 +33,7 @@ class GernzyDevDebugUITest extends TestCase
         $this->assertStringContainsString('div', $response->content());
     }
 
-    public function testGetInstalledPackagesDevUITools()
+    public function testThirdPartyPackagesDevUITools()
     {
         $file = __DIR__ . "/../../../composer.json";
         $file2 = __DIR__ . "/../../../composer.lock";
@@ -57,5 +57,10 @@ class GernzyDevDebugUITest extends TestCase
 
         $this->assertNotEmpty($requirePackages);
         $this->assertNotEmpty($requireDevPackages);
+    }
+
+    public function testFirstPartyPackagesDevUITools()
+    {
+        $providers = config('app.providers');
     }
 }

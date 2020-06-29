@@ -15,18 +15,23 @@
             </div>
             <div class="uk-width-expand@m">
                 <ul id="component-tab-left" class="uk-switcher">
-                    <li>Coite en de riit in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed do eiusmod.</li>
+                    <li>
+                        <template x-for="(item, index) in providers" :key="index">
+                            <div x-bind:class="{ 'uk-badge': item.class }" x-text="item.item"></div>
+                        </template>
+                    </li>
 
                     <li>
                         <em>require</em>
-                        <template x-for="package in requirePackages">
-                    <li x-text="package">
-                    </li>
-                    </template>
-                    <em>require-dev</em>
-                    <template x-for="package in requireDevPackages">
-                        <li x-text="package"></li>
-                    </template>
+                        <template x-for="(item, index) in requirePackages" :key="index">
+                            <!-- You can also reference "index" inside the iteration if you need. -->
+                            <div x-text="item"></div>
+                        </template>
+                        <em>require-dev</em>
+                        <template x-for="(item, index) in requireDevPackages" :key="index">
+                            <!-- You can also reference "index" inside the iteration if you need. -->
+                            <div x-text="item"></div>
+                        </template>
                     </li>
 
                     <li>Coite en de riit in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed do eiusmod.</li>
