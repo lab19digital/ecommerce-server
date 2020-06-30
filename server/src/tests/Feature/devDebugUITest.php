@@ -52,11 +52,16 @@ class GernzyDevDebugUITest extends TestCase
         $stripeService = App::make('Stripe\StripeService');
         $paypalService = App::make('Paypal\PaypalService');
 
+        $publishableProviders = App::make('Gernzy\PublishableProviders');
+        $paymentProviderServices = App::make('Gernzy\PaymentProviderServices');
 
         $this->assertNotEmpty($stripeService->providerName());
         $this->assertNotEmpty($stripeService->logFile());
 
         $this->assertNotEmpty($paypalService->providerName());
         $this->assertNotEmpty($paypalService->logFile());
+
+        $this->assertNotEmpty($publishableProviders);
+        $this->assertNotEmpty($paymentProviderServices);
     }
 }

@@ -31,6 +31,8 @@ class Inspector implements GernzyInspector {
             providers: [],
             events: [],
             paymentProviders: [],
+            publishableProviders: [],
+            laravel_log: [],
             showSuccess: false,
             successText: 'Success!',
             showError: false,
@@ -41,33 +43,47 @@ class Inspector implements GernzyInspector {
                         let packages = JSON.parse(data.data.packages);
 
                         let packagesProviders = packages.providers.map((item: '') => {
-                            if (new RegExp('\\b' + 'Gernzy' + '\\b', 'i').test(item)) {
-                                return { item: item, class: true };
-                            } else {
-                                return { item: item, class: false };
-                            }
+                            return self.searchGernzy(item);
+                        });
+
+                        let publishableProviders = packages.publishable_providers.map((item: '') => {
+                            return self.searchGernzy(item);
                         });
 
                         let eventObjects = Object.entries(packages.events).map((event: any) => {
                             return { event: event[0], actions: event[1] };
                         });
 
+                        console.log(packages.laravel_log);
+
                         this.requireDevPackages = Object.entries(packages.require_dev_packages);
                         this.requirePackages = Object.entries(packages.require_packages);
                         this.providers = packagesProviders;
                         this.paymentProviders = packages.payment_providers;
-                        this.paymentProviders = packages.payment_providers;
                         //@ts-ignore
                         this.events = eventObjects;
+                        this.publishableProviders = publishableProviders;
+                        this.laravel_log = packages.laravel_log;
                     } catch (error) {
                         this.showError = true;
                         this.errorText = 'An error occured while loading product. Please try again';
                         // console.log('productsComponent() .then(  try { catch');
-                        // console.log(error);
+                        console.log(error);
                     }
                 });
             },
+            viewLogClick() {
+                console.log('hihihihhi');
+            },
         };
+    }
+
+    public searchGernzy(item: any) {
+        if (new RegExp('\\b' + 'Gernzy' + '\\b', 'i').test(item)) {
+            return { item: item, class: true };
+        } else {
+            return { item: item, class: false };
+        }
     }
 }
 export { Inspector };

@@ -103,6 +103,11 @@ class GernzyServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/config/currency.php', 'currency');
         $this->mergeConfigFrom(__DIR__ . '/config/events.php', 'events');
         $this->mergeConfigFrom(__DIR__ . '/config/api.php', 'api');
+
+        // Dev tools
+        $this->app->bind('Gernzy\PublishableProviders', function ($app) {
+            return $this->publishableProviders();
+        });
     }
 
     /**
