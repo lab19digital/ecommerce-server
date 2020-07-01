@@ -87,41 +87,47 @@
                         <template x-for="(item, index) in laravel_log" :key="index">
                             <div>
                                 <template x-for="(subItem, subIndex) in item" :key="subIndex">
-                                    <div>
+                                    <div class="uk-margin-bottom">
                                         <template x-if="subIndex == 0">
-                                            <span class="uk-badge uk-padding-small" x-text="subItem" style="width: 80vw;"></span>
+                                            <div class="uk-flex" style="width: 80vw;">
+                                                <p x-text="subItem" x-text="subItem"></p>
+                                                <button class="uk-button uk-button-default uk-button-small uk-margin-left" x-on:click="viewLogClick">View log</button>
+                                            </div>
+                                            <!-- <span class="uk-badge uk-padding-small" x-text="subItem" style="width: 80vw;"></span> -->
                                         </template>
-                                        <template x-if="subIndex > 0">
-                                            <div>
-                                                <div class="uk-margin-bottom">
-                                                    <span class="uk-label uk-label-warning">Log item <span x-text="subIndex"></span></span>
+                                        <div x-show.transition="open">
+                                            <template x-if="subIndex > 0">
+                                                <div>
+                                                    <div class="uk-margin-bottom">
+                                                        <span class="uk-label uk-label-warning">Log item <span x-text="subIndex"></span></span>
 
-                                                    <div class=" uk-flex">
-                                                        <strong class="uk-width-1-3">context</strong>
-                                                        <em x-text="subItem.context" class="uk-width-1-2"></em>
-                                                    </div>
-                                                    <div class="uk-flex">
-                                                        <strong class="uk-width-1-3">date</strong>
-                                                        <em x-text="subItem.date" class="uk-width-1-2"></em>
-                                                    </div>
+                                                        <div class=" uk-flex">
+                                                            <strong class="uk-width-1-3">context</strong>
+                                                            <em x-text="subItem.context" class="uk-width-1-2"></em>
+                                                        </div>
+                                                        <div class="uk-flex">
+                                                            <strong class="uk-width-1-3">date</strong>
+                                                            <em x-text="subItem.date" class="uk-width-1-2"></em>
+                                                        </div>
 
-                                                    <div class="uk-flex">
-                                                        <strong class="uk-width-1-3">level</strong>
-                                                        <em x-text="subItem.level" class="uk-width-1-2"></em>
-                                                    </div>
-                                                    <strong>stack</strong>
-                                                    <div style="width:80vw;">
-                                                        <template x-for=" (subSubItem, subSubIndex) in subItem.stack" :key="subSubIndex">
-                                                            <p x-text="subSubItem" class="uk-margin-small"></p>
-                                                        </template>
-                                                    </div>
-                                                    <div class="uk-flex uk-flex-wrap" style="width:80vw;">
-                                                        <strong>text</strong>
-                                                        <p x-text="subItem.text"></p>
+                                                        <div class="uk-flex">
+                                                            <strong class="uk-width-1-3">level</strong>
+                                                            <em x-text="subItem.level" class="uk-width-1-2"></em>
+                                                        </div>
+                                                        <strong>stack</strong>
+                                                        <div style="width:80vw;">
+                                                            <template x-for=" (subSubItem, subSubIndex) in subItem.stack" :key="subSubIndex">
+                                                                <p x-text="subSubItem" class="uk-margin-small"></p>
+                                                            </template>
+                                                        </div>
+                                                        <div class="uk-flex uk-flex-wrap" style="width:80vw;">
+                                                            <strong>text</strong>
+                                                            <p x-text="subItem.text"></p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </template>
+                                            </template>
+                                        </div>
                                     </div>
                                 </template>
                             </div>

@@ -37,6 +37,7 @@ class Inspector implements GernzyInspector {
             successText: 'Success!',
             showError: false,
             errorText: 'An error occured.',
+            open: false,
             fetch() {
                 self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                     try {
@@ -81,7 +82,7 @@ class Inspector implements GernzyInspector {
                 });
             },
             viewLogClick() {
-                console.log('hihihihhi');
+                this.open = !this.open;
             },
         };
     }
