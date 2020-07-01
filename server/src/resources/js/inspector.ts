@@ -54,7 +54,15 @@ class Inspector implements GernzyInspector {
                             return { event: event[0], actions: event[1] };
                         });
 
-                        console.log(packages.laravel_log);
+                        let logs = packages.laravel_log;
+                        logs.forEach((element: any) => {
+                            element.forEach((innnerElement: any, index: any) => {
+                                try {
+                                    innnerElement.stack = innnerElement.stack.split('#');
+                                } catch (error) {}
+                            });
+                        });
+                        console.log(logs);
 
                         this.requireDevPackages = Object.entries(packages.require_dev_packages);
                         this.requirePackages = Object.entries(packages.require_packages);
@@ -63,7 +71,7 @@ class Inspector implements GernzyInspector {
                         //@ts-ignore
                         this.events = eventObjects;
                         this.publishableProviders = publishableProviders;
-                        this.laravel_log = packages.laravel_log;
+                        this.laravel_log = logs;
                     } catch (error) {
                         this.showError = true;
                         this.errorText = 'An error occured while loading product. Please try again';

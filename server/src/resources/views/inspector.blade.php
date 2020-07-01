@@ -86,12 +86,47 @@
                     <li>
                         <template x-for="(item, index) in laravel_log" :key="index">
                             <div>
-                                <p x-text="item.context"></p>
-                                <p x-text="item.date"></p>
-                                <p x-text="item.level"></p>
-                                <p x-text="item.stack"></p>
-                                <p x-text="item.text"></p>
+                                <template x-for="(subItem, subIndex) in item" :key="subIndex">
+                                    <div>
+                                        <template x-if="subIndex == 0">
+                                            <span class="uk-badge uk-padding-small" x-text="subItem" style="width: 80vw;"></span>
+                                        </template>
+                                        <template x-if="subIndex > 0">
+                                            <div>
+                                                <div class="uk-margin-bottom">
+                                                    <span class="uk-label uk-label-warning">Log item <span x-text="subIndex"></span></span>
+
+                                                    <div class=" uk-flex">
+                                                        <strong class="uk-width-1-3">context</strong>
+                                                        <em x-text="subItem.context" class="uk-width-1-2"></em>
+                                                    </div>
+                                                    <div class="uk-flex">
+                                                        <strong class="uk-width-1-3">date</strong>
+                                                        <em x-text="subItem.date" class="uk-width-1-2"></em>
+                                                    </div>
+
+                                                    <div class="uk-flex">
+                                                        <strong class="uk-width-1-3">level</strong>
+                                                        <em x-text="subItem.level" class="uk-width-1-2"></em>
+                                                    </div>
+                                                    <strong>stack</strong>
+                                                    <div style="width:80vw;">
+                                                        <template x-for=" (subSubItem, subSubIndex) in subItem.stack" :key="subSubIndex">
+                                                            <p x-text="subSubItem" class="uk-margin-small"></p>
+                                                        </template>
+                                                    </div>
+                                                    <div class="uk-flex uk-flex-wrap" style="width:80vw;">
+                                                        <strong>text</strong>
+                                                        <p x-text="subItem.text"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
                             </div>
+
+
                         </template>
                     </li>
 

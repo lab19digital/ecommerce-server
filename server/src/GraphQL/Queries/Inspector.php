@@ -6,6 +6,7 @@ use \App;
 use Gernzy\Server\Exceptions\GernzyException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Inspector
@@ -54,9 +55,14 @@ class Inspector
             );
         }
 
-        $filePath = storage_path() . '/logs/laravel.log';
-        $data = File::get($filePath);
-
+        $allParsed = [];
+        foreach (glob(storage_path() . '/logs/*.log') as $filename) {
+            Log::debug($filename);
+            $file = File::get($filename);
+            $parsed = $this->parseLogFile($file);
+            array_unshift($parsed, $filename);
+            array_push($allParsed, $parsed);
+        }
 
         $packageDataStructure = [
             // "packages_lock" => $packages,
@@ -66,14 +72,14 @@ class Inspector
             "payment_providers" => $paymentProviderInformation,
             "events" => $eventMapping,
             "publishable_providers" => $publishableProviders,
-            "laravel_log" => $this->all()
+            "laravel_log" => $allParsed
         ];
 
         return json_encode($packageDataStructure);
     }
 
 
-    public function all()
+    public function parseLogFile($file)
     {
         $levels_imgs = [
             'debug' => 'info-circle',
@@ -89,8 +95,6 @@ class Inspector
         ];
 
         $log = [];
-        $filePath = storage_path() . '/logs/laravel.log';
-        $file = File::get($filePath);
 
         preg_match_all('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*/', $file, $headings);
 
