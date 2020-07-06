@@ -6,7 +6,6 @@ use \App;
 use Gernzy\Server\Exceptions\GernzyException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Inspector
@@ -57,11 +56,7 @@ class Inspector
 
         $logFileNames = [];
         foreach (glob(storage_path() . '/logs/*.log') as $filename) {
-            // Log::debug($filename);
-            //$file = File::get($filename);
-            //$parsed = $this->parseLogFile($file);
-            //array_unshift($parsed, $filename);
-            array_push($logFileNames, $filename);
+            array_push($logFileNames, basename($filename));
         }
 
         $packageDataStructure = [
@@ -76,6 +71,21 @@ class Inspector
         ];
 
         return json_encode($packageDataStructure);
+    }
+
+    public function logContents($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        $fileToLookFor = $args['filename'];
+        $returnArray = [];
+        foreach (glob(storage_path() . '/logs/*.log') as $filename) {
+            if (basename($filename) == $fileToLookFor) {
+                $file = File::get($filename);
+                $parsed = $this->parseLogFile($file);
+                array_push($returnArray, $fileToLookFor);
+                array_push($returnArray, $parsed);
+            }
+        }
+        return json_encode($returnArray);
     }
 
 

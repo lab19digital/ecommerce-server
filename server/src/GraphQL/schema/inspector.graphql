@@ -1,3 +1,4 @@
 extend type Query {
     packages: String @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\Inspector@packages")
+    logContents(filename: String): String @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\Inspector@logContents")
 }

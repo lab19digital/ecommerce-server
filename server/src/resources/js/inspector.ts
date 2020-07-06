@@ -19,10 +19,6 @@ class Inspector implements GernzyInspector {
     }
 
     public createPublicInterface() {
-        let query = `query {
-            packages
-        }`;
-
         let userToken = localStorage.getItem('userToken') || '';
         var self = this;
         return {
@@ -37,8 +33,12 @@ class Inspector implements GernzyInspector {
             successText: 'Success!',
             showError: false,
             errorText: 'An error occured.',
-            open: false,
+            logContent: [],
             fetch() {
+                let query = `query {
+                    packages
+                }`;
+
                 self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                     try {
                         let packages = JSON.parse(data.data.packages);
@@ -55,15 +55,9 @@ class Inspector implements GernzyInspector {
                             return { event: event[0], actions: event[1] };
                         });
 
-                        let logs = packages.laravel_log;
-                        // logs.forEach((element: any) => {
-                        //     element.forEach((innnerElement: any, index: any) => {
-                        //         try {
-                        //             innnerElement.stack = innnerElement.stack.split('#');
-                        //         } catch (error) {}
-                        //     });
-                        // });
-                        console.log(logs);
+                        let logs = packages.laravel_log.map((item: '') => {
+                            return { item: item, show: false };
+                        });
 
                         this.requireDevPackages = Object.entries(packages.require_dev_packages);
                         this.requirePackages = Object.entries(packages.require_packages);
@@ -81,8 +75,37 @@ class Inspector implements GernzyInspector {
                     }
                 });
             },
-            viewLogClick() {
-                this.open = !this.open;
+            viewLogClick(event: { target: HTMLInputElement }) {
+                let logFileName = event.target.getAttribute('data-log');
+                let query = `query {
+                    logContents(filename: "${logFileName}")
+                }`;
+
+                this.laravel_log.forEach((element: any) => {
+                    if (element.item == logFileName) {
+                        element.show = true;
+                    }
+                });
+
+                self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
+                    try {
+                        let logContent = JSON.parse(data.data.logContents);
+                        // console.log(logContent);
+                        logContent[1].forEach((element: any) => {
+                            try {
+                                element.stack = element.stack.split('#');
+                            } catch (error) {}
+                        });
+                        logContent[0] = [logContent[0]];
+                        console.log(logContent);
+                        this.logContent = logContent;
+                    } catch (error) {
+                        this.showError = true;
+                        this.errorText = 'An error occured while loading logs. Please try again';
+                        // console.log('productsComponent() .then(  try { catch');
+                        console.log(error);
+                    }
+                });
             },
         };
     }

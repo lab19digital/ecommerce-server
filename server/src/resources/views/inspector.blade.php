@@ -86,10 +86,61 @@
                     <li>
                         <template x-for="(item, index) in laravel_log" :key="index">
                             <div>
-                                <div class="uk-card-small uk-card-default uk-card-body uk-flex uk-margin uk-width-1-1" style="min-width:24rem;">
-                                    <p x-text="item"></p>
-                                    <button :data-log="item" class="uk-button uk-button-default uk-button-small uk-margin-left" style="min-width:8rem;" x-on:click="viewLogClick">View log</button>
+                                <div class="uk-card-small uk-card-default uk-card-body uk-margin uk-flex">
+                                    <p x-text="item.item" class="uk-width-1-1"></p>
+                                    <button :data-log="item.item" class="uk-button uk-button-default uk-button-small uk-margin-left" x-on:click="viewLogClick">Open</button>
                                 </div>
+                                <!--  -->
+                                <div x-show.transition="item.show">
+                                    <template x-for="(subItem, subIndex) in logContent" :key="subIndex">
+                                        <div class="uk-margin-bottom">
+                                            <template x-if="subIndex == 0">
+                                                <div class="uk-flex" style="width: 80vw;">
+                                                    <span class="uk-label uk-label-primary">Log File: <span x-text="subItem"></span></span>
+                                                </div>
+                                            </template>
+
+                                            <div x-show.transition="open">
+                                                <template x-if="subIndex > 0">
+                                                    <div>
+                                                        <template x-for="(subSubItem, subSubItemindex) in subItem" :key="subSubItemindex">
+                                                            <div>
+                                                                <div class="uk-margin-bottom">
+                                                                    <span class="uk-label uk-label-warning">Log item <span x-text="subSubItemindex"></span></span>
+
+                                                                    <div class=" uk-flex">
+                                                                        <strong class="uk-width-1-3">context</strong>
+                                                                        <em x-text="subSubItem.context" class="uk-width-1-2"></em>
+                                                                    </div>
+                                                                    <div class="uk-flex">
+                                                                        <strong class="uk-width-1-3">date</strong>
+                                                                        <em x-text="subSubItem.date" class="uk-width-1-2"></em>
+                                                                    </div>
+
+                                                                    <div class="uk-flex">
+                                                                        <strong class="uk-width-1-3">level</strong>
+                                                                        <em x-text="subSubItem.level" class="uk-width-1-2"></em>
+                                                                    </div>
+                                                                    <strong>stack</strong>
+                                                                    <div style="width:80vw;">
+                                                                        <template x-for=" (subSubSubItem, subSubSubItemindex) in subSubItem.stack" :key="subSubSubItemindex">
+                                                                            <p x-text="subSubSubItem" class="uk-margin-small"></p>
+                                                                        </template>
+                                                                    </div>
+                                                                    <div class="uk-flex uk-flex-wrap" style="width:80vw;">
+                                                                        <strong>text</strong>
+                                                                        <p x-text="subSubItem.text"></p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                                <!--  -->
                             </div>
                         </template>
                     </li>
