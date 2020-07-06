@@ -55,13 +55,13 @@ class Inspector
             );
         }
 
-        $allParsed = [];
+        $logFileNames = [];
         foreach (glob(storage_path() . '/logs/*.log') as $filename) {
-            Log::debug($filename);
-            $file = File::get($filename);
-            $parsed = $this->parseLogFile($file);
-            array_unshift($parsed, $filename);
-            array_push($allParsed, $parsed);
+            // Log::debug($filename);
+            //$file = File::get($filename);
+            //$parsed = $this->parseLogFile($file);
+            //array_unshift($parsed, $filename);
+            array_push($logFileNames, $filename);
         }
 
         $packageDataStructure = [
@@ -72,7 +72,7 @@ class Inspector
             "payment_providers" => $paymentProviderInformation,
             "events" => $eventMapping,
             "publishable_providers" => $publishableProviders,
-            "laravel_log" => $allParsed
+            "laravel_log" => $logFileNames
         ];
 
         return json_encode($packageDataStructure);

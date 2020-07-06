@@ -56,13 +56,13 @@ class Inspector implements GernzyInspector {
                         });
 
                         let logs = packages.laravel_log;
-                        logs.forEach((element: any) => {
-                            element.forEach((innnerElement: any, index: any) => {
-                                try {
-                                    innnerElement.stack = innnerElement.stack.split('#');
-                                } catch (error) {}
-                            });
-                        });
+                        // logs.forEach((element: any) => {
+                        //     element.forEach((innnerElement: any, index: any) => {
+                        //         try {
+                        //             innnerElement.stack = innnerElement.stack.split('#');
+                        //         } catch (error) {}
+                        //     });
+                        // });
                         console.log(logs);
 
                         this.requireDevPackages = Object.entries(packages.require_dev_packages);
