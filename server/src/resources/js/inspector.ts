@@ -84,20 +84,20 @@ class Inspector implements GernzyInspector {
                 this.laravel_log.forEach((element: any) => {
                     if (element.item == logFileName) {
                         element.show = true;
+                    } else {
+                        element.show = false;
                     }
                 });
 
                 self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                     try {
                         let logContent = JSON.parse(data.data.logContents);
-                        // console.log(logContent);
                         logContent[1].forEach((element: any) => {
                             try {
                                 element.stack = element.stack.split('#');
                             } catch (error) {}
                         });
                         logContent[0] = [logContent[0]];
-                        console.log(logContent);
                         this.logContent = logContent;
                     } catch (error) {
                         this.showError = true;
