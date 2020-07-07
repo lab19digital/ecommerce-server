@@ -24,8 +24,9 @@ class CaptureOrderPaypal
         // 3. Call PayPal to capture an authorization
         $client = PayPalClient::client();
         $response = $client->execute($request);
+
         // 4. Save the capture ID to your database. Implement logic to save capture to your database for future reference.
-        if ($debug) {
+        if ($debug || $response->statusCode != 201) {
             Log::debug("Status Code: {$response->statusCode}\n", ['package' => "Paypal"]);
             Log::debug("Status: {$response->result->status}\n", ['package' => "Paypal"]);
             Log::debug("Order ID: {$response->result->id}\n", ['package' => "Paypal"]);

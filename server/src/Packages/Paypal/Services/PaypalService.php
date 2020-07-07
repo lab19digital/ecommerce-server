@@ -14,6 +14,7 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
     {
         $captureOrderPaypal = App::make('Paypal\CaptureOrderPaypal');
         if (!$captureResponse = $captureOrderPaypal->captureOrder($orderID, false)) {
+            Log::error("Error on paypal response: {$captureResponse}\n", ['package' => "Paypal"]);
             return response()->json(['error' => 'Server error'], 400);
         }
 
@@ -21,9 +22,9 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
         $orderTransaction = OrderTransaction::where('transaction_data->paypal_data->result->id', $captureResponse->result->id)->first();
 
         if (!isset($orderTransaction)) {
-            Log::error('The transaction order data was not found for that successful payment.' + $captureResponse->result->id);
+            Log::error("The transaction order data was not found for that successful payment in Paypal: {$captureResponse->result->id}\n", ['package' => "Paypal"]);
             throw new GernzyException(
-                'The transaction order data was not found for that successful payment.',
+                'The transaction order data was not found for the successful payment in Paypal.',
                 ''
             );
         }
