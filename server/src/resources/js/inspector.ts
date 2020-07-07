@@ -34,6 +34,7 @@ class Inspector implements GernzyInspector {
             showError: false,
             errorText: 'An error occured.',
             logContent: [],
+            dateInput: '',
             fetch() {
                 let query = `query {
                     packages
@@ -106,6 +107,19 @@ class Inspector implements GernzyInspector {
                         console.log(error);
                     }
                 });
+            },
+            updateListOfFiles(event: { target: HTMLInputElement }) {
+                let date = event.target.value;
+
+                this.laravel_log.forEach((element: any, index: any) => {
+                    var dateFromFileName = element.item.slice(8, 18);
+                    if (date != dateFromFileName) {
+                        this.laravel_log.splice(index, 1);
+                    }
+                });
+
+                // console.log(date);
+                // this.laravel_log;
             },
         };
     }
