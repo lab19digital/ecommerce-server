@@ -12,7 +12,7 @@
                     <li><a href="#">Payment providers</a></li>
                     <li><a href="#">Actions browser</a></li>
                     <li><a href="#">Publishable Providers</a></li>
-                    <li><a href="#">Laravel Log</a></li>
+                    <li><a href="#">Laravel Logs</a></li>
                 </ul>
             </div>
             <div class="uk-width-expand@m">
@@ -92,17 +92,17 @@
 
 
                         <template x-for="(item, index) in laravel_log" :key="index">
-                            <div>
-                                <div x-show.transition="item.showLogName" class="uk-card-small uk-card-default uk-card-body uk-margin uk-flex">
-                                    <p x-text="item.item" class="uk-width-1-1"></p>
-                                    <button :data-log="item.item" class="uk-button uk-button-default uk-button-small uk-margin-left" x-on:click="viewLogClick">Open</button>
+                            <div style="width: 80vw;">
+                                <div x-show.transition="item.showLogName" class="uk-card-small uk-card-default uk-card-body uk-margin uk-flex uk-flex-middle uk-card-hover">
+                                    <div x-text="item.item" class="uk-width-1-1"></div>
+                                    <button :data-log="item.item" class="uk-button uk-button-default uk-button-small uk-margin-left" x-on:click="viewLogClick" x-text="item.button_text">Open</button>
                                 </div>
                                 <!-- Log contents -->
                                 <div x-show.transition="item.showLogContents">
                                     <template x-for="(subItem, subIndex) in logContent" :key="subIndex">
                                         <div class="uk-margin-bottom">
                                             <template x-if="subIndex == 0">
-                                                <div class="uk-flex" style="width: 80vw;">
+                                                <div class="uk-flex">
                                                     <span class="uk-label uk-label-primary">Log File: <span x-text="subItem"></span></span>
                                                 </div>
                                             </template>

@@ -57,7 +57,7 @@ class Inspector implements GernzyInspector {
                         });
 
                         let logs = packages.laravel_log.map((item: '') => {
-                            return { item: item, showLogName: true, showLogContents: false };
+                            return { item: item, showLogName: true, showLogContents: false, button_text: 'open' };
                         });
 
                         this.requireDevPackages = Object.entries(packages.require_dev_packages);
@@ -83,13 +83,29 @@ class Inspector implements GernzyInspector {
                     logContents(filename: "${logFileName}")
                 }`;
 
-                this.laravel_log.forEach((element: any) => {
+                let alreadyOpen = false;
+
+                this.laravel_log.forEach((element: any, index: any) => {
                     if (element.item == logFileName) {
+                        if (element.showLogContents == true) {
+                            element.button_text = 'open';
+                            element.showLogContents = false;
+                            alreadyOpen = true;
+                            this.logContent = [];
+                            return;
+                        }
                         element.showLogContents = true;
+                        element.button_text = 'close';
                     } else {
                         element.showLogContents = false;
                     }
                 });
+
+                // this checks if the file has alread been loaded and displayed on the screen
+                // No need to do api call again
+                if (alreadyOpen) {
+                    return;
+                }
 
                 self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                     try {
@@ -111,30 +127,27 @@ class Inspector implements GernzyInspector {
             },
             // Filter the UI list of log files, for files that match the date input
             updateListOfFiles(event: { target: HTMLInputElement }) {
+                this.logContent = [];
                 let date = event.target.value;
 
                 this.laravel_log.forEach((element: any, index: any) => {
                     var dateFromFileName = element.item.slice(8, 18);
                     if (date == dateFromFileName) {
-                        //@ts-ignore
-                        this.laravel_log[index].showLogName = true;
+                        element.showLogName = true;
                     } else {
-                        console.log(Date.parse(dateFromFileName));
                         if (Date.parse(dateFromFileName)) {
-                            //@ts-ignore
-                            this.laravel_log[index].showLogName = false;
-                            //@ts-ignore
-                            this.laravel_log[index].showLogContents = false;
+                            element.showLogName = false;
+
+                            element.showLogContents = false;
                         }
                     }
                 });
             },
             viewLogResetClick() {
+                this.logContent = [];
                 this.laravel_log.forEach((element: any, index: any) => {
-                    //@ts-ignore
-                    this.laravel_log[index].showLogName = true;
-                    //@ts-ignore
-                    this.laravel_log[index].showLogContents = false;
+                    element.showLogName = true;
+                    element.showLogContents = false;
                 });
             },
         };
