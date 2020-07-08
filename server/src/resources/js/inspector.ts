@@ -76,6 +76,7 @@ class Inspector implements GernzyInspector {
                     }
                 });
             },
+            // Display the contents of a log
             viewLogClick(event: { target: HTMLInputElement }) {
                 let logFileName = event.target.getAttribute('data-log');
                 let query = `query {
@@ -108,26 +109,25 @@ class Inspector implements GernzyInspector {
                     }
                 });
             },
+            // Filter the UI list of log files, for files that match the date input
             updateListOfFiles(event: { target: HTMLInputElement }) {
                 let date = event.target.value;
 
                 this.laravel_log.forEach((element: any, index: any) => {
                     var dateFromFileName = element.item.slice(8, 18);
-                    console.log(dateFromFileName);
-
                     if (date == dateFromFileName) {
-                        // this.laravel_log.splice(index, 1);
                         //@ts-ignore
                         this.laravel_log[index].showLogName = true;
-                        // console.log('found' + dateFromFileName);
                     } else {
-                        //@ts-ignore
-                        this.laravel_log[index].showLogName = false;
+                        console.log(Date.parse(dateFromFileName));
+                        if (Date.parse(dateFromFileName)) {
+                            //@ts-ignore
+                            this.laravel_log[index].showLogName = false;
+                            //@ts-ignore
+                            this.laravel_log[index].showLogContents = false;
+                        }
                     }
                 });
-
-                // console.log(date);
-                // this.laravel_log;
             },
         };
     }
