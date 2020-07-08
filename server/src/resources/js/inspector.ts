@@ -57,7 +57,7 @@ class Inspector implements GernzyInspector {
                         });
 
                         let logs = packages.laravel_log.map((item: '') => {
-                            return { item: item, show: false };
+                            return { item: item, showLogName: true, showLogContents: false };
                         });
 
                         this.requireDevPackages = Object.entries(packages.require_dev_packages);
@@ -84,9 +84,9 @@ class Inspector implements GernzyInspector {
 
                 this.laravel_log.forEach((element: any) => {
                     if (element.item == logFileName) {
-                        element.show = true;
+                        element.showLogContents = true;
                     } else {
-                        element.show = false;
+                        element.showLogContents = false;
                     }
                 });
 
@@ -113,8 +113,16 @@ class Inspector implements GernzyInspector {
 
                 this.laravel_log.forEach((element: any, index: any) => {
                     var dateFromFileName = element.item.slice(8, 18);
-                    if (date != dateFromFileName) {
-                        this.laravel_log.splice(index, 1);
+                    console.log(dateFromFileName);
+
+                    if (date == dateFromFileName) {
+                        // this.laravel_log.splice(index, 1);
+                        //@ts-ignore
+                        this.laravel_log[index].showLogName = true;
+                        // console.log('found' + dateFromFileName);
+                    } else {
+                        //@ts-ignore
+                        this.laravel_log[index].showLogName = false;
                     }
                 });
 

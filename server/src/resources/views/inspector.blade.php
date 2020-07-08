@@ -89,12 +89,12 @@
 
                         <template x-for="(item, index) in laravel_log" :key="index">
                             <div>
-                                <div class="uk-card-small uk-card-default uk-card-body uk-margin uk-flex">
+                                <div x-show.transition="item.showLogName" class="uk-card-small uk-card-default uk-card-body uk-margin uk-flex">
                                     <p x-text="item.item" class="uk-width-1-1"></p>
                                     <button :data-log="item.item" class="uk-button uk-button-default uk-button-small uk-margin-left" x-on:click="viewLogClick">Open</button>
                                 </div>
-                                <!--  -->
-                                <div x-show.transition="item.show">
+                                <!-- Log contents -->
+                                <div x-show.transition="item.showLogContents">
                                     <template x-for="(subItem, subIndex) in logContent" :key="subIndex">
                                         <div class="uk-margin-bottom">
                                             <template x-if="subIndex == 0">
@@ -103,7 +103,7 @@
                                                 </div>
                                             </template>
 
-                                            <div x-show.transition="open">
+                                            <div>
                                                 <template x-if="subIndex > 0">
                                                     <div>
                                                         <template x-for="(subSubItem, subSubItemindex) in subItem" :key="subSubItemindex">
