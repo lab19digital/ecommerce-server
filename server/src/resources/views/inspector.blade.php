@@ -84,11 +84,23 @@
                     </li>
 
                     <li>
-                        <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-bottom uk-width-1-1">
-                            <label for="logdate">Log files</label>
-                            <input x-on:change="updateListOfFiles($event)" x-model="dateInput" type="date" id="logdate" name="logdate">
-                            <button x-on:click="viewLogResetClick" class="uk-margin-left" uk-icon="refresh"></button>
+                        <div class="uk-flex uk-flex-middle uk-margin-bottom">
+                            <div class="uk-flex uk-flex-middle uk-width-1-1">
+                                <label for="logdate">Change date</label>
+                                <input class="uk-margin-left" x-on:change="updateListOfFiles($event)" x-model="dateInput" type="date" id="logdate" name="logdate">
+                                <button x-on:click="viewLogResetClick" class="uk-margin-left" uk-icon="refresh"></button>
+                            </div>
+                            <div>
+                                <button class="uk-button uk-button-default" type="button" style="min-width: 13rem;">Payment providers</button>
+                                <div uk-dropdown>
+                                    <ul class="uk-nav uk-dropdown-nav">
+                                        <li class="uk-active"><a href="#">Active</a></li>
+                                        <li><a href="#">Item</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
+
 
 
                         <template x-for="(item, index) in laravel_log" :key="index">
