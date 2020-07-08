@@ -129,6 +129,14 @@ class Inspector implements GernzyInspector {
                     }
                 });
             },
+            viewLogResetClick() {
+                this.laravel_log.forEach((element: any, index: any) => {
+                    //@ts-ignore
+                    this.laravel_log[index].showLogName = true;
+                    //@ts-ignore
+                    this.laravel_log[index].showLogContents = false;
+                });
+            },
         };
     }
 

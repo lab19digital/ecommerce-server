@@ -84,8 +84,12 @@
                     </li>
 
                     <li>
-                        <label for="logdate">Log file (date and time):</label>
-                        <input x-on:change="updateListOfFiles($event)" x-model="dateInput" type="date" id="logdate" name="logdate">
+                        <div class="uk-flex uk-flex-middle uk-flex-between uk-margin-bottom uk-width-1-1">
+                            <label for="logdate">Log files</label>
+                            <input x-on:change="updateListOfFiles($event)" x-model="dateInput" type="date" id="logdate" name="logdate">
+                            <button x-on:click="viewLogResetClick" class="uk-margin-left" uk-icon="refresh"></button>
+                        </div>
+
 
                         <template x-for="(item, index) in laravel_log" :key="index">
                             <div>
