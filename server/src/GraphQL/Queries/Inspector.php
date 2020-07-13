@@ -6,6 +6,7 @@ use \App;
 use Gernzy\Server\Exceptions\GernzyException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Inspector
@@ -88,10 +89,28 @@ class Inspector
         return json_encode($returnArray);
     }
 
+    public function filteredLogContents($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
+    {
+        $incomingFileNames = $args['filenames'];
+        // $keyword = $args['keyword'];
+
+        return json_encode($incomingFileNames);
+
+
+        // Parse all files that have been specified in the args
+        foreach (glob(storage_path() . '/logs/*.log') as $filename) {
+            if (basename($filename) == in_array($filename, $incomingFileNames)) {
+                $file = File::get($filename);
+                $parsed = $this->parseLogFile($file);
+                Log::debug($parsed['stack']);
+            }
+        }
+    }
+
 
     public function parseLogFile($file)
     {
-        $levels_imgs = [
+        $message_levels = [
             'debug' => 'info-circle',
             'info' => 'info-circle',
             'notice' => 'info-circle',
@@ -120,7 +139,7 @@ class Inspector
 
         foreach ($headings as $h) {
             for ($i = 0, $j = count($h); $i < $j; $i++) {
-                foreach (array_keys($levels_imgs) as $level) {
+                foreach (array_keys($message_levels) as $level) {
                     if (strpos(strtolower($h[$i]), '.' . $level) || strpos(strtolower($h[$i]), $level . ':')) {
                         preg_match('/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?)\](?:.*?(\w+)\.|.*?)' . $level . ': (.*?)( in .*?:[0-9]+)?$/i', $h[$i], $current);
                         if (!isset($current[4])) {

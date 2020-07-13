@@ -127,8 +127,10 @@ class Inspector implements GernzyInspector {
             },
             // Filter the UI list of log files, for files that match the date input
             updateListOfFiles(event: { target: HTMLInputElement }) {
+                // Clear log content for performance
                 this.logContent = [];
                 let date = event.target.value;
+                this.dateInput = date;
 
                 this.laravel_log.forEach((element: any, index: any) => {
                     var dateFromFileName = element.item.slice(8, 18);
@@ -149,14 +151,35 @@ class Inspector implements GernzyInspector {
                     element.showLogName = true;
                     element.showLogContents = false;
                 });
+                this.dateInput = '';
             },
             filterLogForProviders(event: { target: HTMLInputElement }) {
-                let providerClass = event.target.getAttribute('data-provider');
+                let fileNames: any[] = [];
 
-                // Check the date input
-                // no date, then search all I guess
+                this.laravel_log.forEach((element: any, index: any) => {
+                    if (element.showLogName) {
+                        fileNames.push(element.item);
+                    }
+                });
 
-                // Query based on date
+                let query = `query {filteredLogContents(filenames: [ ${fileNames} ], keyword: "hi")}`;
+
+                console.log(
+                    JSON.stringify({
+                        query: query,
+                    }),
+                );
+
+                self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
+                    try {
+                        console.log(data);
+                    } catch (error) {
+                        this.showError = true;
+                        this.errorText = 'An error occured while loading provider logs. Please try again';
+                        // console.log('productsComponent() .then(  try { catch');
+                        console.log(error);
+                    }
+                });
             },
         };
     }
