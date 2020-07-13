@@ -86,18 +86,25 @@
                     <li>
                         <div class="uk-flex uk-flex-middle uk-margin-bottom">
                             <div class="uk-flex uk-flex-middle uk-width-1-1">
-                                <label for="logdate">Change date</label>
-                                <input class="uk-margin-left" x-on:change="updateListOfFiles($event)" x-model="dateInput" type="date" id="logdate" name="logdate">
-                                <button x-on:click="viewLogResetClick" class="uk-margin-left" uk-icon="refresh"></button>
-                            </div>
-                            <div>
-                                <button class="uk-button uk-button-default" type="button" style="min-width: 13rem;">Payment providers</button>
-                                <div uk-dropdown>
-                                    <ul class="uk-nav uk-dropdown-nav">
-                                        <li class="uk-active"><a href="#">Active</a></li>
-                                        <li><a href="#">Item</a></li>
-                                    </ul>
+
+                                <input x-on:change="updateListOfFiles($event)" x-model="dateInput" type="date" id="logdate" name="logdate">
+
+                                <button class="uk-margin-left" uk-icon="settings"></button>
+                                <div uk-dropdown="mode: click">
+                                    <template x-for="(item, index) in paymentProviders" :key="index">
+                                        <div>
+                                            <ul class="uk-nav uk-dropdown-nav">
+                                                <li class="uk-width-1-2">
+                                                    <a x-on:click="filterLogForProviders" :data-provider="item.provider_class" href="#" x-text="item.provider_name"></a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </template>
                                 </div>
+
+                                <button x-on:click="viewLogResetClick" class="uk-margin-left" uk-icon="refresh"></button>
+
+
                             </div>
                         </div>
 

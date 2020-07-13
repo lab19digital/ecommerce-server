@@ -150,6 +150,14 @@ class Inspector implements GernzyInspector {
                     element.showLogContents = false;
                 });
             },
+            filterLogForProviders(event: { target: HTMLInputElement }) {
+                let providerClass = event.target.getAttribute('data-provider');
+
+                // Check the date input
+                // no date, then search all I guess
+
+                // Query based on date
+            },
         };
     }
 

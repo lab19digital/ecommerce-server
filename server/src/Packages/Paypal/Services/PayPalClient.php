@@ -38,12 +38,15 @@ class PayPalClient
         $clientId = config("api.paypal_client_id") ?: "";
         $clientSecret = config("api.paypal_client_secret") ?: "";
 
+        $paypalService = App::make('Paypal\PaypalService');
+        $providerName = $paypalService->providerName() ?? 'Paypal';
+
         if ($env == 'production') {
             return new ProductionEnvironment($clientId, $clientSecret);
         } elseif ($env == 'development') {
             return new SandboxEnvironment($clientId, $clientSecret);
         } else {
-            Log::error("The environment has not been defined for Paypal.", ['package' => "Paypal"]);
+            Log::error("The environment has not been defined for Paypal.", ['package' => $providerName]);
             throw new GernzyException(
                 'The environment has not been defined for Paypal.',
                 'Please define if environment is development or production'
