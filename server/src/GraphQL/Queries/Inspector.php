@@ -6,7 +6,6 @@ use \App;
 use Gernzy\Server\Exceptions\GernzyException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Inspector
@@ -92,19 +91,20 @@ class Inspector
     public function filteredLogContents($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $incomingFileNames = $args['filenames'];
-        // $keyword = $args['keyword'];
+        $keyword = $args['keyword'];
+        $result = [];
 
-        return json_encode($incomingFileNames);
-
-
-        // Parse all files that have been specified in the args
+        // Parse all files that have been specified in the args if they contain the keyword
         foreach (glob(storage_path() . '/logs/*.log') as $filename) {
-            if (basename($filename) == in_array($filename, $incomingFileNames)) {
+            if (in_array(basename($filename), $incomingFileNames)) {
                 $file = File::get($filename);
-                $parsed = $this->parseLogFile($file);
-                Log::debug($parsed['stack']);
+                if (preg_match("/{$keyword}/i", $file)) {
+                    array_push($result, basename($filename));
+                }
             }
         }
+
+        return json_encode($result);
     }
 
 

@@ -57,7 +57,13 @@ class Inspector implements GernzyInspector {
                         });
 
                         let logs = packages.laravel_log.map((item: '') => {
-                            return { item: item, showLogName: true, showLogContents: false, button_text: 'open' };
+                            return {
+                                item: item,
+                                showLogName: true,
+                                showLogContents: false,
+                                button_text: 'open',
+                                found: false,
+                            };
                         });
 
                         this.requireDevPackages = Object.entries(packages.require_dev_packages);
@@ -150,11 +156,18 @@ class Inspector implements GernzyInspector {
                 this.laravel_log.forEach((element: any, index: any) => {
                     element.showLogName = true;
                     element.showLogContents = false;
+                    element.found = false;
                 });
                 this.dateInput = '';
             },
             filterLogForProviders(event: { target: HTMLInputElement }) {
+                // reset
+                this.laravel_log.forEach((element: any, index: any) => {
+                    element.found = false;
+                });
+
                 let fileNames: any[] = [];
+                let providerName = event.target.getAttribute('data-provider');
 
                 this.laravel_log.forEach((element: any, index: any) => {
                     if (element.showLogName) {
@@ -162,11 +175,21 @@ class Inspector implements GernzyInspector {
                     }
                 });
 
-                let query = `query {filteredLogContents(filenames:  ${JSON.stringify(fileNames)} , keyword: "hi")}`;
+                let query = `query {filteredLogFiles(filenames:  ${JSON.stringify(
+                    fileNames,
+                )} , keyword: "${providerName}")}`;
 
                 self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                     try {
-                        console.log(data);
+                        let files = JSON.parse(data.data.filteredLogFiles);
+                        this.laravel_log.forEach((element: any, index: any) => {
+                            let found = files.find(function (inner: any) {
+                                return inner == element.item;
+                            });
+                            if (found) {
+                                element.found = true;
+                            }
+                        });
                     } catch (error) {
                         this.showError = true;
                         this.errorText = 'An error occured while loading provider logs. Please try again';

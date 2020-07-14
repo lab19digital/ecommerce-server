@@ -95,7 +95,7 @@
                                         <div>
                                             <ul class="uk-nav uk-dropdown-nav">
                                                 <li class="uk-width-1-2">
-                                                    <a x-on:click="filterLogForProviders" :data-provider="item.provider_class" href="#" x-text="item.provider_name"></a>
+                                                    <a x-on:click="filterLogForProviders" :data-provider="item.provider_name" href="#" x-text="item.provider_name"></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -112,7 +112,7 @@
 
                         <template x-for="(item, index) in laravel_log" :key="index">
                             <div style="width: 80vw;">
-                                <div x-show.transition="item.showLogName" class="uk-card-small uk-card-default uk-card-body uk-margin uk-flex uk-flex-middle uk-card-hover">
+                                <div x-show.transition="item.showLogName" :class="{ 'uk-background-primary': item.found }" class="uk-card-small uk-card-default uk-card-body uk-margin uk-flex uk-flex-middle uk-card-hover">
                                     <div x-text="item.item" class="uk-width-1-1"></div>
                                     <button :data-log="item.item" class="uk-button uk-button-default uk-button-small uk-margin-left" x-on:click="viewLogClick" x-text="item.button_text">Open</button>
                                 </div>
