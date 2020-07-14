@@ -35,6 +35,7 @@ class Inspector implements GernzyInspector {
             errorText: 'An error occured.',
             logContent: [],
             dateInput: '',
+            selectedPaymentProvider: '',
             fetch() {
                 let query = `query {
                     packages
@@ -62,7 +63,7 @@ class Inspector implements GernzyInspector {
                                 showLogName: true,
                                 showLogContents: false,
                                 button_text: 'open',
-                                found: false,
+                                fileMatchedKeyWord: false,
                             };
                         });
 
@@ -119,7 +120,26 @@ class Inspector implements GernzyInspector {
                         logContent[1].forEach((element: any) => {
                             try {
                                 element.stack = element.stack.split('#');
-                            } catch (error) {}
+                                element.stack = element.stack.map((item: any) => {
+                                    if (this.selectedPaymentProvider) {
+                                        let highlight = false;
+                                        if (new RegExp('\\b' + this.selectedPaymentProvider + '\\b', 'i').test(item)) {
+                                            highlight = true;
+                                        }
+                                        return {
+                                            item: item,
+                                            highlight: highlight,
+                                        };
+                                    }
+
+                                    return {
+                                        item: item,
+                                        highlight: false,
+                                    };
+                                });
+                            } catch (error) {
+                                // console.log(error);
+                            }
                         });
                         logContent[0] = [logContent[0]];
                         this.logContent = logContent;
@@ -140,14 +160,10 @@ class Inspector implements GernzyInspector {
 
                 this.laravel_log.forEach((element: any, index: any) => {
                     var dateFromFileName = element.item.slice(8, 18);
-                    if (date == dateFromFileName) {
-                        element.showLogName = true;
-                    } else {
-                        if (Date.parse(dateFromFileName)) {
-                            element.showLogName = false;
-
-                            element.showLogContents = false;
-                        }
+                    if (date == dateFromFileName) element.showLogName = true;
+                    else if (Date.parse(dateFromFileName)) {
+                        element.showLogName = false;
+                        element.showLogContents = false;
                     }
                 });
             },
@@ -156,23 +172,22 @@ class Inspector implements GernzyInspector {
                 this.laravel_log.forEach((element: any, index: any) => {
                     element.showLogName = true;
                     element.showLogContents = false;
-                    element.found = false;
+                    element.fileMatchedKeyWord = false;
                 });
                 this.dateInput = '';
             },
             filterLogForProviders(event: { target: HTMLInputElement }) {
                 // reset
                 this.laravel_log.forEach((element: any, index: any) => {
-                    element.found = false;
+                    element.fileMatchedKeyWord = false;
                 });
 
                 let fileNames: any[] = [];
                 let providerName = event.target.getAttribute('data-provider');
+                if (providerName) this.selectedPaymentProvider = providerName;
 
                 this.laravel_log.forEach((element: any, index: any) => {
-                    if (element.showLogName) {
-                        fileNames.push(element.item.toString());
-                    }
+                    if (element.showLogName) fileNames.push(element.item.toString());
                 });
 
                 let query = `query {filteredLogFiles(filenames:  ${JSON.stringify(
@@ -183,12 +198,10 @@ class Inspector implements GernzyInspector {
                     try {
                         let files = JSON.parse(data.data.filteredLogFiles);
                         this.laravel_log.forEach((element: any, index: any) => {
-                            let found = files.find(function (inner: any) {
+                            let fileMatchedKeyWord = files.find(function (inner: any) {
                                 return inner == element.item;
                             });
-                            if (found) {
-                                element.found = true;
-                            }
+                            if (fileMatchedKeyWord) element.fileMatchedKeyWord = true;
                         });
                     } catch (error) {
                         this.showError = true;

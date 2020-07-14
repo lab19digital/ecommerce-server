@@ -112,7 +112,7 @@
 
                         <template x-for="(item, index) in laravel_log" :key="index">
                             <div style="width: 80vw;">
-                                <div x-show.transition="item.showLogName" :class="{ 'uk-background-primary': item.found }" class="uk-card-small uk-card-default uk-card-body uk-margin uk-flex uk-flex-middle uk-card-hover">
+                                <div x-show.transition="item.showLogName" :class="{ 'uk-background-primary': item.fileMatchedKeyWord }" class="uk-card-small uk-card-default uk-card-body uk-margin uk-flex uk-flex-middle uk-card-hover">
                                     <div x-text="item.item" class="uk-width-1-1"></div>
                                     <button :data-log="item.item" class="uk-button uk-button-default uk-button-small uk-margin-left" x-on:click="viewLogClick" x-text="item.button_text">Open</button>
                                 </div>
@@ -150,7 +150,11 @@
                                                                     <strong>stack</strong>
                                                                     <div style="width:80vw;">
                                                                         <template x-for=" (subSubSubItem, subSubSubItemindex) in subSubItem.stack" :key="subSubSubItemindex">
-                                                                            <p x-text="subSubSubItem" class="uk-margin-small"></p>
+                                                                            <p :class="{ 
+                                                                                'uk-background-primary': subSubSubItem.highlight, 
+                                                                                'uk-border-rounded': subSubSubItem.highlight,
+                                                                                'uk-label': subSubSubItem.highlight
+                                                                            }" x-text="subSubSubItem.item" class="uk-margin-small"></p>
                                                                         </template>
                                                                     </div>
                                                                     <div class="uk-flex uk-flex-wrap" style="width:80vw;">
