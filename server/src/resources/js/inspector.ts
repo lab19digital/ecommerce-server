@@ -158,17 +158,11 @@ class Inspector implements GernzyInspector {
 
                 this.laravel_log.forEach((element: any, index: any) => {
                     if (element.showLogName) {
-                        fileNames.push(element.item);
+                        fileNames.push(element.item.toString());
                     }
                 });
 
-                let query = `query {filteredLogContents(filenames: [ ${fileNames} ], keyword: "hi")}`;
-
-                console.log(
-                    JSON.stringify({
-                        query: query,
-                    }),
-                );
+                let query = `query {filteredLogContents(filenames:  ${JSON.stringify(fileNames)} , keyword: "hi")}`;
 
                 self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                     try {
