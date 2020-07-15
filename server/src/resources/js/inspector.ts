@@ -33,7 +33,7 @@ class Inspector implements GernzyInspector {
             successText: 'Success!',
             showError: false,
             errorText: 'An error occured.',
-            logContent: [],
+            logContent: '',
             dateInput: '',
             selectedPaymentProvider: '',
             fetch() {
@@ -64,6 +64,7 @@ class Inspector implements GernzyInspector {
                                 showLogContents: false,
                                 button_text: 'open',
                                 fileMatchedKeyWord: false,
+                                showLogContentsSpinner: false,
                             };
                         });
 
@@ -94,17 +95,22 @@ class Inspector implements GernzyInspector {
 
                 this.laravel_log.forEach((element: any, index: any) => {
                     if (element.item == logFileName) {
+                        //so already open
                         if (element.showLogContents == true) {
                             element.button_text = 'open';
                             element.showLogContents = false;
+                            element.showLogContentsSpinner = false;
                             alreadyOpen = true;
-                            this.logContent = [];
+                            this.logContent = '';
                             return;
                         }
                         element.showLogContents = true;
                         element.button_text = 'close';
+                        element.showLogContentsSpinner = true;
                     } else {
                         element.showLogContents = false;
+                        element.button_text = 'open';
+                        this.logContent = '';
                     }
                 });
 
@@ -117,32 +123,76 @@ class Inspector implements GernzyInspector {
                 self.graphqlService.sendQuery(query, userToken, self.url).then((data) => {
                     try {
                         let logContent = JSON.parse(data.data.logContents);
-                        logContent[1].forEach((element: any) => {
-                            try {
-                                element.stack = element.stack.split('#');
-                                element.stack = element.stack.map((item: any) => {
-                                    if (this.selectedPaymentProvider) {
-                                        let highlight = false;
-                                        if (new RegExp('\\b' + this.selectedPaymentProvider + '\\b', 'i').test(item)) {
-                                            highlight = true;
-                                        }
-                                        return {
-                                            item: item,
-                                            highlight: highlight,
-                                        };
-                                    }
 
-                                    return {
-                                        item: item,
-                                        highlight: false,
-                                    };
-                                });
-                            } catch (error) {
-                                // console.log(error);
-                            }
+                        logContent[1].forEach((element: any) => {
+                            let html = `
+                                <div class="uk-margin-bottom">
+                                    <div class="uk-margin-bottom">
+                                        <div class=" uk-flex">
+                                            <strong class="uk-width-1-3">context</strong>
+                                            <em class="uk-width-1-2">${element.context}</em>
+                                        </div>
+                                        <div class="uk-flex">
+                                            <strong class="uk-width-1-3">date</strong>
+                                            <em class="uk-width-1-2">${element.date}</em>
+                                        </div>
+
+                                        <div class="uk-flex">
+                                            <strong class="uk-width-1-3">level</strong>
+                                            <em class="uk-width-1-2">${element.level}</em>
+                                        </div>
+                                        <strong>stack</strong>
+                                        <div style="width:80vw;">
+                                            <p>${element.stack}</p>
+                                        </div>
+                                        <div class="uk-flex uk-flex-wrap" style="width:80vw;">
+                                            <strong>text</strong>
+                                            <p>${element.text}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+
+                            this.logContent += html;
                         });
-                        logContent[0] = [logContent[0]];
-                        this.logContent = logContent;
+
+                        // console.log(logContent);
+
+                        // This is the stack array
+                        // logContent[1].forEach((element: any) => {
+                        //     try {
+                        // element.stack = element.stack.split('#');
+                        // element.stack = element.stack.map((item: any) => {
+                        //     if (this.selectedPaymentProvider) {
+                        //         let highlight = false;
+                        //         if (new RegExp('\\b' + this.selectedPaymentProvider + '\\b', 'i').test(item)) {
+                        //             highlight = true;
+                        //         }
+                        //         return {
+                        //             item: item,
+                        //             highlight: highlight,
+                        //         };
+                        //     }
+                        //     return {
+                        //         item: item,
+                        //         highlight: false,
+                        //     };
+                        // });
+                        // @ts-ignore
+                        // this.logContent.push(element);
+                        // } catch (error) {
+                        // console.log(error);
+                        // }
+                        // });
+
+                        // this.logContent = logContent[1];
+
+                        this.laravel_log.forEach((element: any, index: any) => {
+                            element.showLogContentsSpinner = false;
+                        });
+
+                        // logContent[0] = [logContent[0]];
+                        // this.logContent = logContent;
                     } catch (error) {
                         this.showError = true;
                         this.errorText = 'An error occured while loading logs. Please try again';
@@ -154,7 +204,7 @@ class Inspector implements GernzyInspector {
             // Filter the UI list of log files, for files that match the date input
             updateListOfFiles(event: { target: HTMLInputElement }) {
                 // Clear log content for performance
-                this.logContent = [];
+                this.logContent = '';
                 let date = event.target.value;
                 this.dateInput = date;
 
@@ -168,7 +218,7 @@ class Inspector implements GernzyInspector {
                 });
             },
             viewLogResetClick() {
-                this.logContent = [];
+                this.logContent = '';
                 this.laravel_log.forEach((element: any, index: any) => {
                     element.showLogName = true;
                     element.showLogContents = false;
