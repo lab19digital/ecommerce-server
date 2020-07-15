@@ -8,12 +8,15 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- UIkit CSS -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/css/uikit.min.css" /> -->
-    <link rel="stylesheet" href="/css/uikit.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/css/uikit.min.css" />
+    <!-- <link rel="stylesheet" href="/css/uikit.min.css" /> -->
 
     <!-- UIkit JS -->
-    <script src="/js/uikit.min.js"></script>
-    <script src="/js/uikit-icons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.5/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.5/dist/js/uikit-icons.min.js"></script>
+
+    <!-- <script src="/js/uikit.min.js"></script>
+    <script src="/js/uikit-icons.min.js"></script> -->
 
     <!-- Stripe -->
     <script src="https://js.stripe.com/v3/"></script>
