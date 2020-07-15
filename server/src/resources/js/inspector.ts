@@ -125,6 +125,15 @@ class Inspector implements GernzyInspector {
                         let logContent = JSON.parse(data.data.logContents);
 
                         logContent[1].forEach((element: any) => {
+                            try {
+                                element.stack = element.stack.split('#');
+                                element.stack = element.stack.map((item: any) => {
+                                    return `<div>${item}</div>`;
+                                });
+                            } catch (error) {
+                                // console.log(error);
+                            }
+
                             let html = `
                                 <div class="uk-margin-bottom">
                                     <div class="uk-margin-bottom">
