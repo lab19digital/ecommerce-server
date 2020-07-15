@@ -3,6 +3,7 @@
 namespace  Gernzy\Server\Packages\Paypal\Services;
 
 use Gernzy\Server\Exceptions\GernzyException;
+use Illuminate\Support\Facades\Log;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
@@ -37,13 +38,17 @@ class PayPalClient
         $clientId = config("api.paypal_client_id") ?: "";
         $clientSecret = config("api.paypal_client_secret") ?: "";
 
+        $paypalService = App::make('Paypal\PaypalService');
+        $providerName = $paypalService->providerName() ?? 'Paypal';
+
         if ($env == 'production') {
             return new ProductionEnvironment($clientId, $clientSecret);
         } elseif ($env == 'development') {
             return new SandboxEnvironment($clientId, $clientSecret);
         } else {
+            Log::error("The environment has not been defined for Paypal.", ['package' => $providerName]);
             throw new GernzyException(
-                'The environment has not been defined.',
+                'The environment has not been defined for Paypal.',
                 'Please define if environment is development or production'
             );
         }

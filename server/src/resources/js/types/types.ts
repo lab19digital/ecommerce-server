@@ -5,6 +5,7 @@ const TYPES = {
     GernzyUser: Symbol.for('GernzyUser'),
     GernzyCart: Symbol.for('GernzyCart'),
     GernzyCheckout: Symbol.for('GernzyCheckout'),
+    GernzyInspector: Symbol.for('GernzyInspector'),
 };
 
 export { TYPES };

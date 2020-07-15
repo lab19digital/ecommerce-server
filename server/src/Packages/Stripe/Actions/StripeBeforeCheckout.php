@@ -7,6 +7,7 @@ use Gernzy\Server\Classes\ActionClass;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Services\ActionInterface;
 use Gernzy\Server\Services\ExhangeRatesManager;
+use Illuminate\Support\Facades\Log;
 
 class StripeBeforeCheckout implements ActionInterface
 {
@@ -30,8 +31,12 @@ class StripeBeforeCheckout implements ActionInterface
         $cartService = $data['cart_service'];
         $cartTotal = $cartService->getCartTotal();
 
+        $stripeService = App::make('Stripe\StripeService');
+        $providerName = $stripeService->providerName() ?? 'Stripe';
+
         // Safety checks
         if (!isset($cartTotal) || $cartTotal <= 0) {
+            Log::error("failed stripe The cart total has to be more than 0 ", ['package' => $providerName]);
             throw new GernzyException(
                 'The cart total has to be more than 0.',
                 'Please make sure the charge amount is more than 0.'

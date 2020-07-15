@@ -42,6 +42,7 @@ class GernzyServiceProvider extends ServiceProvider
 
         // Register core packages
         $this->app->register(AuthServiceProvider::class);
+        $this->app->register(GernzyPaymentProvider::class);
 
         // Some configuration needs to be overriden by the cart
         // plugin, rather than from within the Laravel app itself
@@ -102,6 +103,11 @@ class GernzyServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/config/currency.php', 'currency');
         $this->mergeConfigFrom(__DIR__ . '/config/events.php', 'events');
         $this->mergeConfigFrom(__DIR__ . '/config/api.php', 'api');
+
+        // Dev tools
+        $this->app->bind('Gernzy\PublishableProviders', function ($app) {
+            return $this->publishableProviders();
+        });
     }
 
     /**
