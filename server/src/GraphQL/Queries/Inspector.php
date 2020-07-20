@@ -28,11 +28,11 @@ class Inspector
 
     public function packages($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $file = __DIR__ . "/../../../composer.json";
-        $file2 = __DIR__ . "/../../../composer.lock";
-        $packages = json_decode(file_get_contents($file2), true)['packages'];
-        $requirePackages = json_decode(file_get_contents($file), true)['require'];
-        $requireDevPackages = json_decode(file_get_contents($file), true)['require-dev'];
+        $composerFile = base_path() . '\packages\gernzy\server\composer.json';
+        $composerLockFile = base_path() . '\packages\gernzy\server\composer.lock';
+        $packages = json_decode(file_get_contents($composerLockFile), true)['packages'];
+        $requirePackages = json_decode(file_get_contents($composerFile), true)['require'];
+        $requireDevPackages = json_decode(file_get_contents($composerFile), true)['require-dev'];
 
         $publishableProviders = App::make('Gernzy\PublishableProviders');
         $paymentProviderServices = App::make('Gernzy\PaymentProviderServices');
@@ -79,8 +79,8 @@ class Inspector
         $returnArray = [];
         foreach (glob(storage_path() . '/logs/*.log') as $filename) {
             if (basename($filename) == $fileToLookFor) {
-                $file = File::get($filename);
-                $parsed = $this->parseLogFile($file);
+                $composerFile = File::get($filename);
+                $parsed = $this->parseLogFile($composerFile);
                 array_push($returnArray, $fileToLookFor);
                 array_push($returnArray, $parsed);
             }
@@ -97,8 +97,8 @@ class Inspector
         // Parse all files that have been specified in the args if they contain the keyword
         foreach (glob(storage_path() . '/logs/*.log') as $filename) {
             if (in_array(basename($filename), $incomingFileNames)) {
-                $file = File::get($filename);
-                if (preg_match("/{$keyword}/i", $file)) {
+                $composerFile = File::get($filename);
+                if (preg_match("/{$keyword}/i", $composerFile)) {
                     array_push($result, basename($filename));
                 }
             }
@@ -108,7 +108,7 @@ class Inspector
     }
 
 
-    public function parseLogFile($file)
+    public function parseLogFile($composerFile)
     {
         $message_levels = [
             'debug' => 'info-circle',
@@ -125,13 +125,13 @@ class Inspector
 
         $log = [];
 
-        preg_match_all('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*/', $file, $headings);
+        preg_match_all('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*/', $composerFile, $headings);
 
         if (!is_array($headings)) {
             return $log;
         }
 
-        $log_data = preg_split('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*/', $file);
+        $log_data = preg_split('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*/', $composerFile);
 
         if ($log_data[0] < 1) {
             array_shift($log_data);
@@ -163,7 +163,7 @@ class Inspector
         }
 
         if (empty($log)) {
-            $lines = explode(PHP_EOL, $file);
+            $lines = explode(PHP_EOL, $composerFile);
             $log = [];
 
             foreach ($lines as $key => $line) {
