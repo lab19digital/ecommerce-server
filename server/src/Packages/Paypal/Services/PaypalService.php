@@ -54,7 +54,7 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
         return $captureResponse;
     }
 
-    public function createOrder($debug = false, $cartTotal, $sessionCurrency)
+    public function createOrder($debug, $cartTotal, $sessionCurrency)
     {
         $createOrderPaypal = App::make('Paypal\CreateOrderPaypal');
         $response = $createOrderPaypal->createOrder($debug, $cartTotal, $sessionCurrency);

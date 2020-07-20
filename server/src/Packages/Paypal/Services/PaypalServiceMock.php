@@ -64,4 +64,15 @@ class PaypalServiceMock implements PaypalServiceInterface
         }
         ');
     }
+
+    public function providerName()
+    {
+        return 'Paypal';
+    }
+
+
+    public function logFile()
+    {
+        return '../paypalLog.txt';
+    }
 }
