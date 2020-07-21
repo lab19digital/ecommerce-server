@@ -137,14 +137,18 @@ class Inspector implements GernzyInspector {
                             if (split.length < 2) {
                                 html = `
                                 <p>${element}</p>
+                                <hr class="uk-divider-small">
                             `;
                             } else {
                                 let idKey = Math.random().toString(36).substring(2);
+                                var newStr = split[1].replace(/#/g, '<br><br>');
+
                                 html = `
                                 <p>${split[0]}</p>
                                 <button href="#toggle-animation-${idKey}" class="uk-button uk-button-default" type="button" uk-toggle="target: #toggle-animation-${idKey}; animation: uk-animation-fade">Open/Close [stacktrace]</button>
-                                <div id="toggle-animation-${idKey}" class="uk-card uk-card-default uk-card-body uk-margin-small" hidden><p>${split[1]}</p></div>
-                            `;
+                                <div id="toggle-animation-${idKey}" class="uk-card uk-card-default uk-card-body uk-margin-small uk-background-secondary uk-light" hidden><p>${newStr}</p></div>
+                                <hr class="uk-divider-small">
+                                `;
                             }
 
                             this.logContent += html;
