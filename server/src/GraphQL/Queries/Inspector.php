@@ -6,24 +6,10 @@ use \App;
 use Gernzy\Server\Exceptions\GernzyException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Inspector
 {
-    public $message_levels = [
-        'debug',
-        'info',
-        'notice',
-        'warning',
-        'error',
-        'critical',
-        'alert',
-        'emergency',
-        'processed',
-        'failed'
-    ];
-
     /**
      * Return a value for the field.
      *
@@ -89,12 +75,14 @@ class Inspector
 
     public function logContents($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        $inspectorService = App::make('Gernzy\InspectorService');
+
         $fileToLookFor = $args['filename'];
         $returnArray = [];
         foreach (glob(storage_path() . '/logs/*.log') as $filename) {
             if (basename($filename) == $fileToLookFor) {
                 $composerFile = File::get($filename);
-                $parsed = $this->parseLogFile($composerFile);
+                $parsed = $inspectorService->parseLogFile($composerFile);
                 array_push($returnArray, $fileToLookFor);
                 array_push($returnArray, $parsed);
             }
@@ -119,18 +107,5 @@ class Inspector
         }
 
         return json_encode($result);
-    }
-
-
-    public function parseLogFile($composerFile)
-    {
-        // Split up file for each log message into an array, based on [YYYY-MM-DD HH:MM:SS]
-        $logMessages = preg_split('/(?=\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*)/', $composerFile);
-
-        if (strlen($logMessages[0]) < 1) {
-            array_shift($logMessages);
-        }
-
-        return array_reverse($logMessages);
     }
 }

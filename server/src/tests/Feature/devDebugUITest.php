@@ -64,4 +64,13 @@ class GernzyDevDebugUITest extends TestCase
         $this->assertNotEmpty($publishableProviders);
         $this->assertNotEmpty($paymentProviderServices);
     }
+
+    public function testViewLogContents()
+    {
+        // Mock log file contents
+
+        // Test service
+        $inspectorService = App::make('Gernzy\InspectorService');
+        $inspectorService->parseLogFile('some log file contents as a string');
+    }
 }
