@@ -5,6 +5,7 @@ namespace Gernzy\Server\Tests\Feature;
 use \App;
 use Gernzy\Server\Testing\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\File;
 
 class GernzyDevDebugUITest extends TestCase
 {
@@ -72,5 +73,10 @@ class GernzyDevDebugUITest extends TestCase
         // Test service
         $inspectorService = App::make('Gernzy\InspectorService');
         $inspectorService->parseLogFile('some log file contents as a string');
+
+        $composerFile = File::get(__DIR__ . "/../mockFiles/laravel.log");
+        $parsed = $inspectorService->parseLogFile($composerFile);
+
+        $this->assertNotEmpty($parsed);
     }
 }

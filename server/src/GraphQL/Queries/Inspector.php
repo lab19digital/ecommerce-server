@@ -81,8 +81,8 @@ class Inspector
         $returnArray = [];
         foreach (glob(storage_path() . '/logs/*.log') as $filename) {
             if (basename($filename) == $fileToLookFor) {
-                $composerFile = File::get($filename);
-                $parsed = $inspectorService->parseLogFile($composerFile);
+                $logFile = File::get($filename);
+                $parsed = $inspectorService->parseLogFile($logFile);
                 array_push($returnArray, $fileToLookFor);
                 array_push($returnArray, $parsed);
             }
@@ -99,8 +99,8 @@ class Inspector
         // Parse all files that have been specified in the args if they contain the keyword
         foreach (glob(storage_path() . '/logs/*.log') as $filename) {
             if (in_array(basename($filename), $incomingFileNames)) {
-                $composerFile = File::get($filename);
-                if (preg_match("/{$keyword}/i", $composerFile)) {
+                $logFile = File::get($filename);
+                if (preg_match("/{$keyword}/i", $logFile)) {
                     array_push($result, basename($filename));
                 }
             }
