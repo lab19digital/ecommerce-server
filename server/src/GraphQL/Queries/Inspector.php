@@ -6,10 +6,24 @@ use \App;
 use Gernzy\Server\Exceptions\GernzyException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Inspector
 {
+    public $message_levels = [
+        'debug',
+        'info',
+        'notice',
+        'warning',
+        'error',
+        'critical',
+        'alert',
+        'emergency',
+        'processed',
+        'failed'
+    ];
+
     /**
      * Return a value for the field.
      *
@@ -110,77 +124,13 @@ class Inspector
 
     public function parseLogFile($composerFile)
     {
-        $message_levels = [
-            'debug' => 'info-circle',
-            'info' => 'info-circle',
-            'notice' => 'info-circle',
-            'warning' => 'exclamation-triangle',
-            'error' => 'exclamation-triangle',
-            'critical' => 'exclamation-triangle',
-            'alert' => 'exclamation-triangle',
-            'emergency' => 'exclamation-triangle',
-            'processed' => 'info-circle',
-            'failed' => 'exclamation-triangle'
-        ];
+        // Split up file for each log message into an array, based on [YYYY-MM-DD HH:MM:SS]
+        $logMessages = preg_split('/(?=\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*)/', $composerFile);
 
-        $log = [];
-
-        preg_match_all('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*/', $composerFile, $headings);
-
-        if (!is_array($headings)) {
-            return $log;
+        if (strlen($logMessages[0]) < 1) {
+            array_shift($logMessages);
         }
 
-        $log_data = preg_split('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*/', $composerFile);
-
-        if ($log_data[0] < 1) {
-            array_shift($log_data);
-        }
-
-        foreach ($headings as $h) {
-            for ($i = 0, $j = count($h); $i < $j; $i++) {
-                foreach (array_keys($message_levels) as $level) {
-                    if (strpos(strtolower($h[$i]), '.' . $level) || strpos(strtolower($h[$i]), $level . ':')) {
-                        preg_match('/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?)\](?:.*?(\w+)\.|.*?)' . $level . ': (.*?)( in .*?:[0-9]+)?$/i', $h[$i], $current);
-                        if (!isset($current[4])) {
-                            continue;
-                        }
-
-                        $log[] = [
-                            'context' => $current[3],
-                            'level' => $level,
-                            // 'folder' => $this->folder,
-                            // 'level_class' => $this->level->cssClass($level),
-                            // 'level_img' => $this->level->img($level),
-                            'date' => $current[1],
-                            'text' => $current[4],
-                            // 'in_file' => isset($current[5]) ? $current[5] : null,
-                            'stack' => preg_replace("/^\n*/", '', $log_data[$i])
-                        ];
-                    }
-                }
-            }
-        }
-
-        if (empty($log)) {
-            $lines = explode(PHP_EOL, $composerFile);
-            $log = [];
-
-            foreach ($lines as $key => $line) {
-                $log[] = [
-                    'context' => '',
-                    'level' => '',
-                    'folder' => '',
-                    'level_class' => '',
-                    'level_img' => '',
-                    'date' => $key + 1,
-                    'text' => $line,
-                    'in_file' => null,
-                    'stack' => '',
-                ];
-            }
-        }
-
-        return array_reverse($log);
+        return array_reverse($logMessages);
     }
 }

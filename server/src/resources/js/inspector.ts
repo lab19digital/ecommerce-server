@@ -124,84 +124,35 @@ class Inspector implements GernzyInspector {
                     try {
                         let logContent = JSON.parse(data.data.logContents);
 
-                        logContent[1].forEach((element: any) => {
+                        logContent[1].forEach((element: any, index: any) => {
+                            let split: any[] = [];
                             try {
-                                element.stack = element.stack.split('#');
-                                element.stack = element.stack.map((item: any) => {
-                                    return `<div>${item}</div>`;
-                                });
+                                split = element.split('[stacktrace]');
                             } catch (error) {
                                 // console.log(error);
                             }
 
-                            let html = `
-                                <div class="uk-margin-bottom">
-                                    <div class="uk-margin-bottom">
-                                        <div class=" uk-flex">
-                                            <strong class="uk-width-1-3">context</strong>
-                                            <em class="uk-width-1-2">${element.context}</em>
-                                        </div>
-                                        <div class="uk-flex">
-                                            <strong class="uk-width-1-3">date</strong>
-                                            <em class="uk-width-1-2">${element.date}</em>
-                                        </div>
+                            let html = '';
 
-                                        <div class="uk-flex">
-                                            <strong class="uk-width-1-3">level</strong>
-                                            <em class="uk-width-1-2">${element.level}</em>
-                                        </div>
-                                        <strong>stack</strong>
-                                        <div style="width:80vw;">
-                                            <p>${element.stack}</p>
-                                        </div>
-                                        <div class="uk-flex uk-flex-wrap" style="width:80vw;">
-                                            <strong>text</strong>
-                                            <p>${element.text}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                            if (split.length < 2) {
+                                html = `
+                                <p>${element}</p>
                             `;
+                            } else {
+                                let idKey = Math.random().toString(36).substring(2);
+                                html = `
+                                <p>${split[0]}</p>
+                                <button href="#toggle-animation-${idKey}" class="uk-button uk-button-default" type="button" uk-toggle="target: #toggle-animation-${idKey}; animation: uk-animation-fade">Open/Close [stacktrace]</button>
+                                <div id="toggle-animation-${idKey}" class="uk-card uk-card-default uk-card-body uk-margin-small" hidden><p>${split[1]}</p></div>
+                            `;
+                            }
 
                             this.logContent += html;
                         });
 
-                        // console.log(logContent);
-
-                        // This is the stack array
-                        // logContent[1].forEach((element: any) => {
-                        //     try {
-                        // element.stack = element.stack.split('#');
-                        // element.stack = element.stack.map((item: any) => {
-                        //     if (this.selectedPaymentProvider) {
-                        //         let highlight = false;
-                        //         if (new RegExp('\\b' + this.selectedPaymentProvider + '\\b', 'i').test(item)) {
-                        //             highlight = true;
-                        //         }
-                        //         return {
-                        //             item: item,
-                        //             highlight: highlight,
-                        //         };
-                        //     }
-                        //     return {
-                        //         item: item,
-                        //         highlight: false,
-                        //     };
-                        // });
-                        // @ts-ignore
-                        // this.logContent.push(element);
-                        // } catch (error) {
-                        // console.log(error);
-                        // }
-                        // });
-
-                        // this.logContent = logContent[1];
-
                         this.laravel_log.forEach((element: any, index: any) => {
                             element.showLogContentsSpinner = false;
                         });
-
-                        // logContent[0] = [logContent[0]];
-                        // this.logContent = logContent;
                     } catch (error) {
                         this.showError = true;
                         this.errorText = 'An error occured while loading logs. Please try again';
