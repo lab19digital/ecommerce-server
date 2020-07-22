@@ -3,7 +3,6 @@
 namespace Gernzy\Server\GraphQL\Queries;
 
 use \App;
-use Gernzy\Server\Exceptions\GernzyException;
 use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\File;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
@@ -20,6 +19,11 @@ class Inspector
      * @return mixed
      */
 
+    public function __construct()
+    {
+        $this->inspectorService = App::make('Gernzy\InspectorService');
+    }
+
     public function index($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         return true;
@@ -28,61 +32,44 @@ class Inspector
 
     public function packages($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $composerFile = base_path() . '\packages\gernzy\server\composer.json';
-        $composerLockFile = base_path() . '\packages\gernzy\server\composer.lock';
-        $packages = json_decode(file_get_contents($composerLockFile), true)['packages'];
-        $requirePackages = json_decode(file_get_contents($composerFile), true)['require'];
-        $requireDevPackages = json_decode(file_get_contents($composerFile), true)['require-dev'];
+        // composer files and packages
+        $composerFileDetails = $this->inspectorService->composerPackages();
 
-        $publishableProviders = App::make('Gernzy\PublishableProviders');
-        $paymentProviderServices = App::make('Gernzy\PaymentProviderServices');
+        // Payment providers
+        $providerInfo = $this->inspectorService->paymentProviders();
 
-        $paymentProviderInformation = [];
-        foreach ($paymentProviderServices  as $key => $value) {
-            $instance = new $value();
-            array_push($paymentProviderInformation, [
-                'provider_name' => $instance->providerName(),
-                'provider_log' => $instance->logFile(),
-                'provider_class' => $value
-            ]);
-        }
-
+        // Events
         if (!$eventMapping = config('events')) {
-            throw new GernzyException(
-                'An error occured.',
-                'An error occured when determining the eventMapping. None specified.'
-            );
+            $eventMapping = '';
         }
 
-        $logFileNames = [];
-        foreach (glob(storage_path() . '/logs/*.log') as $filename) {
-            array_push($logFileNames, basename($filename));
+        // providers
+        if (!$providers = config('app.providers')) {
+            $providers = '';
         }
 
+        // log file names
+        $logFileNames = $this->inspectorService->allLogNames();
+
+        // return info
         $packageDataStructure = [
-            // "packages_lock" => $packages,
-            "require_packages" =>  $requirePackages,
-            "require_dev_packages" =>  $requireDevPackages,
-            "providers" =>  config('app.providers'),
-            "payment_providers" => $paymentProviderInformation,
+            "providers" =>  $providers,
             "events" => $eventMapping,
-            "publishable_providers" => $publishableProviders,
             "laravel_log" => $logFileNames
         ];
+        $packageDataStructure = array_merge($packageDataStructure, $composerFileDetails, $providerInfo);
 
         return json_encode($packageDataStructure);
     }
 
     public function logContents($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $inspectorService = App::make('Gernzy\InspectorService');
-
         $fileToLookFor = $args['filename'];
         $returnArray = [];
         foreach (glob(storage_path() . '/logs/*.log') as $filename) {
             if (basename($filename) == $fileToLookFor) {
                 $logFile = File::get($filename);
-                $parsed = $inspectorService->parseLogFile($logFile);
+                $parsed = $this->inspectorService->parseLogFile($logFile);
                 array_push($returnArray, $fileToLookFor);
                 array_push($returnArray, $parsed);
             }
