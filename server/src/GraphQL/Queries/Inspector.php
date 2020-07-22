@@ -39,7 +39,7 @@ class Inspector
         );
 
         // Payment providers
-        $providerInfo = $this->inspectorService->paymentProviders();
+        $gernzyProviderInfo = $this->inspectorService->paymentProviders();
 
         // Events
         if (!$eventMapping = config('events')) {
@@ -60,7 +60,7 @@ class Inspector
             "events" => $eventMapping,
             "laravel_log" => $logFileNames
         ];
-        $packageDataStructure = array_merge($packageDataStructure, $composerFileDetails, $providerInfo);
+        $packageDataStructure = array_merge($packageDataStructure, $composerFileDetails, $gernzyProviderInfo);
 
         return json_encode($packageDataStructure);
     }

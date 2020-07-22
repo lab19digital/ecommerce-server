@@ -2,11 +2,6 @@
 
 namespace Gernzy\Server;
 
-use Gernzy\Server\Packages\Paypal\PaypalProvider;
-use Gernzy\Server\Packages\Paypal\Services\PaypalService;
-use Gernzy\Server\Packages\Stripe\Services\StripeService;
-use Gernzy\Server\Packages\Stripe\StripeProvider;
-
 class GernzyPaymentProvider extends GernzyServiceProvider
 {
     /**
@@ -17,13 +12,13 @@ class GernzyPaymentProvider extends GernzyServiceProvider
     public function register()
     {
         // Register dependency packages
-        $this->app->register(StripeProvider::class);
-        $this->app->register(PaypalProvider::class);
+        if ($providers = config('payment_providers')) {
+            foreach ($providers as $key => $value) {
+                $this->app->register($value);
+            }
+        }
 
-        // Dev tools
-        $this->app->bind('Gernzy\PaymentProviderServices', function ($app) {
-            return [StripeService::class, PaypalService::class];
-        });
+        $this->mergeConfigFrom(__DIR__ . '/config/payment_providers.php', 'payment_providers');
     }
 
     /**
@@ -33,5 +28,8 @@ class GernzyPaymentProvider extends GernzyServiceProvider
      */
     public function boot()
     {
+        $this->publishes([
+            __DIR__ . '/config/payment_providers.php' => config_path('payment_providers.php'),
+        ]);
     }
 }

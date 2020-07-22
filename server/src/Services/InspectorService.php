@@ -45,14 +45,19 @@ class InspectorService
     public function paymentProviders()
     {
         $publishableProviders = App::make('Gernzy\PublishableProviders');
-        $paymentProviderServices = App::make('Gernzy\PaymentProviderServices');
+
+        // $paymentProviderServices = App::make('Gernzy\PaymentProviderServices');
+
+        if (!$providers = config('payment_providers')) {
+            $providers = '';
+        }
+
 
         $paymentProviderInformation = [];
-        foreach ($paymentProviderServices  as $key => $value) {
-            $instance = new $value();
+        foreach ($providers as $key => $value) {
             array_push($paymentProviderInformation, [
-                'provider_name' => $instance->providerName(),
-                'provider_log' => $instance->logFile(),
+                'provider_name' => $key,
+                'provider_log' => '',
                 'provider_class' => $value
             ]);
         }
