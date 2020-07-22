@@ -84,7 +84,8 @@ class Inspector
     {
         $incomingFileNames = $args['filenames'];
         $keyword = $args['keyword'];
-        $result = $this->inspectorService->searchLogFile($incomingFileNames, $keyword);
+        $filePaths = glob(storage_path() . '/logs/*.log');
+        $result = $this->inspectorService->searchLogFile($incomingFileNames, $keyword, $filePaths);
         return json_encode($result);
     }
 }

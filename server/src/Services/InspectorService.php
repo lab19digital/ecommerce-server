@@ -75,11 +75,11 @@ class InspectorService
         return $logFileNames;
     }
 
-    public function searchLogFile($incomingFileNames, $keyword)
+    public function searchLogFile($incomingFileNames, $keyword, $filePaths)
     {
         $result = [];
         // Parse all files that have been specified in the args if they contain the keyword
-        foreach (glob(storage_path() . '/logs/*.log') as $filename) {
+        foreach ($filePaths as $filename) {
             if (in_array(basename($filename), $incomingFileNames)) {
                 $logFile = File::get($filename);
                 if (preg_match("/{$keyword}/i", $logFile)) {
