@@ -46,9 +46,10 @@ class GernzyDevDebugUITest extends TestCase
             $file
         );
 
-
         $this->assertNotEmpty($composerFileDetails);
         $this->assertIsArray($composerFileDetails);
+        $this->assertArrayHasKey('require_packages', $composerFileDetails);
+        $this->assertArrayHasKey('require_dev_packages', $composerFileDetails);
     }
 
     public function testPaymentProvidersInfo()
