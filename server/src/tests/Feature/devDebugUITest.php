@@ -39,13 +39,16 @@ class GernzyDevDebugUITest extends TestCase
     {
         $file = __DIR__ . "/../../../composer.json";
         $file2 = __DIR__ . "/../../../composer.lock";
-        $packages = json_decode(file_get_contents($file2), true)['packages'];
-        $requirePackages = json_decode(file_get_contents($file), true)['require'];
-        $requireDevPackages = json_decode(file_get_contents($file), true)['require-dev'];
 
-        $this->assertNotEmpty($packages);
-        $this->assertNotEmpty($requirePackages);
-        $this->assertNotEmpty($requireDevPackages);
+        $inspectorService = App::make('Gernzy\InspectorService');
+        $composerFileDetails = $inspectorService->composerPackages(
+            $file2,
+            $file
+        );
+
+
+        $this->assertNotEmpty($composerFileDetails);
+        $this->assertIsArray($composerFileDetails);
     }
 
     public function testPaymentProvidersInfo()
@@ -69,14 +72,13 @@ class GernzyDevDebugUITest extends TestCase
     public function testViewLogContents()
     {
         // Mock log file contents
+        $composerFile = File::get(__DIR__ . "/../mockFiles/laravel.log");
 
         // Test service
         $inspectorService = App::make('Gernzy\InspectorService');
-        $inspectorService->parseLogFile('some log file contents as a string');
-
-        $composerFile = File::get(__DIR__ . "/../mockFiles/laravel.log");
         $parsed = $inspectorService->parseLogFile($composerFile);
 
         $this->assertNotEmpty($parsed);
+        $this->assertIsArray($parsed);
     }
 }

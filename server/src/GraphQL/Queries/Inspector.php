@@ -33,7 +33,10 @@ class Inspector
     public function packages($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         // composer files and packages
-        $composerFileDetails = $this->inspectorService->composerPackages();
+        $composerFileDetails = $this->inspectorService->composerPackages(
+            base_path() . '\packages\gernzy\server\composer.lock',
+            base_path() . '\packages\gernzy\server\composer.json'
+        );
 
         // Payment providers
         $providerInfo = $this->inspectorService->paymentProviders();

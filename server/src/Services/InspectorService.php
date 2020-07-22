@@ -6,10 +6,10 @@ use \App;
 
 class InspectorService
 {
-    public function parseLogFile($composerFile)
+    public function parseLogFile($composerFileContents)
     {
         // Split up file for each log message into an array, based on [YYYY-MM-DD HH:MM:SS]
-        $logMessages = preg_split('/(?=\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*)/', $composerFile);
+        $logMessages = preg_split('/(?=\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}([\+-]\d{4})?\].*)/', $composerFileContents);
 
         if (strlen($logMessages[0]) < 1) {
             array_shift($logMessages);
@@ -18,19 +18,16 @@ class InspectorService
         return array_reverse($logMessages);
     }
 
-    public function composerPackages()
+    public function composerPackages($composerLockFilePath, $composerFilePath)
     {
-        $composerLockFile = base_path() . '\packages\gernzy\server\composer.lock';
-        $composerFile = base_path() . '\packages\gernzy\server\composer.json';
-
         try {
-            $lockFilePackages = json_decode(file_get_contents($composerLockFile), true)['packages'];
+            $lockFilePackages = json_decode(file_get_contents($composerLockFilePath), true)['packages'];
         } catch (\Throwable $th) {
             $lockFilePackages = '';
         }
 
         try {
-            $fileContents = file_get_contents($composerFile);
+            $fileContents = file_get_contents($composerFilePath);
             $requirePackages = json_decode($fileContents, true)['require'];
             $requireDevPackages = json_decode($fileContents, true)['require-dev'];
         } catch (\Throwable $th) {
