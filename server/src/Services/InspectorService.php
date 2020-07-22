@@ -3,6 +3,7 @@
 namespace Gernzy\Server\Services;
 
 use \App;
+use Illuminate\Support\Facades\File;
 
 class InspectorService
 {
@@ -46,18 +47,15 @@ class InspectorService
     {
         $publishableProviders = App::make('Gernzy\PublishableProviders');
 
-        // $paymentProviderServices = App::make('Gernzy\PaymentProviderServices');
-
         if (!$providers = config('payment_providers')) {
             $providers = '';
         }
-
 
         $paymentProviderInformation = [];
         foreach ($providers as $key => $value) {
             array_push($paymentProviderInformation, [
                 'provider_name' => $key,
-                'provider_log' => '',
+                'provider_log' => '', //TODO: how to access the service class associated with the provider?
                 'provider_class' => $value
             ]);
         }
@@ -75,5 +73,21 @@ class InspectorService
             array_push($logFileNames, basename($filename));
         }
         return $logFileNames;
+    }
+
+    public function searchLogFile($incomingFileNames, $keyword)
+    {
+        $result = [];
+        // Parse all files that have been specified in the args if they contain the keyword
+        foreach (glob(storage_path() . '/logs/*.log') as $filename) {
+            if (in_array(basename($filename), $incomingFileNames)) {
+                $logFile = File::get($filename);
+                if (preg_match("/{$keyword}/i", $logFile)) {
+                    array_push($result, basename($filename));
+                }
+            }
+        }
+
+        return $result;
     }
 }

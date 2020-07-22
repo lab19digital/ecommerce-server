@@ -84,18 +84,7 @@ class Inspector
     {
         $incomingFileNames = $args['filenames'];
         $keyword = $args['keyword'];
-        $result = [];
-
-        // Parse all files that have been specified in the args if they contain the keyword
-        foreach (glob(storage_path() . '/logs/*.log') as $filename) {
-            if (in_array(basename($filename), $incomingFileNames)) {
-                $logFile = File::get($filename);
-                if (preg_match("/{$keyword}/i", $logFile)) {
-                    array_push($result, basename($filename));
-                }
-            }
-        }
-
+        $result = $this->inspectorService->searchLogFile($incomingFileNames, $keyword);
         return json_encode($result);
     }
 }
