@@ -11,12 +11,22 @@ class GernzyDevDebugUITest extends TestCase
 {
     use WithFaker;
 
+
     public function setUp(): void
     {
         parent::setUp();
 
         // Mock local mode
         config(['app.env' => 'local']);
+    }
+
+    public function getMockFilePath()
+    {
+        if (file_exists(__DIR__ . "/../mockFiles/laravel.log")) {
+            return  __DIR__ . "/../mockFiles/laravel.log";
+        } else {
+            return "/home/travis/build/gernzy/gernzy/server/src/tests/mockFiles/laravel.log";
+        }
     }
 
     /**
@@ -71,7 +81,7 @@ class GernzyDevDebugUITest extends TestCase
     public function testViewLogContents()
     {
         // Mock log file contents
-        $composerFile = File::get(__DIR__ . "/../mockFiles/laravel.log");
+        $composerFile = File::get($this->getMockFilePath());
 
         // Test service
         $inspectorService = App::make('Gernzy\InspectorService');
@@ -88,7 +98,7 @@ class GernzyDevDebugUITest extends TestCase
 
         $incomingFileNames = ['laravel.log'];
         $keyword = 'stripe';
-        $filePaths = [__DIR__ . "/../mockFiles/laravel.log"];
+        $filePaths = [$this->getMockFilePath()];
         $result = $inspectorService->searchLogFile($incomingFileNames, $keyword, $filePaths);
 
         $this->assertNotEmpty($result);
