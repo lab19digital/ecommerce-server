@@ -22,12 +22,7 @@ class GernzyDevDebugUITest extends TestCase
 
     public function getMockFilePath()
     {
-        // if (file_exists(__DIR__ . "/../mockFiles/laravel.log")) {
-        //     return  __DIR__ . "/../mockFiles/laravel.log";
-        // } else {
-        //     return "/home/travis/build/gernzy/gernzy/server/src/tests/mockFiles/laravel.log";
-        // }
-        return __DIR__ . "/laravel.log";
+        return __DIR__ . "/laravelMock.log";
     }
 
     /**
