@@ -92,13 +92,13 @@ class GernzyDevDebugUITest extends TestCase
         // Test service
         $inspectorService = App::make('Gernzy\InspectorService');
 
-        $incomingFileNames = ['laravel.log'];
+        $incomingFileNames = ['laravelMock.log'];
         $keyword = 'stripe';
         $filePaths = [$this->getMockFilePath()];
         $result = $inspectorService->searchLogFile($incomingFileNames, $keyword, $filePaths);
 
         $this->assertNotEmpty($result);
         $this->assertIsArray($result);
-        $this->assertContains('laravel.log', $result);
+        $this->assertContains('laravelMock.log', $result);
     }
 }
