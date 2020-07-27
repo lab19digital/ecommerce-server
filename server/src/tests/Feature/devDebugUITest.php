@@ -58,7 +58,6 @@ class GernzyDevDebugUITest extends TestCase
         $paypalService = App::make('Paypal\PaypalService');
 
         $publishableProviders = App::make('Gernzy\PublishableProviders');
-        $paymentProviderServices = App::make('Gernzy\PaymentProviderServices');
 
         $this->assertNotEmpty($stripeService->providerName());
         $this->assertNotEmpty($stripeService->logFile());
@@ -67,7 +66,6 @@ class GernzyDevDebugUITest extends TestCase
         $this->assertNotEmpty($paypalService->logFile());
 
         $this->assertNotEmpty($publishableProviders);
-        $this->assertNotEmpty($paymentProviderServices);
     }
 
     public function testViewLogContents()
