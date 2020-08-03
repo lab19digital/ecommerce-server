@@ -5,14 +5,16 @@ namespace  Gernzy\Server\Packages\Paypal\Services;
 use \App;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
+use Gernzy\Server\Services\PaymentProviderInterface;
 use Illuminate\Support\Facades\Log;
 
-class PaypalService implements PaypalServiceInterface
+class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
 {
     public function capturePayment($orderID)
     {
         $captureOrderPaypal = App::make('Paypal\CaptureOrderPaypal');
         if (!$captureResponse = $captureOrderPaypal->captureOrder($orderID, false)) {
+            Log::error("Error on paypal response: {$captureResponse}\n", ['package' => "Paypal"]);
             return response()->json(['error' => 'Server error'], 400);
         }
 
@@ -20,9 +22,9 @@ class PaypalService implements PaypalServiceInterface
         $orderTransaction = OrderTransaction::where('transaction_data->paypal_data->result->id', $captureResponse->result->id)->first();
 
         if (!isset($orderTransaction)) {
-            Log::error('The transaction order data was not found for that successful payment.' + $captureResponse->result->id);
+            Log::error("The transaction order data was not found for that successful payment in Paypal: {$captureResponse->result->id}\n", ['package' => "Paypal"]);
             throw new GernzyException(
-                'The transaction order data was not found for that successful payment.',
+                'The transaction order data was not found for the successful payment in Paypal.',
                 ''
             );
         }
@@ -52,10 +54,22 @@ class PaypalService implements PaypalServiceInterface
         return $captureResponse;
     }
 
-    public function createOrder($debug = false, $cartTotal, $sessionCurrency)
+    public function createOrder($debug, $cartTotal, $sessionCurrency)
     {
         $createOrderPaypal = App::make('Paypal\CreateOrderPaypal');
         $response = $createOrderPaypal->createOrder($debug, $cartTotal, $sessionCurrency);
         return $response;
+    }
+
+
+    public function providerName()
+    {
+        return 'Paypal';
+    }
+
+
+    public function logFile()
+    {
+        return '../paypalLog.txt';
     }
 }

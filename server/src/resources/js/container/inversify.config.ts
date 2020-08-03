@@ -12,6 +12,8 @@ import { Cart } from '../cart';
 import { GernzyCart } from '../interfaces/cart';
 import { GernzyCheckout } from '../interfaces/checkout';
 import { Checkout } from '../checkout';
+import { Inspector } from '../inspector';
+import { GernzyInspector } from '../interfaces/inspector';
 
 const GernzyContainer = new Container();
 GernzyContainer.bind<StoreProducts>(TYPES.StoreProducts).to(Products);
@@ -20,5 +22,6 @@ GernzyContainer.bind<GernzySession>(TYPES.GernzySession).to(SessionService);
 GernzyContainer.bind<GernzyUser>(TYPES.GernzyUser).to(User);
 GernzyContainer.bind<GernzyCart>(TYPES.GernzyCart).to(Cart);
 GernzyContainer.bind<GernzyCheckout>(TYPES.GernzyCheckout).to(Checkout);
+GernzyContainer.bind<GernzyInspector>(TYPES.GernzyInspector).to(Inspector);
 
 export { GernzyContainer };

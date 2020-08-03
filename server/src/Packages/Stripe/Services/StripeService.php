@@ -4,10 +4,11 @@ namespace  Gernzy\Server\Packages\Stripe\Services;
 
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
+use Gernzy\Server\Services\PaymentProviderInterface;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
-class StripeService implements ServiceInterface
+class StripeService implements ServiceInterface, PaymentProviderInterface
 {
     public function __construct()
     {
@@ -19,6 +20,7 @@ class StripeService implements ServiceInterface
             return $paymentIntent->client_secret;
         }
 
+        Log::error("Stripe The response did not include a secret.", ['package' => $this->providerName()]);
         throw new GernzyException(
             'The response did not include a secret.',
             'Please recreate the intent.'
@@ -50,7 +52,7 @@ class StripeService implements ServiceInterface
         $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $paymentIntent->id)->first();
 
         if (!isset($orderTransaction)) {
-            Log::error('The transaction order data was not found for that successful payment.' + $paymentIntent->id);
+            Log::error('The transaction order data was not found for that successful payment stripe.' . $paymentIntent->id, ['package' => $this->providerName()]);
             throw new GernzyException(
                 'The transaction order data was not found for that successful payment.',
                 ''
@@ -101,15 +103,18 @@ class StripeService implements ServiceInterface
             );
         } catch (\UnexpectedValueException $e) {
             // Invalid payload
+            Log::debug('Invalid payload stripe.', ['package' => $this->providerName()]);
             return false;
         } catch (\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
+            Log::debug('Invalid signature stripe.', ['package' => $this->providerName()]);
             return false;
         }
 
         // Now check IP address of the request is from stripe. Note this won't work behind a proxy server
         $ipAddresses = $this->getStripeWebhookIPAdresses();
         if (!in_array($_SERVER['REMOTE_ADDR'], $ipAddresses)) {
+            Log::debug('Invalid IP address stripe.', ['package' => $this->providerName()]);
             return false;
         }
 
@@ -128,5 +133,16 @@ class StripeService implements ServiceInterface
         });
 
         return $stripe_webhooks_ips;
+    }
+
+    public function providerName()
+    {
+        return 'Stripe';
+    }
+
+
+    public function logFile()
+    {
+        return '../stripeLog.txt';
     }
 }

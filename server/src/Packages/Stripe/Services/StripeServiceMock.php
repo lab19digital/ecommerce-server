@@ -286,4 +286,15 @@ class StripeServiceMock implements ServiceInterface
             11 => "54.241.34.107"
         ];
     }
+
+    public function providerName()
+    {
+        return 'Paypal';
+    }
+
+
+    public function logFile()
+    {
+        return '../paypalLog.txt';
+    }
 }

@@ -5,6 +5,7 @@ namespace Gernzy\Server\Packages\Stripe\Http\Controllers;
 use \App;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Log;
 
 class WebhookController extends BaseController
 {
@@ -18,8 +19,10 @@ class WebhookController extends BaseController
     {
         $payload = $request->getContent();
         $stripeService = App::make('Stripe\StripeService');
+        $providerName = $stripeService->providerName() ?? 'Stripe';
 
         if (!$event = $stripeService->securityChecks($payload)) {
+            Log::error("failed stripe security checks: " . $payload, ['package' => $providerName]);
             return response('Success', 400);
         }
 
@@ -32,6 +35,7 @@ class WebhookController extends BaseController
                 // ... handle other event types
             default:
                 // Unexpected event type
+                Log::error("failed stripe event:  " . $event, ['package' => $providerName]);
                 return response('Error', 400);
         }
 

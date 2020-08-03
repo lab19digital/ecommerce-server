@@ -26,18 +26,23 @@ class CreateOrderPaypal
         // 3. Call PayPal to set up a transaction
         $client = PayPalClient::client();
         $response = $client->execute($request);
-        if ($debug) {
-            Log::debug("Status Code: {$response->statusCode}\n");
-            Log::debug("Status: {$response->result->status}\n");
-            Log::debug("Order ID: {$response->result->id}\n");
-            Log::debug("Intent: {$response->result->intent}\n");
-            Log::debug("Links:\n");
+
+        $paypalService = App::make('Paypal\PaypalService');
+        $providerName = $paypalService->providerName() ?? 'Paypal';
+
+
+        if ($debug || $response->statusCode != 201) {
+            Log::debug("Status Code: {$response->statusCode}\n", ['package' => $providerName]);
+            Log::debug("Status: {$response->result->status}\n", ['package' => $providerName]);
+            Log::debug("Order ID: {$response->result->id}\n", ['package' => $providerName]);
+            Log::debug("Intent: {$response->result->intent}\n", ['package' => $providerName]);
+            Log::debug("Links:\n", ['package' => $providerName]);
             foreach ($response->result->links as $link) {
-                Log::debug("\t{$link->rel}: {$link->href}\tCall Type: {$link->method}\n");
+                Log::debug("\t{$link->rel}: {$link->href}\tCall Type: {$link->method}\n", ['package' => $providerName]);
             }
 
             // To Log::debug() the whole response body, uncomment the following line
-            Log::debug(json_encode($response->result, JSON_PRETTY_PRINT));
+            Log::debug(json_encode($response->result, JSON_PRETTY_PRINT), ['package' => $providerName]);
         }
 
         // 4. Return a successful response to the client.

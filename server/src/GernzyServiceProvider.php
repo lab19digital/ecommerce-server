@@ -16,6 +16,7 @@ use Gernzy\Server\Services\CartService;
 use Gernzy\Server\Services\CurrencyConversionInterface;
 use Gernzy\Server\Services\GeolocationInterface;
 use Gernzy\Server\Services\GeolocationService;
+use Gernzy\Server\Services\InspectorService;
 use Gernzy\Server\Services\MaxmindGeoIP2;
 use Gernzy\Server\Services\OpenExchangeRates;
 use Gernzy\Server\Services\OrderService;
@@ -42,6 +43,7 @@ class GernzyServiceProvider extends ServiceProvider
 
         // Register core packages
         $this->app->register(AuthServiceProvider::class);
+        $this->app->register(GernzyPaymentProvider::class);
 
         // Some configuration needs to be overriden by the cart
         // plugin, rather than from within the Laravel app itself
@@ -81,6 +83,7 @@ class GernzyServiceProvider extends ServiceProvider
         $this->app->bind('Gernzy\OrderService', OrderService::class);
         $this->app->bind('Gernzy\ServerService', CartService::class);
         $this->app->bind('Gernzy\GeolocationService', GeolocationService::class);
+        $this->app->bind('Gernzy\InspectorService', InspectorService::class);
 
         $this->app->bind('GuzzleHttp\Client', function ($app, array $parameters) {
             return new Client([
@@ -102,6 +105,11 @@ class GernzyServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/config/currency.php', 'currency');
         $this->mergeConfigFrom(__DIR__ . '/config/events.php', 'events');
         $this->mergeConfigFrom(__DIR__ . '/config/api.php', 'api');
+
+        // Inspector info
+        $this->app->bind('Gernzy\PublishableProviders', function ($app) {
+            return $this->publishableProviders();
+        });
     }
 
     /**
