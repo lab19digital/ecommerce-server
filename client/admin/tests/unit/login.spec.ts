@@ -5,7 +5,7 @@ import createStore from "../../src/store/store";
 import {
   createLocalVue,
   createApolloTestProvider,
-  makeGetInitialState
+  makeGetInitialState,
 } from "./helper";
 
 const localVue = createLocalVue();
@@ -21,12 +21,12 @@ describe("Login", () => {
 
   test("should render content correctly", () => {
     const wrapper = mount(Login, {
-      apolloProvider
+      apolloProvider,
     });
     expect(wrapper.find('label[for="email"]').text()).toEqual("Username");
   });
 
-  test("can handle successful login when submit button is clicked", async function(done) {
+  test("can handle successful login when submit button is clicked", async function (done) {
     const elem = document.createElement("div");
     if (document.body) {
       document.body.appendChild(elem);
@@ -36,7 +36,7 @@ describe("Login", () => {
       store,
       localVue,
       apolloProvider,
-      attachTo: elem
+      attachTo: elem,
     });
     const email = wrapper.find("#email");
     const passw = wrapper.find("#password");
@@ -45,12 +45,13 @@ describe("Login", () => {
     wrapper.find('button[type="submit"]').trigger("click");
 
     await Vue.nextTick();
+    // @ts-ignore
     expect(store.state.session.has_active_session).toEqual(true);
     wrapper.destroy();
     done();
   });
 
-  test("can handle failed login when submit button is clicked", async function(done) {
+  test("can handle failed login when submit button is clicked", async function (done) {
     const elem = document.createElement("div");
     if (document.body) {
       document.body.appendChild(elem);
@@ -60,7 +61,7 @@ describe("Login", () => {
       store,
       localVue,
       apolloProvider,
-      attachTo: elem
+      attachTo: elem,
     });
     const email = wrapper.find("#email");
     const passw = wrapper.find("#password");
@@ -69,6 +70,7 @@ describe("Login", () => {
     wrapper.find('button[type="submit"]').trigger("click");
 
     await Vue.nextTick();
+    // @ts-ignore
     expect(store.state.session.has_active_session).toEqual(false);
     wrapper.destroy();
     done();

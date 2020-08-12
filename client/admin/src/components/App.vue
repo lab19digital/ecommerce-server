@@ -1,5 +1,5 @@
 <template>
-	<div>
+  <div>
     <ul class="uk-navbar-nav">
       <li><router-link to="/">Root</router-link></li>
       <li><router-link to="/login">Login</router-link></li>
@@ -7,9 +7,11 @@
     <div>
       <router-view></router-view>
     </div>
-	</div>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
+import { Vue } from "vue-property-decorator";
 
+export default class App extends Vue {}
 </script>
