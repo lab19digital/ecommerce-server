@@ -6,6 +6,7 @@ import createRouter from "./router";
 import "@/assets/scss/app.scss";
 import createStore from "./store/store";
 import { createProvider } from "./vue-apollo";
+import "@/assets/styles/tailwindcss.css";
 
 // Use 3rd party libraries
 Vue.use(VueRouter);

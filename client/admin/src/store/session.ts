@@ -2,6 +2,7 @@ interface State {
   has_active_session: Boolean;
   token: string | null;
   user: any;
+  name: any;
 }
 export default {
   state: {
@@ -11,8 +12,9 @@ export default {
   },
 
   mutations: {
-    logIn(state: State) {
+    logIn(state: State, { user, token }: any) {
       state.has_active_session = true;
+      state.name = user.name;
     },
     clearSession(state: State) {
       state.has_active_session = false;

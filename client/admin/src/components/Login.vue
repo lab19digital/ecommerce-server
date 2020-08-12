@@ -1,89 +1,115 @@
 <template>
-  <div class="uk-box-shadow-small gernzy-login uk-padding">
-    <form @submit="checkForm">
-      <div class="uk-alert uk-alert-danger uk-margin-top" v-if="errors.length">
-        <p  v-for="(error, key) in errors" :key="key">{{ error }}</p>
-      </div>
-      <div class="uk-margin-top">
-        <label for="email">
+  <div class="w-full max-w-xs">
+    <form
+      class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+      @submit="checkForm"
+    >
+      <div class="mb-4">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="username"
+        >
           Username
         </label>
-        <input id="email" type="text" placeholder="Email" v-model="email" class="uk-input">
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="username"
+          type="text"
+          placeholder="Username"
+          v-model="email"
+        />
       </div>
-      <div class="uk-margin-top">
-        <label for="password">
+      <div class="mb-6">
+        <label
+          class="block text-gray-700 text-sm font-bold mb-2"
+          for="password"
+        >
           Password
         </label>
-        <input id="password" type="password" placeholder="Password" v-model="password" class="uk-input">
+        <input
+          class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+          id="password"
+          type="password"
+          placeholder="******************"
+          v-model="password"
+        />
+        <p class="text-red-500 text-xs italic">Please choose a password.</p>
       </div>
-      <div class="uk-margin-top">
-        <Button text="Sign in" type="submit" class="uk-button uk-button-primary" />
+      <div class="flex items-center justify-between">
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+        >
+          Sign In
+        </button>
+        <a
+          class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+          href="#"
+        >
+          Forgot Password?
+        </a>
       </div>
     </form>
-    <p>
-      &copy;2019 Gernzy. All rights reserved
+    <p class="text-center text-gray-500 text-xs">
+      &copy;2020 Gernzy. All rights reserved.
     </p>
+    <div>Name: {{ name }}</div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
+import gql from "graphql-tag";
 
-  import { mapState } from 'vuex'
-  import gql from 'graphql-tag'
-  import Button from './Button.vue'
+export default {
+  components: {},
+  data: () => ({
+    email: "",
+    password: "",
+    errors: [],
+  }),
+  computed: mapState({
+    name: (state) => state.session.name,
+  }),
+  methods: {
+    checkForm: async function (event) {
+      event.preventDefault();
+      const { email, password } = this;
+      if (!email || !password) {
+        this.errors = ["Please complete your email and password"];
+        return;
+      }
 
-  export default {
-    components: {
-      Button,
-    },
-    data: () => ({
-      email: '',
-      password: '',
-      errors: [],
-    }),
-    computed: mapState({
-      name: state => state.session.name
-    }),
-    methods: {
-      checkForm: async function ( event ){
-        event.preventDefault();
-        const { email, password } = this
-        if( !email || !password ){
-          this.errors = [
-            'Please complete your email and password'
-          ]
-          return
-        }
+      this.errors = [];
 
-        this.errors = []
-
-        try {
-          const result = await this.$apollo.mutate({
-            mutation: gql`mutation ($email: String!, $password: String!) {
-              logIn( input: {
-                email: $email,
-                password: $password
-              }){
-                user { id }
+      try {
+        const result = await this.$apollo.mutate({
+          mutation: gql`
+            mutation($email: String!, $password: String!) {
+              logIn(input: { email: $email, password: $password }) {
+                user {
+                  id
+                  name
+                }
                 token
               }
-            }`,
-            // Parameters
-            variables: {
-              email,
-              password,
-            },
-          })
+            }
+          `,
+          // Parameters
+          variables: {
+            email,
+            password,
+          },
+        });
 
-          const { errors } = this.$store.dispatch('logIn', result)
-          if( errors ){
-            this.errors = errors
-          }
-        } catch(e){
-          console.log(e)
+        const { errors } = this.$store.dispatch("logIn", result);
+        if (errors) {
+          this.errors = errors;
         }
+      } catch (e) {
+        console.log(e);
       }
-    }
-  }
-
+    },
+  },
+};
 </script>

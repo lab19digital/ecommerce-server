@@ -11,7 +11,6 @@ import {
 const localVue = createLocalVue();
 const store = createStore();
 const apolloProvider = createApolloTestProvider();
-const attachToDocument = true;
 const getInitialState = makeGetInitialState(store);
 
 describe("Login", () => {
