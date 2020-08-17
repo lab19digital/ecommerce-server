@@ -1,8 +1,9 @@
-import Vuex from 'vuex'
-import session from './session'
+import Vuex from "vuex";
+import { session } from "./session";
 
-export default () => new Vuex.Store({
-  modules: {
-    session
-  }
-})
+export default () =>
+  new Vuex.Store({
+    modules: {
+      session,
+    },
+  });

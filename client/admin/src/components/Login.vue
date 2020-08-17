@@ -51,7 +51,7 @@
       </div>
     </form>
     <p class="text-center text-gray-500 text-xs">
-      &copy;2020 Gernzy. All rights reserved.
+      &copy;{{ dateYear }} Gernzy. All rights reserved.
     </p>
 
     <!-- Success -->
@@ -93,60 +93,72 @@
   </div>
 </template>
 
-<script>
-import { mapState } from "vuex";
+<script lang="ts">
+import Vue from "vue";
+import { Component } from "vue-property-decorator";
+import { Getter, Action, namespace } from "vuex-class";
 import gql from "graphql-tag";
 
-export default {
-  components: {},
-  data: () => ({
-    email: "",
-    password: "",
-    errors: [],
-  }),
-  computed: mapState({
-    name: (state) => state.session.name,
-    activeSesssion: (state) => state.session.has_active_session,
-  }),
-  methods: {
-    checkForm: async function (event) {
-      event.preventDefault();
-      const { email, password } = this;
-      if (!email || !password) {
-        this.errors = ["Please complete your email and password"];
-        return;
-      }
+const SessionGetter = namespace("session", Getter);
+const SessionAction = namespace("session", Action);
 
-      this.errors = [];
+@Component
+export default class Login extends Vue {
+  private email: string = "";
+  private password: string = "";
+  private errors: any[] = [];
 
-      try {
-        const result = await this.$apollo.mutate({
-          mutation: gql`
-            mutation($email: String!, $password: String!) {
-              logIn(input: { email: $email, password: $password }) {
-                user {
-                  id
-                  name
-                }
-                token
+  // @ts-ignore
+  @SessionGetter("has_active_session") activeSesssion;
+  // @ts-ignore
+  @SessionGetter name;
+  // @ts-ignore
+  @SessionAction logIn;
+  // @ts-ignore
+  @SessionAction clearSession;
+
+  public async checkForm(event: any): Promise<any> {
+    event.preventDefault();
+    const { email, password } = this;
+    if (!email || !password) {
+      this.errors = ["Please complete your email and password"];
+      return;
+    }
+    this.errors = [];
+    try {
+      const result = await this.$apollo.mutate({
+        mutation: gql`
+          mutation($email: String!, $password: String!) {
+            logIn(input: { email: $email, password: $password }) {
+              user {
+                id
+                name
               }
+              token
             }
-          `,
-          // Parameters
-          variables: {
-            email,
-            password,
-          },
-        });
+          }
+        `,
+        // Parameters
+        variables: {
+          email,
+          password,
+        },
+      });
 
-        const { errors } = this.$store.dispatch("logIn", result);
-        if (errors) {
-          this.errors = errors;
-        }
-      } catch (e) {
-        console.log(e);
+      // @ts-ignore
+      const { errors } = this.logIn(result);
+      if (errors) {
+        this.errors = errors;
       }
-    },
-  },
-};
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  get dateYear(): string {
+    const today: any = new Date();
+    const date: any = today.getFullYear();
+    return date;
+  }
+}
 </script>
