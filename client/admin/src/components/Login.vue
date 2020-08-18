@@ -52,40 +52,13 @@
     </p>
 
     <!-- Success -->
-    <div
-      v-if="activeSesssion"
-      class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md"
-      role="alert"
-    >
-      <div class="flex">
-        <div class="py-1">
-          <svg
-            class="fill-current h-6 w-6 text-teal-500 mr-4"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-          >
-            <path
-              d="M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zm12.73-1.41A8 8 0 1 0 4.34 4.34a8 8 0 0 0 11.32 11.32zM9 11V9h2v6H9v-4zm0-6h2v2H9V5z"
-            />
-          </svg>
-        </div>
-        <div>
-          <p class="font-bold">You successfully logged in</p>
-          <p class="text-sm">Welcome to the admin panel {{ name }}</p>
-        </div>
-      </div>
+    <div v-if="activeSesssion">
+      <SuccessNotification :msg="name" />
     </div>
 
     <!-- Failed -->
-    <div v-if="errors.length" role="alert">
-      <div class="bg-red-500 text-white font-bold rounded-t px-4 py-2">
-        An error occurred
-      </div>
-      <div
-        class="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700"
-      >
-        <p v-for="(error, key) in errors" :key="key">{{ error }}</p>
-      </div>
+    <div v-if="errors.length">
+      <ErrorNotification :errors="errors" />
     </div>
   </div>
 </template>
@@ -94,30 +67,33 @@
 import { Component, Vue } from "vue-property-decorator";
 import { Getter, Action, namespace } from "vuex-class";
 import gql from "graphql-tag";
+import SuccessNotification from "@/components/SuccessNotification.vue";
+import ErrorNotification from "@/components/ErrorNotification.vue";
 
 const SessionGetter = namespace("session", Getter);
 const SessionAction = namespace("session", Action);
 
-@Component
+@Component({
+  components: {
+    SuccessNotification,
+    ErrorNotification,
+  },
+})
 export default class Login extends Vue {
   private email: string = "";
   private password: string = "";
   private errors: any[] = [];
 
-  // @ts-ignore
-  @SessionGetter("has_active_session") activeSesssion;
-  // @ts-ignore
-  @SessionGetter name;
-  // @ts-ignore
-  @SessionAction logIn;
-  // @ts-ignore
-  @SessionAction clearSession;
+  @SessionGetter("has_active_session") activeSesssion: any;
+  @SessionGetter name: any;
+  @SessionAction logIn: any;
+  @SessionAction clearSession: any;
 
   public async checkForm(event: any): Promise<any> {
     event.preventDefault();
     const { email, password } = this;
     if (!email || !password) {
-      this.errors = ["Please complete your email and password"];
+      this.errors.push("Please complete your email and password");
       return;
     }
     this.errors = [];
@@ -148,6 +124,7 @@ export default class Login extends Vue {
       }
     } catch (e) {
       console.log(e);
+      this.errors.push(e);
     }
   }
 
