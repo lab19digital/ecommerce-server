@@ -19,7 +19,12 @@ describe("Login", () => {
   });
 
   test("should render content correctly", () => {
+    // const wrapper = mount(Login, {
+    //   apolloProvider,
+    // });
     const wrapper = mount(Login, {
+      store,
+      localVue,
       apolloProvider,
     });
     expect(wrapper.find('label[for="email"]').text()).toEqual("Username");
