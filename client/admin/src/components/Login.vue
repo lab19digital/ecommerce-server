@@ -53,7 +53,7 @@
 
     <!-- Success -->
     <div v-if="activeSesssion">
-      <SuccessNotification :msg="name" />
+      <SuccessNotification :msg="user.name" />
     </div>
 
     <!-- Failed -->
@@ -85,9 +85,9 @@ export default class Login extends Vue {
   private errors: any[] = [];
 
   @SessionGetter("has_active_session") activeSesssion: any;
-  @SessionGetter name: any;
   @SessionAction logIn: any;
   @SessionAction clearSession: any;
+  @SessionGetter user: any;
 
   public async checkForm(event: any): Promise<any> {
     event.preventDefault();

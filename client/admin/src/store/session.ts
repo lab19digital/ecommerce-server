@@ -4,7 +4,6 @@ import { RootState, SessionState } from "./types";
 type SessionGetter = GetterTree<SessionState, RootState>;
 
 export const state: SessionState = {
-  name: null,
   email: null,
   has_active_session: false,
   token: null,
@@ -13,13 +12,14 @@ export const state: SessionState = {
 
 export const getters: SessionGetter = {
   has_active_session: (state) => state.has_active_session,
-  name: (state) => state.name,
+  user: (state) => state.user,
 };
 
 export const mutations: MutationTree<SessionState> = {
   logIn(state, { user, token }) {
     state.has_active_session = true;
-    state.name = user.name;
+    state.token = token;
+    state.user = user;
   },
   clearSession(state) {
     state.has_active_session = false;

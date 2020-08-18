@@ -6,7 +6,6 @@ export interface RootState {
 }
 
 export interface SessionState {
-  name: string | null;
   email: string | null;
   has_active_session: Boolean;
   token: string | null;
