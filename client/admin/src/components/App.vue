@@ -1,18 +1,6 @@
 <template>
   <div>
-    <ul class="flex">
-      <li class="mr-6">
-        <router-link class="text-blue-500 hover:text-blue-800" to="/"
-          >Root</router-link
-        >
-      </li>
-      <li class="mr-6">
-        <router-link class="text-blue-500 hover:text-blue-800" to="/login"
-          >Login</router-link
-        >
-      </li>
-    </ul>
-
+    <Navigation />
     <div>
       <router-view></router-view>
     </div>
@@ -20,7 +8,13 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
+import Navigation from "@/components/Navigation.vue";
 
+@Component({
+  components: {
+    Navigation,
+  },
+})
 export default class App extends Vue {}
 </script>

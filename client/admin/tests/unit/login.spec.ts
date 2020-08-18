@@ -19,9 +19,6 @@ describe("Login", () => {
   });
 
   test("should render content correctly", () => {
-    // const wrapper = mount(Login, {
-    //   apolloProvider,
-    // });
     const wrapper = mount(Login, {
       store,
       localVue,
