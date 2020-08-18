@@ -1,9 +1,9 @@
 import { GetterTree, MutationTree, ActionTree, Module } from "vuex";
-// import { RootState, SessionState, Session } from "../types";
+import { RootState, SessionState } from "./types";
 
-// type SessionGetter = GetterTree<SessionState, RootState>;
+type SessionGetter = GetterTree<SessionState, RootState>;
 
-export const state: any = {
+export const state: SessionState = {
   name: null,
   email: null,
   has_active_session: false,
@@ -11,12 +11,12 @@ export const state: any = {
   user: null,
 };
 
-export const getters: GetterTree<any, any> = {
+export const getters: SessionGetter = {
   has_active_session: (state) => state.has_active_session,
   name: (state) => state.name,
 };
 
-export const mutations: MutationTree<any> = {
+export const mutations: MutationTree<SessionState> = {
   logIn(state, { user, token }) {
     state.has_active_session = true;
     state.name = user.name;
@@ -28,7 +28,7 @@ export const mutations: MutationTree<any> = {
   },
 };
 
-export const actions: ActionTree<any, any> = {
+export const actions: ActionTree<SessionState, RootState> = {
   logIn({ commit }: any, { errors, data }: any) {
     if (!errors && data.logIn.user) {
       const { user, token } = data.logIn;
