@@ -51,9 +51,12 @@
       &copy;{{ dateYear }} Gernzy. All rights reserved.
     </p>
 
-    <!-- Success -->
-    <div v-if="activeSesssion">
-      <SuccessNotification :msg="user.name" />
+    <!-- Success login admin user-->
+    <div v-if="activeSesssion && user.is_admin">
+      <SuccessNotification
+        title="You successfully logged in"
+        v-bind:msg="'Welcome to the admin panel ' + user.name"
+      />
     </div>
 
     <!-- Failed -->
@@ -98,30 +101,32 @@ export default class Login extends Vue {
     }
     this.errors = [];
     try {
-      const result = await this.$apollo.mutate({
-        mutation: gql`
-          mutation($email: String!, $password: String!) {
-            logIn(input: { email: $email, password: $password }) {
-              user {
-                id
-                name
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation($email: String!, $password: String!) {
+              logIn(input: { email: $email, password: $password }) {
+                user {
+                  id
+                  name
+                  is_admin
+                }
+                token
               }
-              token
             }
+          `,
+          // Parameters
+          variables: {
+            email,
+            password,
+          },
+        })
+        .then((data: any) => {
+          const { errors } = this.logIn(data);
+          if (errors) {
+            this.errors = errors;
           }
-        `,
-        // Parameters
-        variables: {
-          email,
-          password,
-        },
-      });
-
-      // @ts-ignore
-      const { errors } = this.logIn(result);
-      if (errors) {
-        this.errors = errors;
-      }
+        });
     } catch (e) {
       console.log(e);
       this.errors.push(e);

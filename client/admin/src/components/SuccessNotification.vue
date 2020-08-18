@@ -17,8 +17,8 @@
           </svg>
         </div>
         <div>
-          <p class="font-bold">You successfully logged in</p>
-          <p class="text-sm">Welcome to the admin panel {{ msg }}</p>
+          <p class="font-bold">{{ title }}</p>
+          <p class="text-sm">{{ msg }}</p>
         </div>
       </div>
     </div>
@@ -30,6 +30,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component
 export default class SuccessNotification extends Vue {
+  @Prop() readonly title!: string;
   @Prop() readonly msg!: string;
 }
 </script>
