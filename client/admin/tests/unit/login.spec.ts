@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { mount } from "@vue/test-utils";
-import Login from "../../src/components/login.vue";
-import createStore from "../../src/store/store";
+import Login from "@/views/login.vue";
+import createStore from "@/store/store";
 import {
   createLocalVue,
   createApolloTestProvider,
