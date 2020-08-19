@@ -2,7 +2,7 @@ import Vue from "vue";
 import App from "./components/App.vue";
 import VueRouter from "vue-router";
 import Vuex from "vuex";
-import createRouter from "./router";
+import createRouter from "@/router/router";
 import "@/assets/scss/app.scss";
 import createStore from "./store/store";
 import { createProvider } from "./vue-apollo";
