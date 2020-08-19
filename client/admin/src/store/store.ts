@@ -5,9 +5,6 @@ import { session } from "./session";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    blah: "blahsfodfnao",
-  },
   modules: {
     session,
   },
