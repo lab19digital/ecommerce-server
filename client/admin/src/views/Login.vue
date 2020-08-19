@@ -67,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { Getter, Action, namespace } from "vuex-class";
 import gql from "graphql-tag";
 import SuccessNotification from "@/components/SuccessNotification.vue";
@@ -138,6 +138,17 @@ export default class Login extends Vue {
     const today: any = new Date();
     const date: any = today.getFullYear();
     return date;
+  }
+
+  @Watch("$route", { immediate: true, deep: true })
+  onUrlChange(to: any) {
+    try {
+      if (to.query.redirectFrom) {
+        this.errors.push("Sorry, you have to login first!");
+      }
+    } catch (error) {
+      console.log("Login.vue onUrlChange(to: any)   " + error);
+    }
   }
 }
 </script>

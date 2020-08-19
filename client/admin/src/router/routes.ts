@@ -7,8 +7,9 @@ export default [
     path: "/dashboard",
     component: Dashboard,
     beforeEnter: (to: any, from: any, next: any) => {
-      // @ts-ignore
-      if (store.state.session.has_active_session === false) {
+      let authenticated = store.getters["session/has_active_session"];
+
+      if (authenticated === false) {
         next({
           path: "/login", // back to safety
           query: {
