@@ -1,7 +1,7 @@
 <?php
 
 return [
-     /*
+    /*
      |--------------------------------------------------------------------------
      | Laravel CORS
      |--------------------------------------------------------------------------
@@ -10,6 +10,7 @@ return [
      | to accept any value.
      |
      */
+    'paths' => ['/*'],
     'supportsCredentials' => false,
     'allowedOrigins' => ['*'],
     'allowedHeaders' => ['Content-Type', 'X-Requested-With'],

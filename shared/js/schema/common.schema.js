@@ -37,6 +37,9 @@ const directives = `
   directive @all(
     model: String
   ) on FIELD_DEFINITION
+  directive @in(
+    key: String
+  ) on ARGUMENT_DEFINITION
 `;
 
 export default directives;
