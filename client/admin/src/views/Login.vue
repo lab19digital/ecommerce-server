@@ -126,7 +126,13 @@ export default class Login extends Vue {
           if (errors) {
             console.log(JSON.stringify(data));
             this.errors = errors;
+            return;
           }
+
+          let self = this;
+          setTimeout(function () {
+            self.$router.push({ path: "/dashboard" });
+          }, 3000);
         });
     } catch (e) {
       console.log(e);
