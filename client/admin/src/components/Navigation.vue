@@ -41,6 +41,11 @@
             to="/login"
             >Login</router-link
           >
+          <router-link
+            class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+            to="/dashboard"
+            >Dashboard</router-link
+          >
         </div>
         <div>
           <router-link

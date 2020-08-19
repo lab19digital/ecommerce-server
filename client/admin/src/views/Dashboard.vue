@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto max-w-lg p-6">
-    <h1>Dashboard</h1>
+    <h1 class="text-lg">Dashboard</h1>
   </div>
 </template>
 
