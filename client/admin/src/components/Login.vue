@@ -124,6 +124,7 @@ export default class Login extends Vue {
         .then((data: any) => {
           const { errors } = this.logIn(data);
           if (errors) {
+            console.log(JSON.stringify(data));
             this.errors = errors;
           }
         });
