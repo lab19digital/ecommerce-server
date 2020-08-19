@@ -8,11 +8,16 @@ export default [
     component: Dashboard,
     beforeEnter: (to: any, from: any, next: any) => {
       // @ts-ignore
-      console.log(store.state.blah);
-      // @ts-ignore
-      console.log(store.state.session.has_active_session);
-
-      next();
+      if (store.state.session.has_active_session === false) {
+        next({
+          path: "/login", // back to safety
+          query: {
+            redirectFrom: to.fullPath,
+          },
+        });
+      } else {
+        next();
+      }
     },
   },
   {
