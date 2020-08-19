@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { mount } from "@vue/test-utils";
 import Login from "@/views/login.vue";
-import createStore from "@/store/store";
+import store from "@/store/store";
 import {
   createLocalVue,
   createApolloTestProvider,
@@ -9,7 +9,7 @@ import {
 } from "./helper";
 
 const localVue = createLocalVue();
-const store = createStore();
+// const store = createStore();
 const apolloProvider = createApolloTestProvider();
 const getInitialState = makeGetInitialState(store);
 

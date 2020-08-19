@@ -9,6 +9,8 @@ export default [
     beforeEnter: (to: any, from: any, next: any) => {
       // @ts-ignore
       console.log(store.state.blah);
+      // @ts-ignore
+      console.log(store.state.session.has_active_session);
 
       next();
     },
