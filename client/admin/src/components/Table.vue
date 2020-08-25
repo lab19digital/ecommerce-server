@@ -32,11 +32,11 @@
         <thead>
           <tr>
             <th
-              v-for="(productOption, key) in productOptions"
+              v-for="(tableColum, key) in tableColums"
               :key="key"
               class="px-4 py-2"
             >
-              {{ productOption }}
+              {{ tableColum }}
             </th>
 
             <th class="px-4 py-2">
@@ -51,7 +51,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="(product, key) in products"
+            v-for="(product, key) in productsDisplay"
             :key="key"
             v-bind:class="{ 'bg-gray-200': even(key) }"
           >
@@ -72,7 +72,6 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import ErrorNotification from "@/components/ErrorNotification.vue";
-
 import gql from "graphql-tag";
 
 @Component({
@@ -82,9 +81,13 @@ import gql from "graphql-tag";
 })
 export default class Table extends Vue {
   private errors: any[] = [];
-  private products: any[] = [];
   private showSettings: Boolean = false;
+
+  private products: any[] = [];
+  private productsDisplay: any[] = [];
+
   private productOptions: any[] = [];
+  private tableColums: any[] = [];
 
   @Prop() readonly exampleProp!: string;
 
@@ -92,9 +95,24 @@ export default class Table extends Vue {
     return key % 2 == 0;
   }
 
-  public checked(event: any): Boolean {
+  public checked(event: any): void {
     console.log(event.target.value);
-    return true;
+    let value = event.target.value;
+    this.tableColums.push(value);
+
+    let tableColums = this.tableColums;
+
+    let newArray = this.products.map(function (product: any) {
+      let returnObject: any = {};
+
+      tableColums.forEach((element: any) => {
+        returnObject[element] = product[element];
+      });
+
+      return returnObject;
+    });
+
+    this.productsDisplay = newArray;
   }
 
   async mounted() {
