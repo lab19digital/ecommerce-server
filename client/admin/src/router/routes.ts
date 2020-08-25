@@ -7,16 +7,24 @@ export default [
     path: "/dashboard",
     component: Dashboard,
     beforeEnter: (to: any, from: any, next: any) => {
-      let authenticated = store.getters["session/has_active_session"];
-      let user = store.getters["session/user"];
+      /**
+       * Persist the session data from vuex mutation for use
+       * */
+
       let is_admin = 0;
+      let token = 0;
+
       try {
-        is_admin = user.is_admin;
+        if (localStorage.getItem("session")) {
+          let session = JSON.parse(localStorage.getItem("session") || "");
+          token = session.token.length;
+          is_admin = session.user.is_admin;
+        }
       } catch (error) {
-        is_admin = 0;
+        console.log(error);
       }
 
-      if (authenticated === false || is_admin === 0) {
+      if (token <= 0 || is_admin == 0) {
         next({
           path: "/login", // back to safety
           query: {

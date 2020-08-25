@@ -26,6 +26,11 @@ export const mutations: MutationTree<SessionState> = {
     state.token = null;
     state.user = null;
   },
+  setLocalStorageLogin(state) {
+    let timeStamp = { timestamp: new Date().getTime() };
+    let sessionData = { ...state, ...timeStamp };
+    localStorage.setItem("session", JSON.stringify(sessionData));
+  },
 };
 
 export const actions: ActionTree<SessionState, RootState> = {
@@ -33,6 +38,11 @@ export const actions: ActionTree<SessionState, RootState> = {
     if (!errors && data.logIn.user) {
       const { user, token } = data.logIn;
       commit("logIn", {
+        user,
+        token,
+      });
+
+      commit("setLocalStorageLogin", {
         user,
         token,
       });
