@@ -4,6 +4,14 @@
       <ErrorNotification :errors="errors" />
     </div>
 
+    <button
+      @click="showSettings = !showSettings"
+      class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
+    >
+      <p v-if="!showSettings">Show settings</p>
+      <p v-if="showSettings">Close settings</p>
+    </button>
+
     <transition
       enter-active-class="transition duration-1000 ease-out"
       leave-active-class="transition duration-75 ease-in"
@@ -27,7 +35,7 @@
       </div>
     </transition>
 
-    <div class="overflow-auto">
+    <div class="overflow-auto my-4">
       <table class="table-auto">
         <thead>
           <tr>
@@ -37,15 +45,6 @@
               class="px-4 py-2"
             >
               {{ tableColum }}
-            </th>
-
-            <th class="px-4 py-2">
-              <button
-                @click="showSettings = !showSettings"
-                class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow"
-              >
-                Settings
-              </button>
             </th>
           </tr>
         </thead>
@@ -96,9 +95,30 @@ export default class Table extends Vue {
   }
 
   public checked(event: any): void {
-    console.log(event.target.value);
+    let checked = event.target.checked;
     let value = event.target.value;
-    this.tableColums.push(value);
+
+    /**
+     * Based on whether the attribute of the product is selected in the settings panel, add or remove the product attribute from the
+     * tableColums array
+     */
+
+    if (checked) {
+      this.tableColums.push(value);
+    } else {
+      var index = this.tableColums.indexOf(value);
+      if (index > -1) {
+        this.tableColums.splice(index, 1);
+      }
+    }
+
+    /**
+     * I have an original array (this.products) and another array (this.productsDisplay) , the products array will never be
+     * changed, only the selected values from the settings panel will be used to filter data from the original products array
+     * back into the productsDisplay array and then appear in the ui to the user.
+     *
+     * The products array will keep all the data from graphql query that returns the product attributes.
+     */
 
     let tableColums = this.tableColums;
 
