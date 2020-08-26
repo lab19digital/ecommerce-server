@@ -8,6 +8,15 @@ extend type Query {
             builder: "Gernzy\\Server\\GraphQL\\Builders\\ProductsBuilder@search"
         )
 
+    adminProducts(input: ProductsQueryInput): [Product!]!
+        @gernzyConvertCurrency
+        @paginate(
+            type: "paginator"
+            model: "Gernzy\\Server\\Models\\Product"
+            scopes: []
+            builder: "Gernzy\\Server\\GraphQL\\Builders\\ProductsBuilder@search"
+        )
+
     product(id: ID @eq): Product @gernzyConvertCurrency @find(model: "Gernzy\\Server\\Models\\Product")
 
     # productsByIds(includeIds: [Int!] @in(key: "id")): [Product!]! @paginate

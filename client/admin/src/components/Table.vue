@@ -36,7 +36,7 @@
       </div>
     </transition>
 
-    <div class="overflow-auto my-4">
+    <div class="overflow-auto my-4 max-h-screen">
       <table class="table-auto">
         <thead>
           <tr>
@@ -142,7 +142,7 @@ export default class Table extends Vue {
         .query({
           query: gql`
             query {
-              products(first: 10) {
+              adminProducts(first: 20) {
                 data {
                   id
                   title
@@ -214,6 +214,8 @@ export default class Table extends Vue {
           `,
         })
         .then((data: any) => {
+          console.log(data);
+
           try {
             let error = data.errors[0].debugMessage;
             this.errors.push(error);
@@ -222,8 +224,8 @@ export default class Table extends Vue {
             // no error
           }
 
-          this.products = data.data.products.data;
-          this.productAttributes = Object.keys(data.data.products.data[0]);
+          this.products = data.data.adminProducts.data;
+          this.productAttributes = Object.keys(data.data.adminProducts.data[0]);
 
           // This is to have a few columns displaying on initial view
           this.helper(this.productAttributes.slice(0, 4));
