@@ -56,11 +56,29 @@
             v-bind:class="{ 'bg-gray-200': even(key) }"
           >
             <td
-              v-for="(option, key) in product"
+              v-for="(values, key) in product"
               :key="key"
               class="border px-4 py-2"
             >
-              {{ option }}
+              <div v-if="!checkIfArray(values) && !checkIfObject(values)">
+                {{ values }}
+              </div>
+
+              <div v-if="checkIfArray(values)">
+                <div v-for="(value, key) in values" :key="key">
+                  <!-- {{ value }} -->
+                  <div v-for="(val, key) in value" :key="key">
+                    {{ key }} : {{ val }}
+                  </div>
+                  _
+                </div>
+              </div>
+
+              <div v-if="!checkIfArray(values) && checkIfObject(values)">
+                <div v-for="(val, key) in values" :key="key">
+                  {{ key }} : {{ val }}
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -93,6 +111,14 @@ export default class Table extends Vue {
 
   public even(key: number): Boolean {
     return key % 2 == 0;
+  }
+
+  public checkIfArray(value: number): Boolean {
+    return Array.isArray(value);
+  }
+
+  public checkIfObject(value: number): Boolean {
+    return typeof value === "object" && value !== null;
   }
 
   public checked(event: any): void {
@@ -223,6 +249,21 @@ export default class Table extends Vue {
           } catch (error) {
             // no error
           }
+
+          // This recursively removes the __typename from the array of objects that is returned from the backend
+          function removeMeta(obj: any) {
+            for (const prop in obj) {
+              if (prop === "__typename") delete obj[prop];
+              else if (typeof obj[prop] === "object") removeMeta(obj[prop]);
+            }
+          }
+
+          data.data.adminProducts.data.map((element: any) => {
+            let obj = element;
+            removeMeta(obj);
+
+            return obj;
+          });
 
           this.products = data.data.adminProducts.data;
           this.productAttributes = Object.keys(data.data.adminProducts.data[0]);
