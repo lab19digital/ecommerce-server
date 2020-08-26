@@ -21,13 +21,14 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <div v-show="showSettings" class="bg-gray-500 rounded p-6 flex flex-wrap">
-        <div v-for="(option, key) in productOptions" :key="key" class="p-4">
+        <div v-for="(option, key) in productAttributes" :key="key" class="p-4">
           <input
             type="checkbox"
             :id="option"
             :name="option"
             :value="option"
             @click="checked"
+            :checked="key < 4"
           />
           <label :for="option" class="p-2">{{ option }}</label
           ><br />
@@ -85,7 +86,7 @@ export default class Table extends Vue {
   private products: any[] = [];
   private productsDisplay: any[] = [];
 
-  private productOptions: any[] = [];
+  private productAttributes: any[] = [];
   private tableColums: any[] = [];
 
   @Prop() readonly exampleProp!: string;
@@ -221,15 +222,36 @@ export default class Table extends Vue {
             // no error
           }
 
-          console.log(data.data.products.data);
-
           this.products = data.data.products.data;
-          this.productOptions = Object.keys(data.data.products.data[0]);
+          this.productAttributes = Object.keys(data.data.products.data[0]);
+
+          // This is to have a few columns displaying on initial view
+          this.helper(this.productAttributes.slice(0, 4));
         });
     } catch (e) {
       console.log(e);
       this.errors.push(e);
     }
+  }
+
+  public helper(keys: any[]) {
+    keys.forEach((key: any) => {
+      this.tableColums.push(key);
+    });
+
+    let tableColums = this.tableColums;
+
+    let newArray = this.products.map(function (product: any) {
+      let returnObject: any = {};
+
+      tableColums.forEach((element: any) => {
+        returnObject[element] = product[element];
+      });
+
+      return returnObject;
+    });
+
+    this.productsDisplay = newArray;
   }
 }
 </script>
