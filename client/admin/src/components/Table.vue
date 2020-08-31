@@ -1,7 +1,12 @@
 <template>
   <div>
     <div v-if="errors.length">
-      <button @click="resetErrors">Close</button>
+      <button
+        @click="resetErrors"
+        class="bg-red-500 hover:bg-red-500 text-white font-bold py-2 px-4 border rounded"
+      >
+        Close
+      </button>
       <ErrorNotification :errors="errors" />
     </div>
 
