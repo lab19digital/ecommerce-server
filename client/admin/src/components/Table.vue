@@ -1,6 +1,7 @@
 <template>
   <div>
     <div v-if="errors.length">
+      <button @click="resetErrors">Close</button>
       <ErrorNotification :errors="errors" />
     </div>
 
@@ -83,30 +84,29 @@
           </tr>
         </tbody>
       </table>
-
-      <div>
-        <button
-          @click="paginatorPrevious"
-          class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
-        >
-          Prev
-        </button>
-        <input
-          class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="page"
-          type="text"
-          placeholder="Page"
-          v-model="paginatorInfo.currentPage"
-          @change="paginatorInputChange"
-        />
-        <label for="page"> of {{ paginatorInfo.totalPages }}</label>
-        <button
-          @click="paginatorNext"
-          class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
-        >
-          Next
-        </button>
-      </div>
+    </div>
+    <div>
+      <button
+        @click="paginatorPrevious"
+        class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
+      >
+        Prev
+      </button>
+      <input
+        class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="page"
+        type="text"
+        placeholder="Page"
+        v-model="paginatorInfo.currentPage"
+        @change="paginatorInputChange"
+      />
+      <label for="page"> of {{ paginatorInfo.totalPages }}</label>
+      <button
+        @click="paginatorNext"
+        class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
+      >
+        Next
+      </button>
     </div>
   </div>
 </template>
@@ -139,6 +139,10 @@ export default class Table extends Vue {
     totalPages: 0,
   };
 
+  public resetErrors(): void {
+    this.errors = [];
+  }
+
   public even(key: number): Boolean {
     return key % 2 == 0;
   }
@@ -152,20 +156,35 @@ export default class Table extends Vue {
   }
 
   public paginatorNext(): void {
-    if (this.paginatorInfo.hasMorePages) {
+    if (
+      this.paginatorInfo.currentPage >= 1 &&
+      this.paginatorInfo.hasMorePages &&
+      this.paginatorInfo.currentPage <=
+        Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
+    ) {
       this.paginatorInfo.currentPage++;
       this.loadProducts();
     } else {
-      this.errors.push("No more pages");
+      this.errors.push(
+        "Enter a number up to " +
+          Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
+      );
     }
   }
 
   public paginatorPrevious(): void {
-    if (this.paginatorInfo.currentPage > 1) {
+    if (
+      this.paginatorInfo.currentPage >= 1 &&
+      this.paginatorInfo.currentPage <=
+        Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
+    ) {
       this.paginatorInfo.currentPage--;
       this.loadProducts();
     } else {
-      this.errors.push("No more previous");
+      this.errors.push(
+        "Enter a number up to " +
+          Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
+      );
     }
   }
 
