@@ -83,12 +83,36 @@
           </tr>
         </tbody>
       </table>
+
+      <div>
+        <button
+          @click="paginatorPrevious"
+          class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
+        >
+          Prev
+        </button>
+        <input
+          class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          id="page"
+          type="text"
+          placeholder="Page"
+          v-model="paginatorInfo.currentPage"
+          @change="paginatorInputChange"
+        />
+        <label for="page"> of {{ paginatorInfo.totalPages }}</label>
+        <button
+          @click="paginatorNext"
+          class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
+        >
+          Next
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import gql from "graphql-tag";
 
@@ -107,7 +131,13 @@ export default class Table extends Vue {
   private productAttributes: any[] = [];
   private tableColums: any[] = [];
 
-  @Prop() readonly exampleProp!: string;
+  private paginatorInfo: any = {
+    total: 0,
+    hasMorePages: false,
+    currentPage: 1,
+    first: 20,
+    totalPages: 0,
+  };
 
   public even(key: number): Boolean {
     return key % 2 == 0;
@@ -119,6 +149,39 @@ export default class Table extends Vue {
 
   public checkIfObject(value: number): Boolean {
     return typeof value === "object" && value !== null;
+  }
+
+  public paginatorNext(): void {
+    if (this.paginatorInfo.hasMorePages) {
+      this.paginatorInfo.currentPage++;
+      this.loadProducts();
+    } else {
+      this.errors.push("No more pages");
+    }
+  }
+
+  public paginatorPrevious(): void {
+    if (this.paginatorInfo.currentPage > 1) {
+      this.paginatorInfo.currentPage--;
+      this.loadProducts();
+    } else {
+      this.errors.push("No more previous");
+    }
+  }
+
+  public paginatorInputChange(): void {
+    if (
+      this.paginatorInfo.currentPage >= 1 &&
+      this.paginatorInfo.currentPage <=
+        Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
+    ) {
+      this.loadProducts();
+    } else {
+      this.errors.push(
+        "Enter a number up to " +
+          Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
+      );
+    }
   }
 
   public checked(event: any): void {
@@ -163,12 +226,36 @@ export default class Table extends Vue {
   }
 
   async mounted() {
+    this.loadProducts();
+  }
+
+  public helper(keys: any[]) {
+    keys.forEach((key: any) => {
+      this.tableColums.push(key);
+    });
+
+    let tableColums = this.tableColums;
+
+    let newArray = this.products.map(function (product: any) {
+      let returnObject: any = {};
+
+      tableColums.forEach((element: any) => {
+        returnObject[element] = product[element];
+      });
+
+      return returnObject;
+    });
+
+    this.productsDisplay = newArray;
+  }
+
+  async loadProducts() {
     try {
       await this.$apollo
         .query({
           query: gql`
             query {
-              adminProducts(first: 20) {
+              adminProducts(first: ${this.paginatorInfo.first}, page: ${this.paginatorInfo.currentPage}) {
                 data {
                   id
                   title
@@ -240,7 +327,7 @@ export default class Table extends Vue {
           `,
         })
         .then((data: any) => {
-          console.log(data);
+          // console.log(data);
 
           try {
             let error = data.errors[0].debugMessage;
@@ -268,6 +355,17 @@ export default class Table extends Vue {
           this.products = data.data.adminProducts.data;
           this.productAttributes = Object.keys(data.data.adminProducts.data[0]);
 
+          // Assign paginato information
+          this.paginatorInfo.currentPage =
+            data.data.adminProducts.paginatorInfo.currentPage;
+          this.paginatorInfo.hasMorePages =
+            data.data.adminProducts.paginatorInfo.hasMorePages;
+          this.paginatorInfo.total =
+            data.data.adminProducts.paginatorInfo.total;
+          this.paginatorInfo.totalPages = Math.ceil(
+            this.paginatorInfo.total / this.paginatorInfo.first
+          );
+
           // This is to have a few columns displaying on initial view
           this.helper(this.productAttributes.slice(0, 4));
         });
@@ -275,26 +373,6 @@ export default class Table extends Vue {
       console.log(e);
       this.errors.push(e);
     }
-  }
-
-  public helper(keys: any[]) {
-    keys.forEach((key: any) => {
-      this.tableColums.push(key);
-    });
-
-    let tableColums = this.tableColums;
-
-    let newArray = this.products.map(function (product: any) {
-      let returnObject: any = {};
-
-      tableColums.forEach((element: any) => {
-        returnObject[element] = product[element];
-      });
-
-      return returnObject;
-    });
-
-    this.productsDisplay = newArray;
   }
 }
 </script>
