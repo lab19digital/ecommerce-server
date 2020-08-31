@@ -20,7 +20,7 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             $this->helper();
         }
     }
@@ -119,15 +119,12 @@ class ProductsSeeder extends Seeder
             new Image(["name" => $faker->word(), "url" => $faker->url, "type" => 'jpeg']),
             new Image(["name" => $faker->word(), "url" => $faker->url, "type" => 'png']),
         ]);
-        // $image = new Image([
-        //     "name" => $faker->word(),
-        //     "url" => $faker->url,
-        //     "type" => 'jpeg'
-        // ]);
-        // $image->save();
 
-        // $images = Image::findMany($images);
-        // $product->images()->saveMany($images);
+        $image = $images[0];
+        $attributes->featuredImage($image);
+        $product->attributes()->createMany(
+            $attributes->toArray()
+        );
 
         // Tag product
         for ($i = 0; $i < 5; $i++) {
