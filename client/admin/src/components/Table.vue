@@ -70,18 +70,19 @@
                 {{ values }}
               </div>
 
-              <div v-if="checkIfArray(values)">
-                <div v-for="(value, key) in values" :key="key">
-                  <!-- {{ value }} -->
+              <div class="divide-y divide-gray-800" v-if="checkIfArray(values)">
+                <div class="py-2" v-for="(value, key) in values" :key="key">
                   <div v-for="(val, key) in value" :key="key">
                     {{ key }} : {{ val }}
                   </div>
-                  _
                 </div>
               </div>
 
-              <div v-if="!checkIfArray(values) && checkIfObject(values)">
-                <div v-for="(val, key) in values" :key="key">
+              <div
+                class="divide-y divide-gray-800"
+                v-if="!checkIfArray(values) && checkIfObject(values)"
+              >
+                <div class="py-2" v-for="(val, key) in values" :key="key">
                   {{ key }} : {{ val }}
                 </div>
               </div>
