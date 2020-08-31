@@ -85,15 +85,23 @@
         </tbody>
       </table>
     </div>
-    <div>
+
+    <div class="inline-flex justify-center content-center items-center">
       <button
         @click="paginatorPrevious"
-        class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
       >
         Prev
       </button>
+
+      <button
+        @click="paginatorNext"
+        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
+      >
+        Next
+      </button>
       <input
-        class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
         id="page"
         type="text"
         placeholder="Page"
@@ -101,12 +109,6 @@
         @change="paginatorInputChange"
       />
       <label for="page"> of {{ paginatorInfo.totalPages }}</label>
-      <button
-        @click="paginatorNext"
-        class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
-      >
-        Next
-      </button>
     </div>
   </div>
 </template>
