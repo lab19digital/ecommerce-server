@@ -4,8 +4,9 @@ namespace Gernzy\Server\Database\Seeds;
 
 use Gernzy\Server\Actions\Helpers\Attributes;
 use Gernzy\Server\Models\Product;
+use Gernzy\Server\Models\ProductFixedPrice;
+use Gernzy\Server\Models\Tag;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class ProductsSeeder extends Seeder
 {
@@ -18,18 +19,8 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        $faker = \Faker\Factory::create();
         for ($i = 0; $i < 100; $i++) {
             $this->helper();
-            // $rand = rand(0, 20);
-            // DB::table('gernzy_products')->insert([
-            //     'title' => $faker->word(),
-            //     'short_description' => $faker->sentence(),
-            //     'status' => $rand > 5 ? 'IN_STOCK' : 'OUT_OF_STOCK',
-            //     'published' => $rand > 5 ? 1 : 0,
-            //     'price_cents' => $faker->numberBetween($min = 1000, $max = 9000),
-            //     'price_currency' => 'USD', //$faker->currencyCode()
-            // ]);
         }
     }
 
@@ -50,6 +41,7 @@ class ProductsSeeder extends Seeder
 
         $product->save();
 
+        // Product categories
         $categories = $faker->words();
 
         $createCategories = [];
@@ -61,6 +53,7 @@ class ProductsSeeder extends Seeder
 
         $product->categories()->createMany($createCategories);
 
+        // Product attributes
         $meta =  [
             [
                 'key' => $faker->word(),
@@ -113,5 +106,27 @@ class ProductsSeeder extends Seeder
         $product->attributes()->createMany(
             $attributes->toArray()
         );
+
+        // Tag product
+        for ($i = 0; $i < 5; $i++) {
+            $tag = Tag::create([
+                'name' => $faker->word()
+            ]);
+
+            $product->addTag($tag);
+            $product->save();
+        }
+
+        // Create fixed prices
+        $product->fixedPrices()->saveMany([
+            new ProductFixedPrice(['country_code' => $faker->currencyCode, 'price' => '44.99',]),
+            new ProductFixedPrice(['country_code' => $faker->currencyCode, 'price' => '1430.99',]),
+            new ProductFixedPrice(['country_code' => $faker->currencyCode, 'price' => '23.99',]),
+            new ProductFixedPrice(['country_code' => $faker->currencyCode, 'price' => '55.99',]),
+            new ProductFixedPrice(['country_code' => $faker->currencyCode, 'price' => '76.99',]),
+            new ProductFixedPrice(['country_code' => $faker->currencyCode, 'price' => '98.99',]),
+            new ProductFixedPrice(['country_code' => $faker->currencyCode, 'price' => '140.99',]),
+            new ProductFixedPrice(['country_code' => $faker->currencyCode, 'price' => '12.99',])
+        ]);
     }
 }
