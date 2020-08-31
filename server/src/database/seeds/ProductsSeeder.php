@@ -3,6 +3,7 @@
 namespace Gernzy\Server\Database\Seeds;
 
 use Gernzy\Server\Actions\Helpers\Attributes;
+use Gernzy\Server\Models\Image;
 use Gernzy\Server\Models\Product;
 use Gernzy\Server\Models\ProductFixedPrice;
 use Gernzy\Server\Models\Tag;
@@ -19,7 +20,7 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $this->helper();
         }
     }
@@ -77,11 +78,13 @@ class ProductsSeeder extends Seeder
         $dimensions = [
             'width' => $faker->randomDigitNotNull,
             'height' => $faker->randomDigitNotNull,
+            'length' => $faker->randomDigitNotNull,
+            'unit' =>  $faker->word(),
         ];
 
         $weight = [
-            'kg' => $faker->randomDigitNotNull,
-            'lbs' => $faker->randomDigitNotNull,
+            'weight' => $faker->randomDigitNotNull,
+            'unit' => $faker->word(),
         ];
 
         $prices = [
@@ -95,6 +98,7 @@ class ProductsSeeder extends Seeder
             ]
         ];
 
+
         $attributes = new Attributes();
         $attributes
             ->meta($meta)
@@ -106,6 +110,24 @@ class ProductsSeeder extends Seeder
         $product->attributes()->createMany(
             $attributes->toArray()
         );
+
+        // images
+        $images = $product->images()->saveMany([
+            new Image(["name" => $faker->word(), "url" => $faker->url, "type" => 'jpeg']),
+            new Image(["name" => $faker->word(), "url" => $faker->url, "type" => 'png']),
+            new Image(["name" => $faker->word(), "url" => $faker->url, "type" => 'giff']),
+            new Image(["name" => $faker->word(), "url" => $faker->url, "type" => 'jpeg']),
+            new Image(["name" => $faker->word(), "url" => $faker->url, "type" => 'png']),
+        ]);
+        // $image = new Image([
+        //     "name" => $faker->word(),
+        //     "url" => $faker->url,
+        //     "type" => 'jpeg'
+        // ]);
+        // $image->save();
+
+        // $images = Image::findMany($images);
+        // $product->images()->saveMany($images);
 
         // Tag product
         for ($i = 0; $i < 5; $i++) {
