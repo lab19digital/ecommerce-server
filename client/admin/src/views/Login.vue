@@ -13,7 +13,7 @@
           id="email"
           type="text"
           placeholder="Email"
-          v-model="email"
+          v-model="authDetails.email"
         />
       </div>
       <div class="mb-6">
@@ -28,7 +28,7 @@
           id="password"
           type="password"
           placeholder="******************"
-          v-model="password"
+          v-model="authDetails.password"
         />
         <p class="text-red-500 text-xs italic">Please choose a password.</p>
       </div>
@@ -52,7 +52,7 @@
     </p>
 
     <!-- Success login admin user-->
-    <div v-if="activeSesssion && user.is_admin">
+    <div v-if="false">
       <SuccessNotification
         title="You successfully logged in"
         v-bind:msg="'Welcome to the admin panel ' + user.name"
@@ -68,12 +68,11 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import { Getter, Action, namespace } from "vuex-class";
-import gql from "graphql-tag";
+import { Action, namespace } from "vuex-class";
+// import gql from "graphql-tag";
 import SuccessNotification from "@/components/SuccessNotification.vue";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 
-const SessionGetter = namespace("session", Getter);
 const SessionAction = namespace("session", Action);
 
 @Component({
@@ -83,61 +82,72 @@ const SessionAction = namespace("session", Action);
   },
 })
 export default class Login extends Vue {
-  private email: string = "";
-  private password: string = "";
   private errors: any[] = [];
+  private authDetails: any = {
+    email: "",
+    password: "",
+  };
 
-  @SessionGetter("has_active_session") activeSesssion: any;
   @SessionAction logIn: any;
-  @SessionAction clearSession: any;
-  @SessionGetter user: any;
 
   public async checkForm(event: any): Promise<any> {
     event.preventDefault();
-    const { email, password } = this;
-    if (!email || !password) {
+    if (!this.authDetails.email || !this.authDetails.password) {
       this.errors.push("Please complete your email and password");
       return;
     }
     this.errors = [];
-    try {
-      await this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation($email: String!, $password: String!) {
-              logIn(input: { email: $email, password: $password }) {
-                user {
-                  id
-                  name
-                  is_admin
-                }
-                token
-              }
-            }
-          `,
-          // Parameters
-          variables: {
-            email,
-            password,
-          },
-        })
-        .then((data: any) => {
-          const { errors } = this.logIn(data);
-          if (errors) {
-            console.log(JSON.stringify(data));
-            this.errors = errors;
-            return;
-          }
 
-          let self = this;
-          setTimeout(function () {
-            self.$router.push({ path: "/dashboard" });
-          }, 3000);
-        });
-    } catch (e) {
-      console.log(e);
-      this.errors.push(e);
-    }
+    this.logIn(this.authDetails);
+    // .then((data: any) => {
+    //   console.log(data);
+    //   this.$router.push("/dashboard");
+    // })
+    // .catch((error: any) => {
+    //   console.log(error);
+    // });
+
+    // try {
+    //   await this.$apollo
+    //     .mutate({
+    //       mutation: gql`
+    //         mutation($email: String!, $password: String!) {
+    //           logIn(input: { email: $email, password: $password }) {
+    //             user {
+    //               id
+    //               name
+    //               is_admin
+    //             }
+    //             token
+    //           }
+    //         }
+    //       `,
+    //       // Parameters
+    //       variables: {
+    //         email,
+    //         password,
+    //       },
+    //     })
+    //     .then((data: any) => {
+    //       const { errors } = this.logIn(data);
+    //       if (errors) {
+    //         // console.log(JSON.stringify(data));
+    //         this.errors = errors;
+    //         return;
+    //       }
+
+    //       const { token } = data.data.logIn.token;
+    //       onLogin(this.$apollo, token);
+
+    //       let self = this;
+    //       setTimeout(function () {
+    //         self.$router.push({ path: "/dashboard" });
+    //       }, 3000);
+    //     });
+    // } catch (e) {
+    //   console.log(e);
+    //   this.errors.push(e);
+    // }
   }
 
   get dateYear(): string {

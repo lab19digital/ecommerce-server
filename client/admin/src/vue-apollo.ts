@@ -6,6 +6,8 @@ import {
   // @ts-ignore
 } from "vue-cli-plugin-apollo/graphql-client";
 
+import { setContext } from "apollo-link-context";
+
 // Install the vue plugin
 Vue.use(VueApollo);
 
@@ -16,61 +18,57 @@ const AUTH_TOKEN = "apollo-token";
 const httpEndpoint =
   process.env.VUE_APP_GRAPHQL_HTTP || "http://localhost:4000/graphql";
 
-// Config
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem(AUTH_TOKEN);
+
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+
 const defaultOptions = {
-  // You can use `https` for secure connection (recommended in production)
   httpEndpoint,
-  // You can use `wss` for secure connection (recommended in production)
-  // Use `null` to disable subscriptions
   wsEndpoint: null,
-  // LocalStorage token
   tokenName: AUTH_TOKEN,
-  // Enable Automatic Query persisting with Apollo Engine
   persisting: false,
-  // Use websockets for everything (no HTTP)
-  // You need to pass a `wsEndpoint` for this to work
   websocketsOnly: false,
-  // Is being rendered on the server?
   ssr: false,
-
-  // Override default apollo link
-  // note: don't override httpLink here, specify httpLink options in the
-  // httpLinkOptions property of defaultOptions.
-  // link: myLink
-
-  // Override default cache
+  link: authLink,
   // cache: myCache
-
-  // Override the way the Authorization header is set
-  // getAuth: (tokenName) => ...
-
-  // Additional ApolloClient options
+  // getAuth: () => {
+  //   // get the authentication token from local storage if it exists
+  //   const token = localStorage.getItem(AUTH_TOKEN);
+  //   // return the headers to the context so httpLink can read them
+  //   if (token) {
+  //     return "Bearer " + token;
+  //   } else {
+  //     return "";
+  //   }
+  // },
   // apollo: { ... }
-
-  // Client local data (see apollo-link-state)
   // clientState: { resolvers: { ... }, defaults: { ... } }
 };
 
+// Create apollo client
+export const { apolloClient, wsClient } = createApolloClient({
+  ...defaultOptions,
+  // ...options
+});
+apolloClient.wsClient = wsClient;
+
 // Call this in the Vue app file
 export function createProvider(options: any = {}) {
-  // Create apollo client
-  let client;
-  if (!options.testClient) {
-    const { apolloClient } = createApolloClient({
-      ...defaultOptions,
-      ...options,
-    });
-    client = apolloClient;
-  } else {
-    client = options.testClient;
-  }
-
   // Create vue apollo provider
   const apolloProvider = new VueApollo({
-    defaultClient: client,
+    defaultClient: apolloClient,
     defaultOptions: {
       $query: {
-        // fetchPolicy: 'cache-and-network',
+        // fetchPolicy: "cache-and-network",
       },
     },
     errorHandler(error) {

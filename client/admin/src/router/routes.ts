@@ -12,19 +12,18 @@ export default [
        * */
 
       let is_admin = 0;
-      let token = 0;
+      let token = localStorage.getItem("apollo-token");
 
       try {
-        if (localStorage.getItem("session")) {
+        if (localStorage.getItem("session") !== null) {
           let session = JSON.parse(localStorage.getItem("session") || "");
-          token = session.token.length;
           is_admin = session.user.is_admin;
         }
       } catch (error) {
         console.log(error);
       }
 
-      if (token <= 0 || is_admin == 0) {
+      if (token === null || is_admin == 0) {
         next({
           path: "/login", // back to safety
           query: {

@@ -7,9 +7,9 @@ export interface RootState {
 
 export interface SessionState {
   email: string | null;
-  has_active_session: Boolean;
   token: string | null;
   user: {} | null;
+  authStatus: Boolean;
 }
 
 export interface HistoryState {

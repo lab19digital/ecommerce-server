@@ -1,67 +1,80 @@
 import { GetterTree, MutationTree, ActionTree, Module } from "vuex";
 import { RootState, SessionState } from "./types";
+import { apolloClient } from "@/vue-apollo";
+import { LOGGED_IN_USER } from "@/graphql/queries";
+import { LOGIN_USER, REGISTER_USER } from "@/graphql/mutations";
 
 type SessionGetter = GetterTree<SessionState, RootState>;
 
 export const state: SessionState = {
   email: null,
-  has_active_session: false,
   token: null,
-  user: null,
+  user: {},
+  authStatus: false,
 };
 
 export const getters: SessionGetter = {
-  has_active_session: (state) => state.has_active_session,
+  isAuthenticated: (state) => !!state.token,
+  authStatus: (state) => state.authStatus,
   user: (state) => state.user,
 };
 
 export const mutations: MutationTree<SessionState> = {
-  logIn(state, { user, token }) {
-    state.has_active_session = true;
+  SET_TOKEN(state, token) {
     state.token = token;
-    state.user = user;
   },
-  clearSession(state) {
-    state.has_active_session = false;
-    state.token = null;
-    state.user = null;
+  LOGIN_USER(state, user) {
+    state.authStatus = true;
+    state.user = { ...user };
   },
-  setLocalStorageLogin(state) {
-    let timeStamp = { timestamp: new Date().getTime() };
-    let sessionData = { ...state, ...timeStamp };
-    localStorage.setItem("session", JSON.stringify(sessionData));
+  LOGOUT_USER(state) {
+    state.authStatus = false;
+    state.token = "" && localStorage.removeItem("apollo-token");
   },
 };
 
 export const actions: ActionTree<SessionState, RootState> = {
-  logIn({ commit }: any, { errors, data }: any) {
-    if (!errors && data.logIn.user) {
-      const { user, token } = data.logIn;
-      commit("logIn", {
-        user,
-        token,
+  async register({ commit, dispatch }, authDetails) {
+    try {
+      const { data } = await apolloClient.mutate({
+        mutation: REGISTER_USER,
+        variables: { ...authDetails },
       });
-
-      commit("setLocalStorageLogin", {
-        user,
-        token,
-      });
-      return {
-        success: true,
-        error: null,
-      };
+      const token = data.createUser.token;
+      commit("SET_TOKEN", token);
+      localStorage.setItem("apollo-token", token);
+      dispatch("setUser");
+    } catch (e) {
+      console.log(e);
     }
-
-    return {
-      success: false,
-      error: {
-        msg: errors ? errors[0].message : "Unknown failure",
-        code: "403",
-      },
-    };
   },
-  clearSession({ commit }: any) {
-    commit("clearSession");
+  async logIn({ commit, dispatch }, authDetails) {
+    try {
+      // const { data } = await apolloClient.mutate({
+      //   mutation: LOGIN_USER,
+      //   variables: { ...authDetails },
+      // });
+
+      // const token = data.logIn.token;
+      // commit("SET_TOKEN", token);
+      // localStorage.setItem("apollo-token", token);
+      dispatch("setUser");
+    } catch (e) {
+      console.log("THE ERROR" + e);
+    }
+  },
+  async setUser({ commit }) {
+    try {
+      const { data } = await apolloClient.query({ query: LOGGED_IN_USER });
+      console.log(data);
+
+      commit("LOGIN_USER", data.me);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async logOut({ commit, dispatch }) {
+    commit("LOGOUT_USER");
   },
 };
 
