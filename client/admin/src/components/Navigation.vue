@@ -39,8 +39,25 @@
           <router-link
             class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
             to="/login"
+            v-if="!isAuthenticated && !isAdmin"
             >Login</router-link
           >
+
+          <!-- <router-link
+            class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+            to="#/"
+            v-if="isAuthenticated && isAdmin"
+            @click="logOutClick"
+            >Logout</router-link
+          > -->
+          <a
+            class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
+            v-if="isAuthenticated && isAdmin"
+            @click="logOutClick"
+            href="#/"
+            >Logout</a
+          >
+
           <router-link
             class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4"
             to="/dashboard"
@@ -61,7 +78,20 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { Getter, Action, namespace } from "vuex-class";
+
+const SessionGetter = namespace("session", Getter);
+const SessionAction = namespace("session", Action);
 
 @Component
-export default class Navigation extends Vue {}
+export default class Navigation extends Vue {
+  @SessionGetter isAuthenticated: any;
+  @SessionGetter isAdmin: any;
+  @SessionAction logOut: any;
+
+  public async logOutClick(event: any): Promise<any> {
+    event.preventDefault();
+    this.logOut().then(() => this.$router.push("/login"));
+  }
+}
 </script>

@@ -13,6 +13,14 @@ export const LOGIN_USER = gql`
   }
 `;
 
+export const LOGOUT_USER = gql`
+  mutation {
+    logOut {
+      success
+    }
+  }
+`;
+
 export const REGISTER_USER = gql`
   mutation createAccount(
     $name: String!

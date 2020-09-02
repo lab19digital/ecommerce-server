@@ -1,8 +1,8 @@
 import { GetterTree, MutationTree, ActionTree, Module } from "vuex";
 import { RootState, SessionState } from "./types";
-import { apolloClient, onLogin } from "@/vue-apollo";
+import { apolloClient, onLogin, onLogout } from "@/vue-apollo";
 import { LOGGED_IN_USER } from "@/graphql/queries";
-import { LOGIN_USER, REGISTER_USER } from "@/graphql/mutations";
+import { LOGIN_USER, REGISTER_USER, LOGOUT_USER } from "@/graphql/mutations";
 
 type SessionGetter = GetterTree<SessionState, RootState>;
 
@@ -32,7 +32,7 @@ export const mutations: MutationTree<SessionState> = {
   },
   LOGOUT_USER(state) {
     state.authStatus = false;
-    state.token = "" && localStorage.removeItem(AUTH_TOKEN);
+    state.token = "";
   },
 };
 
@@ -62,7 +62,6 @@ export const actions: ActionTree<SessionState, RootState> = {
       const user = data.logIn.user;
 
       commit("SET_TOKEN", token);
-      localStorage.setItem(AUTH_TOKEN, token);
       await onLogin(apolloClient, token);
 
       dispatch("setUser", user);
@@ -79,8 +78,16 @@ export const actions: ActionTree<SessionState, RootState> = {
       console.log(error);
     }
   },
-  async logOut({ commit, dispatch }) {
+  async logOut({ commit }) {
     commit("LOGOUT_USER");
+    await onLogout(apolloClient);
+  },
+  async checkLoggedIn({ commit }) {
+    if (localStorage.getItem(AUTH_TOKEN) != null) {
+      let token = localStorage.getItem(AUTH_TOKEN);
+      commit("LOGIN_USER", { is_admin: true });
+      commit("SET_TOKEN", token);
+    }
   },
 };
 

@@ -20,13 +20,19 @@ const httpEndpoint =
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = localStorage.getItem(AUTH_TOKEN);
+  let authHeader = "";
+  if (localStorage.getItem(AUTH_TOKEN) === null) {
+    authHeader = "";
+  } else {
+    let token = localStorage.getItem(AUTH_TOKEN);
+    authHeader = `Bearer ${token}`;
+  }
 
   // return the headers to the context so httpLink can read them
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: authHeader,
     },
   };
 });
@@ -39,18 +45,9 @@ const defaultOptions = {
   websocketsOnly: false,
   ssr: false,
   link: authLink,
-  // cache: myCache
-  // getAuth: () => {
-  //   // get the authentication token from local storage if it exists
-  //   const token = localStorage.getItem(AUTH_TOKEN);
-  //   // return the headers to the context so httpLink can read them
-  //   if (token) {
-  //     return "Bearer " + token;
-  //   } else {
-  //     return "";
-  //   }
-  // },
-  // apollo: { ... }
+  // cache: myCache,
+  // getAuth: () => {},
+  // apollo: { ... },
   // clientState: { resolvers: { ... }, defaults: { ... } }
 };
 

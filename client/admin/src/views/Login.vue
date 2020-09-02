@@ -69,7 +69,6 @@
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { Action, namespace } from "vuex-class";
-// import gql from "graphql-tag";
 import SuccessNotification from "@/components/SuccessNotification.vue";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 
