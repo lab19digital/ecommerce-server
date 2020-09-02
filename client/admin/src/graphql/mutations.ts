@@ -3,6 +3,12 @@ export const LOGIN_USER = gql`
   mutation($email: String!, $password: String!) {
     logIn(input: { email: $email, password: $password }) {
       token
+      user {
+        id
+        name
+        email
+        is_admin
+      }
     }
   }
 `;

@@ -12,10 +12,12 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // Check if the user is logged i
-  const isUserLoggedIn = store.getters.isAuthenticated;
+  // Check if the user is logged in
+  let isUserLoggedIn = store.getters["session/isAuthenticated"];
+  let isAdmin = store.getters["session/isAdmin"];
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!isUserLoggedIn) {
+    if (!isUserLoggedIn || isAdmin != 1) {
       // store.dispatch("logOut");
       next({
         path: "/login",

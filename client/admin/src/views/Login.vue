@@ -98,56 +98,7 @@ export default class Login extends Vue {
     }
     this.errors = [];
 
-    this.logIn(this.authDetails);
-    // .then((data: any) => {
-    //   console.log(data);
-    //   this.$router.push("/dashboard");
-    // })
-    // .catch((error: any) => {
-    //   console.log(error);
-    // });
-
-    // try {
-    //   await this.$apollo
-    //     .mutate({
-    //       mutation: gql`
-    //         mutation($email: String!, $password: String!) {
-    //           logIn(input: { email: $email, password: $password }) {
-    //             user {
-    //               id
-    //               name
-    //               is_admin
-    //             }
-    //             token
-    //           }
-    //         }
-    //       `,
-    //       // Parameters
-    //       variables: {
-    //         email,
-    //         password,
-    //       },
-    //     })
-    //     .then((data: any) => {
-    //       const { errors } = this.logIn(data);
-    //       if (errors) {
-    //         // console.log(JSON.stringify(data));
-    //         this.errors = errors;
-    //         return;
-    //       }
-
-    //       const { token } = data.data.logIn.token;
-    //       onLogin(this.$apollo, token);
-
-    //       let self = this;
-    //       setTimeout(function () {
-    //         self.$router.push({ path: "/dashboard" });
-    //       }, 3000);
-    //     });
-    // } catch (e) {
-    //   console.log(e);
-    //   this.errors.push(e);
-    // }
+    this.logIn(this.authDetails).then(() => this.$router.push("/dashboard"));
   }
 
   get dateYear(): string {

@@ -8,7 +8,7 @@ export interface RootState {
 export interface SessionState {
   email: string | null;
   token: string | null;
-  user: {} | null;
+  user: { is_admin: number };
   authStatus: Boolean;
 }
 
