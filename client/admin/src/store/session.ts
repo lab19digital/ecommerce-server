@@ -7,6 +7,7 @@ import { LOGIN_USER, REGISTER_USER, LOGOUT_USER } from "@/graphql/mutations";
 type SessionGetter = GetterTree<SessionState, RootState>;
 
 const AUTH_TOKEN = "apollo-token";
+const AUTH_USER = "user-login-data";
 
 export const state: SessionState = {
   email: null,
@@ -33,6 +34,10 @@ export const mutations: MutationTree<SessionState> = {
   LOGOUT_USER(state) {
     state.authStatus = false;
     state.token = "";
+    state.user = { is_admin: 0 };
+
+    // Remove the user from local storage
+    localStorage.removeItem(AUTH_USER);
   },
 };
 
@@ -62,6 +67,8 @@ export const actions: ActionTree<SessionState, RootState> = {
       const user = data.logIn.user;
 
       commit("SET_TOKEN", token);
+
+      // This also commits the token to local storage
       await onLogin(apolloClient, token);
 
       dispatch("setUser", user);
@@ -74,19 +81,26 @@ export const actions: ActionTree<SessionState, RootState> = {
       // Can't query current user, incorrect permissions or user not found, TODO: figure out why
       // const { data } = await apolloClient.query({ query: LOGGED_IN_USER });
       commit("LOGIN_USER", user);
+      localStorage.setItem(AUTH_USER, JSON.stringify(user));
     } catch (error) {
       console.log(error);
     }
   },
   async logOut({ commit }) {
     commit("LOGOUT_USER");
+
+    // This also removes the token from local storage
     await onLogout(apolloClient);
   },
   async checkLoggedIn({ commit }) {
-    if (localStorage.getItem(AUTH_TOKEN) != null) {
+    if (
+      localStorage.getItem(AUTH_TOKEN) != null &&
+      localStorage.getItem(AUTH_USER) != null
+    ) {
       let token = localStorage.getItem(AUTH_TOKEN);
-      commit("LOGIN_USER", { is_admin: true });
+      let user = localStorage.getItem(AUTH_USER) || "";
       commit("SET_TOKEN", token);
+      commit("LOGIN_USER", JSON.parse(user));
     }
   },
 };
