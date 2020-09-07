@@ -95,10 +95,11 @@ export const actions: ActionTree<SessionState, RootState> = {
       localStorage.getItem(AUTH_TOKEN) != null &&
       localStorage.getItem(AUTH_USER) != null
     ) {
-      let token = localStorage.getItem(AUTH_TOKEN);
+      let token = localStorage.getItem(AUTH_TOKEN) || "";
       let user = localStorage.getItem(AUTH_USER) || "";
       commit("SET_TOKEN", token);
       commit("LOGIN_USER", JSON.parse(user));
+      await onLogin(apolloClient, token);
     }
   },
 };
