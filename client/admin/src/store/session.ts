@@ -78,8 +78,6 @@ export const actions: ActionTree<SessionState, RootState> = {
   },
   async setUser({ commit }, user) {
     try {
-      // Can't query current user, incorrect permissions or user not found, TODO: figure out why
-      // const { data } = await apolloClient.query({ query: LOGGED_IN_USER });
       commit("LOGIN_USER", user);
       localStorage.setItem(AUTH_USER, JSON.stringify(user));
     } catch (error) {

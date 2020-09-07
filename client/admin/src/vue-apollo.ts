@@ -18,24 +18,26 @@ const AUTH_TOKEN = "apollo-token";
 const httpEndpoint =
   process.env.VUE_APP_GRAPHQL_HTTP || "http://localhost:4000/graphql";
 
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  let authHeader = "";
-  if (localStorage.getItem(AUTH_TOKEN) === null) {
-    authHeader = "";
-  } else {
-    let token = localStorage.getItem(AUTH_TOKEN);
-    authHeader = `Bearer ${token}`;
-  }
+// const authLink = setContext((_, { headers }) => {
+//   // get the authentication token from local storage if it exists
+//   let authHeader = "";
+//   if (localStorage.getItem(AUTH_TOKEN) === null) {
+//     authHeader = "";
+//   } else {
+//     let token = localStorage.getItem(AUTH_TOKEN);
+//     authHeader = `Bearer ${token}`;
+//   }
 
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: authHeader,
-    },
-  };
-});
+//   console.log("setContext " + authHeader);
+
+//   // return the headers to the context so httpLink can read them
+//   return {
+//     headers: {
+//       ...headers,
+//       authorization: authHeader,
+//     },
+//   };
+// });
 
 const defaultOptions = {
   httpEndpoint,
@@ -44,9 +46,18 @@ const defaultOptions = {
   persisting: false,
   websocketsOnly: false,
   ssr: false,
-  link: authLink,
+  // link: authLink,
   // cache: myCache,
-  // getAuth: () => {},
+  getAuth: () => {
+    // get the authentication token from local storage if it exists
+    const token = localStorage.getItem(AUTH_TOKEN);
+    // return the headers to the context so httpLink can read them
+    if (token) {
+      return "Bearer " + token;
+    } else {
+      return "";
+    }
+  },
   // apollo: { ... },
   // clientState: { resolvers: { ... }, defaults: { ... } }
 };
