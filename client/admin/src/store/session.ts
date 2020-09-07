@@ -99,7 +99,6 @@ export const actions: ActionTree<SessionState, RootState> = {
       let user = localStorage.getItem(AUTH_USER) || "";
       commit("SET_TOKEN", token);
       commit("LOGIN_USER", JSON.parse(user));
-      await onLogin(apolloClient, token);
     }
   },
 };
