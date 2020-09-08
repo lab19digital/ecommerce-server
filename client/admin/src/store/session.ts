@@ -53,7 +53,7 @@ export const actions: ActionTree<SessionState, RootState> = {
       localStorage.setItem(AUTH_TOKEN, token);
       dispatch("setUser");
     } catch (e) {
-      console.log(e);
+      throw Error(e);
     }
   },
   async logIn({ commit, dispatch }, authDetails) {
@@ -62,18 +62,14 @@ export const actions: ActionTree<SessionState, RootState> = {
         mutation: LOGIN_USER,
         variables: { ...authDetails },
       });
-
       const token = data.logIn.token;
       const user = data.logIn.user;
-
       commit("SET_TOKEN", token);
-
       // This also commits the token to local storage
       await onLogin(apolloClient, token);
-
       dispatch("setUser", user);
     } catch (e) {
-      console.log("THE ERROR" + e);
+      throw Error(e);
     }
   },
   async setUser({ commit }, user) {
@@ -81,7 +77,7 @@ export const actions: ActionTree<SessionState, RootState> = {
       commit("LOGIN_USER", user);
       localStorage.setItem(AUTH_USER, JSON.stringify(user));
     } catch (error) {
-      console.log(error);
+      throw Error(error);
     }
   },
   async logOut({ commit }) {
