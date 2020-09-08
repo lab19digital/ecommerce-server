@@ -213,17 +213,19 @@ export default class Table extends Vue {
   }
 
   public paginatorInputChange(): void {
-    if (
-      this.paginatorInfo.currentPage >= 1 &&
-      this.paginatorInfo.currentPage <=
-        Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-    ) {
+    let currentPage = this.paginatorInfo.currentPage;
+    let totalPages = this.paginatorInfo.total;
+    let pagesFirst = this.paginatorInfo.first;
+    let ceiledPages = Math.ceil(totalPages / pagesFirst);
+
+    if (currentPage < 1 || currentPage > ceiledPages) {
+      this.errors.push("Enter a number up to " + ceiledPages);
+      this.paginatorInfo.currentPage = 1;
+    } else if (currentPage >= 1 && currentPage <= ceiledPages) {
       this.loadProducts();
     } else {
-      this.errors.push(
-        "Enter a number up to " +
-          Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-      );
+      this.errors.push("Error ");
+      this.paginatorInfo.currentPage = 1;
     }
   }
 
