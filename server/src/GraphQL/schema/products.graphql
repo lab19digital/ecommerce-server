@@ -16,6 +16,7 @@ extend type Query {
             scopes: []
             builder: "Gernzy\\Server\\GraphQL\\Builders\\ProductsBuilder@search"
         )
+        @can(ability: "view", model: "Gernzy\\Server\\Models\\User", policy: "Gernzy\\Server\\Policies\\UserPolicy")
 
     product(id: ID @eq): Product @gernzyConvertCurrency @find(model: "Gernzy\\Server\\Models\\Product")
 
