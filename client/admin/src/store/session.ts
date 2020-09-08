@@ -81,10 +81,16 @@ export const actions: ActionTree<SessionState, RootState> = {
     }
   },
   async logOut({ commit }) {
-    commit("LOGOUT_USER");
-
-    // This also removes the token from local storage
-    await onLogout(apolloClient);
+    try {
+      await apolloClient.mutate({
+        mutation: LOGOUT_USER,
+      });
+      commit("LOGOUT_USER");
+      // This also removes the token from local storage
+      await onLogout(apolloClient);
+    } catch (e) {
+      throw Error(e);
+    }
   },
   async checkLoggedIn({ commit }) {
     if (
