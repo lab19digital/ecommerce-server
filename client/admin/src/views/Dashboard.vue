@@ -1,7 +1,6 @@
 <template>
   <div class="mx-auto px-6 py-6">
-    <h1 class="text-5xl">Dashboard</h1>
-    <Table class="pt-10" />
+    <Table />
   </div>
 </template>
 

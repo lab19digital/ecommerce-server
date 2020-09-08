@@ -10,37 +10,13 @@
       <ErrorNotification :errors="errors" />
     </div>
 
-    <button
-      @click="showSettings = !showSettings"
-      class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
-    >
-      <p v-if="!showSettings">Show settings</p>
-      <p v-if="showSettings">Close settings</p>
-    </button>
-
-    <transition
-      enter-active-class="transition duration-1000 ease-out"
-      leave-active-class="transition duration-75 ease-in"
-      enter-class="transform opacity-0 scale-95"
-      enter-to-class="transform opacity-100 scale-100"
-      leave-class="transform opacity-100 scale-100"
-      leave-to-class="transform opacity-0 scale-95"
-    >
-      <div v-show="showSettings" class="bg-gray-500 rounded p-6 flex flex-wrap">
-        <div v-for="(option, key) in productAttributes" :key="key" class="p-4">
-          <input
-            type="checkbox"
-            :id="option"
-            :name="option"
-            :value="option"
-            @click="checked"
-            :checked="key < 4"
-          />
-          <label :for="option" class="p-2">{{ option }}</label
-          ><br />
-        </div>
-      </div>
-    </transition>
+    <!-- Loading -->
+    <div v-if="loadingTableResults" class="absolute bottom-0 right-0">
+      <SuccessNotification
+        title="Loading"
+        msg="Updating the products table with results."
+      />
+    </div>
 
     <div class="overflow-auto my-4 max-h-screen">
       <table class="table-auto">
@@ -116,17 +92,54 @@
       />
       <label for="page"> of {{ paginatorInfo.totalPages }}</label>
     </div>
+
+    <button
+      @click="showSettings = !showSettings"
+      class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4 mx-6"
+    >
+      <p v-if="!showSettings">Show settings</p>
+      <p v-if="showSettings">Close settings</p>
+    </button>
+
+    <transition
+      enter-active-class="transition duration-1000 ease-out"
+      leave-active-class="transition duration-75 ease-in"
+      enter-class="transform opacity-0 scale-95"
+      enter-to-class="transform opacity-100 scale-100"
+      leave-class="transform opacity-100 scale-100"
+      leave-to-class="transform opacity-0 scale-95"
+    >
+      <div v-show="showSettings" class="bg-gray-500 rounded p-6 flex flex-wrap">
+        <div v-for="(option, key) in productAttributes" :key="key" class="p-4">
+          <input
+            type="checkbox"
+            :id="option"
+            :name="option"
+            :value="option"
+            @click="checked"
+            :checked="key < 4"
+          />
+          <label :for="option" class="p-2">{{ option }}</label
+          ><br />
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import ErrorNotification from "@/components/ErrorNotification.vue";
-import gql from "graphql-tag";
+import SuccessNotification from "@/components/SuccessNotification.vue";
+import { Action, Getter, namespace } from "vuex-class";
+
+const TableAction = namespace("table", Action);
+const TableGetter = namespace("table", Getter);
 
 @Component({
   components: {
     ErrorNotification,
+    SuccessNotification,
   },
 })
 export default class Table extends Vue {
@@ -139,11 +152,14 @@ export default class Table extends Vue {
   private productAttributes: any[] = [];
   private tableColums: any[] = [];
 
+  @TableAction tableResults: any;
+  @TableGetter loadingTableResults: any;
+
   private paginatorInfo: any = {
     total: 0,
     hasMorePages: false,
     currentPage: 1,
-    first: 20,
+    first: 15,
     totalPages: 0,
   };
 
@@ -277,129 +293,49 @@ export default class Table extends Vue {
   }
 
   async loadProducts() {
-    try {
-      await this.$apollo
-        .query({
-          query: gql`
-            query {
-              adminProducts(first: ${this.paginatorInfo.first}, page: ${this.paginatorInfo.currentPage}) {
-                data {
-                  id
-                  title
-                  status
-                  published
-                  price_cents
-                  price_currency
-                  short_description
-                  long_description
-                  # created_at
-                  # updated_at
-                  meta {
-                    id
-                    group
-                    value
-                  }
-                  prices {
-                    currency
-                    value
-                  }
-                  sizes {
-                    size
-                  }
-                  variants {
-                    id
-                  }
-                  categories {
-                    id
-                    title
-                  }
-                  dimensions {
-                    length
-                    width
-                    height
-                    unit
-                  }
-                  weight {
-                    weight
-                    unit
-                  }
-                  images {
-                    id
-                    url
-                    type
-                    name
-                  }
-                  featured_image {
-                    id
-                    url
-                    type
-                    name
-                  }
-                  tags {
-                    id
-                    name
-                  }
-                  fixedPrices {
-                    country_code
-                    price
-                  }
-                }
-                paginatorInfo {
-                  total
-                  hasMorePages
-                  currentPage
-                }
-              }
-            }
-          `,
-        })
-        .then((data: any) => {
-          // console.log(data);
+    this.tableResults({
+      first: this.paginatorInfo.first,
+      page: this.paginatorInfo.currentPage,
+    }).then((data: any) => {
+      try {
+        let error = data.errors[0].debugMessage;
+        this.errors.push(error);
+        return;
+      } catch (error) {
+        // no error
+      }
 
-          try {
-            let error = data.errors[0].debugMessage;
-            this.errors.push(error);
-            return;
-          } catch (error) {
-            // no error
-          }
+      // This recursively removes the __typename from the array of objects that is returned from the backend
+      function removeMeta(obj: any) {
+        for (const prop in obj) {
+          if (prop === "__typename") delete obj[prop];
+          else if (typeof obj[prop] === "object") removeMeta(obj[prop]);
+        }
+      }
 
-          // This recursively removes the __typename from the array of objects that is returned from the backend
-          function removeMeta(obj: any) {
-            for (const prop in obj) {
-              if (prop === "__typename") delete obj[prop];
-              else if (typeof obj[prop] === "object") removeMeta(obj[prop]);
-            }
-          }
+      data.data.adminProducts.data.map((element: any) => {
+        let obj = element;
+        removeMeta(obj);
 
-          data.data.adminProducts.data.map((element: any) => {
-            let obj = element;
-            removeMeta(obj);
+        return obj;
+      });
 
-            return obj;
-          });
+      this.products = data.data.adminProducts.data;
+      this.productAttributes = Object.keys(data.data.adminProducts.data[0]);
 
-          this.products = data.data.adminProducts.data;
-          this.productAttributes = Object.keys(data.data.adminProducts.data[0]);
+      // Assign paginato information
+      this.paginatorInfo.currentPage =
+        data.data.adminProducts.paginatorInfo.currentPage;
+      this.paginatorInfo.hasMorePages =
+        data.data.adminProducts.paginatorInfo.hasMorePages;
+      this.paginatorInfo.total = data.data.adminProducts.paginatorInfo.total;
+      this.paginatorInfo.totalPages = Math.ceil(
+        this.paginatorInfo.total / this.paginatorInfo.first
+      );
 
-          // Assign paginato information
-          this.paginatorInfo.currentPage =
-            data.data.adminProducts.paginatorInfo.currentPage;
-          this.paginatorInfo.hasMorePages =
-            data.data.adminProducts.paginatorInfo.hasMorePages;
-          this.paginatorInfo.total =
-            data.data.adminProducts.paginatorInfo.total;
-          this.paginatorInfo.totalPages = Math.ceil(
-            this.paginatorInfo.total / this.paginatorInfo.first
-          );
-
-          // This is to have a few columns displaying on initial view
-          this.helper(this.productAttributes.slice(0, 4));
-        });
-    } catch (e) {
-      console.log(e);
-      this.errors.push(e);
-    }
+      // This is to have a few columns displaying on initial view
+      this.helper(this.productAttributes.slice(0, 4));
+    });
   }
 }
 </script>

@@ -3,6 +3,7 @@ import { MutationPayload } from "vuex";
 // Store
 export interface RootState {
   session: SessionState;
+  table: TableState;
 }
 
 export interface SessionState {
@@ -10,6 +11,10 @@ export interface SessionState {
   token: string | null;
   user: { is_admin: number };
   authStatus: Boolean;
+}
+
+export interface TableState {
+  loading: Boolean;
 }
 
 export interface HistoryState {
