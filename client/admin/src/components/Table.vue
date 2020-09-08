@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="errors.length">
+    <div v-if="errors.length" class="absolute bottom-0 right-0">
       <button
         @click="resetErrors"
         class="bg-red-500 hover:bg-red-500 text-white font-bold py-2 px-4 border rounded"
@@ -273,6 +273,7 @@ export default class Table extends Vue {
   }
 
   public helper(keys: any[]) {
+    this.tableColums = [];
     keys.forEach((key: any) => {
       this.tableColums.push(key);
     });
@@ -297,6 +298,8 @@ export default class Table extends Vue {
       first: this.paginatorInfo.first,
       page: this.paginatorInfo.currentPage,
     }).then((data: any) => {
+      console.log(data);
+
       try {
         let error = data.errors[0].debugMessage;
         this.errors.push(error);
