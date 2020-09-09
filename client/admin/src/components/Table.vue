@@ -40,7 +40,8 @@
             <td
               v-for="(values, key) in product"
               :key="key"
-              class="border px-4 py-2"
+              class="border px-4 py-2 pt-12"
+              style="vertical-align: top;"
             >
               <div v-if="!checkIfArray(values) && !checkIfObject(values)">
                 {{ values }}
