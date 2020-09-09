@@ -34,8 +34,6 @@ export const ADMIN_PRODUCTS = gql`
         # created_at
         # updated_at
         meta {
-          id
-          group
           value
         }
         prices {
@@ -49,7 +47,6 @@ export const ADMIN_PRODUCTS = gql`
           id
         }
         categories {
-          id
           title
         }
         dimensions {
@@ -63,19 +60,16 @@ export const ADMIN_PRODUCTS = gql`
           unit
         }
         images {
-          id
           url
           type
           name
         }
         featured_image {
-          id
           url
           type
           name
         }
         tags {
-          id
           name
         }
         fixedPrices {
