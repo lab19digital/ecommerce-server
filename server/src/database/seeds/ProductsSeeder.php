@@ -58,11 +58,11 @@ class ProductsSeeder extends Seeder
         $meta =  [
             [
                 'key' => $faker->word(),
-                'value' => $faker->word()
+                'value' => $faker->sentence()
             ],
             [
                 'key' => $faker->word(),
-                'value' => $faker->word()
+                'value' => $faker->sentence()
             ]
         ];
 
@@ -189,11 +189,11 @@ class ProductsSeeder extends Seeder
         $meta =  [
             [
                 'key' => $faker->word(),
-                'value' => $faker->word()
+                'value' => $faker->sentence()
             ],
             [
                 'key' => $faker->word(),
-                'value' => $faker->word()
+                'value' => $faker->sentence()
             ]
         ];
 

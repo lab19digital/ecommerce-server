@@ -48,7 +48,11 @@
 
               <div class="divide-y divide-gray-800" v-if="checkIfArray(values)">
                 <div class="py-2" v-for="(value, key) in values" :key="key">
-                  <div v-for="(val, key) in value" :key="key">
+                  <div
+                    v-for="(val, key) in value"
+                    :key="key"
+                    style="white-space: pre;"
+                  >
                     {{ key }} : {{ val }}
                   </div>
                 </div>
@@ -58,7 +62,12 @@
                 class="divide-y divide-gray-800"
                 v-if="!checkIfArray(values) && checkIfObject(values)"
               >
-                <div class="py-2" v-for="(val, key) in values" :key="key">
+                <div
+                  class="py-2"
+                  v-for="(val, key) in values"
+                  :key="key"
+                  style="white-space: pre;"
+                >
                   {{ key }} : {{ val }}
                 </div>
               </div>
@@ -282,6 +291,8 @@ export default class Table extends Vue {
       first: this.paginatorInfo.first,
       page: this.paginatorInfo.currentPage,
     }).then((data: any) => {
+      console.log(data);
+
       try {
         let error = data.errors[0].debugMessage;
         this.errors.push(error);
