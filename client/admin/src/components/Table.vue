@@ -234,8 +234,8 @@ export default class Table extends Vue {
     let value = event.target.value;
 
     /**
-     * Based on whether the attribute of the product is selected in the settings panel, add or remove the product attribute from the
-     * tableColums array
+     * Based on whether the attribute of the product is selected in the settings panel,
+     * add or remove the product attribute from the tableColums array
      */
 
     if (checked) {
@@ -247,6 +247,14 @@ export default class Table extends Vue {
       }
     }
 
+    this.helper();
+  }
+
+  async mounted() {
+    this.loadProducts();
+  }
+
+  public helper() {
     /**
      * I have an original array (this.products) and another array (this.productsDisplay) , the products array will never be
      * changed, only the selected values from the settings panel will be used to filter data from the original products array
@@ -254,32 +262,6 @@ export default class Table extends Vue {
      *
      * The products array will keep all the data from graphql query that returns the product attributes.
      */
-
-    let tableColums = this.tableColums;
-
-    let newArray = this.products.map(function (product: any) {
-      let returnObject: any = {};
-
-      tableColums.forEach((element: any) => {
-        returnObject[element] = product[element];
-      });
-
-      return returnObject;
-    });
-
-    this.productsDisplay = newArray;
-  }
-
-  async mounted() {
-    this.loadProducts();
-  }
-
-  public helper(keys: any[]) {
-    this.tableColums = [];
-    keys.forEach((key: any) => {
-      this.tableColums.push(key);
-    });
-
     let tableColums = this.tableColums;
 
     let newArray = this.products.map(function (product: any) {
@@ -300,8 +282,6 @@ export default class Table extends Vue {
       first: this.paginatorInfo.first,
       page: this.paginatorInfo.currentPage,
     }).then((data: any) => {
-      console.log(data);
-
       try {
         let error = data.errors[0].debugMessage;
         this.errors.push(error);
@@ -310,37 +290,50 @@ export default class Table extends Vue {
         // no error
       }
 
-      // This recursively removes the __typename from the array of objects that is returned from the backend
-      function removeMeta(obj: any) {
-        for (const prop in obj) {
-          if (prop === "__typename") delete obj[prop];
-          else if (typeof obj[prop] === "object") removeMeta(obj[prop]);
-        }
-      }
+      let dataStore = this.cleanupData(data.data.adminProducts.data);
+      this.products = dataStore;
+      this.productAttributes = Object.keys(dataStore[0]);
 
-      data.data.adminProducts.data.map((element: any) => {
-        let obj = element;
-        removeMeta(obj);
-
-        return obj;
-      });
-
-      this.products = data.data.adminProducts.data;
-      this.productAttributes = Object.keys(data.data.adminProducts.data[0]);
-
-      // Assign paginato information
-      this.paginatorInfo.currentPage =
-        data.data.adminProducts.paginatorInfo.currentPage;
-      this.paginatorInfo.hasMorePages =
-        data.data.adminProducts.paginatorInfo.hasMorePages;
-      this.paginatorInfo.total = data.data.adminProducts.paginatorInfo.total;
-      this.paginatorInfo.totalPages = Math.ceil(
-        this.paginatorInfo.total / this.paginatorInfo.first
-      );
+      // Assign paginator information
+      this.paginatorInit(data.data.adminProducts.paginatorInfo);
 
       // This is to have a few columns displaying on initial view
-      this.helper(this.productAttributes.slice(0, 4));
+      if (this.tableColums.length === 0) {
+        this.productAttributes.slice(0, 4).forEach((key: any) => {
+          this.tableColums.push(key);
+        });
+      }
+
+      // Populate column data
+      this.helper();
     });
+  }
+
+  cleanupData(data: any) {
+    // This recursively removes the __typename from the array of objects that is returned from the backend
+    function removeMeta(obj: any) {
+      for (const prop in obj) {
+        if (prop === "__typename") delete obj[prop];
+        else if (typeof obj[prop] === "object") removeMeta(obj[prop]);
+      }
+    }
+
+    data.map((element: any) => {
+      let obj = element;
+      removeMeta(obj);
+      return obj;
+    });
+
+    return data;
+  }
+
+  paginatorInit(data: any) {
+    this.paginatorInfo.currentPage = data.currentPage;
+    this.paginatorInfo.hasMorePages = data.hasMorePages;
+    this.paginatorInfo.total = data.total;
+    this.paginatorInfo.totalPages = Math.ceil(
+      this.paginatorInfo.total / this.paginatorInfo.first
+    );
   }
 }
 </script>
