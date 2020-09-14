@@ -7,6 +7,7 @@ import {
   createApolloTestProvider,
   makeGetInitialState,
 } from "./helper";
+import "isomorphic-fetch";
 
 const localVue = createLocalVue();
 // const store = createStore();
@@ -44,10 +45,9 @@ describe("Login", () => {
     email.setValue("luke@example.com");
     passw.setValue("password");
     wrapper.find('button[type="submit"]').trigger("click");
-
     await Vue.nextTick();
     // @ts-ignore
-    expect(store.state.session.has_active_session).toEqual(true);
+    expect(store.state.session.authStatus).toEqual(true);
     wrapper.destroy();
     done();
   });
@@ -72,7 +72,7 @@ describe("Login", () => {
 
     await Vue.nextTick();
     // @ts-ignore
-    expect(store.state.session.has_active_session).toEqual(false);
+    expect(store.state.session.authStatus).toEqual(false);
     wrapper.destroy();
     done();
   });

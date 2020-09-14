@@ -6,7 +6,7 @@ import {
   // @ts-ignore
 } from "vue-cli-plugin-apollo/graphql-client";
 
-import { setContext } from "apollo-link-context";
+import "regenerator-runtime/runtime.js";
 
 // Install the vue plugin
 Vue.use(VueApollo);
@@ -17,27 +17,6 @@ const AUTH_TOKEN = "apollo-token";
 // Http endpoint
 const httpEndpoint =
   process.env.VUE_APP_GRAPHQL_HTTP || "http://localhost:4000/graphql";
-
-// const authLink = setContext((_, { headers }) => {
-//   // get the authentication token from local storage if it exists
-//   let authHeader = "";
-//   if (localStorage.getItem(AUTH_TOKEN) === null) {
-//     authHeader = "";
-//   } else {
-//     let token = localStorage.getItem(AUTH_TOKEN);
-//     authHeader = `Bearer ${token}`;
-//   }
-
-//   console.log("setContext " + authHeader);
-
-//   // return the headers to the context so httpLink can read them
-//   return {
-//     headers: {
-//       ...headers,
-//       authorization: authHeader,
-//     },
-//   };
-// });
 
 const defaultOptions = {
   httpEndpoint,
@@ -63,7 +42,7 @@ const defaultOptions = {
 };
 
 // Create apollo client
-export const { apolloClient, wsClient } = createApolloClient({
+export let { apolloClient, wsClient } = createApolloClient({
   ...defaultOptions,
   // ...options
 });
@@ -71,6 +50,11 @@ apolloClient.wsClient = wsClient;
 
 // Call this in the Vue app file
 export function createProvider(options: any = {}) {
+  // Override apollo client if the options param contains testClient. (Used in jest tests)
+  if (options.testClient) {
+    apolloClient = options.testClient;
+  }
+
   // Create vue apollo provider
   const apolloProvider = new VueApollo({
     defaultClient: apolloClient,

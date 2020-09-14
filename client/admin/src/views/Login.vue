@@ -99,12 +99,17 @@ export default class Login extends Vue {
 
     this.logIn(this.authDetails)
       .then(() => {
-        this.$router.push("/dashboard");
+        try {
+          this.$router.push("/dashboard");
+        } catch (error) {
+          console.log(error);
+        }
       })
       .catch((e: any) => {
         // Error message contains unwanted words from bubbling up with promise chain
         let er = e.toString().replace(/(error|:|GraphQL)/gi, "");
         this.errors.push(er);
+        console.log(e);
       });
   }
 

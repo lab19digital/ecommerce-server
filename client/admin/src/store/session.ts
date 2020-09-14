@@ -65,9 +65,10 @@ export const actions: ActionTree<SessionState, RootState> = {
       const token = data.logIn.token;
       const user = data.logIn.user;
       commit("SET_TOKEN", token);
+      dispatch("setUser", user);
+
       // This also commits the token to local storage
       await onLogin(apolloClient, token);
-      dispatch("setUser", user);
     } catch (e) {
       throw Error(e);
     }
