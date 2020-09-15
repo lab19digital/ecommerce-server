@@ -41,7 +41,7 @@
               v-for="(values, key) in product"
               :key="key"
               class="border px-4 py-2 pt-12"
-              style="vertical-align: top;"
+              style="vertical-align: top"
             >
               <div v-if="!checkIfArray(values) && !checkIfObject(values)">
                 {{ values }}
@@ -52,7 +52,7 @@
                   <div
                     v-for="(val, key) in value"
                     :key="key"
-                    style="white-space: pre;"
+                    style="white-space: pre"
                   >
                     {{ key }} : {{ val }}
                   </div>
@@ -67,7 +67,7 @@
                   class="py-2"
                   v-for="(val, key) in values"
                   :key="key"
-                  style="white-space: pre;"
+                  style="white-space: pre"
                 >
                   {{ key }} : {{ val }}
                 </div>
@@ -292,8 +292,6 @@ export default class Table extends Vue {
       first: this.paginatorInfo.first,
       page: this.paginatorInfo.currentPage,
     }).then((data: any) => {
-      console.log(data);
-
       try {
         let error = data.errors[0].debugMessage;
         this.errors.push(error);

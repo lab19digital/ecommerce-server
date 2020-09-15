@@ -9,6 +9,16 @@ extend type Query {
             builder: "Gernzy\Server\GraphQL\Builders\ProductsBuilder@search"
         )
 
+    adminProducts(input: ProductsQueryInput, first: Int, page: Int): Product!
+        @gernzyConvertCurrency
+        @paginate(
+            type: "paginator"
+            model: "Gernzy\Server\Models\Product"
+            scopes: []
+            builder: "Gernzy\Server\GraphQL\Builders\ProductsBuilder@search"
+        )
+        @can(ability: "view", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
+
     product(id: ID @eq): Product @gernzyConvertCurrency @find(model: "Gernzy\Server\Models\Product")
 
     # productsByIds(includeIds: [Int!] @in(key: "id")): [Product!]! @paginate
@@ -68,6 +78,16 @@ type Product {
     featured_image: Image
     tags: [Tag!] @hasMany
     fixedPrices: [ProductFixedPrice!] @hasMany
+    data: [Product]
+    paginatorInfo: PaginatorInfo
+}
+
+type PaginatorInfo {
+    total: Int,
+    hasMorePages: Boolean,
+    currentPage: Int,
+    first: Int,
+    totalPages: Int,
 }
 
 type ProductFixedPrice {
@@ -263,4 +283,4 @@ type AddProductTagsPayload {
 type SetProductFeaturedImagePayload {
     product: Product!
 } 
-`
+`;
