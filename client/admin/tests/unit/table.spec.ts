@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { mount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import Table from "@/components/Table.vue";
 import store from "@/store/store";
 import {
@@ -8,12 +8,13 @@ import {
   makeGetInitialState,
 } from "./helper";
 import "isomorphic-fetch";
+import flushPromises from "flush-promises";
 
 const localVue = createLocalVue();
 const apolloProvider = createApolloTestProvider();
 const getInitialState = makeGetInitialState(store);
 
-describe("Login", () => {
+describe("Table", () => {
   beforeEach(() => {
     store.replaceState(getInitialState());
   });
@@ -28,52 +29,31 @@ describe("Login", () => {
     expect(wrapper.findComponent(Table).exists()).toBe(true);
   });
 
-  // test("can handle successful login when submit button is clicked", async function (done) {
-  //   const elem = document.createElement("div");
-  //   if (document.body) {
-  //     document.body.appendChild(elem);
-  //   }
+  test("can handle successful next button is clicked", async function (done) {
+    const wrapper = shallowMount(Table, {
+      store,
+      localVue,
+      apolloProvider,
+    });
 
-  //   const wrapper = mount(Login, {
-  //     store,
-  //     localVue,
-  //     apolloProvider,
-  //     attachTo: elem,
-  //   });
-  //   const email = wrapper.find("#email");
-  //   const passw = wrapper.find("#password");
-  //   email.setValue("luke@example.com");
-  //   passw.setValue("password");
-  //   wrapper.find('button[type="submit"]').trigger("click");
-  //   await Vue.nextTick();
-  //   // @ts-ignore
-  //   expect(store.state.session.authStatus).toEqual(true);
-  //   wrapper.destroy();
-  //   done();
-  // });
+    await flushPromises();
 
-  // test("can handle failed login when submit button is clicked", async function (done) {
-  //   const elem = document.createElement("div");
-  //   if (document.body) {
-  //     document.body.appendChild(elem);
-  //   }
+    // @ts-ignore
+    const originalCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    expect(originalCurrentPage == 0).toBe(false);
+    // @ts-ignore
+    wrapper.vm.paginatorInfo.currentPage = 1;
+    // @ts-ignore
+    wrapper.vm.paginatorInfo.hasMorePages = true;
 
-  //   const wrapper = mount(Login, {
-  //     store,
-  //     localVue,
-  //     apolloProvider,
-  //     attachTo: elem,
-  //   });
-  //   const email = wrapper.find("#email");
-  //   const passw = wrapper.find("#password");
-  //   email.setValue("");
-  //   passw.setValue("");
-  //   wrapper.find('button[type="submit"]').trigger("click");
+    wrapper.find("#pnext").trigger("click");
+    await flushPromises();
+    // @ts-ignore
+    const newCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    expect(originalCurrentPage == newCurrentPage).toBe(false);
+    expect(wrapper.findComponent(Table).exists()).toBe(true);
 
-  //   await Vue.nextTick();
-  //   // @ts-ignore
-  //   expect(store.state.session.authStatus).toEqual(false);
-  //   wrapper.destroy();
-  //   done();
-  // });
+    wrapper.destroy();
+    done();
+  });
 });

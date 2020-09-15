@@ -80,6 +80,7 @@
 
     <div class="inline-flex justify-center content-center items-center">
       <button
+        id="pprev"
         @click="paginatorPrevious"
         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
       >
@@ -87,6 +88,7 @@
       </button>
 
       <button
+        id="pnext"
         @click="paginatorNext"
         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
       >
@@ -316,6 +318,8 @@ export default class Table extends Vue {
 
       // Populate column data
       this.helper();
+
+      return Promise.resolve();
     });
   }
 
