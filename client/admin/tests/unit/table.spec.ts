@@ -19,14 +19,27 @@ describe("Table", () => {
     store.replaceState(getInitialState());
   });
 
-  test("should render content correctly", () => {
+  test("should render content correctly", async function (done) {
     const wrapper = mount(Table, {
       store,
       localVue,
       apolloProvider,
     });
-    // expect(wrapper.find('label[for="email"]').text()).toEqual("Username");
+    await flushPromises();
     expect(wrapper.findComponent(Table).exists()).toBe(true);
+    done();
+  });
+
+  test("should query products correctly", async function (done) {
+    const wrapper: any = mount(Table, {
+      store,
+      localVue,
+      apolloProvider,
+    });
+    await flushPromises();
+
+    expect(wrapper.vm.products.length > 0).toBe(true);
+    done();
   });
 
   test("can handle successful next button is clicked", async function (done) {
@@ -104,6 +117,33 @@ describe("Table", () => {
   });
 
   test("can handle successful paginator input change", async function (done) {
+    const wrapper: any = shallowMount(Table, {
+      store,
+      localVue,
+      apolloProvider,
+    });
+
+    await flushPromises();
+
+    const originalCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    expect(originalCurrentPage == 0).toBe(false);
+    wrapper.vm.paginatorInfo.currentPage = 1;
+    wrapper.vm.paginatorInfo.hasMorePages = true;
+
+    const paginatorInput = wrapper.find("#ppage");
+    paginatorInput.element.value = 6;
+    paginatorInput.trigger("change");
+
+    await flushPromises();
+    const newCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    expect(originalCurrentPage == newCurrentPage).toBe(false);
+    expect(wrapper.findComponent(Table).exists()).toBe(true);
+
+    wrapper.destroy();
+    done();
+  });
+
+  test("can handle successful settings checkbox select change", async function (done) {
     const wrapper: any = shallowMount(Table, {
       store,
       localVue,
