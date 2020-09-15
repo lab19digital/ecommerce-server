@@ -56,4 +56,38 @@ describe("Table", () => {
     wrapper.destroy();
     done();
   });
+
+  test("can handle successful paginator input change", async function (done) {
+    const wrapper = shallowMount(Table, {
+      store,
+      localVue,
+      apolloProvider,
+    });
+
+    await flushPromises();
+
+    // @ts-ignore
+    const originalDisplayValues = Object.keys(wrapper.vm.productsDisplay[0]);
+    // @ts-ignore
+    const attribute = wrapper.vm.productAttributes[5];
+
+    wrapper.find(`#${attribute}`).trigger("click");
+
+    const checkBox = wrapper.find(`#${attribute}`);
+    // @ts-ignore
+    checkBox.element.selected = false;
+    checkBox.trigger("change");
+    await Vue.nextTick();
+
+    // @ts-ignore
+    const mutatedDisplayValues = Object.keys(wrapper.vm.productsDisplay[0]);
+
+    expect(originalDisplayValues.length == mutatedDisplayValues.length).toBe(
+      false
+    );
+    expect(mutatedDisplayValues).toContain(attribute);
+
+    wrapper.destroy();
+    done();
+  });
 });
