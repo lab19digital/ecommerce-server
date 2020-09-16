@@ -42,6 +42,7 @@ const defaultOptions = {
 };
 
 // Create apollo client
+// eslint-disable-next-line prefer-const
 export let { apolloClient, wsClient } = createApolloClient({
   ...defaultOptions,
   // ...options
