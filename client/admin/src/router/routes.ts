@@ -1,5 +1,6 @@
 import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
+import Products from "@/views/Products.vue";
 import store from "@/store/store";
 
 export default [
@@ -11,6 +12,12 @@ export default [
     path: "/dashboard",
     name: "Dashboard",
     component: Dashboard,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/products",
+    name: "Products",
+    component: Products,
     meta: { requiresAuth: true },
   },
   {

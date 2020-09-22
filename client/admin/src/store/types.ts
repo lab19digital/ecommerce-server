@@ -3,7 +3,7 @@ import { MutationPayload } from "vuex";
 // Store
 export interface RootState {
   session: SessionState;
-  table: TableState;
+  products: ProductsState;
 }
 
 export interface SessionState {
@@ -13,7 +13,7 @@ export interface SessionState {
   authStatus: Boolean;
 }
 
-export interface TableState {
+export interface ProductsState {
   loading: Boolean;
 }
 

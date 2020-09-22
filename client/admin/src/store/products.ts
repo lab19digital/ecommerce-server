@@ -1,26 +1,26 @@
 import { GetterTree, MutationTree, ActionTree, Module } from "vuex";
-import { RootState, TableState } from "./types";
+import { RootState, ProductsState } from "./types";
 import { apolloClient, onLogin, onLogout } from "@/vue-apollo";
 import { ADMIN_PRODUCTS } from "@/graphql/queries";
 
-type TableGetter = GetterTree<TableState, RootState>;
+type ProductsGetter = GetterTree<ProductsState, RootState>;
 
-export const state: TableState = {
+export const state: ProductsState = {
   loading: false,
 };
 
-export const getters: TableGetter = {
-  loadingTableResults: (state) => state.loading,
+export const getters: ProductsGetter = {
+  loadingProductsResults: (state) => state.loading,
 };
 
-export const mutations: MutationTree<TableState> = {
+export const mutations: MutationTree<ProductsState> = {
   SET_TABLE_RESULT(state, result) {
     state.loading = result;
   },
 };
 
-export const actions: ActionTree<TableState, RootState> = {
-  async tableResults({ commit }, paginatorInfo) {
+export const actions: ActionTree<ProductsState, RootState> = {
+  async productsResults({ commit }, paginatorInfo) {
     commit("SET_TABLE_RESULT", true);
 
     return await apolloClient
@@ -35,7 +35,7 @@ export const actions: ActionTree<TableState, RootState> = {
   },
 };
 
-export const table: Module<any, any> = {
+export const products: Module<any, any> = {
   state,
   getters,
   mutations,
