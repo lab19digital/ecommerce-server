@@ -1,17 +1,14 @@
 <template>
   <div class="mx-auto px-6 py-6">
-    <Table />
+    <h1 class="text-5xl">Dashboard</h1>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import Table from "@/components/Table.vue";
 
 @Component({
-  components: {
-    Table,
-  },
+  components: {},
 })
 export default class Dashboard extends Vue {}
 </script>
