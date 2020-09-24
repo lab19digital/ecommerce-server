@@ -35,10 +35,12 @@ class ProductsSeeder extends Seeder
             'price_cents' =>  $faker->numberBetween($min = 1000, $max = 9000),
             'price_currency' => "USD",
             'short_description' => $faker->sentence(),
-            'long_description' => $faker->sentence(),
+            'long_description' => $faker->paragraph(),
             'status' => $rand > 5 ? 'IN_STOCK' : 'OUT_OF_STOCK',
             'published' => $rand > 5 ? 1 : 0
         ]);
+
+        $product->parent_id = $rand;
 
         $product->save();
 
@@ -149,8 +151,8 @@ class ProductsSeeder extends Seeder
         ]);
 
         // Create variants for product
-        $this->createVariant($product->id);
-        $this->createVariant($product->id);
+        // $this->createVariant($product->id);
+        // $this->createVariant($product->id);
     }
 
     public function createVariant($parent_id)
