@@ -125,18 +125,6 @@ export default class Products extends Vue {
     this.errors = [];
   }
 
-  // public even(key: number): Boolean {
-  //   return key % 2 == 0;
-  // }
-
-  // public checkIfArray(value: number): Boolean {
-  //   return Array.isArray(value);
-  // }
-
-  // public checkIfObject(value: number): Boolean {
-  //   return typeof value === "object" && value !== null;
-  // }
-
   public paginatorNext(): void {
     if (
       this.paginatorInfo.currentPage >= 1 &&
