@@ -88,7 +88,12 @@ import Table from "@/components/Table.vue";
 import { Action, Getter, namespace } from "vuex-class";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
-import { checkIfArray, formatArray } from "@/utils/products";
+import {
+  checkIfArray,
+  formatArray,
+  checkIfObject,
+  formatObject,
+} from "@/utils/products";
 const ProductsAction = namespace("products", Action);
 const ProductsGetter = namespace("products", Getter);
 
@@ -217,6 +222,9 @@ export default class Products extends Vue {
         let prodElement: any = product[element];
         if (checkIfArray(prodElement)) {
           prodElement = formatArray(prodElement);
+        }
+        if (checkIfObject(prodElement)) {
+          prodElement = formatObject(prodElement);
         }
         returnObject[element] = prodElement;
       });

@@ -25,34 +25,8 @@
               class="border px-4 py-2 pt-12"
               style="vertical-align: top"
             >
-              <div v-if="!checkIfArray(values) && !checkIfObject(values)">
+              <div v-if="values">
                 {{ values }}
-              </div>
-
-              <div class="divide-y divide-gray-800" v-if="checkIfArray(values)">
-                <div class="py-2" v-for="(value, key) in values" :key="key">
-                  <div
-                    v-for="(val, key) in value"
-                    :key="key"
-                    style="white-space: pre"
-                  >
-                    {{ key }} : {{ val }}
-                  </div>
-                </div>
-              </div>
-
-              <div
-                class="divide-y divide-gray-800"
-                v-if="!checkIfArray(values) && checkIfObject(values)"
-              >
-                <div
-                  class="py-2"
-                  v-for="(val, key) in values"
-                  :key="key"
-                  style="white-space: pre"
-                >
-                  {{ key }} : {{ val }}
-                </div>
               </div>
             </td>
           </tr>
@@ -71,14 +45,6 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 export default class Table extends Vue {
   @Prop() readonly rows!: string;
   @Prop() readonly columns!: string;
-
-  public checkIfArray(value: number): Boolean {
-    return Array.isArray(value);
-  }
-
-  public checkIfObject(value: number): Boolean {
-    return typeof value === "object" && value !== null;
-  }
 
   public even(key: number): Boolean {
     return key % 2 == 0;

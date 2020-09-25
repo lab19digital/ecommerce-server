@@ -24,6 +24,7 @@ export default [
     path: "/login",
     component: Login,
     beforeEnter: (to: any, from: any, next: any) => {
+      store.dispatch("session/checkLoggedIn");
       const isUserLoggedIn = store.getters["session/isAuthenticated"];
       const isAdmin = store.getters["session/isAdmin"];
 
