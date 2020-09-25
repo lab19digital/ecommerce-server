@@ -1,12 +1,29 @@
 const formatter = {
-  // categories: csv,
-  // images: gallery,
-  // dimensions: csv,
-  // title: link,
+  // id: link,
+  // title: todo,
+  // status: todo,
+  // published: todo,
+  // price_cents: todo,
+  // price_currency: todo,
+  // short_description: todo,
+  // long_description: todo,
+  // created_at: todo,
+  // updated_at: todo,
+  // meta: todo,
+  // prices: todo,
+  // sizes: todo,
+  // variants: todo,
+  // categories: todo,
+  // dimensions: todo,
+  // weight: todo,
+  // images: todo,
+  // featured_image: todo,
+  // tags: todo,
+  // fixedPrices: todo,
 };
 
-// function link( columnName: string, rowData: Row ){
-//   return `/products/${rowData.id}`
+// function link(rowData: any) {
+//   return `/products/${rowData.id}`;
 // }
 
 export function checkIfArray(value: number): Boolean {
