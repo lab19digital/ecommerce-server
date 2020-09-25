@@ -48,7 +48,7 @@ export function checkIfObject(value: number): Boolean {
 export function formatArray(arr: []): String {
   const returnVals = arr
     .map((each) => {
-      // check if the formatter obect higher up has a function to format the key (which corresponds to column)
+      // check if the formatter object higher up has a function to format the key (which corresponds to column)
       // Otherwise just return value of object in coming
       try {
         const keysIncoming: string[] = Object.keys(each);
