@@ -1,4 +1,4 @@
-const formatter = {
+const formatter: any = {
   // id: link,
   // title: todo,
   // status: todo,
@@ -13,7 +13,7 @@ const formatter = {
   // prices: todo,
   // sizes: todo,
   // variants: todo,
-  // categories: todo,
+  categories: categories,
   // dimensions: todo,
   // weight: todo,
   // images: todo,
@@ -25,6 +25,14 @@ const formatter = {
 // function link(rowData: any) {
 //   return `/products/${rowData.id}`;
 // }
+
+function categories(data: any): string {
+  return data
+    .map((each: any) => {
+      return each.title;
+    })
+    .join(",");
+}
 
 export function checkIfArray(value: number): Boolean {
   return Array.isArray(value);
@@ -40,6 +48,23 @@ export function checkIfObject(value: number): Boolean {
 export function formatArray(arr: []): String {
   const returnVals = arr
     .map((each) => {
+      // check if the formatter obect higher up has a function to format the key (which corresponds to column)
+      // Otherwise just return value of object in coming
+      try {
+        const keysIncoming: string[] = Object.keys(each);
+        const keysFormatter: string[] = Object.keys(formatter);
+
+        const key: any = keysFormatter.filter(function (val) {
+          return keysIncoming.indexOf(val) != -1;
+        });
+
+        if (key.length > 0) {
+          return formatter[key](each);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
       return Object.values(each);
     })
     .join("; ");
