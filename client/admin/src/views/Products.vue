@@ -88,12 +88,7 @@ import Table from "@/components/Table.vue";
 import { Action, Getter, namespace } from "vuex-class";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
-import {
-  checkIfArray,
-  formatArray,
-  checkIfObject,
-  formatObject,
-} from "@/utils/products";
+import { transform } from "@/utils/products";
 const ProductsAction = namespace("products", Action);
 const ProductsGetter = namespace("products", Getter);
 
@@ -219,14 +214,8 @@ export default class Products extends Vue {
       let returnObject: any = {};
 
       tableColums.forEach((element: any) => {
-        let prodElement: any = product[element];
-        if (checkIfArray(prodElement)) {
-          prodElement = formatArray(prodElement);
-        }
-        if (checkIfObject(prodElement)) {
-          prodElement = formatObject(prodElement);
-        }
-        returnObject[element] = prodElement;
+        // Transform is a helper function to prepare data for the table component
+        returnObject[element] = transform(product[element]);
       });
 
       return returnObject;
@@ -240,7 +229,7 @@ export default class Products extends Vue {
       first: this.paginatorInfo.first,
       page: this.paginatorInfo.currentPage,
     }).then((data: any) => {
-      console.log(data);
+      // console.log(data);
       try {
         let error = data.errors[0].debugMessage;
         this.errors.push(error);
