@@ -89,6 +89,8 @@ import { Action, Getter, namespace } from "vuex-class";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
 import { transform } from "@/utils/products";
+import { Paginator } from "@/types/paginator";
+// import { Product } from "@/types/product";
 const ProductsAction = namespace("products", Action);
 const ProductsGetter = namespace("products", Getter);
 
@@ -100,20 +102,20 @@ const ProductsGetter = namespace("products", Getter);
   },
 })
 export default class Products extends Vue {
-  private errors: any[] = [];
+  private errors: string[] = [];
 
   private showSettings: Boolean = false;
 
   private products: any[] = [];
   private productsDisplay: any[] = [];
 
-  private productAttributes: any[] = [];
-  private tableColums: any[] = [];
+  private productAttributes: string[] = [];
+  private tableColums: string[] = [];
 
-  @ProductsAction productsResults: any;
-  @ProductsGetter loadingProductsResults: any;
+  @ProductsAction productsResults!: any;
+  @ProductsGetter loadingProductsResults!: Boolean;
 
-  private paginatorInfo: any = {
+  private paginatorInfo: Paginator = {
     total: 0,
     hasMorePages: false,
     currentPage: 1,
@@ -193,35 +195,32 @@ export default class Products extends Vue {
       }
     }
 
-    this.helper();
+    this.filterProducts();
   }
 
   async mounted() {
     this.loadProducts();
   }
 
-  public helper() {
+  public filterProducts() {
     /**
      * I have an original array (this.products) and another array (this.productsDisplay) , the products array will never be
      * changed, only the selected values from the settings panel will be used to filter data from the original products array
      * back into the productsDisplay array and then appear in the ui to the user.
      *
-     * The products array will keep all the data from graphql query that returns the product attributes.
+     * The products array will keep all the data from graphql query that returns the product attributes. The productsDisplay will change
+     * each time the user selects more columns or removes columns from the setttings tab. Each column value is a property in the poduct
+     * object. So for each product object in the producs array we filter out only the desired keys from the objects and clone them
+     * into the productDisplay array.
      */
     let tableColums = this.tableColums;
 
-    let newArray = this.products.map(function (product: any) {
-      let returnObject: any = {};
-
-      tableColums.forEach((element: any) => {
-        // Transform is a helper function to prepare data for the table component
-        returnObject[element] = transform(product[element]);
-      });
-
-      return returnObject;
+    this.productsDisplay = this.products.map(function (product: any) {
+      return Object.keys(product)
+        .filter((k) => tableColums.includes(k))
+        .map((k) => Object.assign({}, { [k]: transform(product[k]) }))
+        .reduce((res, o) => Object.assign(res, o), {});
     });
-
-    this.productsDisplay = newArray;
   }
 
   async loadProducts() {
@@ -253,7 +252,7 @@ export default class Products extends Vue {
       }
 
       // Populate column data
-      this.helper();
+      this.filterProducts();
 
       return Promise.resolve();
     });

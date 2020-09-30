@@ -1,5 +1,5 @@
 import { GetterTree, MutationTree, ActionTree, Module } from "vuex";
-import { RootState, SessionState } from "./types";
+import { RootState, SessionState } from "../types/types";
 import { apolloClient, onLogin, onLogout } from "@/vue-apollo";
 import { LOGGED_IN_USER } from "@/graphql/queries";
 import { LOGIN_USER, REGISTER_USER, LOGOUT_USER } from "@/graphql/mutations";

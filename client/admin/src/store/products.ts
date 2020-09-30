@@ -1,5 +1,5 @@
 import { GetterTree, MutationTree, ActionTree, Module } from "vuex";
-import { RootState, ProductsState } from "./types";
+import { RootState, ProductsState } from "@/types/types";
 import { apolloClient, onLogin, onLogout } from "@/vue-apollo";
 import { ADMIN_PRODUCTS } from "@/graphql/queries";
 
@@ -28,7 +28,7 @@ export const actions: ActionTree<ProductsState, RootState> = {
         mutation: ADMIN_PRODUCTS,
         variables: { ...paginatorInfo },
       })
-      .then((data: any) => {
+      .then((data: []) => {
         commit("SET_TABLE_RESULT", false);
         return data;
       });
