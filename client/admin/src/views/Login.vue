@@ -81,8 +81,8 @@ const SessionAction = namespace("session", Action);
   },
 })
 export default class Login extends Vue {
-  private errors: any[] = [];
-  private authDetails: any = {
+  private errors: string[] = [];
+  private authDetails: { email: string; password: string } = {
     email: "",
     password: "",
   };
@@ -105,7 +105,7 @@ export default class Login extends Vue {
           console.log(error);
         }
       })
-      .catch((e: any) => {
+      .catch((e: string) => {
         // Error message contains unwanted words from bubbling up with promise chain
         let er = e.toString().replace(/(error|:|GraphQL)/gi, "");
         this.errors.push(er);
@@ -113,20 +113,20 @@ export default class Login extends Vue {
       });
   }
 
-  get dateYear(): string {
-    const today: any = new Date();
-    const date: any = today.getFullYear();
+  get dateYear(): number {
+    const today: Date = new Date();
+    const date: number = today.getFullYear();
     return date;
   }
 
   @Watch("$route", { immediate: true, deep: true })
-  onUrlChange(to: any) {
+  onUrlChange(to: { query: { redirectFrom: string } }) {
     try {
       if (to.query.redirectFrom) {
         this.errors.push("Sorry, you have to login first!");
       }
     } catch (error) {
-      console.log("Login.vue onUrlChange(to: any)   " + error);
+      console.log("Login.vue onUrlChange(to)   " + error);
     }
   }
 }

@@ -22,24 +22,28 @@ const formatter: any = {
   // fixedPrices: todo,
 };
 
-// function link(rowData: any) {
+// function link(rowData: {}) {
 //   return `/products/${rowData.id}`;
 // }
 
-function categories(data: any): string {
+function categories(data: []): string {
   return data
-    .map((each: any) => {
+    .map((each: { title: string }) => {
       return each.title;
     })
     .join(",");
 }
 
-export function checkIfArray(value: number): Boolean {
+export function checkIfArray(value: any): Boolean {
   return Array.isArray(value);
 }
 
-export function checkIfObject(value: number): Boolean {
-  return typeof value === "object" && value !== null;
+export function checkIfObject(value: any): Boolean {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    Object.prototype.toString.call(value) === "[object Object]"
+  );
 }
 
 /**
@@ -47,11 +51,11 @@ export function checkIfObject(value: number): Boolean {
  * */
 export function formatArray(arr: []): String {
   const returnVals = arr
-    .map((each) => {
+    .map((currentObject) => {
       // check if the formatter object higher up has a function to format the key (which corresponds to column)
       // Otherwise just return value of object in coming
       try {
-        const keysIncoming: string[] = Object.keys(each);
+        const keysIncoming: string[] = Object.keys(currentObject);
         const keysFormatter: string[] = Object.keys(formatter);
 
         const key: any = keysFormatter.filter(function (val) {
@@ -59,13 +63,13 @@ export function formatArray(arr: []): String {
         });
 
         if (key.length > 0) {
-          return formatter[key](each);
+          return formatter[key](currentObject);
         }
       } catch (error) {
         console.log(error);
       }
 
-      return Object.values(each);
+      return Object.values(currentObject);
     })
     .join("; ");
   return returnVals;
@@ -74,17 +78,16 @@ export function formatArray(arr: []): String {
 /**
  * Takes an object and reduces it to a string value
  * */
-export function formatObject(arr: []): String {
-  return Object.values(arr).join("; ");
+export function formatObject(obj: {}): String {
+  return Object.values(obj).join("; ");
 }
 
-export function transform(prodElement: any): String {
-  if (checkIfArray(prodElement)) {
-    prodElement = formatArray(prodElement);
+export function transform(prodElement: {} | [] | String): String | {} {
+  if (Array.isArray(prodElement)) {
+    return formatArray(prodElement);
+  } else if (checkIfObject(prodElement)) {
+    return formatObject(prodElement);
+  } else {
+    return prodElement;
   }
-  if (checkIfObject(prodElement)) {
-    prodElement = formatObject(prodElement);
-  }
-
-  return prodElement;
 }
