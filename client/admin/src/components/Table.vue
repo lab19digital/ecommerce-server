@@ -90,6 +90,9 @@ export default class Table extends Vue {
   }
 
   @PaginatorAction updatePaginatorInfo!: any;
+  @PaginatorAction paginatorNext!: any;
+  @PaginatorAction paginatorPrevious!: any;
+  @PaginatorAction paginatorInputChange!: any;
   @PaginatorGetter getPaginatorState!: Boolean;
 
   // public paginatorNext(): void {
