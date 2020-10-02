@@ -93,7 +93,7 @@ export default class Login extends Vue {
     event.preventDefault();
     if (!this.authDetails.email || !this.authDetails.password) {
       this.errors.push("Please complete your email and password");
-      return;
+      return null;
     }
     this.errors = [];
 

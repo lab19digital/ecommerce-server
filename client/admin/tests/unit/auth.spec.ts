@@ -30,11 +30,12 @@ describe("Router", () => {
   test("should not navigate to dashboard unless logged in", async () => {
     const to = {
       matched: [{ meta: { requiresAuth: true } }],
+      fullPath: "",
     };
 
     const next = jest.fn();
 
-    beforeEachGernzy(to, undefined, next);
+    beforeEachGernzy(to, {}, next);
 
     expect(auth).toHaveBeenCalled();
   });

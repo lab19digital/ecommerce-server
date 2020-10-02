@@ -35,7 +35,7 @@ export const actions: ActionTree<ProductsState, RootState> = {
   },
 };
 
-export const products: Module<any, any> = {
+export const products: Module<ProductsState, RootState> = {
   state,
   getters,
   mutations,

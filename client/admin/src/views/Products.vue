@@ -48,6 +48,7 @@
       <label for="page"> of {{ paginatorInfo.totalPages }}</label>
     </div>
 
+    <!-- Settings -->
     <button
       @click="showSettings = !showSettings"
       class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4 mx-6"

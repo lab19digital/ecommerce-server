@@ -4,6 +4,7 @@ import { MutationPayload } from "vuex";
 export interface RootState {
   session: SessionState;
   products: ProductsState;
+  paginator: PaginatorState;
 }
 
 export interface SessionState {
@@ -15,6 +16,15 @@ export interface SessionState {
 
 export interface ProductsState {
   loading: Boolean;
+}
+
+export interface PaginatorState {
+  total: number;
+  hasMorePages: boolean;
+  currentPage: number;
+  first: number;
+  totalPages: number;
+  errors: Array<string>;
 }
 
 export interface HistoryState {

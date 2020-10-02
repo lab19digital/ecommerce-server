@@ -1,6 +1,6 @@
 import store from "@/store/store";
 
-export function auth(to: any, from: any, next: any) {
+export function auth(to: { fullPath: string }, from: {}, next: Function) {
   /**
    * This action is to check and set the state, in case the user has
    * refreshed the page, after having logged in. The token and user object

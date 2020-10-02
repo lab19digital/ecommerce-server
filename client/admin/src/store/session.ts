@@ -106,7 +106,7 @@ export const actions: ActionTree<SessionState, RootState> = {
   },
 };
 
-export const session: Module<any, any> = {
+export const session: Module<SessionState, RootState> = {
   state,
   getters,
   mutations,
