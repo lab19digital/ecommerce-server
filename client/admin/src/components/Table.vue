@@ -66,9 +66,10 @@
         id="ppage"
         type="text"
         placeholder="Page"
-        v-model="getPaginatorState.currentPage"
+        :value="getPaginatorState.currentPage"
         @change="paginatorInputChangeHandle"
       />
+
       <label for="page"> of {{ getPaginatorState.totalPages }}</label>
     </div>
   </div>
@@ -109,8 +110,8 @@ export default class Table extends Vue {
     this.paginatorPrevious();
   }
 
-  public paginatorInputChangeHandle(): void {
-    this.paginatorInputChange();
+  public paginatorInputChangeHandle(event: any): void {
+    this.paginatorInputChange(event.target.value);
   }
 
   public resetErrors(): void {

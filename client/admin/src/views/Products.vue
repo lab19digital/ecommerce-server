@@ -90,7 +90,7 @@ export default class Products extends Vue {
   @ProductsGetter loadingProductsResults!: Boolean;
   @PaginatorAction updatePaginatorInfo!: any;
 
-  private paginatorState = this.$store.state["paginator"];
+  private paginatorState: Paginator = this.$store.state["paginator"];
 
   private paginatorInfo: Paginator = this.$store.state["paginator"];
 

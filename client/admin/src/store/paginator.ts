@@ -39,15 +39,12 @@ export const actions: ActionTree<PaginatorState, RootState> = {
     commit("RESET_PAGINATOR_ERROR");
   },
   paginatorNext({ commit, state }, paginatorInfo) {
-    console.log("store paginatorNext");
-
     if (
       state.currentPage >= 1 &&
       state.hasMorePages &&
       state.currentPage <= Math.ceil(state.total / state.first)
     ) {
       state.currentPage++;
-      // this.loadProducts();
     } else {
       state.errors.push(
         "Enter a number up to " + Math.ceil(state.total / state.first)
@@ -56,14 +53,11 @@ export const actions: ActionTree<PaginatorState, RootState> = {
   },
 
   paginatorPrevious({ commit, state }, paginatorInfo) {
-    console.log("store paginatorPrevious");
-
     if (
       state.currentPage >= 1 &&
       state.currentPage <= Math.ceil(state.total / state.first)
     ) {
       state.currentPage--;
-      // this.loadProducts();
     } else {
       state.errors.push(
         "Enter a number up to " + Math.ceil(state.total / state.first)
@@ -71,22 +65,18 @@ export const actions: ActionTree<PaginatorState, RootState> = {
     }
   },
 
-  paginatorInputChange({ commit, state }, paginatorInfo) {
-    console.log("store paginatorInputChange");
-
-    const currentPage = state.currentPage;
+  paginatorInputChange({ commit, state }, value) {
+    const currentPage = value;
     const totalPages = state.total;
     const pagesFirst = state.first;
     const ceiledPages = Math.ceil(totalPages / pagesFirst);
 
     if (currentPage < 1 || currentPage > ceiledPages) {
       state.errors.push("Enter a number up to " + ceiledPages);
-      state.currentPage = 1;
     } else if (currentPage >= 1 && currentPage <= ceiledPages) {
-      // this.loadProducts();
+      state.currentPage = currentPage;
     } else {
-      state.errors.push("Error ");
-      state.currentPage = 1;
+      state.errors.push("Error occurred");
     }
   },
 };

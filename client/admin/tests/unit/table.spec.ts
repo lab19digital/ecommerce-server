@@ -30,18 +30,6 @@ describe("Table", () => {
     done();
   });
 
-  test("should query products correctly", async function (done) {
-    const wrapper: any = mount(Table, {
-      store,
-      localVue,
-      apolloProvider,
-    });
-    await flushPromises();
-
-    expect(wrapper.vm.products.length > 0).toBe(true);
-    done();
-  });
-
   test("can handle successful next button is clicked", async function (done) {
     const wrapper: any = shallowMount(Table, {
       store,
@@ -51,14 +39,16 @@ describe("Table", () => {
 
     await flushPromises();
 
-    const originalCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    const originalCurrentPage: any = store.state.paginator.currentPage;
     expect(originalCurrentPage == 0).toBe(false);
-    wrapper.vm.paginatorInfo.currentPage = 1;
-    wrapper.vm.paginatorInfo.hasMorePages = true;
+    store.state.paginator.currentPage = 1;
+    store.state.paginator.hasMorePages = true;
+    store.state.paginator.total = 100;
 
     wrapper.find("#pnext").trigger("click");
     await flushPromises();
-    const newCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    const newCurrentPage: any = store.state.paginator.currentPage;
+
     expect(originalCurrentPage == newCurrentPage).toBe(false);
     expect(wrapper.findComponent(Table).exists()).toBe(true);
 
@@ -75,14 +65,15 @@ describe("Table", () => {
 
     await flushPromises();
 
-    const originalCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    const originalCurrentPage: any = store.state.paginator.currentPage;
     expect(originalCurrentPage == 0).toBe(false);
-    wrapper.vm.paginatorInfo.currentPage = 2;
-    wrapper.vm.paginatorInfo.hasMorePages = true;
+    store.state.paginator.currentPage = 3;
+    store.state.paginator.hasMorePages = true;
+    store.state.paginator.total = 100;
 
     wrapper.find("#pprev").trigger("click");
     await flushPromises();
-    const newCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    const newCurrentPage: any = store.state.paginator.currentPage;
     expect(originalCurrentPage == newCurrentPage).toBe(false);
     expect(wrapper.findComponent(Table).exists()).toBe(true);
 
@@ -99,18 +90,18 @@ describe("Table", () => {
 
     await flushPromises();
 
-    wrapper.vm.paginatorInfo.hasMorePages = false;
+    store.state.paginator.hasMorePages = false;
 
     wrapper.find("#pnext").trigger("click");
     await flushPromises();
-    expect(wrapper.vm.errors.length > 0).toBe(true);
+    expect(store.state.paginator.errors.length > 0).toBe(true);
 
-    wrapper.vm.resetErrors();
+    store.dispatch("paginator/resetPaginatorInfoError");
 
-    wrapper.vm.paginatorInfo.currentPage = 0;
+    store.state.paginator.currentPage = 0;
     wrapper.find("#pprev").trigger("click");
     await flushPromises();
-    expect(wrapper.vm.errors.length > 0).toBe(true);
+    expect(store.state.paginator.errors.length > 0).toBe(true);
 
     wrapper.destroy();
     done();
@@ -125,49 +116,20 @@ describe("Table", () => {
 
     await flushPromises();
 
-    const originalCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    const originalCurrentPage: any = store.state.paginator.currentPage;
     expect(originalCurrentPage == 0).toBe(false);
-    wrapper.vm.paginatorInfo.currentPage = 1;
-    wrapper.vm.paginatorInfo.hasMorePages = true;
+    store.state.paginator.currentPage = 1;
+    store.state.paginator.hasMorePages = true;
+    store.state.paginator.total = 100;
 
     const paginatorInput = wrapper.find("#ppage");
-    paginatorInput.element.value = 6;
+    paginatorInput.element.value = 3;
     paginatorInput.trigger("change");
 
     await flushPromises();
-    const newCurrentPage: any = wrapper.vm.paginatorInfo.currentPage;
+    const newCurrentPage: any = store.state.paginator.currentPage;
     expect(originalCurrentPage == newCurrentPage).toBe(false);
     expect(wrapper.findComponent(Table).exists()).toBe(true);
-
-    wrapper.destroy();
-    done();
-  });
-
-  test("can handle successful settings checkbox select change", async function (done) {
-    const wrapper: any = shallowMount(Table, {
-      store,
-      localVue,
-      apolloProvider,
-    });
-
-    await flushPromises();
-
-    const originalDisplayValues = Object.keys(wrapper.vm.productsDisplay[0]);
-    const attribute = wrapper.vm.productAttributes[5];
-
-    wrapper.find(`#${attribute}`).trigger("click");
-
-    const checkBox = wrapper.find(`#${attribute}`);
-    checkBox.element.selected = false;
-    checkBox.trigger("change");
-    await Vue.nextTick();
-
-    const mutatedDisplayValues = Object.keys(wrapper.vm.productsDisplay[0]);
-
-    expect(originalDisplayValues.length == mutatedDisplayValues.length).toBe(
-      false
-    );
-    expect(mutatedDisplayValues).toContain(attribute);
 
     wrapper.destroy();
     done();
