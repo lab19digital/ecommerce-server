@@ -90,8 +90,6 @@ export default class Products extends Vue {
   @ProductsGetter loadingProductsResults!: Boolean;
   @PaginatorAction updatePaginatorInfo!: any;
 
-  private paginatorState: Paginator = this.$store.state["paginator"];
-
   private paginatorInfo: Paginator = this.$store.state["paginator"];
 
   public resetErrors(): void {
@@ -99,8 +97,8 @@ export default class Products extends Vue {
   }
 
   // Watch when table component changes the pagination state
-  @Watch("paginatorState", { deep: true })
-  onPaginatorStateChanged() {
+  @Watch("paginatorInfo", { deep: true })
+  onPaginatorInfoChanged() {
     this.loadProducts();
   }
 
@@ -154,40 +152,46 @@ export default class Products extends Vue {
     this.productsResults({
       first: this.paginatorInfo.first,
       page: this.paginatorInfo.currentPage,
-    }).then(
-      (data: {
-        data: { adminProducts: { data: object[]; paginatorInfo: Paginator } };
-        errors: [{ debugMessage: string }];
-      }) => {
-        // console.log(data);
-        try {
-          let error = data.errors[0].debugMessage;
-          this.errors.push(error);
-          return;
-        } catch (error) {
-          // no error
+    })
+      .then(
+        (data: {
+          data: { adminProducts: { data: object[]; paginatorInfo: Paginator } };
+          errors: [{ debugMessage: string }];
+        }) => {
+          // console.log(data);
+
+          try {
+            let error = data.errors[0].debugMessage;
+            this.errors.push(error);
+            console.log(error);
+            return;
+          } catch (error) {
+            // no error
+          }
+
+          let dataStore = this.cleanupData(data.data.adminProducts.data);
+          this.products = dataStore;
+          this.productAttributes = Object.keys(dataStore[0]);
+
+          // Assign paginator information
+          this.updatePaginatorInfo(data.data.adminProducts.paginatorInfo);
+
+          // This is to have a few columns displaying on initial view
+          if (this.tableColums.length === 0) {
+            this.productAttributes.slice(0, 4).forEach((key: string) => {
+              this.tableColums.push(key);
+            });
+          }
+
+          // Populate column data
+          this.filterProducts();
+
+          return Promise.resolve();
         }
-
-        let dataStore = this.cleanupData(data.data.adminProducts.data);
-        this.products = dataStore;
-        this.productAttributes = Object.keys(dataStore[0]);
-
-        // Assign paginator information
-        this.paginatorInit(data.data.adminProducts.paginatorInfo);
-
-        // This is to have a few columns displaying on initial view
-        if (this.tableColums.length === 0) {
-          this.productAttributes.slice(0, 4).forEach((key: string) => {
-            this.tableColums.push(key);
-          });
-        }
-
-        // Populate column data
-        this.filterProducts();
-
-        return Promise.resolve();
-      }
-    );
+      )
+      .catch((error: string) => {
+        console.log(error);
+      });
   }
 
   cleanupData(data: any) {
@@ -206,10 +210,6 @@ export default class Products extends Vue {
     });
 
     return data;
-  }
-
-  paginatorInit(data: Paginator) {
-    this.updatePaginatorInfo(data);
   }
 }
 </script>
