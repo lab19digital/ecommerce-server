@@ -21,33 +21,6 @@
 
     <Table :columns="tableColums" :rows="productsDisplay" />
 
-    <div class="inline-flex justify-center content-center items-center">
-      <button
-        id="pprev"
-        @click="paginatorPrevious"
-        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
-      >
-        Prev
-      </button>
-
-      <button
-        id="pnext"
-        @click="paginatorNext"
-        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
-      >
-        Next
-      </button>
-      <input
-        class="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
-        id="ppage"
-        type="text"
-        placeholder="Page"
-        v-model="paginatorInfo.currentPage"
-        @change="paginatorInputChange"
-      />
-      <label for="page"> of {{ paginatorInfo.totalPages }}</label>
-    </div>
-
     <!-- Settings -->
     <button
       @click="showSettings = !showSettings"
@@ -84,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import Table from "@/components/Table.vue";
 import { Action, Getter, namespace } from "vuex-class";
 import ErrorNotification from "@/components/ErrorNotification.vue";
@@ -93,6 +66,7 @@ import { transform } from "@/utils/products";
 import { Paginator } from "@/types/paginator";
 const ProductsAction = namespace("products", Action);
 const ProductsGetter = namespace("products", Getter);
+const PaginatorAction = namespace("paginator", Action);
 
 @Component({
   components: {
@@ -114,67 +88,20 @@ export default class Products extends Vue {
 
   @ProductsAction productsResults!: any;
   @ProductsGetter loadingProductsResults!: Boolean;
+  @PaginatorAction updatePaginatorInfo!: any;
 
-  private paginatorInfo: Paginator = {
-    total: 0,
-    hasMorePages: false,
-    currentPage: 1,
-    first: 15,
-    totalPages: 0,
-  };
+  private paginatorState = this.$store.state["paginator"];
+
+  private paginatorInfo: Paginator = this.$store.state["paginator"];
 
   public resetErrors(): void {
     this.errors = [];
   }
 
-  public paginatorNext(): void {
-    if (
-      this.paginatorInfo.currentPage >= 1 &&
-      this.paginatorInfo.hasMorePages &&
-      this.paginatorInfo.currentPage <=
-        Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-    ) {
-      this.paginatorInfo.currentPage++;
-      this.loadProducts();
-    } else {
-      this.errors.push(
-        "Enter a number up to " +
-          Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-      );
-    }
-  }
-
-  public paginatorPrevious(): void {
-    if (
-      this.paginatorInfo.currentPage >= 1 &&
-      this.paginatorInfo.currentPage <=
-        Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-    ) {
-      this.paginatorInfo.currentPage--;
-      this.loadProducts();
-    } else {
-      this.errors.push(
-        "Enter a number up to " +
-          Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-      );
-    }
-  }
-
-  public paginatorInputChange(): void {
-    let currentPage = this.paginatorInfo.currentPage;
-    let totalPages = this.paginatorInfo.total;
-    let pagesFirst = this.paginatorInfo.first;
-    let ceiledPages = Math.ceil(totalPages / pagesFirst);
-
-    if (currentPage < 1 || currentPage > ceiledPages) {
-      this.errors.push("Enter a number up to " + ceiledPages);
-      this.paginatorInfo.currentPage = 1;
-    } else if (currentPage >= 1 && currentPage <= ceiledPages) {
-      this.loadProducts();
-    } else {
-      this.errors.push("Error ");
-      this.paginatorInfo.currentPage = 1;
-    }
+  // Watch when table component changes the pagination state
+  @Watch("paginatorState", { deep: true })
+  onPaginatorStateChanged() {
+    this.loadProducts();
   }
 
   public checked(event: any): void {
@@ -282,12 +209,7 @@ export default class Products extends Vue {
   }
 
   paginatorInit(data: Paginator) {
-    this.paginatorInfo.currentPage = data.currentPage;
-    this.paginatorInfo.hasMorePages = data.hasMorePages;
-    this.paginatorInfo.total = data.total;
-    this.paginatorInfo.totalPages = Math.ceil(
-      this.paginatorInfo.total / this.paginatorInfo.first
-    );
+    this.updatePaginatorInfo(data);
   }
 }
 </script>

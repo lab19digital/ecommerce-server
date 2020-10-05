@@ -1,5 +1,15 @@
 <template>
   <div>
+    <!-- Error -->
+    <div v-if="getPaginatorErrors.length" class="absolute bottom-0 right-0">
+      <button
+        @click="resetErrors"
+        class="bg-red-500 hover:bg-red-500 text-white font-bold py-2 px-4 border rounded"
+      >
+        Close
+      </button>
+      <ErrorNotification :errors="getPaginatorErrors" />
+    </div>
     <div class="overflow-auto my-4 max-h-screen">
       <table class="table-auto">
         <thead>
@@ -34,18 +44,11 @@
       </table>
     </div>
 
-    <button
-      id="pprev"
-      @click="testFire"
-      class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
-    >
-      Test
-    </button>
     <!-- Paginator -->
-    <!-- <div class="inline-flex justify-center content-center items-center">
+    <div class="inline-flex justify-center content-center items-center">
       <button
         id="pprev"
-        @click="paginatorPrevious"
+        @click="paginatorPreviousClick"
         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
       >
         Prev
@@ -53,7 +56,7 @@
 
       <button
         id="pnext"
-        @click="paginatorNext"
+        @click="paginatorNextClick"
         class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
       >
         Next
@@ -63,23 +66,24 @@
         id="ppage"
         type="text"
         placeholder="Page"
-        v-model="paginatorInfo.currentPage"
-        @change="paginatorInputChange"
+        v-model="getPaginatorState.currentPage"
+        @change="paginatorInputChangeHandle"
       />
-      <label for="page"> of {{ paginatorInfo.totalPages }}</label>
-    </div> -->
+      <label for="page"> of {{ getPaginatorState.totalPages }}</label>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { Action, Getter, namespace } from "vuex-class";
+import ErrorNotification from "@/components/ErrorNotification.vue";
 
 const PaginatorAction = namespace("paginator", Action);
 const PaginatorGetter = namespace("paginator", Getter);
 
 @Component({
-  components: {},
+  components: { ErrorNotification },
 })
 export default class Table extends Vue {
   @Prop() readonly rows!: string;
@@ -93,56 +97,24 @@ export default class Table extends Vue {
   @PaginatorAction paginatorNext!: any;
   @PaginatorAction paginatorPrevious!: any;
   @PaginatorAction paginatorInputChange!: any;
-  @PaginatorGetter getPaginatorState!: Boolean;
+  @PaginatorAction resetPaginatorInfoError!: Function;
+  @PaginatorGetter getPaginatorState!: {};
+  @PaginatorGetter getPaginatorErrors!: [];
 
-  // public paginatorNext(): void {
-  //   if (
-  //     this.paginatorInfo.currentPage >= 1 &&
-  //     this.paginatorInfo.hasMorePages &&
-  //     this.paginatorInfo.currentPage <=
-  //       Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-  //   ) {
-  //     this.paginatorInfo.currentPage++;
-  //     this.loadProducts();
-  //   } else {
-  //     this.errors.push(
-  //       "Enter a number up to " +
-  //         Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-  //     );
-  //   }
-  // }
+  public paginatorNextClick(): void {
+    this.paginatorNext();
+  }
 
-  // public paginatorPrevious(): void {
-  //   if (
-  //     this.paginatorInfo.currentPage >= 1 &&
-  //     this.paginatorInfo.currentPage <=
-  //       Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-  //   ) {
-  //     this.paginatorInfo.currentPage--;
-  //     this.loadProducts();
-  //   } else {
-  //     this.errors.push(
-  //       "Enter a number up to " +
-  //         Math.ceil(this.paginatorInfo.total / this.paginatorInfo.first)
-  //     );
-  //   }
-  // }
+  public paginatorPreviousClick(): void {
+    this.paginatorPrevious();
+  }
 
-  // public paginatorInputChange(): void {
-  //   let currentPage = this.paginatorInfo.currentPage;
-  //   let totalPages = this.paginatorInfo.total;
-  //   let pagesFirst = this.paginatorInfo.first;
-  //   let ceiledPages = Math.ceil(totalPages / pagesFirst);
+  public paginatorInputChangeHandle(): void {
+    this.paginatorInputChange();
+  }
 
-  //   if (currentPage < 1 || currentPage > ceiledPages) {
-  //     this.errors.push("Enter a number up to " + ceiledPages);
-  //     this.paginatorInfo.currentPage = 1;
-  //   } else if (currentPage >= 1 && currentPage <= ceiledPages) {
-  //     this.loadProducts();
-  //   } else {
-  //     this.errors.push("Error ");
-  //     this.paginatorInfo.currentPage = 1;
-  //   }
-  // }
+  public resetErrors(): void {
+    this.resetPaginatorInfoError();
+  }
 }
 </script>

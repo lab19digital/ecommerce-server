@@ -16,11 +16,18 @@ export const state: PaginatorState = {
 
 export const getters: PaginatorGetter = {
   getPaginatorState: (state) => state,
+  getPaginatorErrors: (state) => state.errors,
 };
 
 export const mutations: MutationTree<PaginatorState> = {
   UPDATE_PAGINATOR(state, paginatorInfo) {
-    state = paginatorInfo;
+    state.currentPage = paginatorInfo.currentPage;
+    state.hasMorePages = paginatorInfo.hasMorePages;
+    state.total = paginatorInfo.total;
+    state.totalPages = Math.ceil(state.total / state.first);
+  },
+  RESET_PAGINATOR_ERROR(state) {
+    state.errors = [];
   },
 };
 
@@ -28,7 +35,12 @@ export const actions: ActionTree<PaginatorState, RootState> = {
   updatePaginatorInfo({ commit }, paginatorInfo) {
     commit("UPDATE_PAGINATOR", paginatorInfo);
   },
+  resetPaginatorInfoError({ commit }) {
+    commit("RESET_PAGINATOR_ERROR");
+  },
   paginatorNext({ commit, state }, paginatorInfo) {
+    console.log("store paginatorNext");
+
     if (
       state.currentPage >= 1 &&
       state.hasMorePages &&
@@ -44,6 +56,8 @@ export const actions: ActionTree<PaginatorState, RootState> = {
   },
 
   paginatorPrevious({ commit, state }, paginatorInfo) {
+    console.log("store paginatorPrevious");
+
     if (
       state.currentPage >= 1 &&
       state.currentPage <= Math.ceil(state.total / state.first)
@@ -58,6 +72,8 @@ export const actions: ActionTree<PaginatorState, RootState> = {
   },
 
   paginatorInputChange({ commit, state }, paginatorInfo) {
+    console.log("store paginatorInputChange");
+
     const currentPage = state.currentPage;
     const totalPages = state.total;
     const pagesFirst = state.first;
