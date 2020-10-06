@@ -34,16 +34,7 @@ export const mutations: MutationTree<PaginatorState> = {
   UPDATE_RELOAD(state, payload) {
     state.reload = payload;
   },
-};
-
-export const actions: ActionTree<PaginatorState, RootState> = {
-  updatePaginatorInfo({ commit }, paginatorInfo) {
-    commit("UPDATE_PAGINATOR", paginatorInfo);
-  },
-  resetPaginatorInfoError({ commit }) {
-    commit("RESET_PAGINATOR_ERROR");
-  },
-  paginatorNext({ commit, state }, paginatorInfo) {
+  PAGINATOR_NEXT(state) {
     if (
       state.currentPage >= 1 &&
       state.hasMorePages &&
@@ -56,7 +47,7 @@ export const actions: ActionTree<PaginatorState, RootState> = {
       );
     }
   },
-  paginatorPrevious({ commit, state }, paginatorInfo) {
+  PAGINATOR_PREVIOUS(state) {
     if (
       state.currentPage >= 1 &&
       state.currentPage <= Math.ceil(state.total / state.first)
@@ -68,7 +59,7 @@ export const actions: ActionTree<PaginatorState, RootState> = {
       );
     }
   },
-  paginatorInputChange({ commit, state }, value) {
+  PAGINATOR_INPUT_CHANGE(state, value) {
     const currentPage = value;
     const totalPages = state.total;
     const pagesFirst = state.first;
@@ -81,6 +72,24 @@ export const actions: ActionTree<PaginatorState, RootState> = {
     } else {
       state.errors.push("Error occurred");
     }
+  },
+};
+
+export const actions: ActionTree<PaginatorState, RootState> = {
+  updatePaginatorInfo({ commit }, paginatorInfo) {
+    commit("UPDATE_PAGINATOR", paginatorInfo);
+  },
+  resetPaginatorInfoError({ commit }) {
+    commit("RESET_PAGINATOR_ERROR");
+  },
+  paginatorNext({ commit }) {
+    commit("PAGINATOR_NEXT");
+  },
+  paginatorPrevious({ commit }) {
+    commit("PAGINATOR_PREVIOUS");
+  },
+  paginatorInputChange({ commit }, value) {
+    commit("PAGINATOR_INPUT_CHANGE", value);
   },
   reloadResults({ commit, state }, value) {
     commit("UPDATE_RELOAD", value);
