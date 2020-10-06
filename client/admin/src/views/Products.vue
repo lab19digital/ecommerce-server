@@ -66,6 +66,7 @@ import { transform } from "@/utils/products";
 import { Paginator } from "@/types/paginator";
 const ProductsAction = namespace("products", Action);
 const ProductsGetter = namespace("products", Getter);
+const PaginatorGetter = namespace("paginator", Getter);
 const PaginatorAction = namespace("paginator", Action);
 
 @Component({
@@ -88,18 +89,23 @@ export default class Products extends Vue {
 
   @ProductsAction productsResults!: any;
   @ProductsGetter loadingProductsResults!: Boolean;
+  @PaginatorGetter paginatorInfo!: Paginator;
   @PaginatorAction updatePaginatorInfo!: any;
 
-  private paginatorInfo: Paginator = this.$store.state["paginator"];
+  private paginatorState: Paginator = this.$store.state["paginator"];
 
   public resetErrors(): void {
     this.errors = [];
   }
 
   // Watch when table component changes the pagination state
-  @Watch("paginatorInfo", { deep: true })
-  onPaginatorInfoChanged() {
-    this.loadProducts();
+  @Watch("paginatorState", { deep: true })
+  onPaginatorStateChanged(state: { reload: Boolean }) {
+    console.log(state.reload);
+
+    if (state.reload == true) {
+      this.loadProducts();
+    }
   }
 
   public checked(event: any): void {
@@ -173,8 +179,14 @@ export default class Products extends Vue {
           this.products = dataStore;
           this.productAttributes = Object.keys(dataStore[0]);
 
-          // Assign paginator information
-          this.updatePaginatorInfo(data.data.adminProducts.paginatorInfo);
+          // Assign paginator information, and set reload to false to prevent infinite loop
+          // as this component also watches for state changes in the paginator vuex state
+          // because the table component changes the paginator state and this component fetches the result of that change
+          let paginatorUpdate: {} = data.data.adminProducts.paginatorInfo;
+          this.updatePaginatorInfo({
+            ...{ reload: false },
+            ...paginatorUpdate,
+          });
 
           // This is to have a few columns displaying on initial view
           if (this.tableColums.length === 0) {

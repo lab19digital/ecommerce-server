@@ -9,13 +9,14 @@ export const state: PaginatorState = {
   total: 0,
   hasMorePages: false,
   currentPage: 1,
-  first: 15,
+  first: 10,
   totalPages: 0,
   errors: [],
+  reload: false,
 };
 
 export const getters: PaginatorGetter = {
-  getPaginatorState: (state) => state,
+  paginatorInfo: (state) => state,
   getPaginatorErrors: (state) => state.errors,
 };
 
@@ -24,10 +25,14 @@ export const mutations: MutationTree<PaginatorState> = {
     state.currentPage = paginatorInfo.currentPage;
     state.hasMorePages = paginatorInfo.hasMorePages;
     state.total = paginatorInfo.total;
+    state.reload = paginatorInfo.reload;
     state.totalPages = Math.ceil(state.total / state.first);
   },
   RESET_PAGINATOR_ERROR(state) {
     state.errors = [];
+  },
+  UPDATE_RELOAD(state, payload) {
+    state.reload = payload;
   },
 };
 
@@ -51,7 +56,6 @@ export const actions: ActionTree<PaginatorState, RootState> = {
       );
     }
   },
-
   paginatorPrevious({ commit, state }, paginatorInfo) {
     if (
       state.currentPage >= 1 &&
@@ -64,7 +68,6 @@ export const actions: ActionTree<PaginatorState, RootState> = {
       );
     }
   },
-
   paginatorInputChange({ commit, state }, value) {
     const currentPage = value;
     const totalPages = state.total;
@@ -78,6 +81,9 @@ export const actions: ActionTree<PaginatorState, RootState> = {
     } else {
       state.errors.push("Error occurred");
     }
+  },
+  reloadResults({ commit, state }, value) {
+    commit("UPDATE_RELOAD", value);
   },
 };
 

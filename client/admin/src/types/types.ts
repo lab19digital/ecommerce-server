@@ -25,6 +25,7 @@ export interface PaginatorState {
   first: number;
   totalPages: number;
   errors: Array<string>;
+  reload: Boolean;
 }
 
 export interface HistoryState {
