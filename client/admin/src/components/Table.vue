@@ -70,7 +70,7 @@
         @change="paginatorInputChangeHandle"
       />
 
-      <label for="page"> of {{ paginatorInfo.totalPages }}</label>
+      <label for="ppage"> of {{ paginatorInfo.totalPages }}</label>
     </div>
   </div>
 </template>

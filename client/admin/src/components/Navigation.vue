@@ -74,7 +74,7 @@ export default class Navigation extends Vue {
 
   public async logOutClick(event: any): Promise<any> {
     event.preventDefault();
-    this.logOut().then(() => this.$router.push("/login"));
+    this.logOut().then(() => this.$router.push("/"));
   }
 }
 </script>

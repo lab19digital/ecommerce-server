@@ -24,9 +24,9 @@
     <!-- Settings -->
     <button
       @click="showSettings = !showSettings"
-      class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4 mx-6"
+      class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow my-4"
     >
-      <p v-if="!showSettings">Show settings</p>
+      <p v-if="!showSettings">Select settings</p>
       <p v-if="showSettings">Close settings</p>
     </button>
 
@@ -38,18 +38,41 @@
       leave-class="transform opacity-100 scale-100"
       leave-to-class="transform opacity-0 scale-95"
     >
-      <div v-show="showSettings" class="bg-gray-500 rounded p-6 flex flex-wrap">
-        <div v-for="(option, key) in productAttributes" :key="key" class="p-4">
+      <div
+        v-show="showSettings"
+        class="bg-gray-200 rounded p-6 divide-y divide-gray-400"
+      >
+        <div class="flex flex-wrap">
+          <h3 class="p-4 text-lg underline w-full">Columns to display</h3>
+          <div
+            v-for="(option, key) in productAttributes"
+            :key="key"
+            class="p-4"
+          >
+            <input
+              type="checkbox"
+              :id="option"
+              :name="option"
+              :value="option"
+              @click="checked"
+              :checked="key < 4"
+            />
+            <label :for="option" class="p-2">{{ option }}</label
+            ><br />
+          </div>
+        </div>
+
+        <div>
+          <h3 class="p-4 text-lg underline">Results per page</h3>
           <input
-            type="checkbox"
-            :id="option"
-            :name="option"
-            :value="option"
-            @click="checked"
-            :checked="key < 4"
+            class="mx-4 shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-16"
+            id="numResults"
+            type="text"
+            @change="paginatorResultsPerPageInputChangeHandle"
+            v-model="paginatorInfo.first"
           />
-          <label :for="option" class="p-2">{{ option }}</label
-          ><br />
+
+          <label for="numResults">results per page.</label>
         </div>
       </div>
     </transition>
@@ -106,6 +129,11 @@ export default class Products extends Vue {
     if (state.reload == true) {
       this.loadProducts();
     }
+  }
+
+  public paginatorResultsPerPageInputChangeHandle() {
+    console.log("hello");
+    this.loadProducts();
   }
 
   public checked(event: any): void {

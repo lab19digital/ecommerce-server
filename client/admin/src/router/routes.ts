@@ -1,12 +1,13 @@
 import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import Products from "@/views/Products.vue";
+import Home from "@/views/Home.vue";
 import store from "@/store/store";
 
 export default [
   {
     path: "/",
-    component: Login,
+    component: Home,
   },
   {
     path: "/dashboard",
