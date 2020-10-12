@@ -121,7 +121,7 @@ export default class Products extends Vue {
     this.errors = [];
   }
 
-  // Watch when table component changes the pagination state
+  // Watch when table component changes the pagination state, then update products
   @Watch("paginatorState", { deep: true })
   onPaginatorStateChanged(state: { reload: Boolean }) {
     if (state.reload == true) {
