@@ -121,7 +121,7 @@ export default class Products extends Vue {
     this.errors = [];
   }
 
-  // Watch when table component changes the pagination state
+  // Watch when table component changes the pagination state, then update products
   @Watch("paginatorState", { deep: true })
   onPaginatorStateChanged(state: { reload: Boolean }) {
     if (state.reload == true) {
@@ -213,7 +213,8 @@ export default class Products extends Vue {
             ...paginatorUpdate,
           });
 
-          // This is to have a few columns displaying on initial view
+          // This is to have a few columns displaying on initial view, by pushing the column keys into
+          // tableColumns
           if (this.tableColums.length === 0) {
             this.productAttributes.slice(0, 4).forEach((key: string) => {
               this.tableColums.push(key);
