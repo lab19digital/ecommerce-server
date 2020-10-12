@@ -2,13 +2,20 @@ import { mount } from "@vue/test-utils";
 import VueRouter from "vue-router";
 import App from "@/components/App.vue";
 import Login from "@/views/Login.vue";
+import Dashboard from "@/views/Dashboard.vue";
 import routes from "@/router/routes.ts";
 import store from "@/store/store";
+import flushPromises from "flush-promises";
 import {
   createLocalVue,
   createApolloTestProvider,
   makeGetInitialState,
 } from "./helper";
+// @ts-ignore
+import { beforeEachGernzy } from "@/router/helper";
+import { auth } from "@/router/auth";
+
+jest.mock("@/router/auth.ts");
 
 const localVue = createLocalVue();
 localVue.use(VueRouter);
@@ -20,18 +27,16 @@ describe("Router", () => {
     store.replaceState(getInitialState());
   });
 
-  test("should mount the router and see login", async () => {
-    const router = new VueRouter({ routes });
+  test("should not navigate to dashboard unless logged in", async () => {
+    const to = {
+      matched: [{ meta: { requiresAuth: true } }],
+      fullPath: "",
+    };
 
-    const wrapper = mount(App, {
-      store,
-      router,
-      localVue,
-      apolloProvider,
-    });
+    const next = jest.fn();
 
-    router.push("/login");
-    await wrapper.vm.$nextTick();
-    expect(wrapper.findComponent(Login).exists()).toBe(true);
+    beforeEachGernzy(to, {}, next);
+
+    expect(auth).toHaveBeenCalled();
   });
 });

@@ -18,7 +18,7 @@ class CreateGernzyUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('session_token', 80)
+            $table->string('session_token', 255)
                 ->unique()
                 ->nullable()
                 ->default(null);

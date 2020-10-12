@@ -15,7 +15,7 @@ class CreateGernzySessionsTable extends Migration
     {
         Schema::create('gernzy_sessions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('token', 80)
+            $table->string('token', 255)
                 ->unique()
                 ->nullable()
                 ->default(null);
