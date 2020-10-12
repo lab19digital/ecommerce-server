@@ -100,7 +100,7 @@ const PaginatorAction = namespace("paginator", Action);
   },
 })
 export default class Products extends Vue {
-  // Errors array
+  // Errors array property
   private errors: string[] = [];
 
   private showSettings: Boolean = false;
