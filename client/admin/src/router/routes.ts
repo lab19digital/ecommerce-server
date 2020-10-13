@@ -2,6 +2,7 @@ import Login from "@/views/Login.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import Products from "@/views/Products.vue";
 import Home from "@/views/Home.vue";
+import Orders from "@/views/Orders.vue";
 import store from "@/store/store";
 
 export default [
@@ -37,5 +38,11 @@ export default [
         next();
       }
     },
+  },
+  {
+    path: "/orders",
+    name: "Orders",
+    component: Orders,
+    meta: { requiresAuth: true },
   },
 ];
