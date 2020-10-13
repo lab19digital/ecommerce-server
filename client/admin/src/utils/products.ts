@@ -1,5 +1,5 @@
 const formatter: any = {
-  // id: link,
+  // id: todo,
   // title: todo,
   // status: todo,
   // published: todo,
@@ -21,10 +21,6 @@ const formatter: any = {
   // tags: todo,
   // fixedPrices: todo,
 };
-
-// function link(rowData: {}) {
-//   return `/products/${rowData.id}`;
-// }
 
 function categories(data: []): string {
   return data
