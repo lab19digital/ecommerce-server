@@ -14,6 +14,11 @@ extend type Query {
             model: "Gernzy\Server\Models\Order"
             policy: "Gernzy\Server\Policies\OrderPolicy"
         )
+
+    orders: [Order!]!
+        @all
+        @paginate
+        @can(ability: "view", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
 }
 
 input CheckoutInput {
@@ -82,4 +87,4 @@ input SetOrderItemsInput {
     product_id: ID!
     quantity: Int!
 } 
-`
+`;
