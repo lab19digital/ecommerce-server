@@ -44,6 +44,7 @@ class OrdersSeeder extends Seeder
                 "payment_method" => $faker->word(),
                 "agree_to_terms" => $faker->boolean(),
                 "notes" => $faker->sentence(),
+                "created_at" => $faker->dateTimeBetween($startDate = '-5 years', $endDate = 'now')
             ]);
 
             // Associate the order to the user
