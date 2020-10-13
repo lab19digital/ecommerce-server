@@ -22,7 +22,6 @@ type Query {
             policy: "Gernzy\Server\Policies\UserPolicy"
         )
 
-    orders: [Order!]! @paginate(type: "paginator", model: "Gernzy\Server\Models\Order")
 
     order_items: [OrderItem!]! @paginate(type: "paginator", model: "Gernzy\Server\Models\OrderItem")
     order_item(id: ID @eq): OrderItem @find(model: "Gernzy\Server\Models\OrderItem")
@@ -125,4 +124,4 @@ input UpdateCartInput {
 #import orders.graphql
 #import tags.graphql
 #import inspector.graphql 
-`
+`;
