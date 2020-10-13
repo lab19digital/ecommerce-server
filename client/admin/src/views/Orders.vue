@@ -183,10 +183,10 @@ export default class Orders extends Vue {
     })
       .then(
         (data: {
-          data: { orders: { data: object[]; paginatorInfo: Paginator } };
+          data: { adminOrders: { data: object[]; paginatorInfo: Paginator } };
           errors: [{ debugMessage: string }];
         }) => {
-          console.log(data);
+          // console.log(data);
 
           try {
             let error = data.errors[0].debugMessage;
@@ -197,14 +197,14 @@ export default class Orders extends Vue {
             // no error
           }
 
-          let dataStore = this.cleanupData(data.data.orders.data);
+          let dataStore = this.cleanupData(data.data.adminOrders.data);
           this.orders = dataStore;
           this.ordersAttributes = Object.keys(dataStore[0]);
 
           // Assign paginator information, and set reload to false to prevent infinite loop
           // as this component also watches for state changes in the paginator vuex state
           // because the table component changes the paginator state and this component fetches the result of that change
-          let paginatorUpdate: {} = data.data.orders.paginatorInfo;
+          let paginatorUpdate: {} = data.data.adminOrders.paginatorInfo;
           this.updatePaginatorInfo({
             ...{ reload: false },
             ...paginatorUpdate,

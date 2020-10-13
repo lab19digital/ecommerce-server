@@ -88,7 +88,7 @@ export const ADMIN_PRODUCTS = gql`
 
 export const ADMIN_ORDERS = gql`
   query($first: Int!, $page: Int!) {
-    orders(first: $first, page: $page) {
+    adminOrders(first: $first, page: $page) {
       data {
         id
         name

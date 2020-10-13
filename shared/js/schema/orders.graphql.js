@@ -14,11 +14,11 @@ extend type Query {
             model: "Gernzy\Server\Models\Order"
             policy: "Gernzy\Server\Policies\OrderPolicy"
         )
+        orders: [Order!]! @paginate(type: "paginator", model: "Gernzy\\Server\\Models\\Order")
 
-    orders: [Order!]!
-        @all
-        @paginate
-        @can(ability: "view", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
+        adminOrders: [Order!]!
+            @paginate(type: "paginator", model: "Gernzy\\Server\\Models\\Order")
+            @can(ability: "view", model: "Gernzy\\Server\\Models\\User", policy: "Gernzy\\Server\\Policies\\UserPolicy")
 }
 
 input CheckoutInput {
