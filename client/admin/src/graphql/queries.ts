@@ -85,3 +85,34 @@ export const ADMIN_PRODUCTS = gql`
     }
   }
 `;
+
+export const ADMIN_ORDERS = gql`
+  query($first: Int!, $page: Int!) {
+    orders(first: $first, page: $page) {
+      data {
+        id
+        name
+        email
+        telephone
+        shipping_address_line_1
+        shipping_address_line_2
+        shipping_address_postcode
+        shipping_address_state
+        shipping_address_country
+        billing_address_line_1
+        billing_address_line_2
+        billing_address_postcode
+        billing_address_state
+        billing_address_country
+        payment_method
+        agree_to_terms
+        notes
+      }
+      paginatorInfo {
+        total
+        hasMorePages
+        currentPage
+      }
+    }
+  }
+`;
