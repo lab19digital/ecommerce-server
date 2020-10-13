@@ -113,6 +113,7 @@ type Order {
     payment_method: String
     agree_to_terms: String
     notes: String
+    created_at: String
 }
 
 type OrderItem {
