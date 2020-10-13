@@ -81,7 +81,7 @@ import Table from "@/components/Table.vue";
 import { Action, Getter, namespace } from "vuex-class";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
-import { transform } from "@/utils/products";
+import { transform } from "@/utils/orders";
 import { Paginator } from "@/types/paginator";
 const OrdersAction = namespace("orders", Action);
 const OrdersGetter = namespace("orders", Getter);
