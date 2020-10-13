@@ -176,8 +176,14 @@ export default class Orders extends Vue {
           .reduce((res, o) => Object.assign(res, o), {});
       })
       .sort(
-        (prev, curr) =>
-          Date.parse(prev.created_at) - Date.parse(curr.created_at)
+        (
+          prev: {
+            [x: string]: any;
+          },
+          curr: {
+            [x: string]: any;
+          }
+        ) => Date.parse(prev.created_at) - Date.parse(curr.created_at)
       );
   }
 
