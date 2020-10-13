@@ -107,6 +107,7 @@ export const ADMIN_ORDERS = gql`
         payment_method
         agree_to_terms
         notes
+        created_at
       }
       paginatorInfo {
         total
