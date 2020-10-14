@@ -88,7 +88,11 @@ export const ADMIN_PRODUCTS = gql`
 
 export const ADMIN_ORDERS = gql`
   query($first: Int!, $page: Int!) {
-    adminOrders(first: $first, page: $page) {
+    adminOrders(
+      first: $first
+      page: $page
+      orderBy: [{ field: "created_at", order: DESC }]
+    ) {
       data {
         id
         name
