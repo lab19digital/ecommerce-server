@@ -17,7 +17,8 @@ extend type Query {
 
     orders: [Order!]! @paginate(type: "paginator", model: "Gernzy\Server\Models\Order")
 
-    adminOrders: [Order!]!
+    #first: Int, page: Int is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
+    adminOrders(first: Int, page: Int): Order!
         @paginate(type: "paginator", model: "Gernzy\Server\Models\Order")
         @can(ability: "view", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
 
@@ -115,10 +116,12 @@ type Order {
     agree_to_terms: String
     notes: String
     created_at: String
+    data: [Order] #This is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
+    paginatorInfo: PaginatorInfo  #This is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
 }
 
 type OrderItem {
     id: ID!
     order_id: ID!
 } 
-`
+`;
