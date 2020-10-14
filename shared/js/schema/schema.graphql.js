@@ -22,10 +22,6 @@ type Query {
             policy: "Gernzy\Server\Policies\UserPolicy"
         )
 
-
-    order_items: [OrderItem!]! @paginate(type: "paginator", model: "Gernzy\Server\Models\OrderItem")
-    order_item(id: ID @eq): OrderItem @find(model: "Gernzy\Server\Models\OrderItem")
-
     shopConfig: ShopConfig @field(resolver: "Gernzy\Server\GraphQL\Queries\ShopConfig@index")
 }
 
@@ -46,16 +42,6 @@ type User {
     updated_at: DateTime!
 }
 
-type Order {
-    id: ID!
-    email: String!
-    name: String!
-    currency_id: Int!
-    cart_id: ID!
-    is_admin_order: Boolean!
-    cart: Cart @hasOne
-}
-
 type Cart {
     id: ID!
     order_id: ID
@@ -70,11 +56,6 @@ type Cart {
 type CartItem {
     product_id: ID!
     quantity: Int!
-}
-
-type OrderItem {
-    id: ID!
-    order_id: ID!
 }
 
 type Mutation {
@@ -124,4 +105,4 @@ input UpdateCartInput {
 #import orders.graphql
 #import tags.graphql
 #import inspector.graphql 
-`;
+`
