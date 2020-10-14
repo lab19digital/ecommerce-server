@@ -56,12 +56,12 @@ export function formatObject(obj: {}): String {
   return Object.values(obj).join("; ");
 }
 
-export function transform(prodElement: {} | [] | String): String | {} {
-  if (Array.isArray(prodElement)) {
-    return formatArray(prodElement);
-  } else if (checkIfObject(prodElement)) {
-    return formatObject(prodElement);
+export function transform(orderElement: {} | [] | String): String | {} {
+  if (Array.isArray(orderElement)) {
+    return formatArray(orderElement);
+  } else if (checkIfObject(orderElement)) {
+    return formatObject(orderElement);
   } else {
-    return prodElement;
+    return orderElement;
   }
 }
