@@ -168,23 +168,12 @@ export default class Orders extends Vue {
      */
     let tableColums = this.tableColums;
 
-    this.ordersDisplay = this.orders
-      .map(function (order: any) {
-        return Object.keys(order)
-          .filter((k) => tableColums.includes(k))
-          .map((k) => Object.assign({}, { [k]: transform(order[k]) }))
-          .reduce((res, o) => Object.assign(res, o), {});
-      })
-      .sort(
-        (
-          prev: {
-            [x: string]: any;
-          },
-          curr: {
-            [x: string]: any;
-          }
-        ) => Date.parse(prev.created_at) - Date.parse(curr.created_at)
-      );
+    this.ordersDisplay = this.orders.map(function (order: any) {
+      return Object.keys(order)
+        .filter((k) => tableColums.includes(k))
+        .map((k) => Object.assign({}, { [k]: transform(order[k]) }))
+        .reduce((res, o) => Object.assign(res, o), {});
+    });
   }
 
   async loadOrders() {
