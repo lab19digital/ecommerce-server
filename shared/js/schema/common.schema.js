@@ -40,6 +40,9 @@ const directives = `
   directive @in(
     key: String
   ) on ARGUMENT_DEFINITION
+  directive @orderBy(
+    key: String
+  ) on ARGUMENT_DEFINITION
 `;
 
 export default directives;

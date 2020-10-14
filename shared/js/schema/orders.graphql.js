@@ -18,12 +18,22 @@ extend type Query {
     orders: [Order!]! @paginate(type: "paginator", model: "Gernzy\Server\Models\Order")
 
     #first: Int, page: Int is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
-    adminOrders(first: Int, page: Int): Order!
+    adminOrders(first: Int, page: Int, orderBy: [OrderByClause!] @orderBy): Order!
         @paginate(type: "paginator", model: "Gernzy\Server\Models\Order")
         @can(ability: "view", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
 
     order_items: [OrderItem!]! @paginate(type: "paginator", model: "Gernzy\Server\Models\OrderItem")
     order_item(id: ID @eq): OrderItem @find(model: "Gernzy\Server\Models\OrderItem")
+}
+
+input OrderByClause {
+    field: String!
+    order: SortOrder!
+}
+
+enum SortOrder {
+    ASC
+    DESC
 }
 
 input CheckoutInput {
