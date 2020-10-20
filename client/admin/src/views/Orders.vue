@@ -82,6 +82,7 @@ import { Action, Getter, namespace } from "vuex-class";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
 import { transform } from "@/utils/orders";
+import { cleanupData } from "@/utils/helper";
 import { Paginator } from "@/types/paginator";
 const OrdersAction = namespace("orders", Action);
 const OrdersGetter = namespace("orders", Getter);
@@ -197,7 +198,7 @@ export default class Orders extends Vue {
             // no error
           }
 
-          let dataStore = this.cleanupData(data.data.adminOrders.data);
+          let dataStore = cleanupData(data.data.adminOrders.data);
           this.orders = dataStore;
           this.ordersAttributes = Object.keys(dataStore[0]);
 
@@ -227,24 +228,6 @@ export default class Orders extends Vue {
       .catch((error: string) => {
         console.log(error);
       });
-  }
-
-  cleanupData(data: any) {
-    // This recursively removes the __typename from the array of objects that is returned from the backend
-    function removeMeta(obj: any) {
-      for (const prop in obj) {
-        if (prop === "__typename") delete obj[prop];
-        else if (typeof obj[prop] === "object") removeMeta(obj[prop]);
-      }
-    }
-
-    data.map((element: {}) => {
-      let obj = element;
-      removeMeta(obj);
-      return obj;
-    });
-
-    return data;
   }
 }
 </script>
