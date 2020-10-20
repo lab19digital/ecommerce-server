@@ -27,6 +27,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Nuwave\Lighthouse\LighthouseServiceProvider;
+use Nuwave\Lighthouse\OrderBy\OrderByServiceProvider;
 
 class GernzyServiceProvider extends ServiceProvider
 {
@@ -39,6 +40,7 @@ class GernzyServiceProvider extends ServiceProvider
     {
         // Register dependency packages
         $this->app->register(LighthouseServiceProvider::class);
+        $this->app->register(OrderByServiceProvider::class);
         $this->app->register(CorsServiceProvider::class);
 
         // Register core packages
