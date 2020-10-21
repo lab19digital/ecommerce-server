@@ -81,8 +81,7 @@ import Table from "@/components/Table.vue";
 import { Action, Getter, namespace } from "vuex-class";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
-import { transform } from "@/utils/orders";
-import { cleanupData } from "@/utils/helper";
+import { cleanupData, filterArray } from "@/utils/helper";
 import { Paginator } from "@/types/paginator";
 const OrdersAction = namespace("orders", Action);
 const OrdersGetter = namespace("orders", Getter);
@@ -149,32 +148,11 @@ export default class Orders extends Vue {
       }
     }
 
-    this.filterOrders();
+    this.ordersDisplay = filterArray(this.tableColums, this.orders);
   }
 
   async mounted() {
     this.loadOrders();
-  }
-
-  public filterOrders() {
-    /**
-     * I have an original array (this.orders) and another array (this.ordersDisplay) , the orders array will never be
-     * changed, only the selected values from the settings panel will be used to filter data from the original orders array
-     * back into the ordersDisplay array and then appear in the ui to the user.
-     *
-     * The orders array will keep all the data from graphql query that returns the order attributes. The ordersDisplay will change
-     * each time the user selects more columns or removes columns from the setttings tab. Each column value is a property in the poduct
-     * object. So for each order object in the orders array we filter out only the desired keys from the objects and clone them
-     * into the ordersDisplay array.
-     */
-    let tableColums = this.tableColums;
-
-    this.ordersDisplay = this.orders.map(function (order: any) {
-      return Object.keys(order)
-        .filter((k) => tableColums.includes(k))
-        .map((k) => Object.assign({}, { [k]: transform(order[k]) }))
-        .reduce((res, o) => Object.assign(res, o), {});
-    });
   }
 
   async loadOrders() {
@@ -220,7 +198,7 @@ export default class Orders extends Vue {
           }
 
           // Populate column data
-          this.filterOrders();
+          this.ordersDisplay = filterArray(this.tableColums, this.orders);
 
           return Promise.resolve();
         }
