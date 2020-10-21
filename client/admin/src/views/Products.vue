@@ -85,8 +85,7 @@ import Table from "@/components/Table.vue";
 import { Action, Getter, namespace } from "vuex-class";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
-import { transform } from "@/utils/products";
-import { cleanupData } from "@/utils/helper";
+import { cleanupData, filterArray } from "@/utils/helper";
 import { Paginator } from "@/types/paginator";
 const ProductsAction = namespace("products", Action);
 const ProductsGetter = namespace("products", Getter);
@@ -153,32 +152,11 @@ export default class Products extends Vue {
       }
     }
 
-    this.filterProducts();
+    this.productsDisplay = filterArray(this.tableColums, this.products);
   }
 
   async mounted() {
     this.loadProducts();
-  }
-
-  public filterProducts() {
-    /**
-     * I have an original array (this.products) and another array (this.productsDisplay) , the products array will never be
-     * changed, only the selected values from the settings panel will be used to filter data from the original products array
-     * back into the productsDisplay array and then appear in the ui to the user.
-     *
-     * The products array will keep all the data from graphql query that returns the product attributes. The productsDisplay will change
-     * each time the user selects more columns or removes columns from the setttings tab. Each column value is a property in the poduct
-     * object. So for each product object in the producs array we filter out only the desired keys from the objects and clone them
-     * into the productDisplay array.
-     */
-    let tableColums = this.tableColums;
-
-    this.productsDisplay = this.products.map(function (product: any) {
-      return Object.keys(product)
-        .filter((k) => tableColums.includes(k))
-        .map((k) => Object.assign({}, { [k]: transform(product[k]) }))
-        .reduce((res, o) => Object.assign(res, o), {});
-    });
   }
 
   async loadProducts() {
@@ -224,7 +202,7 @@ export default class Products extends Vue {
           }
 
           // Populate column data
-          this.filterProducts();
+          this.productsDisplay = filterArray(this.tableColums, this.products);
 
           return Promise.resolve();
         }
