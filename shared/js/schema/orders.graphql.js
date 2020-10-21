@@ -14,6 +14,26 @@ extend type Query {
             model: "Gernzy\Server\Models\Order"
             policy: "Gernzy\Server\Policies\OrderPolicy"
         )
+
+    orders: [Order!]! @paginate(type: "paginator", model: "Gernzy\Server\Models\Order")
+
+    #first: Int, page: Int is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
+    adminOrders(first: Int, page: Int, orderBy: [OrderByClause!] @orderBy): Order!
+        @paginate(type: "paginator", model: "Gernzy\Server\Models\Order")
+        @can(ability: "view", model: "Gernzy\Server\Models\User", policy: "Gernzy\Server\Policies\UserPolicy")
+
+    order_items: [OrderItem!]! @paginate(type: "paginator", model: "Gernzy\Server\Models\OrderItem")
+    order_item(id: ID @eq): OrderItem @find(model: "Gernzy\Server\Models\OrderItem")
+}
+
+input OrderByClause {
+    field: String!
+    order: SortOrder!
+}
+
+enum SortOrder {
+    ASC
+    DESC
 }
 
 input CheckoutInput {
@@ -81,5 +101,37 @@ input UpdateOrderInput {
 input SetOrderItemsInput {
     product_id: ID!
     quantity: Int!
+}
+
+type Order {
+    id: ID!
+    email: String!
+    name: String!
+    currency_id: Int!
+    cart_id: ID!
+    is_admin_order: Boolean!
+    cart: Cart @hasOne
+    telephone: String
+    shipping_address_line_1: String
+    shipping_address_line_2: String
+    shipping_address_postcode: String
+    shipping_address_state: String
+    shipping_address_country: String
+    billing_address_line_1: String
+    billing_address_line_2: String
+    billing_address_postcode: String
+    billing_address_state: String
+    billing_address_country: String
+    payment_method: String
+    agree_to_terms: String
+    notes: String
+    created_at: String
+    data: [Order] #This is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
+    paginatorInfo: PaginatorInfo  #This is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
+}
+
+type OrderItem {
+    id: ID!
+    order_id: ID!
 } 
-`
+`;

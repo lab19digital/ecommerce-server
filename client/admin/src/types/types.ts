@@ -18,6 +18,10 @@ export interface ProductsState {
   loading: Boolean;
 }
 
+export interface OrdersState {
+  loading: Boolean;
+}
+
 export interface PaginatorState {
   total: number;
   hasMorePages: boolean;

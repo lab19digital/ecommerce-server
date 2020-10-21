@@ -12,14 +12,14 @@
     </div>
 
     <!-- Loading -->
-    <div v-if="loadingProductsResults" class="absolute bottom-0 right-0">
+    <div v-if="loadingOrdersResults" class="absolute bottom-0 right-0">
       <SuccessNotification
         title="Loading"
-        msg="Updating the products table with results."
+        msg="Updating the orders table with results."
       />
     </div>
 
-    <Table :columns="tableColums" :rows="productsDisplay" />
+    <Table :columns="tableColums" :rows="ordersDisplay" />
 
     <!-- Settings -->
     <button
@@ -44,11 +44,7 @@
       >
         <div class="flex flex-wrap">
           <h3 class="p-4 text-lg underline w-full">Columns to display</h3>
-          <div
-            v-for="(option, key) in productAttributes"
-            :key="key"
-            class="p-4"
-          >
+          <div v-for="(option, key) in ordersAttributes" :key="key" class="p-4">
             <input
               type="checkbox"
               :id="option"
@@ -87,8 +83,8 @@ import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
 import { cleanupData, filterArray } from "@/utils/helper";
 import { Paginator } from "@/types/paginator";
-const ProductsAction = namespace("products", Action);
-const ProductsGetter = namespace("products", Getter);
+const OrdersAction = namespace("orders", Action);
+const OrdersGetter = namespace("orders", Getter);
 const PaginatorGetter = namespace("paginator", Getter);
 const PaginatorAction = namespace("paginator", Action);
 
@@ -99,20 +95,20 @@ const PaginatorAction = namespace("paginator", Action);
     SuccessNotification,
   },
 })
-export default class Products extends Vue {
+export default class Orders extends Vue {
   // Errors array
   private errors: string[] = [];
 
   private showSettings: Boolean = false;
 
-  private products: object[] = [];
-  private productsDisplay: object[] = [];
+  private orders: object[] = [];
+  private ordersDisplay: object[] = [];
 
-  private productAttributes: string[] = [];
+  private ordersAttributes: string[] = [];
   private tableColums: string[] = [];
 
-  @ProductsAction productsResults!: any;
-  @ProductsGetter loadingProductsResults!: Boolean;
+  @OrdersAction ordersResults!: any;
+  @OrdersGetter loadingOrdersResults!: Boolean;
   @PaginatorGetter paginatorInfo!: Paginator;
   @PaginatorAction updatePaginatorInfo!: any;
 
@@ -122,16 +118,16 @@ export default class Products extends Vue {
     this.errors = [];
   }
 
-  // Watch when table component changes the pagination state, then update products
+  // Watch when table component changes the pagination state, then update orders
   @Watch("paginatorState", { deep: true })
   onPaginatorStateChanged(state: { reload: Boolean }) {
     if (state.reload == true) {
-      this.loadProducts();
+      this.loadOrders();
     }
   }
 
   public paginatorResultsPerPageInputChangeHandle() {
-    this.loadProducts();
+    this.loadOrders();
   }
 
   public checked(event: any): void {
@@ -139,8 +135,8 @@ export default class Products extends Vue {
     let value = event.target.value;
 
     /**
-     * Based on whether the attribute of the product is selected in the settings panel,
-     * add or remove the product attribute from the tableColums array
+     * Based on whether the attribute of the order is selected in the settings panel,
+     * add or remove the order attribute from the tableColums array
      */
 
     if (checked) {
@@ -152,21 +148,21 @@ export default class Products extends Vue {
       }
     }
 
-    this.productsDisplay = filterArray(this.tableColums, this.products);
+    this.ordersDisplay = filterArray(this.tableColums, this.orders);
   }
 
   async mounted() {
-    this.loadProducts();
+    this.loadOrders();
   }
 
-  async loadProducts() {
-    this.productsResults({
+  async loadOrders() {
+    this.ordersResults({
       first: this.paginatorInfo.first,
       page: this.paginatorInfo.currentPage,
     })
       .then(
         (data: {
-          data: { adminProducts: { data: object[]; paginatorInfo: Paginator } };
+          data: { adminOrders: { data: object[]; paginatorInfo: Paginator } };
           errors: [{ debugMessage: string }];
         }) => {
           // console.log(data);
@@ -180,14 +176,14 @@ export default class Products extends Vue {
             // no error
           }
 
-          let dataStore = cleanupData(data.data.adminProducts.data);
-          this.products = dataStore;
-          this.productAttributes = Object.keys(dataStore[0]);
+          let dataStore = cleanupData(data.data.adminOrders.data);
+          this.orders = dataStore;
+          this.ordersAttributes = Object.keys(dataStore[0]);
 
           // Assign paginator information, and set reload to false to prevent infinite loop
           // as this component also watches for state changes in the paginator vuex state
           // because the table component changes the paginator state and this component fetches the result of that change
-          let paginatorUpdate: {} = data.data.adminProducts.paginatorInfo;
+          let paginatorUpdate: {} = data.data.adminOrders.paginatorInfo;
           this.updatePaginatorInfo({
             ...{ reload: false },
             ...paginatorUpdate,
@@ -196,13 +192,13 @@ export default class Products extends Vue {
           // This is to have a few columns displaying on initial view, by pushing the column keys into
           // tableColumns
           if (this.tableColums.length === 0) {
-            this.productAttributes.slice(0, 4).forEach((key: string) => {
+            this.ordersAttributes.slice(0, 4).forEach((key: string) => {
               this.tableColums.push(key);
             });
           }
 
           // Populate column data
-          this.productsDisplay = filterArray(this.tableColums, this.products);
+          this.ordersDisplay = filterArray(this.tableColums, this.orders);
 
           return Promise.resolve();
         }

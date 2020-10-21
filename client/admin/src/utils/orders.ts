@@ -1,26 +1,4 @@
-const formatter: any = {
-  // id: todo,
-  // title: todo,
-  // status: todo,
-  // published: todo,
-  // price_cents: todo,
-  // price_currency: todo,
-  // short_description: todo,
-  // long_description: todo,
-  // created_at: todo,
-  // updated_at: todo,
-  // meta: todo,
-  // prices: todo,
-  // sizes: todo,
-  // variants: todo,
-  categories: categories,
-  // dimensions: todo,
-  // weight: todo,
-  // images: todo,
-  // featured_image: todo,
-  // tags: todo,
-  // fixedPrices: todo,
-};
+const formatter: any = {};
 
 function categories(data: []): string {
   return data
@@ -78,12 +56,12 @@ export function formatObject(obj: {}): String {
   return Object.values(obj).join("; ");
 }
 
-export function transform(prodElement: {} | [] | String): String | {} {
-  if (Array.isArray(prodElement)) {
-    return formatArray(prodElement);
-  } else if (checkIfObject(prodElement)) {
-    return formatObject(prodElement);
+export function transform(orderElement: {} | [] | String): String | {} {
+  if (Array.isArray(orderElement)) {
+    return formatArray(orderElement);
+  } else if (checkIfObject(orderElement)) {
+    return formatObject(orderElement);
   } else {
-    return prodElement;
+    return orderElement;
   }
 }

@@ -9,6 +9,7 @@ extend type Query {
             builder: "Gernzy\Server\GraphQL\Builders\ProductsBuilder@search"
         )
 
+    #first: Int, page: Int is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
     adminProducts(input: ProductsQueryInput, first: Int, page: Int): Product!
         @gernzyConvertCurrency
         @paginate(
@@ -78,10 +79,11 @@ type Product {
     featured_image: Image
     tags: [Tag!] @hasMany
     fixedPrices: [ProductFixedPrice!] @hasMany
-    data: [Product]
-    paginatorInfo: PaginatorInfo
+    data: [Product] #This is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
+    paginatorInfo: PaginatorInfo #This is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
 }
 
+#This is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
 type PaginatorInfo {
     total: Int,
     hasMorePages: Boolean,
