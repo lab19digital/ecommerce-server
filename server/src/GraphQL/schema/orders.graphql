@@ -124,6 +124,16 @@ type Order {
     agree_to_terms: String
     notes: String
     created_at: String
+    orderTransaction: OrderTransaction @hasOne
+}
+
+type OrderTransaction {
+    id: Int
+    order_id: Int
+    order: Order @belongsTo
+    status: String
+    transaction_data: String @field(resolver: "Gernzy\\Server\\GraphQL\\Queries\\Order@transactionData")
+    payment_method: String
 }
 
 type OrderItem {
