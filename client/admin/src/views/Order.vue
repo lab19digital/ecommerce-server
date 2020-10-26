@@ -36,6 +36,20 @@
       <p class="text-gray-700 text-sm">{{ order.shipping_address_postcode }}</p>
       <p class="text-gray-700 text-sm">{{ order.shipping_address_state }}</p>
       <p class="text-gray-700 text-sm">{{ order.shipping_address_country }}</p>
+
+      <h5 class="text-2xl font-bold mb-1 mt-6">Transactions</h5>
+
+      <p class="text-gray-700 text-sm">id: {{ order.orderTransaction.id }}</p>
+      <p class="text-gray-700 text-sm">
+        Status: {{ order.orderTransaction.status }}
+      </p>
+      <p class="text-gray-700 text-sm">
+        Payment Method: {{ order.orderTransaction.payment_method }}
+      </p>
+
+      <p class="text-gray-700 text-sm">
+        Details: {{ order.orderTransaction.transaction_data }}
+      </p>
     </div>
   </div>
 </template>
@@ -70,7 +84,7 @@ export default class Order extends Vue {
       })
       .then(
         (data: { data: { order: {} }; errors: [{ debugMessage: string }] }) => {
-          // console.log(data.data.order);
+          console.log(data);
           try {
             let error = data.errors[0].debugMessage;
             this.errors.push(error);
