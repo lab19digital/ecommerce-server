@@ -1,0 +1,234 @@
+{
+    "id": 1,
+    "order_id": 1,
+    "status": "paid",
+    "transaction_data": {
+        "stripe_payment_event": {
+            "id": "evt_1HgUp0BEW94QPQobOP4SmJ9a",
+            "data": {
+                "object": {
+                    "id": "pi_1HgUozBEW94QPQob1T4z6Pem",
+                    "amount": 2000,
+                    "object": "payment_intent",
+                    "review": null,
+                    "source": null,
+                    "status": "succeeded",
+                    "charges": {
+                        "url": "/v1/charges?payment_intent=pi_1HgUozBEW94QPQob1T4z6Pem",
+                        "data": [
+                            {
+                                "id": "ch_1HgUozBEW94QPQobgvvTUyno",
+                                "paid": true,
+                                "order": null,
+                                "amount": 2000,
+                                "object": "charge",
+                                "review": null,
+                                "source": null,
+                                "status": "succeeded",
+                                "created": 1603715349,
+                                "dispute": null,
+                                "invoice": null,
+                                "outcome": {
+                                    "type": "authorized",
+                                    "reason": null,
+                                    "risk_level": "normal",
+                                    "risk_score": 48,
+                                    "network_status": "approved_by_network",
+                                    "seller_message": "Payment complete."
+                                },
+                                "refunds": {
+                                    "url": "/v1/charges/ch_1HgUozBEW94QPQobgvvTUyno/refunds",
+                                    "data": [],
+                                    "object": "list",
+                                    "has_more": false,
+                                    "total_count": 0
+                                },
+                                "captured": true,
+                                "currency": "usd",
+                                "customer": null,
+                                "disputed": false,
+                                "livemode": false,
+                                "metadata": [],
+                                "refunded": false,
+                                "shipping": {
+                                    "name": "Jenny Rosen",
+                                    "phone": null,
+                                    "address": {
+                                        "city": "San Francisco",
+                                        "line1": "510 Townsend St",
+                                        "line2": null,
+                                        "state": "CA",
+                                        "country": "US",
+                                        "postal_code": "94103"
+                                    },
+                                    "carrier": null,
+                                    "tracking_number": null
+                                },
+                                "application": null,
+                                "description": "(created by Stripe CLI)",
+                                "destination": null,
+                                "receipt_url": "https://pay.stripe.com/receipts/acct_1FqyBQBEW94QPQob/ch_1HgUozBEW94QPQobgvvTUyno/rcpt_IH2uOBMYZsxZn1PJt61Jd8rgKuzXdQl",
+                                "failure_code": null,
+                                "on_behalf_of": null,
+                                "fraud_details": [],
+                                "receipt_email": null,
+                                "transfer_data": null,
+                                "payment_intent": "pi_1HgUozBEW94QPQob1T4z6Pem",
+                                "payment_method": "pm_1HgUozBEW94QPQobJG0tUNVo",
+                                "receipt_number": null,
+                                "transfer_group": null,
+                                "amount_captured": 2000,
+                                "amount_refunded": 0,
+                                "application_fee": null,
+                                "billing_details": {
+                                    "name": null,
+                                    "email": null,
+                                    "phone": null,
+                                    "address": {
+                                        "city": null,
+                                        "line1": null,
+                                        "line2": null,
+                                        "state": null,
+                                        "country": null,
+                                        "postal_code": null
+                                    }
+                                },
+                                "failure_message": null,
+                                "source_transfer": null,
+                                "balance_transaction": "txn_1HgUozBEW94QPQobVqIktjQF",
+                                "statement_descriptor": null,
+                                "application_fee_amount": null,
+                                "payment_method_details": {
+                                    "card": {
+                                        "brand": "visa",
+                                        "last4": "4242",
+                                        "checks": {
+                                            "cvc_check": null,
+                                            "address_line1_check": null,
+                                            "address_postal_code_check": null
+                                        },
+                                        "wallet": null,
+                                        "country": "US",
+                                        "funding": "credit",
+                                        "network": "visa",
+                                        "exp_year": 2021,
+                                        "exp_month": 10,
+                                        "fingerprint": "kBBAPzC0kRrZrukV",
+                                        "installments": null,
+                                        "three_d_secure": null
+                                    },
+                                    "type": "card"
+                                },
+                                "statement_descriptor_suffix": null,
+                                "calculated_statement_descriptor": "Stripe"
+                            }
+                        ],
+                        "object": "list",
+                        "has_more": false,
+                        "total_count": 1
+                    },
+                    "created": 1603715349,
+                    "invoice": null,
+                    "currency": "usd",
+                    "customer": null,
+                    "livemode": false,
+                    "metadata": [],
+                    "shipping": {
+                        "name": "Jenny Rosen",
+                        "phone": null,
+                        "address": {
+                            "city": "San Francisco",
+                            "line1": "510 Townsend St",
+                            "line2": null,
+                            "state": "CA",
+                            "country": "US",
+                            "postal_code": "94103"
+                        },
+                        "carrier": null,
+                        "tracking_number": null
+                    },
+                    "application": null,
+                    "canceled_at": null,
+                    "description": "(created by Stripe CLI)",
+                    "next_action": null,
+                    "on_behalf_of": null,
+                    "client_secret": null,
+                    "receipt_email": null,
+                    "transfer_data": null,
+                    "capture_method": "automatic",
+                    "payment_method": "pm_1HgUozBEW94QPQobJG0tUNVo",
+                    "transfer_group": null,
+                    "amount_received": 2000,
+                    "amount_capturable": 0,
+                    "last_payment_error": null,
+                    "setup_future_usage": null,
+                    "cancellation_reason": null,
+                    "confirmation_method": "automatic",
+                    "payment_method_types": ["card"],
+                    "statement_descriptor": null,
+                    "application_fee_amount": null,
+                    "payment_method_options": {
+                        "card": { "network": null, "installments": null, "request_three_d_secure": "automatic" }
+                    },
+                    "statement_descriptor_suffix": null
+                }
+            },
+            "type": "payment_intent.succeeded",
+            "object": "event",
+            "created": 1603715350,
+            "request": { "id": "req_gi1YbONoOmpcRe", "idempotency_key": null },
+            "livemode": false,
+            "api_version": "2020-03-02",
+            "pending_webhooks": 2
+        },
+        "stripe_payment_intent": {
+            "id": "pi_1HgUJSBEW94QPQobaRB6qrnF",
+            "amount": 16572,
+            "object": "payment_intent",
+            "review": null,
+            "source": null,
+            "status": "requires_payment_method",
+            "charges": {
+                "url": "/v1/charges?payment_intent=pi_1HgUJSBEW94QPQobaRB6qrnF",
+                "data": [],
+                "object": "list",
+                "has_more": false,
+                "total_count": 0
+            },
+            "created": 1603713394,
+            "invoice": null,
+            "currency": "usd",
+            "customer": null,
+            "livemode": false,
+            "metadata": { "integration_check": "accept_a_payment" },
+            "shipping": null,
+            "application": null,
+            "canceled_at": null,
+            "description": null,
+            "next_action": null,
+            "on_behalf_of": null,
+            "client_secret": null,
+            "receipt_email": null,
+            "transfer_data": null,
+            "capture_method": "automatic",
+            "payment_method": null,
+            "transfer_group": null,
+            "amount_received": 0,
+            "amount_capturable": 0,
+            "last_payment_error": null,
+            "setup_future_usage": null,
+            "cancellation_reason": null,
+            "confirmation_method": "automatic",
+            "payment_method_types": ["card"],
+            "statement_descriptor": null,
+            "application_fee_amount": null,
+            "payment_method_options": {
+                "card": { "network": null, "installments": null, "request_three_d_secure": "automatic" }
+            },
+            "statement_descriptor_suffix": null
+        }
+    },
+    "payment_method": "stripe_standard",
+    "created_at": "2020-10-26T11:56:35.000000Z",
+    "updated_at": "2020-10-26T12:29:12.000000Z"
+}
