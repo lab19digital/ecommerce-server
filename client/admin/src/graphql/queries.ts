@@ -143,6 +143,13 @@ export const ORDER = gql`
       agree_to_terms
       notes
       created_at
+      orderTransaction {
+        id
+        order_id
+        status
+        transaction_data
+        payment_method
+      }
     }
   }
 `;
