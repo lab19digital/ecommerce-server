@@ -47,7 +47,7 @@ export default [
     meta: { requiresAuth: true },
   },
   {
-    path: "/order/:id",
+    path: "/orders/:id",
     name: "Order",
     component: Order,
     meta: { requiresAuth: true },
