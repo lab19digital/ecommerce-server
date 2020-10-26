@@ -36,12 +36,7 @@
               style="vertical-align: top"
             >
               <div v-if="values">
-                <div v-if="checkIfLink(values)">
-                  <a :href="values" target="_blank" class="underline">{{
-                    values
-                  }}</a>
-                </div>
-                <div v-else>{{ values }}</div>
+                {{ values }}
               </div>
             </td>
           </tr>
@@ -125,18 +120,6 @@ export default class Table extends Vue {
 
   public resetErrors(): void {
     this.resetPaginatorInfoError();
-  }
-
-  public checkIfLink(element: string) {
-    //eslint-disable-next-line
-    let re: any = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
-    var res: any = re.exec(element);
-
-    if (res) {
-      return true;
-    } else {
-      return false;
-    }
   }
 }
 </script>
