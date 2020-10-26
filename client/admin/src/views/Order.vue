@@ -47,8 +47,8 @@
         Payment Method: {{ order.orderTransaction.payment_method }}
       </p>
 
-      <p class="text-gray-700 text-sm">
-        Details: {{ order.orderTransaction.transaction_data }}
+      <p id="transactionDetails" class="text-gray-700 text-sm">
+        Details: {{ textedJson }}
       </p>
     </div>
   </div>
@@ -71,6 +71,7 @@ export default class Order extends Vue {
   // Errors array
   private errors: string[] = [];
   private order: {} = {};
+  private textedJson: string = "";
 
   public resetErrors(): void {
     this.errors = [];
@@ -83,7 +84,10 @@ export default class Order extends Vue {
         variables: { id: this.$route.params.id },
       })
       .then(
-        (data: { data: { order: {} }; errors: [{ debugMessage: string }] }) => {
+        (data: {
+          data: { order: { orderTransaction: any } };
+          errors: [{ debugMessage: string }];
+        }) => {
           console.log(data);
           try {
             let error = data.errors[0].debugMessage;
@@ -94,6 +98,14 @@ export default class Order extends Vue {
             // no error
           }
           this.order = data.data.order;
+
+          this.$nextTick(function () {
+            let transdata = data.data.order.orderTransaction.transaction_data;
+            transdata = JSON.stringify(JSON.parse(transdata), null, 2);
+            let el = document.getElementById("transactionDetails");
+            // @ts-ignore
+            el.innerHTML = transdata;
+          });
         }
       );
   }
