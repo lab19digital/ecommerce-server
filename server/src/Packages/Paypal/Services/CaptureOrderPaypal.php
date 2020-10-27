@@ -2,6 +2,7 @@
 
 namespace  Gernzy\Server\Packages\Paypal\Services;
 
+use \App;
 use Illuminate\Support\Facades\Log;
 use PayPalCheckoutSdk\Orders\OrdersCaptureRequest;
 
