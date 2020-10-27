@@ -11,7 +11,7 @@
       <ErrorNotification :errors="errors" />
     </div>
 
-    <div class="bg-white rounded shadow border p-6">
+    <div v-if="order" class="bg-white rounded shadow border p-6">
       <h5 class="text-3xl font-bold mb-1 mt-0">Order {{ order.id }}</h5>
       <p class="text-gray-700 text-m">{{ order.name }}</p>
       <p class="text-gray-700 text-m">{{ order.email }}</p>
@@ -39,34 +39,15 @@
 
       <h5 class="text-2xl font-bold mb-1 mt-6">Transactions</h5>
 
-      <p class="text-gray-700 text-m">id: {{ order.orderTransaction.id }}</p>
-      <p class="text-gray-700 text-m">
-        Status: {{ order.orderTransaction.status }}
-      </p>
-      <p class="text-gray-700 text-m">
-        Payment Method: {{ order.orderTransaction.payment_method }}
-      </p>
-      <p class="text-gray-700 text-m">
-        Amount:
-        {{
-          order.orderTransaction.transaction_data.transaction_data
-            .stripe_payment_event.data.object.amount_received
-        }}
-      </p>
-      <p class="text-gray-700 text-m">
-        Currency:
-        {{
-          order.orderTransaction.transaction_data.transaction_data
-            .stripe_payment_event.data.object.currency
-        }}
-      </p>
-      <p class="text-gray-700 text-m">
-        Decsription:
-        {{
-          order.orderTransaction.transaction_data.transaction_data
-            .stripe_payment_event.data.object.description
-        }}
-      </p>
+      <div v-if="order.orderTransaction">
+        <p class="text-gray-700 text-m">id: {{ order.orderTransaction.id }}</p>
+        <p class="text-gray-700 text-m">
+          Status: {{ order.orderTransaction.status }}
+        </p>
+        <p class="text-gray-700 text-m">
+          Payment Method: {{ order.orderTransaction.payment_method }}
+        </p>
+      </div>
 
       <a
         @click="toggleDetailsClick"
@@ -100,7 +81,6 @@ export default class Order extends Vue {
   // Errors array
   private errors: string[] = [];
   private order: {} = {};
-  private textedJson: string = "";
   private toggleDetails: Boolean = false;
 
   public resetErrors(): void {
@@ -119,7 +99,7 @@ export default class Order extends Vue {
       })
       .then(
         (data: {
-          data: { order: { orderTransaction: any } };
+          data: { order: { orderTransaction: any; payment_method: string } };
           errors: [{ debugMessage: string }];
         }) => {
           console.log(data);
@@ -132,26 +112,52 @@ export default class Order extends Vue {
             // no error
           }
 
-          let transdata = data.data.order.orderTransaction.transaction_data;
-          transdata = JSON.parse(transdata);
-          data.data.order.orderTransaction.transaction_data = transdata;
-          this.order = data.data.order;
+          let paymentProvider = data.data.order.payment_method;
+          if (paymentProvider == "stripe_standard") {
+            this.stripeProcessJSONforDisplay(data);
+          }
 
-          this.$nextTick(function () {
-            let transdata = data.data.order.orderTransaction.transaction_data;
-            transdata = JSON.stringify(transdata, null, 2);
-            transdata = transdata.replace(/"|{|}|,/g, "");
-            transdata = transdata.replace(/(^[ \t]*\n)/gm, "");
-            transdata = transdata.replace(/[a-z|_]*:/gi, function (match: any) {
-              return '<b class="text-teal-500">' + match + "</b>";
-            });
-
-            let el = document.getElementById("transactionDetails");
-            // @ts-ignore
-            el.innerHTML = transdata;
-          });
+          if (paymentProvider == "paypal_standard") {
+            this.paypalProcessJSONforDisplay(data);
+          }
         }
       );
+  }
+
+  public stripeProcessJSONforDisplay(data: any) {
+    let transdata = data.data.order.orderTransaction.transaction_data;
+    transdata = JSON.parse(transdata);
+    data.data.order.orderTransaction.transaction_data = transdata;
+    this.order = data.data.order;
+    this.$nextTick(function () {
+      transdata = JSON.stringify(transdata, null, 2);
+      transdata = transdata.replace(/"|{|}|,/g, "");
+      transdata = transdata.replace(/(^[ \t]*\n)/gm, "");
+      transdata = transdata.replace(/[a-z|_]*:/gi, function (match: any) {
+        return '<b class="text-teal-500">' + match + "</b>";
+      });
+      let el = document.getElementById("transactionDetails");
+      // @ts-ignore
+      el.innerHTML = transdata;
+    });
+  }
+
+  public paypalProcessJSONforDisplay(data: any) {
+    let transdata = data.data.order.orderTransaction.transaction_data;
+    transdata = JSON.parse(transdata);
+    data.data.order.orderTransaction.transaction_data = transdata;
+    this.order = data.data.order;
+    this.$nextTick(function () {
+      transdata = JSON.stringify(transdata, null, 2);
+      transdata = transdata.replace(/"|{|}|,/g, "");
+      transdata = transdata.replace(/(^[ \t]*\n)/gm, "");
+      transdata = transdata.replace(/[a-z|_]*:/gi, function (match: any) {
+        return '<b class="text-teal-500">' + match + "</b>";
+      });
+      let el = document.getElementById("transactionDetails");
+      // @ts-ignore
+      el.innerHTML = transdata;
+    });
   }
 }
 </script>
