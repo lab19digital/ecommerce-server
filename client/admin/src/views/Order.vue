@@ -124,6 +124,8 @@ export default class Order extends Vue {
       );
   }
 
+  // Take the json that was saved in the database, which is a result from the payement provider, for the payment by the user
+  // and format then display for the admin as json
   public stripeProcessJSONforDisplay(data: any) {
     let transdata = data.data.order.orderTransaction.transaction_data;
     transdata = JSON.parse(transdata);
@@ -142,6 +144,8 @@ export default class Order extends Vue {
     });
   }
 
+  // Take the json that was saved in the database, which is a result from the payement provider, for the payment by the user
+  // and format then display for the admin as json
   public paypalProcessJSONforDisplay(data: any) {
     let transdata = data.data.order.orderTransaction.transaction_data;
     transdata = JSON.parse(transdata);
