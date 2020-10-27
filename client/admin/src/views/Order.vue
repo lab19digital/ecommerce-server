@@ -13,43 +13,72 @@
 
     <div class="bg-white rounded shadow border p-6">
       <h5 class="text-3xl font-bold mb-1 mt-0">Order {{ order.id }}</h5>
-      <p class="text-gray-700 text-sm">{{ order.name }}</p>
-      <p class="text-gray-700 text-sm">{{ order.email }}</p>
-      <p class="text-gray-700 text-sm">{{ order.telephone }}</p>
-      <p class="text-gray-700 text-sm">
+      <p class="text-gray-700 text-m">{{ order.name }}</p>
+      <p class="text-gray-700 text-m">{{ order.email }}</p>
+      <p class="text-gray-700 text-m">{{ order.telephone }}</p>
+      <p class="text-gray-700 text-m">
         Agree to terms: {{ order.agree_to_terms }}
       </p>
-      <p class="text-gray-700 text-sm">{{ order.created_at }}</p>
-      <p class="text-gray-700 text-sm">{{ order.notes }}</p>
-      <p class="text-gray-700 text-sm">{{ order.payment_method }}</p>
+      <p class="text-gray-700 text-m">{{ order.created_at }}</p>
+      <p class="text-gray-700 text-m">{{ order.notes }}</p>
+      <p class="text-gray-700 text-m">{{ order.payment_method }}</p>
 
       <h5 class="text-2xl font-bold mb-1 mt-6">Billing</h5>
-      <p class="text-gray-700 text-sm">{{ order.billing_address_line_1 }}</p>
-      <p class="text-gray-700 text-sm">{{ order.billing_address_line_2 }}</p>
-      <p class="text-gray-700 text-sm">{{ order.billing_address_postcode }}</p>
-      <p class="text-gray-700 text-sm">{{ order.billing_address_state }}</p>
-      <p class="text-gray-700 text-sm">{{ order.billing_address_country }}</p>
+      <p class="text-gray-700 text-m">{{ order.billing_address_line_1 }}</p>
+      <p class="text-gray-700 text-m">{{ order.billing_address_line_2 }}</p>
+      <p class="text-gray-700 text-m">{{ order.billing_address_postcode }}</p>
+      <p class="text-gray-700 text-m">{{ order.billing_address_state }}</p>
+      <p class="text-gray-700 text-m">{{ order.billing_address_country }}</p>
 
       <h5 class="text-2xl font-bold mb-1 mt-6">Shipping</h5>
-      <p class="text-gray-700 text-sm">{{ order.shipping_address_line_1 }}</p>
-      <p class="text-gray-700 text-sm">{{ order.shipping_address_line_2 }}</p>
-      <p class="text-gray-700 text-sm">{{ order.shipping_address_postcode }}</p>
-      <p class="text-gray-700 text-sm">{{ order.shipping_address_state }}</p>
-      <p class="text-gray-700 text-sm">{{ order.shipping_address_country }}</p>
+      <p class="text-gray-700 text-m">{{ order.shipping_address_line_1 }}</p>
+      <p class="text-gray-700 text-m">{{ order.shipping_address_line_2 }}</p>
+      <p class="text-gray-700 text-m">{{ order.shipping_address_postcode }}</p>
+      <p class="text-gray-700 text-m">{{ order.shipping_address_state }}</p>
+      <p class="text-gray-700 text-m">{{ order.shipping_address_country }}</p>
 
       <h5 class="text-2xl font-bold mb-1 mt-6">Transactions</h5>
 
-      <p class="text-gray-700 text-sm">id: {{ order.orderTransaction.id }}</p>
-      <p class="text-gray-700 text-sm">
+      <p class="text-gray-700 text-m">id: {{ order.orderTransaction.id }}</p>
+      <p class="text-gray-700 text-m">
         Status: {{ order.orderTransaction.status }}
       </p>
-      <p class="text-gray-700 text-sm">
+      <p class="text-gray-700 text-m">
         Payment Method: {{ order.orderTransaction.payment_method }}
       </p>
-
-      <p id="transactionDetails" class="text-gray-700 text-sm">
-        Details: {{ textedJson }}
+      <p class="text-gray-700 text-m">
+        Amount:
+        {{
+          order.orderTransaction.transaction_data.transaction_data
+            .stripe_payment_event.data.object.amount_received
+        }}
       </p>
+      <p class="text-gray-700 text-m">
+        Currency:
+        {{
+          order.orderTransaction.transaction_data.transaction_data
+            .stripe_payment_event.data.object.currency
+        }}
+      </p>
+      <p class="text-gray-700 text-m">
+        Decsription:
+        {{
+          order.orderTransaction.transaction_data.transaction_data
+            .stripe_payment_event.data.object.description
+        }}
+      </p>
+
+      <a
+        @click="toggleDetailsClick"
+        href="#/"
+        class="text-gray-700 text-m underline"
+        >View more details</a
+      >
+      <pre
+        v-show="toggleDetails"
+        id="transactionDetails"
+        class="text-gray-700 text-m"
+      ></pre>
     </div>
   </div>
 </template>
@@ -72,9 +101,14 @@ export default class Order extends Vue {
   private errors: string[] = [];
   private order: {} = {};
   private textedJson: string = "";
+  private toggleDetails: Boolean = false;
 
   public resetErrors(): void {
     this.errors = [];
+  }
+
+  toggleDetailsClick() {
+    this.toggleDetails = !this.toggleDetails;
   }
 
   mounted() {
@@ -97,11 +131,21 @@ export default class Order extends Vue {
           } catch (error) {
             // no error
           }
+
+          let transdata = data.data.order.orderTransaction.transaction_data;
+          transdata = JSON.parse(transdata);
+          data.data.order.orderTransaction.transaction_data = transdata;
           this.order = data.data.order;
 
           this.$nextTick(function () {
             let transdata = data.data.order.orderTransaction.transaction_data;
-            transdata = JSON.stringify(JSON.parse(transdata), null, 2);
+            transdata = JSON.stringify(transdata, null, 2);
+            transdata = transdata.replace(/"|{|}|,/g, "");
+            transdata = transdata.replace(/(^[ \t]*\n)/gm, "");
+            transdata = transdata.replace(/[a-z|_]*:/gi, function (match: any) {
+              return '<b class="text-teal-500">' + match + "</b>";
+            });
+
             let el = document.getElementById("transactionDetails");
             // @ts-ignore
             el.innerHTML = transdata;
