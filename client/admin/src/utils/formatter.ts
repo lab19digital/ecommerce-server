@@ -31,7 +31,13 @@ function categories(data: []): string {
 }
 
 function link(contents: [], data: { url: string }): string | [] {
-  if (data.url) return data.url + "/" + contents;
+  const url = data.url + "/" + contents;
+  if (data.url)
+    return (
+      `<a class="text-teal-500 underline" href="${url}" target="_blank">` +
+      contents +
+      "</a>"
+    );
 
   return contents;
 }
