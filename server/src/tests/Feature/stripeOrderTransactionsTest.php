@@ -265,4 +265,107 @@ class GernzyStripeOrderTransactionsTest extends PaymentGatewayTest
         $stripeService = new StripeService();
         $this->assertTrue(in_array('3.18.12.63', $stripeService->getStripeWebhookIPAdresses()));
     }
+
+
+    public function testStripeWebhookWithDataAndFindOrderAndOrderTransactionAndQueryOrderResult()
+    {
+        // Set currency, add to cart, fire events and checkout (from PaymentGatewayTest test)
+        $this->testPaymentGatewayProviderWithDifferentCurrency();
+
+        // Simulate stripe payment succesful event posted to gernzy webhook
+        // public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
+        $response = $this->mockStripeWebhook();
+
+        $response->assertStatus(200);
+        $this->assertEquals('Success', $response->getContent());
+
+        $postDataObject = json_decode($this->postData);
+        $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $postDataObject->data->object->id)->first();
+        $this->assertNotEmpty($orderTransaction->transaction_data);
+        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_intent']);
+        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_event']);
+        $this->assertEquals($orderTransaction->status, 'paid');
+
+        // Check that the client secret is not present in the db
+        $this->assertEmpty($orderTransaction->transaction_data['stripe_payment_intent']['client_secret']);
+        $this->assertEmpty($orderTransaction->transaction_data['stripe_payment_event']['data']['object']['client_secret']);
+
+        // Check the association
+        $order = $orderTransaction->order;
+        $this->assertNotEmpty($orderTransaction->id);
+        $this->assertNotEmpty($order->id);
+
+
+        $this->graphQLCreateAccountWithSession('order@example.com', 'password');
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        {
+            order(id:1){
+              id
+              name
+              email
+              telephone
+              shipping_address_line_1
+              shipping_address_line_2
+              shipping_address_postcode
+              shipping_address_state
+              shipping_address_country
+              billing_address_line_1
+              billing_address_line_2
+              billing_address_postcode
+              billing_address_state
+              billing_address_country
+              payment_method
+              agree_to_terms
+              notes
+              created_at
+              orderTransaction {
+                id
+                order_id
+                status
+                transaction_data
+                payment_method
+              }
+            }
+        }
+    ');
+
+        $result = $response->decodeResponseJson();
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+      'data' => [
+        'order' => [
+          'id',
+          'name',
+          'email',
+          'telephone',
+          'shipping_address_line_1',
+          'shipping_address_line_2',
+          'shipping_address_postcode',
+          'shipping_address_state',
+          'shipping_address_country',
+          'billing_address_line_1',
+          'billing_address_line_2',
+          'billing_address_postcode',
+          'billing_address_state',
+          'billing_address_country',
+          'payment_method',
+          'agree_to_terms',
+          'notes',
+          'created_at',
+          'orderTransaction' => [
+            'id',
+            'order_id',
+            'status',
+            'transaction_data',
+            'payment_method',
+          ]
+        ],
+      ],
+    ]);
+
+        return $orderTransaction;
+    }
 }
