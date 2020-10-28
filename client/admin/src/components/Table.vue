@@ -36,7 +36,7 @@
               style="vertical-align: top"
             >
               <div v-if="values">
-                {{ values }}
+                <div v-html="values"></div>
               </div>
             </td>
           </tr>
