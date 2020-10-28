@@ -128,10 +128,20 @@ type Order {
     created_at: String
     data: [Order] #This is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
     paginatorInfo: PaginatorInfo  #This is for paginator use in the front end tests, and on the backend lighthouse has this built in, so not defined in the schema
+    orderTransaction: OrderTransaction @hasOne
+}
+
+type OrderTransaction {
+    id: Int
+    order_id: Int
+    order: Order @belongsTo
+    status: String
+    transaction_data: String @field(resolver: "Gernzy\Server\GraphQL\Queries\Order@transactionData")
+    payment_method: String
 }
 
 type OrderItem {
     id: ID!
     order_id: ID!
 } 
-`;
+`
