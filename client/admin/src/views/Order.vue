@@ -124,7 +124,7 @@ export default class Order extends Vue {
           data: { order: { orderTransaction: any; payment_method: string } };
           errors: [{ debugMessage: string }];
         }) => {
-          console.log(data);
+          // console.log(data);
           try {
             let error = data.errors[0].debugMessage;
             this.errors.push(error);
@@ -134,13 +134,24 @@ export default class Order extends Vue {
             // no error
           }
 
+          let transdata = "";
+          try {
+            transdata = data.data.order.orderTransaction.transaction_data;
+            transdata = JSON.parse(transdata);
+            data.data.order.orderTransaction.transaction_data = transdata;
+          } catch (error) {
+            // console.log("Order component mounted() error: \n" + error);
+          }
+
+          this.order = data.data.order;
+
           let paymentProvider = data.data.order.payment_method;
           if (paymentProvider == "stripe_standard") {
-            this.stripeProcessJSONforDisplay(data);
+            this.stripeProcessJSONforDisplay(transdata);
           }
 
           if (paymentProvider == "paypal_standard") {
-            this.paypalProcessJSONforDisplay(data);
+            this.paypalProcessJSONforDisplay(transdata);
           }
         }
       );
@@ -148,11 +159,7 @@ export default class Order extends Vue {
 
   // Take the json that was saved in the database, which is a result from the payement provider, for the payment by the user
   // and format then display for the admin as json
-  public stripeProcessJSONforDisplay(data: any) {
-    let transdata = data.data.order.orderTransaction.transaction_data;
-    transdata = JSON.parse(transdata);
-    data.data.order.orderTransaction.transaction_data = transdata;
-    this.order = data.data.order;
+  public stripeProcessJSONforDisplay(transdata: any) {
     this.$nextTick(function () {
       transdata = JSON.stringify(transdata, null, 2);
       transdata = transdata.replace(/"|{|}|,/g, "");
@@ -168,11 +175,7 @@ export default class Order extends Vue {
 
   // Take the json that was saved in the database, which is a result from the payement provider, for the payment by the user
   // and format then display for the admin as json
-  public paypalProcessJSONforDisplay(data: any) {
-    let transdata = data.data.order.orderTransaction.transaction_data;
-    transdata = JSON.parse(transdata);
-    data.data.order.orderTransaction.transaction_data = transdata;
-    this.order = data.data.order;
+  public paypalProcessJSONforDisplay(transdata: any) {
     this.$nextTick(function () {
       transdata = JSON.stringify(transdata, null, 2);
       transdata = transdata.replace(/"|{|}|,/g, "");
