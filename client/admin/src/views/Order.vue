@@ -11,17 +11,33 @@
       <ErrorNotification :errors="errors" />
     </div>
 
-    <div v-if="order" class="bg-white rounded shadow border p-6">
+    <div
+      v-if="order"
+      class="bg-white rounded shadow border p-6 w-full break-words"
+    >
       <h5 class="text-3xl font-bold mb-1 mt-0">Order {{ order.id }}</h5>
-      <p class="text-gray-700 text-m">{{ order.name }}</p>
-      <p class="text-gray-700 text-m">{{ order.email }}</p>
-      <p class="text-gray-700 text-m">{{ order.telephone }}</p>
       <p class="text-gray-700 text-m">
-        Agree to terms: {{ order.agree_to_terms }}
+        <b class="text-teal-500">Name: </b>{{ order.name }}
       </p>
-      <p class="text-gray-700 text-m">{{ order.created_at }}</p>
-      <p class="text-gray-700 text-m">{{ order.notes }}</p>
-      <p class="text-gray-700 text-m">{{ order.payment_method }}</p>
+      <p class="text-gray-700 text-m">
+        <b class="text-teal-500">Email: </b>{{ order.email }}
+      </p>
+      <p class="text-gray-700 text-m">
+        <b class="text-teal-500">Tel: </b>{{ order.telephone }}
+      </p>
+      <p class="text-gray-700 text-m">
+        <b class="text-teal-500">Agree to terms: </b>
+        {{ order.agree_to_terms }}
+      </p>
+      <p class="text-gray-700 text-m">
+        <b class="text-teal-500">Created at: </b> {{ order.created_at }}
+      </p>
+      <p class="text-gray-700 text-m">
+        <b class="text-teal-500">Notes: </b>{{ order.notes }}
+      </p>
+      <p class="text-gray-700 text-m">
+        <b class="text-teal-500">Payment method: </b>{{ order.payment_method }}
+      </p>
 
       <h5 class="text-2xl font-bold mb-1 mt-6">Billing</h5>
       <p class="text-gray-700 text-m">{{ order.billing_address_line_1 }}</p>
@@ -40,12 +56,16 @@
       <h5 class="text-2xl font-bold mb-1 mt-6">Transactions</h5>
 
       <div v-if="order.orderTransaction">
-        <p class="text-gray-700 text-m">id: {{ order.orderTransaction.id }}</p>
         <p class="text-gray-700 text-m">
-          Status: {{ order.orderTransaction.status }}
+          <b class="text-teal-500">id: </b> {{ order.orderTransaction.id }}
         </p>
         <p class="text-gray-700 text-m">
-          Payment Method: {{ order.orderTransaction.payment_method }}
+          <b class="text-teal-500">Status: </b>
+          {{ order.orderTransaction.status }}
+        </p>
+        <p class="text-gray-700 text-m">
+          <b class="text-teal-500">Payment method: </b>
+          {{ order.orderTransaction.payment_method }}
         </p>
       </div>
 
@@ -55,11 +75,13 @@
         class="text-gray-700 text-m underline"
         >View more details</a
       >
-      <pre
-        v-show="toggleDetails"
-        id="transactionDetails"
-        class="text-gray-700 text-m"
-      ></pre>
+      <div class="overflow-auto">
+        <pre
+          v-show="toggleDetails"
+          id="transactionDetails"
+          class="text-gray-700 text-m"
+        ></pre>
+      </div>
     </div>
   </div>
 </template>
