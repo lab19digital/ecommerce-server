@@ -206,27 +206,6 @@ export default class Orders extends Vue {
             url: window.location.href,
           });
 
-          this.$nextTick(function () {
-            var tds = document.querySelectorAll("#ordersTable td");
-            //eslint-disable-next-line
-            let re: any = tds.forEach((element) => {
-              // eslint-disable-next-line
-              let re: any = /\/orders\//;
-              var res: any = re.exec(element.innerHTML);
-
-              if (res) {
-                // @ts-ignore
-                let link = element.childNodes[0].innerHTML;
-                element.innerHTML =
-                  `<a class="text-teal-500 underline" href="${link}" target="_blank">` +
-                  link +
-                  "</b>";
-              } else {
-                return false;
-              }
-            });
-          });
-
           return Promise.resolve();
         }
       )
