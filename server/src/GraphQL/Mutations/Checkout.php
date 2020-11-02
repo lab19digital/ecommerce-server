@@ -47,7 +47,13 @@ class Checkout
             );
 
             // Get all the data that was modified by the event service and corresponding listeners
-            $eventServiceData = $eventService->getAllModifiedData();
+            try {
+                //code...
+                $eventServiceData = $eventService->getAllModifiedData();
+            } catch (\Throwable $th) {
+                //throw $th;
+                // no event data
+            }
 
             $createCheckout = App::make(CreateCheckout::class);
             $order = $createCheckout->handle($args['input']);
