@@ -3,7 +3,7 @@
 namespace Gernzy\Server\GraphQL\Queries;
 
 use \App;
-use Gernzy\Server\Listeners\ViewPaymentHistory;
+use Gernzy\Server\Listeners\TransactionHistory;
 use Gernzy\Server\Services\EventService;
 use Gernzy\Server\Services\SessionService;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -46,7 +46,7 @@ class Order
             $orderTransaction = $order->orderTransaction;
             // Fire the before checkout event
             $eventService = EventService::triggerEvent(
-                ViewPaymentHistory::class,
+                TransactionHistory::class,
                 [
                     'order_transaction_id' => $orderTransaction->id,
                     'payment_method' => $orderTransaction->payment_method
