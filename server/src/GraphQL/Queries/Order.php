@@ -2,6 +2,10 @@
 
 namespace Gernzy\Server\GraphQL\Queries;
 
+use \App;
+use Gernzy\Server\Listeners\ViewPaymentHistory;
+use Gernzy\Server\Services\EventService;
+use Gernzy\Server\Services\SessionService;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -28,8 +32,36 @@ class Order
 
     public function transactionData($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        // Graphql requires a string for this field, however on the OPredTransaction Model we cast the transaction_data to an array for
-        // use in other places, thus this is a custom resolver to change the reponse into a json string
-        return json_encode($rootValue);
+        $sessionService = App::make(SessionService::class);
+
+        if (!$sessionService->exists()) {
+            return false;
+        }
+
+        $user = $sessionService->getUser();
+
+        $orders = $user->orders;
+
+        foreach ($orders as $order) {
+            $orderTransaction = $order->orderTransaction;
+            // Fire the before checkout event
+            $eventService = EventService::triggerEvent(
+                ViewPaymentHistory::class,
+                [
+                    'order_transaction_id' => $orderTransaction->id,
+                    'payment_method' => $orderTransaction->payment_method
+                ]
+            );
+
+            // Get all the data that was modified by the event service and corresponding listeners
+            try {
+                array_push($eventServiceData, $eventService->getAllModifiedData());
+            } catch (\Throwable $th) {
+                // throw $th;
+            }
+        }
+
+
+        return json_encode(empty($eventServiceData) ? $eventServiceData = "" : $eventServiceData);
     }
 }
