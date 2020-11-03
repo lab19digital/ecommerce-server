@@ -42,8 +42,11 @@ class Order
 
         $orders = $user->orders;
 
+        $eventServiceData = [];
+
         foreach ($orders as $order) {
             $orderTransaction = $order->orderTransaction;
+
             // Fire the before checkout event
             $eventService = EventService::triggerEvent(
                 TransactionHistory::class,
@@ -55,13 +58,22 @@ class Order
 
             // Get all the data that was modified by the event service and corresponding listeners
             try {
-                array_push($eventServiceData, $eventService->getAllModifiedData());
+                $modifiedData = $eventService->getAllModifiedData();
+                $instance = $modifiedData[0]["data"];
+
+                $data = [
+                    'provider' => $instance->getProvider(),
+                    'status' => $instance->getStatus(),
+                    'amount' => $instance->getAmount(),
+                    'date' => $instance->getDate()
+                ];
+
+                array_push($eventServiceData, $data);
             } catch (\Throwable $th) {
                 // throw $th;
             }
         }
 
-
-        return json_encode(empty($eventServiceData) ? $eventServiceData = "" : $eventServiceData);
+        return json_encode($eventServiceData);
     }
 }
