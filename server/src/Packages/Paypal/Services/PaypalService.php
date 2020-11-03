@@ -3,6 +3,7 @@
 namespace  Gernzy\Server\Packages\Paypal\Services;
 
 use \App;
+use Gernzy\Server\Classes\ActionClassPaymentHistory;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
 use Gernzy\Server\Services\PaymentProviderInterface;
@@ -71,5 +72,20 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
     public function logFile()
     {
         return '../paypalLog.txt';
+    }
+
+    // $provider, $status, $amount, $date
+    public function getTransactionHistory($orderTransactionId): ActionClassPaymentHistory
+    {
+        $orderTransaction = OrderTransaction::find($orderTransactionId);
+
+        $provider = $orderTransaction->payment_method;
+        $status = $orderTransaction->status;
+        $amount = $orderTransaction->transaction_data["paypal_data"]["result"]["purchase_units"][0]["amount"];
+        $date = $orderTransaction->transaction_data["paypal_data"]["result"]["create_time"];
+
+        $returnObj = new ActionClassPaymentHistory($provider, $status, $amount, $date);
+
+        return $returnObj;
     }
 }
