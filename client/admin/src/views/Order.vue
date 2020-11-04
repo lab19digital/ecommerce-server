@@ -70,18 +70,7 @@
       </div>
 
       <div v-for="(data, key) in transdata" :key="key">
-        <p class="text-gray-700 text-m">
-          {{ data.provider }}
-        </p>
-        <p class="text-gray-700 text-m">
-          {{ data.status }}
-        </p>
-        <p class="text-gray-700 text-m">
-          {{ data.amount.value }} {{ data.amount.currency_code }}
-        </p>
-        <p class="text-gray-700 text-m">
-          {{ data.date }}
-        </p>
+        <p class="text-gray-700 text-m">{{ key }}: {{ data }}</p>
       </div>
 
       <!-- <a
@@ -141,7 +130,7 @@ export default class Order extends Vue {
           data: { order: { orderTransaction: any; payment_method: string } };
           errors: [{ debugMessage: string }];
         }) => {
-          // console.log(data);
+          console.log(data);
           try {
             let error = data.errors[0].debugMessage;
             this.errors.push(error);
