@@ -2,10 +2,8 @@
 
 namespace Gernzy\Server\GraphQL\Queries;
 
-use \App;
 use Gernzy\Server\Listeners\TransactionHistory;
 use Gernzy\Server\Services\EventService;
-use Gernzy\Server\Services\SessionService;
 use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
@@ -32,48 +30,35 @@ class Order
 
     public function transactionData($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
-        $sessionService = App::make(SessionService::class);
+        $orderTransactionID = $rootValue->id;
+        $orderTransactionMethod = $rootValue->payment_method;
 
-        if (!$sessionService->exists()) {
-            return false;
+        // Fire the before checkout event
+        $eventService = EventService::triggerEvent(
+            TransactionHistory::class,
+            [
+                'order_transaction_id' => $orderTransactionID,
+                'payment_method' => $orderTransactionMethod
+            ]
+        );
+
+        $data = [];
+        // Get all the data that was modified by the event service and corresponding listeners
+        try {
+            $modifiedData = $eventService->getAllModifiedData();
+            $instance = $modifiedData[0]["data"];
+
+            $data = [
+                'provider' => $instance->getProvider(),
+                'status' => $instance->getStatus(),
+                'amount' => $instance->getAmount(),
+                'date' => $instance->getDate()
+            ];
+        } catch (\Throwable $th) {
+            // throw $th;
         }
 
-        $user = $sessionService->getUser();
 
-        $orders = $user->orders;
-
-        $eventServiceData = [];
-
-        foreach ($orders as $order) {
-            $orderTransaction = $order->orderTransaction;
-
-            // Fire the before checkout event
-            $eventService = EventService::triggerEvent(
-                TransactionHistory::class,
-                [
-                    'order_transaction_id' => $orderTransaction->id,
-                    'payment_method' => $orderTransaction->payment_method
-                ]
-            );
-
-            // Get all the data that was modified by the event service and corresponding listeners
-            try {
-                $modifiedData = $eventService->getAllModifiedData();
-                $instance = $modifiedData[0]["data"];
-
-                $data = [
-                    'provider' => $instance->getProvider(),
-                    'status' => $instance->getStatus(),
-                    'amount' => $instance->getAmount(),
-                    'date' => $instance->getDate()
-                ];
-
-                array_push($eventServiceData, $data);
-            } catch (\Throwable $th) {
-                // throw $th;
-            }
-        }
-
-        return json_encode($eventServiceData);
+        return json_encode($data);
     }
 }
