@@ -45,7 +45,7 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
             $captureResponse->data->object->client_secret = null;
         }
 
-        // Add the stripe event data to the json column of transaction_data table
+        // Add the paypal event data to the json column of transaction_data table
         $transaction_data = $orderTransaction->transaction_data;
         $transaction_data['paypal_payment_capture'] = $captureResponse;
 
