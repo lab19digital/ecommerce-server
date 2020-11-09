@@ -9,12 +9,13 @@ class ActionClassPaymentHistory
     protected $amount;
     protected $date;
 
-    public function __construct($provider, $status, $amount, $date)
+    public function __construct($provider, $status, $amount, $date, $error = '')
     {
         $this->provider = $provider;
         $this->status = $status;
         $this->amount = $amount;
         $this->date = $date;
+        $this->error = $error;
     }
 
     public function getProvider()
