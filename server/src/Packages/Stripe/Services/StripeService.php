@@ -61,6 +61,7 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
             );
         }
 
+
         /** Stripe may send the same event for succeeded multiple times. Thus check if the order status is already set to paid
          * and if not then continue with the flow
          */
@@ -78,7 +79,7 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
 
         // Add the stripe event data to the json column of transaction_data table
         $transaction_data = $orderTransaction->transaction_data;
-        $transaction_data['stripe_payment_event'] = $event;
+        $transaction_data[$event->type . "_" . $event->id] = $event;
 
         $orderTransaction->transaction_data = $transaction_data;
         $orderTransaction->save();
@@ -99,6 +100,7 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
             );
         }
 
+
         // Remove the secret from event as it will be save in the database
         if (isset($event->data->object->client_secret)) {
             $event->data->object->client_secret = null;
@@ -106,7 +108,7 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
 
         // Add the stripe event data to the json column of transaction_data table
         $transaction_data = $orderTransaction->transaction_data;
-        $transaction_data['stripe_payment_event'] = $event;
+        $transaction_data[$event->type . "_" . $event->id] = $event;
 
         $orderTransaction->transaction_data = $transaction_data;
         $orderTransaction->save();
@@ -183,23 +185,23 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
         $returnData = [];
 
         foreach ($orderTransaction->transaction_data as $key => $event) {
-            $eventData = $event['data']['object'];
-            if ($key == "stripe_payment_event" && $event["type"] == "payment_intent.succeeded") {
+            if ($event["type"] == "payment_intent.succeeded") {
+                $eventData = $event['data']['object'];
                 $provider = $orderTransaction->payment_method;
                 $amount = $eventData["amount"];
                 $status = $eventData["status"];
                 $date = Carbon::createFromTimestamp($eventData["created"]);
                 $returnObj = new ActionClassPaymentHistory($provider, $status, $amount, $date);
-            } elseif ($key == "stripe_payment_event" && $event["type"] == "payment_intent.payment_failed") {
-                // TODO:
+                array_push($returnData, $returnObj);
+            } elseif ($event["type"] == "payment_intent.payment_failed") {
+                $eventData = $event['data']['object'];
                 $provider = $orderTransaction->payment_method;
-                $error = $eventData['last_payment_error'];
+                $status = $eventData['last_payment_error']['code'];
                 $error_message = $eventData['last_payment_error']['message'];
                 $date = Carbon::createFromTimestamp($eventData["created"]);
-                $returnObj = new ActionClassPaymentHistory($provider, $error, '', $date, $error_message);
+                $returnObj = new ActionClassPaymentHistory($provider, $status, 'none', $date, $error_message);
+                array_push($returnData, $returnObj);
             }
-
-            array_push($returnData, $returnObj);
         }
         return $returnData;
     }
