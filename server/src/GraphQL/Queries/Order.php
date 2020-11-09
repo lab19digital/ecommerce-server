@@ -42,23 +42,26 @@ class Order
             ]
         );
 
-        $data = [];
+        $dataReturn = [];
         // Get all the data that was modified by the event service and corresponding listeners
         try {
             $modifiedData = $eventService->getAllModifiedData();
-            $instance = $modifiedData[0]["data"];
+            $instances = $modifiedData[0]["data"];
 
-            $data = [
-                'provider' => $instance->getProvider(),
-                'status' => $instance->getStatus(),
-                'amount' => $instance->getAmount(),
-                'date' => $instance->getDate()
-            ];
+            foreach ($instances as $key => $instance) {
+                $data = [
+                    'provider' => $instance->getProvider(),
+                    'status' => $instance->getStatus(),
+                    'amount' => $instance->getAmount(),
+                    'date' => $instance->getDate()
+                ];
+
+                array_push($dataReturn, $data);
+            }
         } catch (\Throwable $th) {
             // throw $th;
         }
 
-
-        return json_encode($data);
+        return json_encode($dataReturn);
     }
 }
