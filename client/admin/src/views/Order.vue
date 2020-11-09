@@ -54,39 +54,9 @@
       <p class="text-gray-700 text-m">{{ order.shipping_address_country }}</p>
 
       <h5 class="text-2xl font-bold mb-1 mt-6">Transactions</h5>
-
-      <div v-if="order.orderTransaction">
-        <p class="text-gray-700 text-m">
-          <b class="text-teal-500">id: </b> {{ order.orderTransaction.id }}
-        </p>
-        <p class="text-gray-700 text-m">
-          <b class="text-teal-500">Status: </b>
-          {{ order.orderTransaction.status }}
-        </p>
-        <p class="text-gray-700 text-m">
-          <b class="text-teal-500">Payment method: </b>
-          {{ order.orderTransaction.payment_method }}
-        </p>
+      <div id="ordersTable">
+        <Table :columns="tableColums" :rows="transactionsDisplay" />
       </div>
-
-      <div v-for="(data, key) in transdata" :key="key">
-        <p class="text-gray-700 text-m">{{ key }}: {{ data }}</p>
-      </div>
-
-      <!-- <a
-        @click="toggleDetailsClick"
-        href="#/"
-        class="text-gray-700 text-m underline"
-        >View more details</a
-      >
-            
-      <div class="overflow-auto">
-        <pre
-          v-show="toggleDetails"
-          id="transactionDetails"
-          class="text-gray-700 text-m"
-        ></pre>
-      </div> -->
     </div>
   </div>
 </template>
@@ -97,11 +67,13 @@ import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
 import { apolloClient } from "@/vue-apollo";
 import { ORDER } from "@/graphql/queries";
+import Table from "@/components/Table.vue";
 
 @Component({
   components: {
     ErrorNotification,
     SuccessNotification,
+    Table,
   },
 })
 export default class Order extends Vue {
@@ -110,6 +82,9 @@ export default class Order extends Vue {
   private order: {} = {};
   private transdata: [] = [];
   private toggleDetails: Boolean = false;
+
+  private tableColums: string[] = [];
+  private transactionsDisplay: object[] = [];
 
   public resetErrors(): void {
     this.errors = [];
@@ -130,7 +105,7 @@ export default class Order extends Vue {
           data: { order: { orderTransaction: any; payment_method: string } };
           errors: [{ debugMessage: string }];
         }) => {
-          console.log(data);
+          // console.log(data);
           try {
             let error = data.errors[0].debugMessage;
             this.errors.push(error);
@@ -141,57 +116,18 @@ export default class Order extends Vue {
           }
 
           try {
-            this.transdata = JSON.parse(
+            let transdata: any = JSON.parse(
               data.data.order.orderTransaction.transaction_data
             );
+            this.tableColums = Object.keys(transdata[0]);
+            this.transactionsDisplay = Object.values(transdata);
           } catch (error) {
-            // console.log("Order component mounted() error: \n" + error);
+            console.log("Order component mounted() error: \n" + error);
           }
 
           this.order = data.data.order;
-
-          // let paymentProvider = data.data.order.payment_method;
-          // if (paymentProvider == "stripe_standard") {
-          //   this.stripeProcessJSONforDisplay(transdata);
-          // }
-
-          // if (paymentProvider == "paypal_standard") {
-          //   this.paypalProcessJSONforDisplay(transdata);
-          // }
         }
       );
   }
-
-  // Take the json that was saved in the database, which is a result from the payement provider, for the payment by the user
-  // and format then display for the admin as json
-  // public stripeProcessJSONforDisplay(transdata: any) {
-  //   this.$nextTick(function () {
-  //     transdata = JSON.stringify(transdata, null, 2);
-  //     transdata = transdata.replace(/"|{|}|,/g, "");
-  //     transdata = transdata.replace(/(^[ \t]*\n)/gm, "");
-  //     transdata = transdata.replace(/[a-z|_]*:/gi, function (match: any) {
-  //       return '<b class="text-teal-500">' + match + "</b>";
-  //     });
-  //     let el = document.getElementById("transactionDetails");
-  //     // @ts-ignore
-  //     el.innerHTML = transdata;
-  //   });
-  // }
-
-  // Take the json that was saved in the database, which is a result from the payement provider, for the payment by the user
-  // and format then display for the admin as json
-  // public paypalProcessJSONforDisplay(transdata: any) {
-  //   this.$nextTick(function () {
-  //     transdata = JSON.stringify(transdata, null, 2);
-  //     transdata = transdata.replace(/"|{|}|,/g, "");
-  //     transdata = transdata.replace(/(^[ \t]*\n)/gm, "");
-  //     transdata = transdata.replace(/[a-z|_]*:/gi, function (match: any) {
-  //       return '<b class="text-teal-500">' + match + "</b>";
-  //     });
-  //     let el = document.getElementById("transactionDetails");
-  //     // @ts-ignore
-  //     el.innerHTML = transdata;
-  //   });
-  // }
 }
 </script>
