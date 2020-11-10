@@ -75,17 +75,22 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
     }
 
     // $provider, $status, $amount, $date
-    public function getTransactionHistory($orderTransactionId): ActionClassPaymentHistory
+    public function getTransactionHistory($orderTransactionId): array
     {
         $orderTransaction = OrderTransaction::find($orderTransactionId);
+        $returnData = [];
 
-        $provider = $orderTransaction->payment_method;
-        $status = $orderTransaction->status;
-        $amount = $orderTransaction->transaction_data["paypal_data"]["result"]["purchase_units"][0]["amount"];
-        $date = $orderTransaction->transaction_data["paypal_data"]["result"]["create_time"];
-
-        $returnObj = new ActionClassPaymentHistory($provider, $status, $amount, $date);
-
-        return $returnObj;
+        foreach ($orderTransaction->transaction_data as $key => $event) {
+            if ($key == 'paypal_payment_capture') {
+                $provider = $orderTransaction->payment_method;
+                // $status = $orderTransaction->status;
+                $status = $event["result"]["status"];
+                $amount = $event["result"]["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"];
+                $date = $amount = $event["result"]["purchase_units"][0]["payments"]["captures"][0]["create_time"];
+                $returnObj = new ActionClassPaymentHistory($provider, $status, $amount, $date);
+                array_push($returnData, $returnObj);
+            }
+        }
+        return $returnData;
     }
 }
