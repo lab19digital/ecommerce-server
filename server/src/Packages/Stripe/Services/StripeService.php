@@ -61,7 +61,6 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
             );
         }
 
-
         /** Stripe may send the same event for succeeded multiple times. Thus check if the order status is already set to paid
          * and if not then continue with the flow
          */
@@ -99,7 +98,6 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
                 ''
             );
         }
-
 
         // Remove the secret from event as it will be save in the database
         if (isset($event->data->object->client_secret)) {
@@ -185,6 +183,9 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
         $returnData = [];
 
         foreach ($orderTransaction->transaction_data as $key => $event) {
+            if (!isset($event["type"])) {
+                continue;
+            }
             if ($event["type"] == "payment_intent.succeeded") {
                 $eventData = $event['data']['object'];
                 $provider = $orderTransaction->payment_method;
