@@ -57,8 +57,8 @@ class OrdersSeeder extends Seeder
             $rand = rand(0, 10);
             $orderTransaction = new OrderTransaction();
             $orderTransaction->order_id = $order->id;
-            $orderTransaction->payment_method = 'Stripe';
-            $orderTransaction->transaction_data = file_get_contents(__DIR__ . "/stripeWebhookMock.json");
+            $orderTransaction->payment_method = 'stripe_standard';
+            $orderTransaction->transaction_data = json_decode(file_get_contents(__DIR__ . "/stripeWebhookMock.json"));
             $orderTransaction->status =  $rand > 5 ? 'pending' : 'paid';
             $orderTransaction->save();
             $order->orderTransaction()->save($orderTransaction);
