@@ -11,7 +11,6 @@ class GernzyPaypaleOrderTransactionsTest extends PaypalTest
 {
     use WithFaker;
 
-    /** This is mock post data that paypal sends to a webhook endpoint for the "type": "payment_intent.succeeded" event*/
     public $postData = '{
         "orderID": "81M70884VT025633W"
     }';
