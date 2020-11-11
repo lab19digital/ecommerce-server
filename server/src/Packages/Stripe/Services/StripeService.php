@@ -189,9 +189,9 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
             if ($event["type"] == "payment_intent.succeeded") {
                 $eventData = $event['data']['object'];
                 $provider = $orderTransaction->payment_method;
-                $amount = $eventData["amount"];
-                $status = $eventData["status"];
-                $date = Carbon::createFromTimestamp($eventData["created"]);
+                $amount = $eventData["amount"] ?? "unknown";
+                $status = $eventData["status"] ?? "unknown";
+                $date = Carbon::createFromTimestamp($eventData["created"]) ?? "unknown";
 
                 $returnObj = App::make('Gernzy\PaymentHistory')
                     ->setProvider($provider)
