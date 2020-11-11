@@ -2,8 +2,8 @@
 
 namespace  Gernzy\Server\Packages\Stripe\Services;
 
+use \App;
 use Carbon\Carbon;
-use Gernzy\Server\Classes\ActionClassPaymentHistory;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
 use Gernzy\Server\Services\PaymentProviderInterface;
@@ -192,7 +192,13 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
                 $amount = $eventData["amount"];
                 $status = $eventData["status"];
                 $date = Carbon::createFromTimestamp($eventData["created"]);
-                $returnObj = new ActionClassPaymentHistory($provider, $status, $amount, $date);
+
+                $returnObj = App::make('Gernzy\PaymentHistory')
+                    ->setProvider($provider)
+                    ->setStatus($status)
+                    ->setAmount($amount)
+                    ->setDate($date);
+
                 array_push($returnData, $returnObj);
             } elseif ($event["type"] == "payment_intent.payment_failed") {
                 $eventData = $event['data']['object'];
@@ -200,7 +206,14 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
                 $status = $eventData['last_payment_error']['code'];
                 $error_message = $eventData['last_payment_error']['message'];
                 $date = Carbon::createFromTimestamp($eventData["created"]);
-                $returnObj = new ActionClassPaymentHistory($provider, $status, 'none', $date, $error_message);
+
+                $returnObj = App::make('Gernzy\PaymentHistory')
+                    ->setProvider($provider)
+                    ->setStatus($status)
+                    ->setAmount("none")
+                    ->setDate($date)
+                    ->setDate($error_message);
+
                 array_push($returnData, $returnObj);
             }
         }
