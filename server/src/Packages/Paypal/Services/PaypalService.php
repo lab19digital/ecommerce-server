@@ -3,7 +3,6 @@
 namespace  Gernzy\Server\Packages\Paypal\Services;
 
 use \App;
-use Gernzy\Server\Classes\ActionClassPaymentHistory;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
 use Gernzy\Server\Services\PaymentProviderInterface;
@@ -86,7 +85,13 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
                 $status = $event["result"]["status"];
                 $amount = $event["result"]["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"];
                 $date = $amount = $event["result"]["purchase_units"][0]["payments"]["captures"][0]["create_time"];
-                $returnObj = new ActionClassPaymentHistory($provider, $status, $amount, $date);
+
+                $returnObj = App::make('Gernzy\PaymentHistory')
+                    ->setProvider($provider)
+                    ->setStatus($status)
+                    ->setAmount($amount)
+                    ->setDate($date);
+
                 array_push($returnData, $returnObj);
             }
         }
