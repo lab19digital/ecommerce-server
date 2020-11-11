@@ -83,7 +83,6 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
         foreach ($orderTransaction->transaction_data as $key => $event) {
             if ($key == 'paypal_payment_capture') {
                 $provider = $orderTransaction->payment_method;
-                // $status = $orderTransaction->status;
                 $status = $event["result"]["status"];
                 $amount = $event["result"]["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"];
                 $date = $amount = $event["result"]["purchase_units"][0]["payments"]["captures"][0]["create_time"];
