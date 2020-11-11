@@ -94,40 +94,33 @@ export default class Order extends Vue {
     this.toggleDetails = !this.toggleDetails;
   }
 
-  mounted() {
-    apolloClient
-      .mutate({
-        mutation: ORDER,
-        variables: { id: this.$route.params.id },
-      })
-      .then(
-        (data: {
-          data: { order: { orderTransaction: any; payment_method: string } };
-          errors: [{ debugMessage: string }];
-        }) => {
-          // console.log(data);
-          try {
-            let error = data.errors[0].debugMessage;
-            this.errors.push(error);
-            console.log(error);
-            return;
-          } catch (error) {
-            // no error
-          }
+  async mounted() {
+    let response = await apolloClient.query({
+      query: ORDER,
+      variables: { id: this.$route.params.id },
+    });
 
-          try {
-            let transdata: any = JSON.parse(
-              data.data.order.orderTransaction.transaction_data
-            );
-            this.tableColums = Object.keys(transdata[0]);
-            this.transactionsDisplay = Object.values(transdata);
-          } catch (error) {
-            console.log("Order component mounted() error: \n" + error);
-          }
+    let data = response;
 
-          this.order = data.data.order;
-        }
+    try {
+      let error = data.errors[0].debugMessage;
+      this.errors.push(error);
+      console.log(error);
+      return;
+    } catch (error) {
+      // no error
+    }
+
+    try {
+      let transdata: any = JSON.parse(
+        data.data.order.orderTransaction.transaction_data
       );
+      this.tableColums = Object.keys(transdata[0]);
+      this.transactionsDisplay = Object.values(transdata);
+    } catch (error) {
+      console.log("Order component mounted() error: \n" + error);
+    }
+    this.order = data.data.order;
   }
 }
 </script>
