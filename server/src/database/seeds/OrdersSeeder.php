@@ -3,6 +3,7 @@
 namespace Gernzy\Server\Database\Seeds;
 
 use Gernzy\Server\Models\Order;
+use Gernzy\Server\Models\OrderTransaction;
 use Gernzy\Server\Services\SessionService;
 use Illuminate\Database\Seeder;
 
@@ -51,6 +52,17 @@ class OrdersSeeder extends Seeder
             // and cart to the order
             $order->user_id = $userId;
             $order->cart_id = $cartId;
+            $order->save();
+
+            $rand = rand(0, 10);
+            $orderTransaction = new OrderTransaction();
+            $orderTransaction->order_id = $order->id;
+            $orderTransaction->payment_method = 'stripe_standard';
+            $orderTransaction->transaction_data = json_decode(file_get_contents(__DIR__ . "/stripeWebhookMock.json"));
+            $orderTransaction->status =  $rand > 5 ? 'pending' : 'paid';
+            $orderTransaction->save();
+            $order->orderTransaction()->save($orderTransaction);
+
             $order->save();
         }
     }

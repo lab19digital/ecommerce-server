@@ -44,7 +44,7 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
             $captureResponse->data->object->client_secret = null;
         }
 
-        // Add the stripe event data to the json column of transaction_data table
+        // Add the paypal event data to the json column of transaction_data table
         $transaction_data = $orderTransaction->transaction_data;
         $transaction_data['paypal_payment_capture'] = $captureResponse;
 
@@ -71,5 +71,30 @@ class PaypalService implements PaypalServiceInterface, PaymentProviderInterface
     public function logFile()
     {
         return '../paypalLog.txt';
+    }
+
+    // $provider, $status, $amount, $date
+    public function getTransactionHistory($orderTransactionId): array
+    {
+        $orderTransaction = OrderTransaction::find($orderTransactionId);
+        $returnData = [];
+
+        foreach ($orderTransaction->transaction_data as $key => $event) {
+            if ($key == 'paypal_payment_capture') {
+                $provider = $orderTransaction->payment_method;
+                $status =  $event["result"]["status"] ?? "unknown";
+                $amount = $event["result"]["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"] ?? "unknown";
+                $date = $amount = $event["result"]["purchase_units"][0]["payments"]["captures"][0]["create_time"] ?? "unknown";
+
+                $returnObj = App::make('Gernzy\PaymentHistory')
+                    ->setProvider($provider)
+                    ->setStatus($status)
+                    ->setAmount($amount)
+                    ->setDate($date);
+
+                array_push($returnData, $returnObj);
+            }
+        }
+        return $returnData;
     }
 }

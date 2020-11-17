@@ -32,11 +32,15 @@ class WebhookController extends BaseController
                 // Then define and call a method to handle the successful payment intent.
                 $stripeService->handleWebhookPaymentSucceededEvent($event);
                 break;
+            case 'payment_intent.payment_failed':
+                Log::error("failed stripe event:  " . $event, ['package' => $providerName]);
+                $stripeService->saveWebhookOtherEvents($event);
+                break;
                 // ... handle other event types
             default:
                 // Unexpected event type
-                Log::error("failed stripe event:  " . $event, ['package' => $providerName]);
-                return response('Error', 400);
+                $stripeService->saveWebhookOtherEvents($event);
+                return response('Error', 500);
         }
 
         return response('Success', 200);

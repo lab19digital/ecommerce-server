@@ -19,7 +19,9 @@
       />
     </div>
 
-    <Table :columns="tableColums" :rows="ordersDisplay" />
+    <div id="ordersTable">
+      <Table :columns="tableColums" :rows="ordersDisplay" />
+    </div>
 
     <!-- Settings -->
     <button
@@ -148,7 +150,9 @@ export default class Orders extends Vue {
       }
     }
 
-    this.ordersDisplay = filterArray(this.tableColums, this.orders);
+    this.ordersDisplay = filterArray(this.tableColums, this.orders, {
+      url: window.location.href,
+    });
   }
 
   async mounted() {
@@ -198,7 +202,9 @@ export default class Orders extends Vue {
           }
 
           // Populate column data
-          this.ordersDisplay = filterArray(this.tableColums, this.orders);
+          this.ordersDisplay = filterArray(this.tableColums, this.orders, {
+            url: window.location.href,
+          });
 
           return Promise.resolve();
         }

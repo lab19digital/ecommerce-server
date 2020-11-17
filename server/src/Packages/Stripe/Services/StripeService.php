@@ -2,6 +2,8 @@
 
 namespace  Gernzy\Server\Packages\Stripe\Services;
 
+use \App;
+use Carbon\Carbon;
 use Gernzy\Server\Exceptions\GernzyException;
 use Gernzy\Server\Models\OrderTransaction;
 use Gernzy\Server\Services\PaymentProviderInterface;
@@ -76,7 +78,35 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
 
         // Add the stripe event data to the json column of transaction_data table
         $transaction_data = $orderTransaction->transaction_data;
-        $transaction_data['stripe_payment_event'] = $event;
+        $transaction_data[$event->type . "_" . $event->id] = $event;
+
+        $orderTransaction->transaction_data = $transaction_data;
+        $orderTransaction->save();
+    }
+
+    public function saveWebhookOtherEvents($event)
+    {
+
+        // Find the order transaction data
+        $paymentIntent = $event->data->object; // contains a \Stripe\PaymentIntent
+        $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $paymentIntent->id)->first();
+
+        if (!isset($orderTransaction)) {
+            Log::error('The transaction order data was not found for that successful payment stripe.' . $paymentIntent->id, ['package' => $this->providerName()]);
+            throw new GernzyException(
+                'The transaction order data was not found for that successful payment.',
+                ''
+            );
+        }
+
+        // Remove the secret from event as it will be save in the database
+        if (isset($event->data->object->client_secret)) {
+            $event->data->object->client_secret = null;
+        }
+
+        // Add the stripe event data to the json column of transaction_data table
+        $transaction_data = $orderTransaction->transaction_data;
+        $transaction_data[$event->type . "_" . $event->id] = $event;
 
         $orderTransaction->transaction_data = $transaction_data;
         $orderTransaction->save();
@@ -144,5 +174,49 @@ class StripeService implements ServiceInterface, PaymentProviderInterface
     public function logFile()
     {
         return '../stripeLog.txt';
+    }
+
+    // $provider, $status, $amount, $date
+    public function getTransactionHistory($orderTransactionId): array
+    {
+        $orderTransaction = OrderTransaction::find($orderTransactionId);
+        $returnData = [];
+
+        foreach ($orderTransaction->transaction_data as $key => $event) {
+            if (!isset($event["type"])) {
+                continue;
+            }
+            if ($event["type"] == "payment_intent.succeeded") {
+                $eventData = $event['data']['object'];
+                $provider = $orderTransaction->payment_method;
+                $amount = $eventData["amount"] ?? "unknown";
+                $status = $eventData["status"] ?? "unknown";
+                $date = Carbon::createFromTimestamp($eventData["created"]) ?? "unknown";
+
+                $returnObj = App::make('Gernzy\PaymentHistory')
+                    ->setProvider($provider)
+                    ->setStatus($status)
+                    ->setAmount($amount)
+                    ->setDate($date);
+
+                array_push($returnData, $returnObj);
+            } elseif ($event["type"] == "payment_intent.payment_failed") {
+                $eventData = $event['data']['object'];
+                $provider = $orderTransaction->payment_method;
+                $status = $eventData['last_payment_error']['code'];
+                $error_message = $eventData['last_payment_error']['message'];
+                $date = Carbon::createFromTimestamp($eventData["created"]);
+
+                $returnObj = App::make('Gernzy\PaymentHistory')
+                    ->setProvider($provider)
+                    ->setStatus($status)
+                    ->setAmount("none")
+                    ->setDate($date)
+                    ->setDate($error_message);
+
+                array_push($returnData, $returnObj);
+            }
+        }
+        return $returnData;
     }
 }

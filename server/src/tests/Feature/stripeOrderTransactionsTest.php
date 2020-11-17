@@ -13,194 +13,189 @@ class GernzyStripeOrderTransactionsTest extends PaymentGatewayTest
 
     /** This is mock post data that stripe sends to a webhook endpoint for the "type": "payment_intent.succeeded" event*/
     public $postData = '{
-        "id": "evt_1GcXm6BEW94QPQobIlnXORHv",
-        "object": "event",
-        "api_version": "2020-03-02",
-        "created": 1587997054,
+        "id": "evt_1HlvFuBEW94QPQobpVgLNO1Q",
         "data": {
-          "object": {
-            "id": "pi_1GcXwpBEW94QPQobF8AyuYs4",
-            "object": "payment_intent",
-            "amount": 2000,
-            "amount_capturable": 0,
-            "amount_received": 2000,
-            "application": null,
-            "application_fee_amount": null,
-            "canceled_at": null,
-            "cancellation_reason": null,
-            "capture_method": "automatic",
-            "charges": {
-              "object": "list",
-              "data": [
-                {
-                  "id": "ch_1GcXm5BEW94QPQob6uaNureL",
-                  "object": "charge",
-                  "amount": 2000,
-                  "amount_refunded": 0,
-                  "application": null,
-                  "application_fee": null,
-                  "application_fee_amount": null,
-                  "balance_transaction": "txn_1GcXm5BEW94QPQobXHGa8qCF",
-                  "billing_details": {
-                    "address": {
-                      "city": null,
-                      "country": null,
-                      "line1": null,
-                      "line2": null,
-                      "postal_code": null,
-                      "state": null
-                    },
-                    "email": null,
-                    "name": null,
-                    "phone": null
-                  },
-                  "calculated_statement_descriptor": "Stripe",
-                  "captured": true,
-                  "created": 1587997053,
-                  "currency": "usd",
-                  "customer": null,
-                  "description": "(created by Stripe CLI)",
-                  "destination": null,
-                  "dispute": null,
-                  "disputed": false,
-                  "failure_code": null,
-                  "failure_message": null,
-                  "fraud_details": {
-                  },
-                  "invoice": null,
-                  "livemode": false,
-                  "metadata": {
-                  },
-                  "on_behalf_of": null,
-                  "order": null,
-                  "outcome": {
-                    "network_status": "approved_by_network",
-                    "reason": null,
-                    "risk_level": "normal",
-                    "risk_score": 48,
-                    "seller_message": "Payment complete.",
-                    "type": "authorized"
-                  },
-                  "paid": true,
-                  "payment_intent": "pi_1GcXm5BEW94QPQob0p6yNpYK",
-                  "payment_method": "pm_1GcXm5BEW94QPQobvT30HiSY",
-                  "payment_method_details": {
-                    "card": {
-                      "brand": "visa",
-                      "checks": {
-                        "address_line1_check": null,
-                        "address_postal_code_check": null,
-                        "cvc_check": null
-                      },
-                      "country": "US",
-                      "exp_month": 4,
-                      "exp_year": 2021,
-                      "fingerprint": "kBBAPzC0kRrZrukV",
-                      "funding": "credit",
-                      "installments": null,
-                      "last4": "4242",
-                      "network": "visa",
-                      "three_d_secure": null,
-                      "wallet": null
-                    },
-                    "type": "card"
-                  },
-                  "receipt_email": null,
-                  "receipt_number": null,
-                  "receipt_url": "https://pay.stripe.com/receipts/acct_1FqyBQBEW94QPQob/ch_1GcXm5BEW94QPQob6uaNureL/rcpt_HAtZ8EF9isKV5QBbFE1bvY3sIFCakIe",
-                  "refunded": false,
-                  "refunds": {
-                    "object": "list",
+            "object": {
+                "id": "pi_1HlvFtBEW94QPQobHccfQBjK",
+                "amount": 2000,
+                "object": "payment_intent",
+                "review": null,
+                "source": null,
+                "status": "succeeded",
+                "charges": {
+                    "url": "/v1/charges?payment_intent=pi_1HlvFtBEW94QPQobHccfQBjK",
                     "data": [
-      
+                        {
+                            "id": "ch_1HlvFtBEW94QPQobfCjpvAPR",
+                            "paid": true,
+                            "order": null,
+                            "amount": 2000,
+                            "object": "charge",
+                            "review": null,
+                            "source": null,
+                            "status": "succeeded",
+                            "created": 1605008601,
+                            "dispute": null,
+                            "invoice": null,
+                            "outcome": {
+                                "type": "authorized",
+                                "reason": null,
+                                "risk_level": "normal",
+                                "risk_score": 29,
+                                "network_status": "approved_by_network",
+                                "seller_message": "Payment complete."
+                            },
+                            "refunds": {
+                                "url": "/v1/charges/ch_1HlvFtBEW94QPQobfCjpvAPR/refunds",
+                                "data": [],
+                                "object": "list",
+                                "has_more": false,
+                                "total_count": 0
+                            },
+                            "captured": true,
+                            "currency": "usd",
+                            "customer": null,
+                            "disputed": false,
+                            "livemode": false,
+                            "metadata": [],
+                            "refunded": false,
+                            "shipping": {
+                                "name": "Jenny Rosen",
+                                "phone": null,
+                                "address": {
+                                    "city": "San Francisco",
+                                    "line1": "510 Townsend St",
+                                    "line2": null,
+                                    "state": "CA",
+                                    "country": "US",
+                                    "postal_code": "94103"
+                                },
+                                "carrier": null,
+                                "tracking_number": null
+                            },
+                            "application": null,
+                            "description": "(created by Stripe CLI)",
+                            "destination": null,
+                            "receipt_url": "https://pay.stripe.com/receipts/acct_1FqyBQBEW94QPQob/ch_1HlvFtBEW94QPQobfCjpvAPR/rcpt_IMeZVaUfClmHfxs2kUdlueLz47LlVYT",
+                            "failure_code": null,
+                            "on_behalf_of": null,
+                            "fraud_details": [],
+                            "receipt_email": null,
+                            "transfer_data": null,
+                            "payment_intent": "pi_1HlvFtBEW94QPQobHccfQBjK",
+                            "payment_method": "pm_1HlvFtBEW94QPQobVdigM3JS",
+                            "receipt_number": null,
+                            "transfer_group": null,
+                            "amount_captured": 2000,
+                            "amount_refunded": 0,
+                            "application_fee": null,
+                            "billing_details": {
+                                "name": null,
+                                "email": null,
+                                "phone": null,
+                                "address": {
+                                    "city": null,
+                                    "line1": null,
+                                    "line2": null,
+                                    "state": null,
+                                    "country": null,
+                                    "postal_code": null
+                                }
+                            },
+                            "failure_message": null,
+                            "source_transfer": null,
+                            "balance_transaction": "txn_1HlvFuBEW94QPQobzRhizLVc",
+                            "statement_descriptor": null,
+                            "application_fee_amount": null,
+                            "payment_method_details": {
+                                "card": {
+                                    "brand": "visa",
+                                    "last4": "4242",
+                                    "checks": {
+                                        "cvc_check": null,
+                                        "address_line1_check": null,
+                                        "address_postal_code_check": null
+                                    },
+                                    "wallet": null,
+                                    "country": "US",
+                                    "funding": "credit",
+                                    "network": "visa",
+                                    "exp_year": 2021,
+                                    "exp_month": 11,
+                                    "fingerprint": "kBBAPzC0kRrZrukV",
+                                    "installments": null,
+                                    "three_d_secure": null
+                                },
+                                "type": "card"
+                            },
+                            "statement_descriptor_suffix": null,
+                            "calculated_statement_descriptor": "Stripe"
+                        }
                     ],
+                    "object": "list",
                     "has_more": false,
-                    "total_count": 0,
-                    "url": "/v1/charges/ch_1GcXm5BEW94QPQob6uaNureL/refunds"
-                  },
-                  "review": null,
-                  "shipping": {
-                    "address": {
-                      "city": "San Francisco",
-                      "country": "US",
-                      "line1": "510 Townsend St",
-                      "line2": null,
-                      "postal_code": "94103",
-                      "state": "CA"
-                    },
-                    "carrier": null,
+                    "total_count": 1
+                },
+                "created": 1605008601,
+                "invoice": null,
+                "currency": "usd",
+                "customer": null,
+                "livemode": false,
+                "metadata": [],
+                "shipping": {
                     "name": "Jenny Rosen",
                     "phone": null,
+                    "address": {
+                        "city": "San Francisco",
+                        "line1": "510 Townsend St",
+                        "line2": null,
+                        "state": "CA",
+                        "country": "US",
+                        "postal_code": "94103"
+                    },
+                    "carrier": null,
                     "tracking_number": null
-                  },
-                  "source": null,
-                  "source_transfer": null,
-                  "statement_descriptor": null,
-                  "statement_descriptor_suffix": null,
-                  "status": "succeeded",
-                  "transfer_data": null,
-                  "transfer_group": null
-                }
-              ],
-              "has_more": false,
-              "total_count": 1,
-              "url": "/v1/charges?payment_intent=pi_1GcXm5BEW94QPQob0p6yNpYK"
-            },
-            "client_secret": "pi_1GcXm5BEW94QPQob0p6yNpYK_secret_9q6Ycg7HyalPMTOPYNCVE3X2S",
-            "confirmation_method": "automatic",
-            "created": 1587997053,
-            "currency": "usd",
-            "customer": null,
-            "description": "(created by Stripe CLI)",
-            "invoice": null,
-            "last_payment_error": null,
-            "livemode": false,
-            "metadata": {
-            },
-            "next_action": null,
-            "on_behalf_of": null,
-            "payment_method": "pm_1GcXm5BEW94QPQobvT30HiSY",
-            "payment_method_options": {
-              "card": {
-                "installments": null,
-                "request_three_d_secure": "automatic"
-              }
-            },
-            "payment_method_types": [
-              "card"
-            ],
-            "receipt_email": null,
-            "review": null,
-            "setup_future_usage": null,
-            "shipping": {
-              "address": {
-                "city": "San Francisco",
-                "country": "US",
-                "line1": "510 Townsend St",
-                "line2": null,
-                "postal_code": "94103",
-                "state": "CA"
-              },
-              "carrier": null,
-              "name": "Jenny Rosen",
-              "phone": null,
-              "tracking_number": null
-            },
-            "source": null,
-            "statement_descriptor": null,
-            "statement_descriptor_suffix": null,
-            "status": "succeeded",
-            "transfer_data": null,
-            "transfer_group": null
-          }
+                },
+                "application": null,
+                "canceled_at": null,
+                "description": "(created by Stripe CLI)",
+                "next_action": null,
+                "on_behalf_of": null,
+                "client_secret": null,
+                "receipt_email": null,
+                "transfer_data": null,
+                "capture_method": "automatic",
+                "payment_method": "pm_1HlvFtBEW94QPQobVdigM3JS",
+                "transfer_group": null,
+                "amount_received": 2000,
+                "amount_capturable": 0,
+                "last_payment_error": null,
+                "setup_future_usage": null,
+                "cancellation_reason": null,
+                "confirmation_method": "automatic",
+                "payment_method_types": ["card"],
+                "statement_descriptor": null,
+                "application_fee_amount": null,
+                "payment_method_options": {
+                    "card": {
+                        "network": null,
+                        "installments": null,
+                        "request_three_d_secure": "automatic"
+                    }
+                },
+                "statement_descriptor_suffix": null
+            }
+        },
+        "type": "payment_intent.succeeded",
+        "object": "event",
+        "created": 1605008602,
+        "request": {
+            "id": "req_KajJfMIF1LK2VR",
+            "idempotency_key": null
         },
         "livemode": false,
-        "pending_webhooks": 1,
-        "request": {
-          "id": "req_mCvlxkVk7vfp3f",
-          "idempotency_key": null
-        },
-        "type": "payment_intent.succeeded"
+        "api_version": "2020-03-02",
+        "pending_webhooks": 1
       }';
 
     public function mockStripeWebhook()
@@ -241,16 +236,20 @@ class GernzyStripeOrderTransactionsTest extends PaymentGatewayTest
         $response->assertStatus(200);
         $this->assertEquals('Success', $response->getContent());
 
+
         $postDataObject = json_decode($this->postData);
+        // payment_intent.succeeded_evt_1GcXm6BEW94QPQobIlnXORHv
+
+
         $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $postDataObject->data->object->id)->first();
         $this->assertNotEmpty($orderTransaction->transaction_data);
         $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_intent']);
-        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_event']);
+        $this->assertNotEmpty($orderTransaction->transaction_data[$postDataObject->type . "_" . $postDataObject->id]);
         $this->assertEquals($orderTransaction->status, 'paid');
 
         // Check that the client secret is not present in the db
         $this->assertEmpty($orderTransaction->transaction_data['stripe_payment_intent']['client_secret']);
-        $this->assertEmpty($orderTransaction->transaction_data['stripe_payment_event']['data']['object']['client_secret']);
+        $this->assertEmpty($orderTransaction->transaction_data[$postDataObject->type . "_" . $postDataObject->id]['data']['object']['client_secret']);
 
         // Check the association
         $order = $orderTransaction->order;
@@ -264,5 +263,108 @@ class GernzyStripeOrderTransactionsTest extends PaymentGatewayTest
     {
         $stripeService = new StripeService();
         $this->assertTrue(in_array('3.18.12.63', $stripeService->getStripeWebhookIPAdresses()));
+    }
+
+
+    public function testStripeWebhookWithDataAndFindOrderAndOrderTransactionAndQueryOrderResult()
+    {
+        // Set currency, add to cart, fire events and checkout (from PaymentGatewayTest test)
+        $this->testPaymentGatewayProviderWithDifferentCurrency();
+
+        // Simulate stripe payment succesful event posted to gernzy webhook
+        // public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
+        $response = $this->mockStripeWebhook();
+
+        $response->assertStatus(200);
+        $this->assertEquals('Success', $response->getContent());
+
+        $postDataObject = json_decode($this->postData);
+        $orderTransaction = OrderTransaction::where('transaction_data->stripe_payment_intent->id', $postDataObject->data->object->id)->first();
+        $this->assertNotEmpty($orderTransaction->transaction_data);
+        $this->assertNotEmpty($orderTransaction->transaction_data['stripe_payment_intent']);
+        $this->assertNotEmpty($orderTransaction->transaction_data[$postDataObject->type . "_" . $postDataObject->id]);
+        $this->assertEquals($orderTransaction->status, 'paid');
+
+        // Check that the client secret is not present in the db
+        $this->assertEmpty($orderTransaction->transaction_data['stripe_payment_intent']['client_secret']);
+        $this->assertEmpty($orderTransaction->transaction_data[$postDataObject->type . "_" . $postDataObject->id]['data']['object']['client_secret']);
+
+        // Check the association
+        $order = $orderTransaction->order;
+        $this->assertNotEmpty($orderTransaction->id);
+        $this->assertNotEmpty($order->id);
+
+
+        $this->graphQLCreateAccountWithSession('order@example.com', 'password');
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        {
+            order(id:1){
+              id
+              name
+              email
+              telephone
+              shipping_address_line_1
+              shipping_address_line_2
+              shipping_address_postcode
+              shipping_address_state
+              shipping_address_country
+              billing_address_line_1
+              billing_address_line_2
+              billing_address_postcode
+              billing_address_state
+              billing_address_country
+              payment_method
+              agree_to_terms
+              notes
+              created_at
+              orderTransaction {
+                id
+                order_id
+                status
+                transaction_data
+                payment_method
+              }
+            }
+        }
+    ');
+
+        $result = $response->decodeResponseJson();
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+      'data' => [
+        'order' => [
+          'id',
+          'name',
+          'email',
+          'telephone',
+          'shipping_address_line_1',
+          'shipping_address_line_2',
+          'shipping_address_postcode',
+          'shipping_address_state',
+          'shipping_address_country',
+          'billing_address_line_1',
+          'billing_address_line_2',
+          'billing_address_postcode',
+          'billing_address_state',
+          'billing_address_country',
+          'payment_method',
+          'agree_to_terms',
+          'notes',
+          'created_at',
+          'orderTransaction' => [
+            'id',
+            'order_id',
+            'status',
+            'transaction_data',
+            'payment_method',
+          ]
+        ],
+      ],
+    ]);
+
+        return $orderTransaction;
     }
 }

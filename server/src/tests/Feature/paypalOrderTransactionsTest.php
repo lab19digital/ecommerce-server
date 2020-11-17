@@ -11,7 +11,6 @@ class GernzyPaypaleOrderTransactionsTest extends PaypalTest
 {
     use WithFaker;
 
-    /** This is mock post data that paypal sends to a webhook endpoint for the "type": "payment_intent.succeeded" event*/
     public $postData = '{
         "orderID": "81M70884VT025633W"
     }';
@@ -69,6 +68,110 @@ class GernzyPaypaleOrderTransactionsTest extends PaypalTest
         $order = $orderTransaction->order;
         $this->assertNotEmpty($orderTransaction->id);
         $this->assertNotEmpty($order->id);
+
+        return $orderTransaction;
+    }
+
+
+    public function testPaypalWebhookWithDataAndFindOrderAndOrderTransactionAndQueryOrderResult()
+    {
+        // Set currency, add to cart, fire events and checkout (from PaymentGatewayTest test)
+        $this->testPaypalPaymentGatewayProviderWithDifferentCurrency();
+
+        // Now bind in the real service
+        $this->app->bind('Paypal\PaypalService', PaypalService::class);
+
+        // Mock the Paypal\CaptureOrderPaypal class, a function inside PaypalService::class
+        $this->app->bind('Paypal\CaptureOrderPaypal', CaptureOrderPaypalMock::class);
+
+        // Simulate paypal payment succesful event posted to gernzy webhook
+        // public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
+        $response = $this->mockPaypalCaptureOrder();
+        $response->assertStatus(200);
+
+        $postDataObject = json_decode($this->postData);
+        $orderTransaction = OrderTransaction::where('transaction_data->paypal_data->result->id', $postDataObject->orderID)->first();
+        $this->assertNotEmpty($orderTransaction->transaction_data);
+        $this->assertNotEmpty($orderTransaction->transaction_data['paypal_data']);
+        $this->assertNotEmpty($orderTransaction->transaction_data['paypal_payment_capture']);
+        $this->assertEquals($orderTransaction->status, 'paid');
+
+        // Check the association
+        $order = $orderTransaction->order;
+        $this->assertNotEmpty($orderTransaction->id);
+        $this->assertNotEmpty($order->id);
+
+
+        $this->graphQLCreateAccountWithSession('order@example.com', 'password');
+        /** @var \Illuminate\Foundation\Testing\TestResponse $response */
+        $response = $this->graphQLWithSession('
+        {
+            order(id:1){
+              id
+              name
+              email
+              telephone
+              shipping_address_line_1
+              shipping_address_line_2
+              shipping_address_postcode
+              shipping_address_state
+              shipping_address_country
+              billing_address_line_1
+              billing_address_line_2
+              billing_address_postcode
+              billing_address_state
+              billing_address_country
+              payment_method
+              agree_to_terms
+              notes
+              created_at
+              orderTransaction {
+                id
+                order_id
+                status
+                transaction_data
+                payment_method
+              }
+            }
+        }
+    ');
+
+        $result = $response->decodeResponseJson();
+
+        $response->assertDontSee('errors');
+
+        $response->assertJsonStructure([
+            'data' => [
+                'order' => [
+                    'id',
+                    'name',
+                    'email',
+                    'telephone',
+                    'shipping_address_line_1',
+                    'shipping_address_line_2',
+                    'shipping_address_postcode',
+                    'shipping_address_state',
+                    'shipping_address_country',
+                    'billing_address_line_1',
+                    'billing_address_line_2',
+                    'billing_address_postcode',
+                    'billing_address_state',
+                    'billing_address_country',
+                    'payment_method',
+                    'agree_to_terms',
+                    'notes',
+                    'created_at',
+                    'orderTransaction' => [
+                        'id',
+                        'order_id',
+                        'status',
+                        'transaction_data',
+                        'payment_method',
+                    ]
+                ],
+            ],
+        ]);
+
 
         return $orderTransaction;
     }

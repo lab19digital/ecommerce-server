@@ -2,6 +2,8 @@
 
 namespace Gernzy\Server;
 
+use Gernzy\Server\Classes\ActionClassPaymentHistory;
+
 class GernzyPaymentProvider extends GernzyServiceProvider
 {
     /**
@@ -11,6 +13,8 @@ class GernzyPaymentProvider extends GernzyServiceProvider
      */
     public function register()
     {
+        $this->app->bind('Gernzy\PaymentHistory', ActionClassPaymentHistory::class);
+
         // Register dependency packages
         if ($providers = config('payment_providers')) {
             foreach ($providers as $key => $value) {

@@ -3,6 +3,7 @@ import Dashboard from "@/views/Dashboard.vue";
 import Products from "@/views/Products.vue";
 import Home from "@/views/Home.vue";
 import Orders from "@/views/Orders.vue";
+import Order from "@/views/Order.vue";
 import store from "@/store/store";
 
 export default [
@@ -43,6 +44,12 @@ export default [
     path: "/orders",
     name: "Orders",
     component: Orders,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/orders/:id",
+    name: "Order",
+    component: Order,
     meta: { requiresAuth: true },
   },
 ];

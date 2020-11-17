@@ -1,0 +1,131 @@
+{
+    "transaction_data": {
+        "paypal_data": {
+            "result": {
+                "id": "51C16308P3472841N",
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/51C16308P3472841N",
+                        "method": "GET"
+                    },
+                    {
+                        "rel": "approve",
+                        "href": "https://www.sandbox.paypal.com/checkoutnow?token=51C16308P3472841N",
+                        "method": "GET"
+                    },
+                    {
+                        "rel": "update",
+                        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/51C16308P3472841N",
+                        "method": "PATCH"
+                    },
+                    {
+                        "rel": "capture",
+                        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/51C16308P3472841N/capture",
+                        "method": "POST"
+                    }
+                ],
+                "intent": "CAPTURE",
+                "status": "CREATED",
+                "create_time": "2020-10-27T11:29:33Z",
+                "purchase_units": [
+                    {
+                        "payee": {
+                            "merchant_id": "KUMYYWAEFJ8KY",
+                            "email_address": "sb-tqnno1669164@business.example.com"
+                        },
+                        "amount": { "value": "227.36", "currency_code": "USD" },
+                        "reference_id": "default"
+                    }
+                ]
+            },
+            "headers": {
+                "": "",
+                "Date": "Tue, 27 Oct 2020 11",
+                "Content-Type": "application/json",
+                "Cache-Control": "max-age=0, no-cache, no-store, must-revalidate",
+                "Content-Length": "748",
+                "Paypal-Debug-Id": "3facc02b06b92"
+            },
+            "statusCode": 201
+        },
+        "paypal_payment_capture": {
+            "result": {
+                "id": "51C16308P3472841N",
+                "links": [
+                    {
+                        "rel": "self",
+                        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/51C16308P3472841N",
+                        "method": "GET"
+                    }
+                ],
+                "payer": {
+                    "name": { "surname": "last test", "given_name": "Test" },
+                    "address": { "country_code": "US" },
+                    "payer_id": "8XHBJZXV8UU26",
+                    "email_address": "test@mail.com"
+                },
+                "status": "COMPLETED",
+                "purchase_units": [
+                    {
+                        "payments": {
+                            "captures": [
+                                {
+                                    "id": "1KH02096GD363164P",
+                                    "links": [
+                                        {
+                                            "rel": "self",
+                                            "href": "https://api.sandbox.paypal.com/v2/payments/captures/1KH02096GD363164P",
+                                            "method": "GET"
+                                        },
+                                        {
+                                            "rel": "refund",
+                                            "href": "https://api.sandbox.paypal.com/v2/payments/captures/1KH02096GD363164P/refund",
+                                            "method": "POST"
+                                        },
+                                        {
+                                            "rel": "up",
+                                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/51C16308P3472841N",
+                                            "method": "GET"
+                                        }
+                                    ],
+                                    "amount": { "value": "227.36", "currency_code": "USD" },
+                                    "status": "COMPLETED",
+                                    "create_time": "2020-10-27T11:31:39Z",
+                                    "update_time": "2020-10-27T11:31:39Z",
+                                    "final_capture": true,
+                                    "seller_protection": { "status": "NOT_ELIGIBLE" },
+                                    "seller_receivable_breakdown": {
+                                        "net_amount": { "value": "218.19", "currency_code": "USD" },
+                                        "paypal_fee": { "value": "9.17", "currency_code": "USD" },
+                                        "gross_amount": { "value": "227.36", "currency_code": "USD" }
+                                    }
+                                }
+                            ]
+                        },
+                        "shipping": {
+                            "name": { "full_name": "Test last test" },
+                            "address": {
+                                "postal_code": "50005",
+                                "admin_area_1": "ID",
+                                "admin_area_2": "Outer West Durban",
+                                "country_code": "US",
+                                "address_line_1": "5 Buffels Drift Road, Drummond, Outer West Durban"
+                            }
+                        },
+                        "reference_id": "default"
+                    }
+                ]
+            },
+            "headers": {
+                "": "",
+                "Date": "Tue, 27 Oct 2020 11",
+                "Content-Type": "application/json",
+                "Cache-Control": "max-age=0, no-cache, no-store, must-revalidate",
+                "Content-Length": "1393",
+                "Paypal-Debug-Id": "e7d5a4f20881"
+            },
+            "statusCode": 201
+        }
+    }
+}
