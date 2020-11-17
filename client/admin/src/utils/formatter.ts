@@ -1,27 +1,18 @@
+/**
+ * This is a mapping object from a function to an object property.
+ * It is used for product objects attributes to be formatted in specific way.
+ * @constructor
+ */
 const formatter: any = {
   id: link,
-  // title: todo,
-  // status: todo,
-  // published: todo,
-  // price_cents: todo,
-  // price_currency: todo,
-  // short_description: todo,
-  // long_description: todo,
-  // created_at: todo,
-  // updated_at: todo,
-  // meta: todo,
-  // prices: todo,
-  // sizes: todo,
-  // variants: todo,
   categories: categories,
-  // dimensions: todo,
-  // weight: todo,
-  // images: todo,
-  // featured_image: todo,
-  // tags: todo,
-  // fixedPrices: todo,
 };
 
+/**
+ * Concatenates an array of category objects into a string.
+ * @constructor
+ * @param {array} data - The array of category objects.
+ */
 function categories(data: []): string {
   return data
     .map((each: { title: string }) => {
@@ -30,6 +21,12 @@ function categories(data: []): string {
     .join(";");
 }
 
+/**
+ * Creates an innerHTML link to display in a html table.
+ * @constructor
+ * @param {array} contents - The id to append to end of url.
+ * @param {object} data - The incoming url to modify.
+ */
 function link(contents: [], data: { url: string }): string | [] {
   const url = data.url + "/" + contents;
   if (data.url)
@@ -42,10 +39,20 @@ function link(contents: [], data: { url: string }): string | [] {
   return contents;
 }
 
+/**
+ * Checks if the incoming data is an array.
+ * @constructor
+ * @param {any} value - Data structure.
+ */
 export function checkIfArray(value: any): Boolean {
   return Array.isArray(value);
 }
 
+/**
+ * Checks if the incoming data is an object.
+ * @constructor
+ * @param {any} value - Data structure.
+ */
 export function checkIfObject(value: any): Boolean {
   return (
     typeof value === "object" &&
@@ -55,8 +62,10 @@ export function checkIfObject(value: any): Boolean {
 }
 
 /**
- * Takes and array of objects and reduces it to a string value
- * */
+ * Takes and array of objects and reduces it to a string value.
+ * @constructor
+ * @param {array} arr - Array.
+ */
 export function formatArray(arr: []): String {
   const returnVals = arr
     .map((currentObject) => {
@@ -67,12 +76,21 @@ export function formatArray(arr: []): String {
 }
 
 /**
- * Takes an object and reduces it to a string value
- * */
+ * Takes an object and reduces it to a string value.
+ * @constructor
+ * @param {object} obj - Object.
+ */
 export function formatObject(obj: {}): String {
   return Object.values(obj).join("; ");
 }
 
+/**
+ * Transform is used to take in data from a component and then transform it in a way to display.
+ * Like innerHTML for a link example. It also checks if the formatter object has a function associated
+ * with the key and will use that function if it exists.
+ * @constructor
+ * @param {object} obj - Object.
+ */
 export function transform(
   element: {} | [] | String,
   data: { column: string; url: string }
