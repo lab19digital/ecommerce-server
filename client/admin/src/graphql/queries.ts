@@ -153,3 +153,67 @@ export const ORDER = gql`
     }
   }
 `;
+
+export const PRODUCT = gql`
+  query($id: ID!) {
+    product(id: $id) {
+      id
+      parent_id
+      title
+      status
+      published
+      price_cents
+      price_currency
+      short_description
+      long_description
+      created_at
+      updated_at
+      meta {
+        id
+        key
+        group
+        value
+      }
+      prices {
+        value
+        currency
+      }
+      sizes {
+        size
+      }
+      variants {
+        id
+      }
+      categories {
+        title
+      }
+      dimensions {
+        length
+        width
+        height
+        unit
+      }
+      weight {
+        weight
+        unit
+      }
+      images {
+        url
+        type
+        name
+      }
+      featured_image {
+        url
+        type
+        name
+      }
+      tags {
+        name
+      }
+      fixedPrices {
+        country_code
+        price
+      }
+    }
+  }
+`;
