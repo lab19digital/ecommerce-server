@@ -183,6 +183,49 @@ export const PRODUCT = gql`
       }
       variants {
         id
+        title
+        meta {
+          key
+          group
+          value
+        }
+        prices {
+          value
+          currency
+        }
+        sizes {
+          size
+        }
+        categories {
+          title
+        }
+        dimensions {
+          length
+          width
+          height
+          unit
+        }
+        weight {
+          weight
+          unit
+        }
+        images {
+          url
+          type
+          name
+        }
+        featured_image {
+          url
+          type
+          name
+        }
+        tags {
+          name
+        }
+        fixedPrices {
+          country_code
+          price
+        }
       }
       categories {
         title
