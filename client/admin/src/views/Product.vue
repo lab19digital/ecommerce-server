@@ -12,7 +12,7 @@
     </div>
 
     <div v-if="product" class="p-6 w-full break-words">
-      <h5 class="text-3xl font-bold mb-1 mt-0">Create Product</h5>
+      <h5 class="text-3xl font-bold">Create Product</h5>
 
       <label class="md:w-2/3 block text-gray-500 font-bold">
         <input class="mr-2 leading-tight" type="checkbox" />
@@ -21,7 +21,8 @@
 
       <!-- Product Begin-->
       <div class="product">
-        <div class="flex mb-4">
+        <!-- top row -->
+        <div class="flex mt-8">
           <div class="w-1/3">
             <div class="bg-gray-400">
               <img
@@ -40,7 +41,7 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="sku"
               type="text"
-              :placeholder="product.id"
+              v-model="product.id"
             />
           </div>
           <div class="w-1/3">
@@ -54,83 +55,99 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="title"
               type="text"
-              :placeholder="product.title"
+              v-model="product.title"
             />
           </div>
         </div>
 
         <!-- Categories -->
-        <label
-          class="block text-gray-700 text-sm font-bold mb-2"
-          for="category"
-        >
-          Category
-        </label>
-        <input
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="category"
-          type="text"
-          :placeholder="product.categories[0].title"
-        />
-
-        <!-- Short description -->
-        <label
-          class="block text-gray-700 text-sm font-bold mb-2"
-          for="username"
-        >
-          Short Description
-        </label>
-        <input
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="username"
-          type="text"
-          :placeholder="product.short_description"
-        />
-
-        <!-- Long description -->
-        <label
-          class="block text-gray-700 text-sm font-bold mb-2"
-          for="username"
-        >
-          Long Description
-        </label>
-        <textarea
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="username"
-          type="text"
-          :placeholder="product.long_description"
-        />
-
-        <!-- Attributes -->
-        <h5 class="text-gray-700 text-sm font-bold mb-2">Global attributes</h5>
-        <div v-for="(value, key) in product.meta" :key="key">
+        <div class="mt-8">
+          <h5 class="text-gray-700 text-sm font-bold mb-2">Categories</h5>
           <div class="flex mb-4">
-            <div class="w-1/2">
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="value.key"
-              />
-            </div>
-            <div class="w-1/2">
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="value.value"
-              />
+            <div v-for="(category, key) in product.categories" :key="key">
+              <div>
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="category.title"
+                />
+              </div>
             </div>
           </div>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="addCategory"
+          >
+            Add category
+          </button>
         </div>
 
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          @click="addAttributes"
-        >
-          Add attribute
-        </button>
+        <!-- Short description -->
+        <div class="mt-8">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="username"
+          >
+            Short Description
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="username"
+            type="text"
+            v-model="product.short_description"
+          />
+        </div>
 
-        <!--  -->
-        <div class="flex mb-4">
+        <!-- Long description -->
+        <div class="mt-8">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="username"
+          >
+            Long Description
+          </label>
+          <textarea
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="username"
+            type="text"
+            v-model="product.long_description"
+          />
+        </div>
+
+        <!-- Attributes -->
+        <div class="mt-8">
+          <h5 class="text-gray-700 text-sm font-bold mb-2">
+            Global attributes
+          </h5>
+          <div v-for="(value, key) in product.meta" :key="key">
+            <div class="flex mb-4">
+              <div class="w-1/2">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="value.key"
+                />
+              </div>
+              <div class="w-1/2">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="value.value"
+                />
+              </div>
+            </div>
+          </div>
+
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="addAttributes"
+          >
+            Add attribute
+          </button>
+        </div>
+
+        <!-- group of fields -->
+        <div class="flex mt-8">
           <div class="w-1/3">
             <!-- Status -->
             <label
@@ -143,7 +160,7 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              :placeholder="product.status"
+              v-model="product.status"
             />
           </div>
           <div class="w-1/3">
@@ -158,7 +175,7 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              :placeholder="product.created_at"
+              v-model="product.created_at"
             />
           </div>
           <div class="w-1/3">
@@ -173,13 +190,13 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              :placeholder="product.updated_at"
+              v-model="product.updated_at"
             />
           </div>
         </div>
 
-        <!--  -->
-        <div class="flex mb-4">
+        <!-- group of fields  -->
+        <div class="flex mt-8">
           <div class="w-1/3">
             <!-- Published -->
             <label
@@ -192,7 +209,7 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              :placeholder="product.published"
+              v-model="product.published"
             />
           </div>
           <div class="w-1/3">
@@ -207,7 +224,7 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              :placeholder="product.price_cents"
+              v-model="product.price_cents"
             />
           </div>
           <div class="w-1/3">
@@ -222,59 +239,64 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
-              :placeholder="product.price_currency"
+              v-model="product.price_currency"
             />
           </div>
         </div>
 
         <!-- Prices -->
-        <h5 class="text-gray-700 text-sm font-bold mb-2">Prices</h5>
-        <div v-for="(value, key) in product.prices" :key="key">
-          <div class="flex mb-4">
-            <div class="w-1/2">
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="value.currency"
-              />
-            </div>
-            <div class="w-1/2">
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="value.value"
-              />
+        <div class="mt-8">
+          <h5 class="text-gray-700 text-sm font-bold mb-2">Prices</h5>
+          <div v-for="(value, key) in product.prices" :key="key">
+            <div class="flex mb-4">
+              <div class="w-1/2">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="value.currency"
+                />
+              </div>
+              <div class="w-1/2">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="value.value"
+                />
+              </div>
             </div>
           </div>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="addPrice"
+          >
+            Add price
+          </button>
         </div>
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          @click="addPrice"
-        >
-          Add price
-        </button>
 
         <!-- Sizes -->
-        <h5 class="text-gray-700 text-sm font-bold mb-2">Sizes</h5>
-        <div class="flex mb-4">
-          <div v-for="(size, key) in product.sizes" :key="key">
-            <div>
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="size.size"
-              />
+        <div class="mt-8">
+          <h5 class="text-gray-700 text-sm font-bold mb-2">Sizes</h5>
+          <div class="flex mb-4">
+            <div v-for="(size, key) in product.sizes" :key="key">
+              <div>
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="size.size"
+                />
+              </div>
             </div>
           </div>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="addSize"
+          >
+            Add size
+          </button>
         </div>
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          @click="addSize"
-        >
-          Add size
-        </button>
+
         <!-- Dimensions -->
-        <div class="flex mb-4">
+        <div class="flex mt-8">
           <div>
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
@@ -286,7 +308,7 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="length"
               type="text"
-              :placeholder="product.dimensions.length"
+              v-model="product.dimensions.length"
             />
           </div>
           <div>
@@ -300,7 +322,7 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="height"
               type="text"
-              :placeholder="product.dimensions.height"
+              v-model="product.dimensions.height"
             />
           </div>
           <div>
@@ -314,7 +336,7 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="width"
               type="text"
-              :placeholder="product.dimensions.width"
+              v-model="product.dimensions.width"
             />
           </div>
           <div>
@@ -328,13 +350,13 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="unit"
               type="text"
-              :placeholder="product.dimensions.unit"
+              v-model="product.dimensions.unit"
             />
           </div>
         </div>
 
         <!-- Weight -->
-        <div class="flex mb-4">
+        <div class="flex mt-8">
           <div>
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
@@ -346,7 +368,7 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="weight"
               type="text"
-              :placeholder="product.weight.weight"
+              v-model="product.weight.weight"
             />
           </div>
           <div>
@@ -360,341 +382,374 @@
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="unit"
               type="text"
-              :placeholder="product.weight.unit"
+              v-model="product.weight.unit"
             />
           </div>
         </div>
 
         <!-- Images -->
-        <h5 class="text-gray-700 text-sm font-bold mb-2">Images</h5>
-        <div v-for="(image, key) in product.images" :key="key">
-          <div class="flex mb-4">
-            <div class="w-1/3">
-              <input
-                id="url"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="image.url"
-              />
-            </div>
-            <div class="w-1/3">
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="image.name"
-              />
-            </div>
-            <div class="w-1/3">
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="image.type"
-              />
+        <div class="mt-8">
+          <h5 class="text-gray-700 text-sm font-bold mb-2">Images</h5>
+          <div v-for="(image, key) in product.images" :key="key">
+            <div class="flex mb-4">
+              <div class="w-1/3">
+                <input
+                  id="url"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="image.url"
+                />
+              </div>
+              <div class="w-1/3">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="image.name"
+                />
+              </div>
+              <div class="w-1/3">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="image.type"
+                />
+              </div>
             </div>
           </div>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="addImages"
+          >
+            Add image
+          </button>
         </div>
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          @click="addImages"
-        >
-          Add image
-        </button>
 
         <!-- Tags -->
-        <h5 class="text-gray-700 text-sm font-bold mb-2">Tags</h5>
-        <div class="flex mb-4">
-          <div v-for="(tag, key) in product.tags" :key="key">
-            <div>
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="tag.name"
-              />
+        <div class="mt-8">
+          <h5 class="text-gray-700 text-sm font-bold mb-2">Tags</h5>
+          <div class="flex mb-4">
+            <div v-for="(tag, key) in product.tags" :key="key">
+              <div>
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="tag.name"
+                />
+              </div>
             </div>
           </div>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="addTag"
+          >
+            Add tag
+          </button>
         </div>
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          @click="addTag"
-        >
-          Add tag
-        </button>
 
         <!-- Fixed Prices -->
-        <h5 class="text-gray-700 text-sm font-bold mb-2">Fixed Prices</h5>
-        <div v-for="(fixedPrice, key) in product.fixedPrices" :key="key">
-          <div class="flex mb-4">
-            <div class="w-1/2">
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="fixedPrice.price"
-              />
-            </div>
-            <div class="w-1/2">
-              <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                :placeholder="fixedPrice.country_code"
-              />
+        <div class="mt-8">
+          <h5 class="text-gray-700 text-sm font-bold mb-2">Fixed Prices</h5>
+          <div v-for="(fixedPrice, key) in product.fixedPrices" :key="key">
+            <div class="flex mb-4">
+              <div class="w-1/2">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="fixedPrice.price"
+                />
+              </div>
+              <div class="w-1/2">
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="text"
+                  v-model="fixedPrice.country_code"
+                />
+              </div>
             </div>
           </div>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="addFixPrices"
+          >
+            Add fixed price
+          </button>
         </div>
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          @click="addFixPrices"
-        >
-          Add fixed price
-        </button>
       </div>
       <!-- Product End -->
 
       <!-- Variants -->
-      <h5 class="text-gray-700 text-sm font-bold mb-2">Variants</h5>
-      <div class="bg-white rounded shadow border p-6 w-full break-words">
-        <div v-for="(variant, key) in product.variants" :key="key">
-          <!-- Product Variant Begin-->
-          <div class="product_variant">
-            <div class="flex mb-4">
-              <div class="w-1/3">
-                <div class="bg-gray-400">
-                  <img
-                    class="object-cover h-48 w-full"
-                    :src="variant.featured_image.url"
-                  />
-                </div>
-              </div>
-              <div class="w-1/3">
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  for="sku"
-                >
-                  SKU
-                </label>
-                <input
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="sku"
-                  type="text"
-                  :placeholder="variant.title"
-                />
-              </div>
-              <div class="w-1/3">
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  for="title"
-                >
-                  Title
-                </label>
-                <input
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="title"
-                  type="text"
-                  :placeholder="variant.title"
-                />
-              </div>
-            </div>
-
-            <!-- Categories -->
-            <label
-              class="block text-gray-700 text-sm font-bold mb-2"
-              for="category"
-            >
-              Category
-            </label>
-            <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="category"
-              type="text"
-              :placeholder="variant.categories[0].title"
-            />
-
-            <!-- Short description -->
-            <label
-              class="block text-gray-700 text-sm font-bold mb-2"
-              for="username"
-            >
-              Short Description
-            </label>
-            <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
-              type="text"
-              :placeholder="variant.short_description"
-            />
-
-            <!-- Long description -->
-            <label
-              class="block text-gray-700 text-sm font-bold mb-2"
-              for="username"
-            >
-              Long Description
-            </label>
-            <textarea
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
-              type="text"
-              :placeholder="variant.long_description"
-            />
-
-            <!-- Attributes -->
-            <h5 class="text-gray-700 text-sm font-bold mb-2">
-              Global attributes
-            </h5>
-            <div v-for="(value, key) in variant.meta" :key="key">
+      <div class="mt-8">
+        <h5 class="text-3xl font-bold">Variants</h5>
+        <div class="bg-white rounded shadow border p-6 w-full break-words">
+          <div v-for="(variant, key) in product.variants" :key="key">
+            <!-- Product Variant Begin-->
+            <div v-bind:class="{ 'mt-24': checkKey(key) }">
+              <!-- top row -->
               <div class="flex mb-4">
-                <div class="w-1/2">
+                <div class="w-1/3">
+                  <div class="bg-gray-400">
+                    <img
+                      class="object-cover h-48 w-full"
+                      :src="variant.featured_image.url"
+                    />
+                  </div>
+                </div>
+                <div class="w-1/3">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="variantSku"
+                  >
+                    SKU
+                  </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="variantSku"
                     type="text"
-                    :placeholder="value.key"
+                    v-model="variant.title"
                   />
                 </div>
-                <div class="w-1/2">
+                <div class="w-1/3">
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="variantTitle"
+                  >
+                    Title
+                  </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="variantTitle"
                     type="text"
-                    :placeholder="value.value"
+                    v-model="variant.title"
                   />
                 </div>
               </div>
-            </div>
 
-            <button
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              @click="addAttributes"
-            >
-              Add attribute
-            </button>
+              <!-- Categories -->
+              <div class="mt-8">
+                <h5 class="text-gray-700 text-sm font-bold mb-2">Categories</h5>
+                <div class="flex mb-4">
+                  <div v-for="(category, key) in variant.categories" :key="key">
+                    <div>
+                      <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        v-model="category.title"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  @click="addCategory"
+                >
+                  Add category
+                </button>
+              </div>
 
-            <!--  -->
-            <div class="flex mb-4">
-              <div class="w-1/4">
-                <!-- Status -->
+              <!-- Short description -->
+              <div class="mt-8">
                 <label
                   class="block text-gray-700 text-sm font-bold mb-2"
                   for="username"
                 >
-                  Status
+                  Short Description
                 </label>
                 <input
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="username"
                   type="text"
-                  :placeholder="product.status"
+                  v-model="variant.short_description"
                 />
               </div>
-              <div class="w-1/4">
-                <!-- Published -->
+
+              <!-- Long description -->
+              <div class="mt-8">
                 <label
                   class="block text-gray-700 text-sm font-bold mb-2"
                   for="username"
                 >
-                  Published
+                  Long Description
                 </label>
-                <input
+                <textarea
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="username"
                   type="text"
-                  :placeholder="product.published"
+                  v-model="variant.long_description"
                 />
               </div>
-              <div class="w-1/4">
-                <!-- price cents -->
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  for="username"
+
+              <!-- Attributes -->
+              <div class="mt-8">
+                <h5 class="text-gray-700 text-sm font-bold mb-2">
+                  Global attributes
+                </h5>
+                <div v-for="(value, key) in variant.meta" :key="key">
+                  <div class="flex mb-4">
+                    <div class="w-1/2">
+                      <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        v-model="value.key"
+                      />
+                    </div>
+                    <div class="w-1/2">
+                      <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        v-model="value.value"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  @click="addAttributes"
                 >
-                  Price Cents
-                </label>
-                <input
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="username"
-                  type="text"
-                  :placeholder="product.price_cents"
-                />
+                  Add attribute
+                </button>
               </div>
-              <div class="w-1/4">
-                <!-- Price currency -->
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  for="username"
-                >
-                  Price currency
-                </label>
-                <input
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="username"
-                  type="text"
-                  :placeholder="product.price_currency"
-                />
+
+              <!-- group of fields -->
+              <div class="flex mt-8">
+                <div class="w-1/4">
+                  <!-- Status -->
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="username"
+                  >
+                    Status
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="username"
+                    type="text"
+                    v-model="product.status"
+                  />
+                </div>
+                <div class="w-1/4">
+                  <!-- Published -->
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="username"
+                  >
+                    Published
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="username"
+                    type="text"
+                    v-model="product.published"
+                  />
+                </div>
+                <div class="w-1/4">
+                  <!-- price cents -->
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="username"
+                  >
+                    Price Cents
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="username"
+                    type="text"
+                    v-model="product.price_cents"
+                  />
+                </div>
+                <div class="w-1/4">
+                  <!-- Price currency -->
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="username"
+                  >
+                    Price currency
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="username"
+                    type="text"
+                    v-model="product.price_currency"
+                  />
+                </div>
+              </div>
+
+              <!-- Stock -->
+              <div class="mt-8">
+                <h5 class="text-gray-700 text-sm font-bold mb-2">Stock</h5>
+                <div class="flex mb-4">
+                  <div class="w-1/4">
+                    <label
+                      class="block text-gray-700 text-sm font-bold mb-2"
+                      for="sku"
+                    >
+                      Quantity
+                    </label>
+                    <input
+                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="sku"
+                      type="text"
+                      v-model="variant.title"
+                    />
+                  </div>
+                  <div class="w-1/4">
+                    <label
+                      class="block text-gray-700 text-sm font-bold mb-2"
+                      for="sku"
+                    >
+                      Cost price
+                    </label>
+                    <input
+                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="sku"
+                      type="text"
+                      v-model="variant.title"
+                    />
+                  </div>
+                  <div class="w-1/4">
+                    <label
+                      class="block text-gray-700 text-sm font-bold mb-2"
+                      for="sku"
+                    >
+                      Price
+                    </label>
+                    <input
+                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="sku"
+                      type="text"
+                      v-model="variant.title"
+                    />
+                  </div>
+                  <div class="w-1/4">
+                    <label
+                      class="block text-gray-700 text-sm font-bold mb-2"
+                      for="sku"
+                    >
+                      Store
+                    </label>
+                    <input
+                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="sku"
+                      type="text"
+                      v-model="variant.title"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-
-            <!-- Stock -->
-            <h5 class="text-gray-700 text-sm font-bold mb-2">Stock</h5>
-            <div class="flex mb-4">
-              <div class="w-1/4">
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  for="sku"
-                >
-                  Quantity
-                </label>
-                <input
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="sku"
-                  type="text"
-                  :placeholder="variant.title"
-                />
-              </div>
-              <div class="w-1/4">
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  for="sku"
-                >
-                  Cost price
-                </label>
-                <input
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="sku"
-                  type="text"
-                  :placeholder="variant.title"
-                />
-              </div>
-              <div class="w-1/4">
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  for="sku"
-                >
-                  Price
-                </label>
-                <input
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="sku"
-                  type="text"
-                  :placeholder="variant.title"
-                />
-              </div>
-              <div class="w-1/4">
-                <label
-                  class="block text-gray-700 text-sm font-bold mb-2"
-                  for="sku"
-                >
-                  Store
-                </label>
-                <input
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="sku"
-                  type="text"
-                  :placeholder="variant.title"
-                />
-              </div>
-            </div>
+            <!-- Product End -->
           </div>
-          <!-- Product End -->
         </div>
       </div>
       <!-- Variants end -->
+
+      <!-- Update the product button -->
+      <button
+        class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-16"
+        @click="updateProduct"
+      >
+        Update product
+      </button>
     </div>
   </div>
 </template>
@@ -726,6 +781,11 @@ export default class Product extends Vue {
     this.errors = [];
   }
 
+  // Just to add margin top to product variant only from 2nd variant
+  public checkKey(key: number): boolean {
+    return key > 0;
+  }
+
   public addAttributes() {
     //@ts-ignore
     this.product.meta.push({ key: "...", value: "..." });
@@ -741,9 +801,21 @@ export default class Product extends Vue {
     this.product.sizes.push({ size: "size..." });
   }
 
+  public addCategory() {
+    //@ts-ignore
+    this.product.categories.push({ title: "category..." });
+  }
+
   public addTag() {
     //@ts-ignore
     this.product.tags.push({ name: "tag..." });
+  }
+
+  /**
+   * updateProduct
+   */
+  public updateProduct() {
+    console.log("update");
   }
 
   public addFixPrices() {
