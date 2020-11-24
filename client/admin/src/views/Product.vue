@@ -1,7 +1,7 @@
 <template>
   <div class="mx-auto px-6 py-6">
     <!-- Error -->
-    <div v-if="errors.length" class="absolute bottom-0 right-0">
+    <div v-if="errors.length" class="fixed bottom-0 right-0">
       <button
         @click="resetErrors"
         class="bg-red-500 hover:bg-red-500 text-white font-bold py-2 px-4 border rounded"
@@ -9,6 +9,17 @@
         Close
       </button>
       <ErrorNotification :errors="errors" />
+    </div>
+
+    <!-- Success -->
+    <div v-if="productUpdated" class="fixed bottom-0 right-0">
+      <button
+        @click="resetProductUpdated"
+        class="bg-teal-500 hover:bg-teal-500 text-white font-bold py-2 px-4 border rounded"
+      >
+        Close
+      </button>
+      <SuccessNotification title="Product" :msg="productUpdated" />
     </div>
 
     <div v-if="product" class="p-6 w-full break-words">
@@ -807,6 +818,7 @@ import { cleanupData } from "@/utils/helper";
 export default class Product extends Vue {
   // Errors array
   private errors: string[] = [];
+  private productUpdated: string = "";
 
   //@ts-ignore
   private product: {
@@ -829,6 +841,10 @@ export default class Product extends Vue {
 
   public resetErrors(): void {
     this.errors = [];
+  }
+
+  public resetProductUpdated(): void {
+    this.productUpdated = "";
   }
 
   // Just to add margin top to product variant only from 2nd variant
@@ -865,7 +881,7 @@ export default class Product extends Vue {
    * updateProduct
    */
   public async updateProduct() {
-    console.log(this.product);
+    this.productUpdated = "Updating...";
 
     let data = await apolloClient.mutate({
       mutation: UPDATE_PRODUCT,
@@ -873,7 +889,8 @@ export default class Product extends Vue {
         id: this.product.id,
         input: {
           title: this.product.title,
-          // price_cents: this.product.price_cents,
+          //@ts-ignore
+          price_cents: parseInt(this.product.price_cents),
           // price_currency: this.product.price_currency,
           // short_description: this.product.short_description,
           // long_description: this.product.long_description,
@@ -892,11 +909,14 @@ export default class Product extends Vue {
     try {
       let error = data.errors[0].debugMessage;
       this.errors.push(error);
+      this.productUpdated = "";
       console.log(error);
       return;
     } catch (error) {
       // no error
     }
+
+    this.productUpdated = "Product successfully updated.";
   }
 
   public addFixPrices() {
