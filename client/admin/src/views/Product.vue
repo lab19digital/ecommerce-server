@@ -34,12 +34,15 @@
             </div>
           </div>
           <div class="w-1/3">
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="sku">
+            <label
+              class="block text-gray-700 text-sm font-bold mb-2"
+              for="product_sku"
+            >
               SKU
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="sku"
+              id="product_sku"
               type="text"
               v-model="product.id"
             />
@@ -86,13 +89,13 @@
         <div class="mt-8">
           <label
             class="block text-gray-700 text-sm font-bold mb-2"
-            for="username"
+            for="short_description"
           >
             Short Description
           </label>
           <input
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
+            id="short_description"
             type="text"
             v-model="product.short_description"
           />
@@ -102,15 +105,31 @@
         <div class="mt-8">
           <label
             class="block text-gray-700 text-sm font-bold mb-2"
-            for="username"
+            for="long_description"
           >
             Long Description
           </label>
           <textarea
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
+            id="long_description"
             type="text"
             v-model="product.long_description"
+          />
+        </div>
+
+        <!-- Feature image url -->
+        <div class="mt-8">
+          <label
+            class="block text-gray-700 text-sm font-bold mb-2"
+            for="feature_image_url"
+          >
+            Feature image url
+          </label>
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="feature_image_url"
+            type="text"
+            v-model="product.featured_image.url"
           />
         </div>
 
@@ -152,13 +171,13 @@
             <!-- Status -->
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
-              for="username"
+              for="status"
             >
               Status
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="status"
               type="text"
               v-model="product.status"
             />
@@ -167,13 +186,13 @@
             <!-- Created at -->
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
-              for="username"
+              for="created_at"
             >
               Created at
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="created_at"
               type="text"
               v-model="product.created_at"
             />
@@ -182,13 +201,13 @@
             <!-- Updated at -->
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
-              for="username"
+              for="updated_at"
             >
               Updated at
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="updated_at"
               type="text"
               v-model="product.updated_at"
             />
@@ -201,13 +220,13 @@
             <!-- Published -->
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
-              for="username"
+              for="published"
             >
               Published
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="published"
               type="text"
               v-model="product.published"
             />
@@ -216,13 +235,13 @@
             <!-- price cents -->
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
-              for="username"
+              for="price_cents"
             >
               Price Cents
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="price_cents"
               type="text"
               v-model="product.price_cents"
             />
@@ -231,13 +250,13 @@
             <!-- Price currency -->
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
-              for="username"
+              for="price_currency"
             >
               Price currency
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="username"
+              id="price_currency"
               type="text"
               v-model="product.price_currency"
             />
@@ -342,13 +361,13 @@
           <div>
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
-              for="unit"
+              for="product_dimensions_unit"
             >
               Unit
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="unit"
+              id="product_dimensions_unit"
               type="text"
               v-model="product.dimensions.unit"
             />
@@ -374,13 +393,13 @@
           <div>
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
-              for="unit"
+              for="product_weight_unit"
             >
               Unit
             </label>
             <input
               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="unit"
+              id="product_weight_unit"
               type="text"
               v-model="product.weight.unit"
             />
@@ -394,7 +413,6 @@
             <div class="flex mb-4">
               <div class="w-1/3">
                 <input
-                  id="url"
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="text"
                   v-model="image.url"
@@ -497,27 +515,27 @@
                 <div class="w-1/3">
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="variantSku"
+                    :for="variant.id + '_sku'"
                   >
                     SKU
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="variantSku"
+                    :id="variant.id + '_sku'"
                     type="text"
-                    v-model="variant.title"
+                    v-model="variant.id"
                   />
                 </div>
                 <div class="w-1/3">
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="variantTitle"
+                    :for="variant.id + '_title'"
                   >
                     Title
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="variantTitle"
+                    :id="variant.id + '_title'"
                     type="text"
                     v-model="variant.title"
                   />
@@ -550,13 +568,13 @@
               <div class="mt-8">
                 <label
                   class="block text-gray-700 text-sm font-bold mb-2"
-                  for="username"
+                  :for="variant.id + '_short_description'"
                 >
                   Short Description
                 </label>
                 <input
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="username"
+                  :id="variant.id + '_short_description'"
                   type="text"
                   v-model="variant.short_description"
                 />
@@ -566,15 +584,31 @@
               <div class="mt-8">
                 <label
                   class="block text-gray-700 text-sm font-bold mb-2"
-                  for="username"
+                  :for="variant.id + '_long_description'"
                 >
                   Long Description
                 </label>
                 <textarea
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="username"
+                  :id="variant.id + '_long_description'"
                   type="text"
                   v-model="variant.long_description"
+                />
+              </div>
+
+              <!-- Feature image url -->
+              <div class="mt-8">
+                <label
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  :for="variant.id + '_feature_image_url'"
+                >
+                  Feature image url
+                </label>
+                <input
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  :id="variant.id + '_feature_image_url'"
+                  type="text"
+                  v-model="variant.featured_image.url"
                 />
               </div>
 
@@ -616,13 +650,13 @@
                   <!-- Status -->
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="username"
+                    :for="variant.id + '_status'"
                   >
                     Status
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username"
+                    :id="variant.id + '_status'"
                     type="text"
                     v-model="product.status"
                   />
@@ -631,13 +665,13 @@
                   <!-- Published -->
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="username"
+                    :for="variant.id + '_published'"
                   >
                     Published
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username"
+                    :id="variant.id + '_published'"
                     type="text"
                     v-model="product.published"
                   />
@@ -646,13 +680,13 @@
                   <!-- price cents -->
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="username"
+                    :for="variant.id + '_price_cents'"
                   >
                     Price Cents
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username"
+                    :id="variant.id + '_price_cents'"
                     type="text"
                     v-model="product.price_cents"
                   />
@@ -661,13 +695,13 @@
                   <!-- Price currency -->
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="username"
+                    :for="variant.id + '_price_currency'"
                   >
                     Price currency
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="username"
+                    :id="variant.id + '_price_currency'"
                     type="text"
                     v-model="product.price_currency"
                   />
@@ -681,13 +715,13 @@
                   <div class="w-1/4">
                     <label
                       class="block text-gray-700 text-sm font-bold mb-2"
-                      for="sku"
+                      :for="variant.id + '_stock'"
                     >
                       Quantity
                     </label>
                     <input
                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="sku"
+                      :id="variant.id + '_stock'"
                       type="text"
                       v-model="variant.title"
                     />
@@ -695,13 +729,13 @@
                   <div class="w-1/4">
                     <label
                       class="block text-gray-700 text-sm font-bold mb-2"
-                      for="sku"
+                      :for="variant.id + '_cost_price'"
                     >
                       Cost price
                     </label>
                     <input
                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="sku"
+                      :id="variant.id + '_cost_price'"
                       type="text"
                       v-model="variant.title"
                     />
@@ -709,13 +743,13 @@
                   <div class="w-1/4">
                     <label
                       class="block text-gray-700 text-sm font-bold mb-2"
-                      for="sku"
+                      :for="variant.id + '_price'"
                     >
                       Price
                     </label>
                     <input
                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="sku"
+                      :id="variant.id + '_price'"
                       type="text"
                       v-model="variant.title"
                     />
@@ -723,13 +757,13 @@
                   <div class="w-1/4">
                     <label
                       class="block text-gray-700 text-sm font-bold mb-2"
-                      for="sku"
+                      :for="variant.id + '_store'"
                     >
                       Store
                     </label>
                     <input
                       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="sku"
+                      :id="variant.id + '_store'"
                       type="text"
                       v-model="variant.title"
                     />
