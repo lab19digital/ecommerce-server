@@ -793,7 +793,7 @@ import { Component, Vue } from "vue-property-decorator";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
 import { apolloClient } from "@/vue-apollo";
-import { PRODUCT } from "@/graphql/queries";
+import { PRODUCT, UPDATE_PRODUCT } from "@/graphql/queries";
 import Table from "@/components/Table.vue";
 import { cleanupData } from "@/utils/helper";
 
@@ -807,7 +807,23 @@ import { cleanupData } from "@/utils/helper";
 export default class Product extends Vue {
   // Errors array
   private errors: string[] = [];
-  private product: {} = {};
+
+  //@ts-ignore
+  private product: {
+    id: number;
+    title: string;
+    price_cents: number;
+    price_currency: string;
+    short_description: string;
+    long_description: string;
+    meta: [];
+    prices: [];
+    sizes: [];
+    categories: [];
+    dimensions: [];
+    weight: [];
+    fixprices: [];
+  } = {};
 
   private tableColums: string[] = [];
 
@@ -848,8 +864,39 @@ export default class Product extends Vue {
   /**
    * updateProduct
    */
-  public updateProduct() {
-    console.log("update");
+  public async updateProduct() {
+    console.log(this.product);
+
+    let data = await apolloClient.mutate({
+      mutation: UPDATE_PRODUCT,
+      variables: {
+        id: this.product.id,
+        input: {
+          title: this.product.title,
+          // price_cents: this.product.price_cents,
+          // price_currency: this.product.price_currency,
+          // short_description: this.product.short_description,
+          // long_description: this.product.long_description,
+          // meta: this.product.meta,
+          // prices: this.product.prices,
+          // sizes: this.product.sizes,
+          // categories: this.product.categories,
+          // dimensions: this.product.dimensions,
+          // weight: this.product.weight,
+          // fixprices: this.product.fixprices,
+        },
+      },
+    });
+    console.log(data);
+
+    try {
+      let error = data.errors[0].debugMessage;
+      this.errors.push(error);
+      console.log(error);
+      return;
+    } catch (error) {
+      // no error
+    }
   }
 
   public addFixPrices() {
@@ -874,7 +921,7 @@ export default class Product extends Vue {
       query: PRODUCT,
       variables: { id: this.$route.params.id },
     });
-    console.log(data);
+    // console.log(data);
 
     try {
       let error = data.errors[0].debugMessage;
