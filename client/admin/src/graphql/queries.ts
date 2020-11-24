@@ -19,6 +19,14 @@ export const LOGOUT_USER = gql`
   }
 `;
 
+export const UPDATE_PRODUCT = gql`
+  mutation($id: ID!, $input: UpdateProductInput!) {
+    updateProduct(id: $id, input: $input) {
+      id
+    }
+  }
+`;
+
 export const ADMIN_PRODUCTS = gql`
   query($first: Int!, $page: Int!) {
     adminProducts(first: $first, page: $page) {
@@ -184,6 +192,14 @@ export const PRODUCT = gql`
       variants {
         id
         title
+        status
+        published
+        price_cents
+        price_currency
+        short_description
+        long_description
+        created_at
+        updated_at
         meta {
           key
           group
