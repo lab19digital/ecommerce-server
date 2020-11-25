@@ -177,9 +177,7 @@ export const PRODUCT = gql`
       created_at
       updated_at
       meta {
-        id
         key
-        group
         value
       }
       prices {
