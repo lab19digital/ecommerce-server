@@ -4,7 +4,6 @@ namespace Gernzy\Server\Actions;
 
 use \App;
 use Gernzy\Server\Actions\Helpers\Attributes;
-use Gernzy\Server\Models\Category;
 use Gernzy\Server\Models\Product;
 
 class UpdateProduct
@@ -16,22 +15,6 @@ class UpdateProduct
         $product->save();
 
         $categories = $args['categories'] ?? [];
-
-        $createCategories = [];
-        foreach ($categories as $category) {
-            if (isset($category['id'])) {
-                $cat = Category::find($category['id']);
-                if ($cat) {
-                    $product->categories()->attach($cat);
-                }
-            } elseif (isset($category['title'])) {
-                $createCategories[] = [
-                    'title' => $category['title']
-                ];
-            }
-        }
-
-        $product->categories()->createMany($createCategories);
 
         $attributes = new Attributes($product);
         $attributes
