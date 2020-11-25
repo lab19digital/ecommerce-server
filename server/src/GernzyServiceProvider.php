@@ -14,6 +14,7 @@ use Gernzy\Server\Models\Cart;
 use Gernzy\Server\Observers\CartObserver;
 use Gernzy\Server\Services\CartService;
 use Gernzy\Server\Services\CurrencyConversionInterface;
+use Gernzy\Server\Services\FixPricesService;
 use Gernzy\Server\Services\GeolocationInterface;
 use Gernzy\Server\Services\GeolocationService;
 use Gernzy\Server\Services\InspectorService;
@@ -86,6 +87,7 @@ class GernzyServiceProvider extends ServiceProvider
         $this->app->bind('Gernzy\ServerService', CartService::class);
         $this->app->bind('Gernzy\GeolocationService', GeolocationService::class);
         $this->app->bind('Gernzy\InspectorService', InspectorService::class);
+        $this->app->bind('Gernzy\FixPricesService', FixPricesService::class);
 
         $this->app->bind('GuzzleHttp\Client', function ($app, array $parameters) {
             return new Client([
