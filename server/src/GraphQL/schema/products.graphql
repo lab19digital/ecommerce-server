@@ -175,6 +175,7 @@ input UpdateProductInput {
     categories: [CategoryInput!]
     dimensions: ProductDimensionsInput
     weight: ProductWeightInput
+    fixprices: [PricingInput]
 }
 
 input ProductAttributeInput {
