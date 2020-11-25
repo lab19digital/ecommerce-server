@@ -834,7 +834,7 @@ export default class Product extends Vue {
     categories: [];
     dimensions: [];
     weight: [];
-    fixprices: [];
+    fixedPrices: [];
   } = {};
 
   private tableColums: string[] = [];
@@ -883,6 +883,8 @@ export default class Product extends Vue {
   public async updateProduct() {
     this.productUpdated = "Updating...";
 
+    console.log(this.product.fixedPrices);
+
     let data = await apolloClient.mutate({
       mutation: UPDATE_PRODUCT,
       variables: {
@@ -891,16 +893,19 @@ export default class Product extends Vue {
           title: this.product.title,
           //@ts-ignore
           price_cents: parseInt(this.product.price_cents),
-          // price_currency: this.product.price_currency,
-          // short_description: this.product.short_description,
-          // long_description: this.product.long_description,
-          // meta: this.product.meta,
-          // prices: this.product.prices,
-          // sizes: this.product.sizes,
-          // categories: this.product.categories,
-          // dimensions: this.product.dimensions,
-          // weight: this.product.weight,
-          // fixprices: this.product.fixprices,
+          price_currency: this.product.price_currency,
+          short_description: this.product.short_description,
+          long_description: this.product.long_description,
+          meta: this.product.meta,
+          prices: this.product.prices,
+          sizes: this.product.sizes,
+          categories: this.product.categories,
+          dimensions: this.product.dimensions,
+          weight: this.product.weight,
+          fixprices: this.product.fixedPrices.map((item) => {
+            //@ts-ignore
+            return { currency: item.country_code, price_cents: item.price };
+          }),
         },
       },
     });
@@ -922,8 +927,10 @@ export default class Product extends Vue {
   public addFixPrices() {
     //@ts-ignore
     this.product.fixedPrices.push({
+      //@ts-ignore
       country_code: "currency...",
-      price: "price...",
+      //@ts-ignore
+      price: 0,
     });
   }
 
