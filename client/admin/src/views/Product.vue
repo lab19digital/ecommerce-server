@@ -77,14 +77,22 @@
         <!-- Categories -->
         <div class="mt-8">
           <h5 class="text-gray-700 text-sm font-bold mb-2">Categories</h5>
-          <div class="flex mb-4">
+          <div class="flex flex-wrap mb-4">
             <div v-for="(category, key) in product.categories" :key="key">
-              <div>
+              <div class="flex mr-6 mb-6">
                 <input
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="text"
                   v-model="category.title"
                 />
+
+                <button
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  :data-key="key"
+                  @click="removeCategory"
+                >
+                  x
+                </button>
               </div>
             </div>
           </div>
@@ -165,6 +173,13 @@
                   v-model="value.value"
                 />
               </div>
+              <button
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                :data-key="key"
+                @click="removeAttributes"
+              >
+                x
+              </button>
             </div>
           </div>
 
@@ -293,6 +308,13 @@
                   v-model="value.value"
                 />
               </div>
+              <button
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                :data-key="key"
+                @click="removePrices"
+              >
+                x
+              </button>
             </div>
           </div>
           <button
@@ -306,14 +328,22 @@
         <!-- Sizes -->
         <div class="mt-8">
           <h5 class="text-gray-700 text-sm font-bold mb-2">Sizes</h5>
-          <div class="flex mb-4">
+          <div class="flex flex-wrap mb-4">
             <div v-for="(size, key) in product.sizes" :key="key">
-              <div>
+              <div class="flex mr-6 mb-6">
                 <input
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="text"
                   v-model="size.size"
                 />
+
+                <button
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  :data-key="key"
+                  @click="removeSize"
+                >
+                  x
+                </button>
               </div>
             </div>
           </div>
@@ -443,6 +473,13 @@
                   v-model="image.type"
                 />
               </div>
+              <button
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                :data-key="key"
+                @click="removeImage"
+              >
+                x
+              </button>
             </div>
           </div>
           <button
@@ -456,14 +493,22 @@
         <!-- Tags -->
         <div class="mt-8">
           <h5 class="text-gray-700 text-sm font-bold mb-2">Tags</h5>
-          <div class="flex mb-4">
+          <div class="flex flex-wrap mb-4">
             <div v-for="(tag, key) in product.tags" :key="key">
-              <div>
+              <div class="flex mr-6 mb-6">
                 <input
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   type="text"
                   v-model="tag.name"
                 />
+
+                <button
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  :data-key="key"
+                  @click="removeTag"
+                >
+                  x
+                </button>
               </div>
             </div>
           </div>
@@ -830,7 +875,9 @@ export default class Product extends Vue {
     long_description: string;
     meta: [];
     prices: [];
+    images: [];
     sizes: [];
+    tags: [];
     categories: [];
     dimensions: [];
     weight: [];
@@ -857,9 +904,19 @@ export default class Product extends Vue {
     this.product.meta.push({ key: "...", value: "..." });
   }
 
+  public removeAttributes(event: any) {
+    let key = event.target.getAttribute("data-key");
+    this.product.meta.splice(key, 1);
+  }
+
   public addPrice() {
     //@ts-ignore
     this.product.prices.push({ currency: "currency...", value: "value..." });
+  }
+
+  public removePrices(event: any) {
+    let key = event.target.getAttribute("data-key");
+    this.product.prices.splice(key, 1);
   }
 
   public addSize() {
@@ -867,14 +924,53 @@ export default class Product extends Vue {
     this.product.sizes.push({ size: "size..." });
   }
 
+  public removeSize(event: any) {
+    let key = event.target.getAttribute("data-key");
+    this.product.sizes.splice(key, 1);
+  }
+
   public addCategory() {
     //@ts-ignore
     this.product.categories.push({ title: "category..." });
   }
 
+  public removeCategory(event: any) {
+    let key = event.target.getAttribute("data-key");
+    this.product.categories.splice(key, 1);
+  }
+
   public addTag() {
     //@ts-ignore
     this.product.tags.push({ name: "tag..." });
+  }
+
+  public removeTag(event: any) {
+    let key = event.target.getAttribute("data-key");
+    this.product.tags.splice(key, 1);
+  }
+
+  public addFixPrices() {
+    //@ts-ignore
+    this.product.fixedPrices.push({
+      //@ts-ignore
+      country_code: "currency...",
+      //@ts-ignore
+      price: 0,
+    });
+  }
+
+  public addImages() {
+    //@ts-ignore
+    this.product.images.push({
+      url: "url...",
+      name: "name...",
+      type: "type...",
+    });
+  }
+
+  public removeImage(event: any) {
+    let key = event.target.getAttribute("data-key");
+    this.product.images.splice(key, 1);
   }
 
   /**
@@ -920,25 +1016,6 @@ export default class Product extends Vue {
     }
 
     this.productUpdated = "Product successfully updated.";
-  }
-
-  public addFixPrices() {
-    //@ts-ignore
-    this.product.fixedPrices.push({
-      //@ts-ignore
-      country_code: "currency...",
-      //@ts-ignore
-      price: 0,
-    });
-  }
-
-  public addImages() {
-    //@ts-ignore
-    this.product.images.push({
-      url: "url...",
-      name: "name...",
-      type: "type...",
-    });
   }
 
   async mounted() {
