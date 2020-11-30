@@ -539,6 +539,13 @@
                   v-model="fixedPrice.country_code"
                 />
               </div>
+              <button
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                :data-key="key"
+                @click="removeFixedPrice"
+              >
+                x
+              </button>
             </div>
           </div>
           <button
@@ -957,6 +964,11 @@ export default class Product extends Vue {
       //@ts-ignore
       price: 0,
     });
+  }
+
+  public removeFixedPrice(event: any) {
+    let key = event.target.getAttribute("data-key");
+    this.product.fixedPrices.splice(key, 1);
   }
 
   public addImages() {
