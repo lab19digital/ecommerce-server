@@ -882,7 +882,7 @@ export default class Product extends Vue {
     long_description: string;
     meta: [];
     prices: [];
-    images: [];
+    images: [{ url: string; name: string; type: string }];
     sizes: [];
     tags: [];
     categories: [];
@@ -972,7 +972,6 @@ export default class Product extends Vue {
   }
 
   public addImages() {
-    //@ts-ignore
     this.product.images.push({
       url: "url...",
       name: "name...",
