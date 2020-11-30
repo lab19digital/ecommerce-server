@@ -883,7 +883,7 @@ export default class Product extends Vue {
     meta: [{ key: string; value: string }];
     prices: [{ currency: string; value: number }];
     images: [{ url: string; name: string; type: string }];
-    sizes: [];
+    sizes: [{ size: number }];
     tags: [];
     categories: [];
     dimensions: [];
@@ -925,8 +925,7 @@ export default class Product extends Vue {
   }
 
   public addSize() {
-    //@ts-ignore
-    this.product.sizes.push({ size: "size..." });
+    this.product.sizes.push({ size: 0 });
   }
 
   public removeSize(event: any) {
