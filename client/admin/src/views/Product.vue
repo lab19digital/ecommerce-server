@@ -883,8 +883,6 @@ export default class Product extends Vue {
   public async updateProduct() {
     this.productUpdated = "Updating...";
 
-    console.log(this.product.fixedPrices);
-
     let data = await apolloClient.mutate({
       mutation: UPDATE_PRODUCT,
       variables: {
