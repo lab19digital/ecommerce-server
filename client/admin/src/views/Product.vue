@@ -880,8 +880,8 @@ export default class Product extends Vue {
     price_currency: string;
     short_description: string;
     long_description: string;
-    meta: [];
-    prices: [];
+    meta: [{ key: string; value: string }];
+    prices: [{ currency: string; value: number }];
     images: [{ url: string; name: string; type: string }];
     sizes: [];
     tags: [];
@@ -907,7 +907,6 @@ export default class Product extends Vue {
   }
 
   public addAttributes() {
-    //@ts-ignore
     this.product.meta.push({ key: "...", value: "..." });
   }
 
@@ -917,8 +916,7 @@ export default class Product extends Vue {
   }
 
   public addPrice() {
-    //@ts-ignore
-    this.product.prices.push({ currency: "currency...", value: "value..." });
+    this.product.prices.push({ currency: "currency...", value: 0.0 });
   }
 
   public removePrices(event: any) {
