@@ -39,10 +39,26 @@ class FixPricesService
 
     public function handleFixedPrices()
     {
-        $product = $this->product;
+        // Create latavel relationship for the products fixed prices in the specified currencies
+        $this->product->fixedPrices()->saveMany($this->convertFixedPrices());
+        return $this->product;
+    }
+
+    public function handleFixedPricesUpdate()
+    {
+        /**
+         * The updated list of fixed prices for the product comes in here and so first delete old values in DB and then
+         * insert the new updated list
+         * */
+        $this->product->fixedPrices()->delete();
+        $this->product->fixedPrices()->saveMany($this->convertFixedPrices());
+        return $this->product;
+    }
+
+    public function convertFixedPrices()
+    {
         $productPrice = $this->productPrice;
         $productBaseCurrency = $this->productBaseCurrency;
-        $fixCurrencies = $this->fixCurrencies;
 
         // Map over $fixCurrencies and fix the price for the product in that currency
         // and pass the resultant array to the save many function
@@ -63,11 +79,8 @@ class FixPricesService
             }
 
             return (new ProductFixedPrice(['country_code' => $targetCurrency, 'price' => $productManualOverridePrice]));
-        }, $fixCurrencies);
+        }, $this->fixCurrencies);
 
-        // Create latavel relationship for the products fixed prices in the specified currencies
-        $product->fixedPrices()->saveMany($convertedFixedPrices);
-
-        return $product;
+        return $convertedFixedPrices;
     }
 }
