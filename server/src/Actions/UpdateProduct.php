@@ -39,6 +39,7 @@ class UpdateProduct
             return $product;
         }
 
+
         // Use FixPricesService to map over $fixCurrencies and fix the price for the product in that currency
         // and pass the resultant array to the save many function
         return (App::make('Gernzy\FixPricesService'))
@@ -46,6 +47,6 @@ class UpdateProduct
             ->setFixCurrencies($fixCurrencies)
             ->setProductPrice($productPrice)
             ->setProductBaseCurrency($productBaseCurrency)
-            ->handleFixedPrices();
+            ->handleFixedPricesUpdate();
     }
 }
