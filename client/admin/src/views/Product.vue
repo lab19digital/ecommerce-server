@@ -859,6 +859,7 @@ import { apolloClient } from "@/vue-apollo";
 import { PRODUCT, UPDATE_PRODUCT } from "@/graphql/queries";
 import Table from "@/components/Table.vue";
 import { cleanupData } from "@/utils/helper";
+import { Product as TProduct } from "@/types/product.ts";
 
 @Component({
   components: {
@@ -872,29 +873,28 @@ export default class Product extends Vue {
   private errors: string[] = [];
   private productUpdated: string = "";
 
-  //@ts-ignore
-  private product: {
-    id: number;
-    title: string;
-    price_cents: string;
-    price_currency: string;
-    short_description: string;
-    long_description: string;
-    meta: [{ key: string; value: string }];
-    prices: [{ currency: string; value: number }];
-    images: [{ url: string; name: string; type: string }];
-    sizes: [{ size: number }];
-    tags: [{ name: string }];
-    categories: [{ title: string }];
-    dimensions: [];
-    weight: [];
+  private product: TProduct = {
+    id: -1,
+    title: "",
+    price_cents: "",
+    price_currency: "",
+    short_description: "",
+    long_description: "",
+    meta: [{ key: "", value: "" }],
+    prices: [{ currency: "", value: 0 }],
+    images: [{ url: "", name: "", type: "" }],
+    sizes: [{ size: 0 }],
+    tags: [{ name: "" }],
+    categories: [{ title: "" }],
+    dimensions: [],
+    weight: [],
     fixedPrices: [
       {
-        country_code: string;
-        price: number;
-      }
-    ];
-  } = {};
+        country_code: "",
+        price: 0,
+      },
+    ],
+  };
 
   private tableColums: string[] = [];
 
@@ -1003,9 +1003,11 @@ export default class Product extends Vue {
           categories: this.product.categories,
           dimensions: this.product.dimensions,
           weight: this.product.weight,
-          fixprices: this.product.fixedPrices.map((item) => {
-            return { currency: item.country_code, price_cents: item.price };
-          }),
+          fixprices: this.product.fixedPrices.map(
+            (item: { country_code: string; price: number }) => {
+              return { currency: item.country_code, price_cents: item.price };
+            }
+          ),
         },
       },
     });
