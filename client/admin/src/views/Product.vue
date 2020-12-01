@@ -876,7 +876,7 @@ export default class Product extends Vue {
   private product: {
     id: number;
     title: string;
-    price_cents: number;
+    price_cents: string;
     price_currency: string;
     short_description: string;
     long_description: string;
@@ -884,11 +884,16 @@ export default class Product extends Vue {
     prices: [{ currency: string; value: number }];
     images: [{ url: string; name: string; type: string }];
     sizes: [{ size: number }];
-    tags: [];
-    categories: [];
+    tags: [{ name: string }];
+    categories: [{ title: string }];
     dimensions: [];
     weight: [];
-    fixedPrices: [];
+    fixedPrices: [
+      {
+        country_code: string;
+        price: number;
+      }
+    ];
   } = {};
 
   private tableColums: string[] = [];
@@ -934,7 +939,6 @@ export default class Product extends Vue {
   }
 
   public addCategory() {
-    //@ts-ignore
     this.product.categories.push({ title: "category..." });
   }
 
@@ -944,7 +948,6 @@ export default class Product extends Vue {
   }
 
   public addTag() {
-    //@ts-ignore
     this.product.tags.push({ name: "tag..." });
   }
 
@@ -954,11 +957,8 @@ export default class Product extends Vue {
   }
 
   public addFixPrices() {
-    //@ts-ignore
     this.product.fixedPrices.push({
-      //@ts-ignore
       country_code: "currency...",
-      //@ts-ignore
       price: 0,
     });
   }
@@ -993,7 +993,6 @@ export default class Product extends Vue {
         id: this.product.id,
         input: {
           title: this.product.title,
-          //@ts-ignore
           price_cents: parseInt(this.product.price_cents),
           price_currency: this.product.price_currency,
           short_description: this.product.short_description,
@@ -1005,7 +1004,6 @@ export default class Product extends Vue {
           dimensions: this.product.dimensions,
           weight: this.product.weight,
           fixprices: this.product.fixedPrices.map((item) => {
-            //@ts-ignore
             return { currency: item.country_code, price_cents: item.price };
           }),
         },
