@@ -19,14 +19,6 @@ export const LOGOUT_USER = gql`
   }
 `;
 
-export const UPDATE_PRODUCT = gql`
-  mutation($id: ID!, $input: UpdateProductInput!) {
-    updateProduct(id: $id, input: $input) {
-      id
-    }
-  }
-`;
-
 export const ADMIN_PRODUCTS = gql`
   query($first: Int!, $page: Int!) {
     adminProducts(first: $first, page: $page) {
