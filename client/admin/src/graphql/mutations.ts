@@ -38,3 +38,17 @@ export const REGISTER_USER = gql`
     }
   }
 `;
+
+export const UPDATE_PRODUCT_IMAGES = gql`
+  mutation($product_id: String!, $images: []) {
+    updateProductImages(product_id: ' . $product_id . ', images: $images){
+      product {
+          id
+          images {
+              id
+              url
+          }
+      }
+    } 
+  }
+`;
