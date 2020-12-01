@@ -856,7 +856,8 @@ import { Component, Vue } from "vue-property-decorator";
 import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
 import { apolloClient } from "@/vue-apollo";
-import { PRODUCT, UPDATE_PRODUCT } from "@/graphql/queries";
+import { PRODUCT } from "@/graphql/queries";
+import { UPDATE_PRODUCT_IMAGES, UPDATE_PRODUCT } from "@/graphql/mutations";
 import Table from "@/components/Table.vue";
 import { cleanupData } from "@/utils/helper";
 import { Product as TProduct } from "@/types/product.ts";
@@ -1011,11 +1012,21 @@ export default class Product extends Vue {
         },
       },
     });
-    console.log(data);
+
+    // Also update the images
+    let imagesData = await apolloClient.mutate({
+      mutation: UPDATE_PRODUCT_IMAGES,
+      variables: {
+        product_id: this.product.id,
+        images: this.product.images,
+      },
+    });
+    console.log(imagesData);
 
     try {
       let error = data.errors[0].debugMessage;
-      this.errors.push(error);
+      let error2 = imagesData.errors[0].debugMessage;
+      this.errors.push(error, error2);
       this.productUpdated = "";
       console.log(error);
       return;
