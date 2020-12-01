@@ -236,6 +236,13 @@ extend type Mutation {
             model: "Gernzy\\Server\\Models\\Product"
             policy: "Gernzy\\Server\\Policies\\ProductPolicy"
         )
+    updateProductImages(product_id: ID!, images: [ID!]): AddProductImagesPayload!
+        @field(resolver: "Gernzy\\Server\\GraphQL\\Mutations\\Product@attachImagesUpdate")
+        @can(
+            ability: "create"
+            model: "Gernzy\\Server\\Models\\Product"
+            policy: "Gernzy\\Server\\Policies\\ProductPolicy"
+        )
     setProductFeaturedImage(product_id: ID!, image_id: ID!): SetProductFeaturedImagePayload!
         @field(resolver: "Gernzy\\Server\\GraphQL\\Mutations\\Product@setFeaturedImage")
         @can(
