@@ -15,6 +15,23 @@ class UpdateProduct
         $product->save();
 
         $categories = $args['categories'] ?? [];
+        $createCategories = [];
+        foreach ($categories as $category) {
+            if (isset($category['id'])) {
+                $cat = Category::find($category['id']);
+                if ($cat) {
+                    $product->categories()->attach($cat);
+                }
+            } elseif (isset($category['title'])) {
+                $createCategories[] = [
+                    'title' => $category['title']
+                ];
+            }
+        }
+
+        // To avoid duplicates delete existing categories and add new incoming categories
+        $product->categories()->delete();
+        $product->categories()->createMany($createCategories);
 
         $attributes = new Attributes($product);
         $attributes
