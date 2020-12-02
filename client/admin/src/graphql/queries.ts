@@ -60,11 +60,13 @@ export const ADMIN_PRODUCTS = gql`
           unit
         }
         images {
+          id
           url
           type
           name
         }
         featured_image {
+          id
           url
           type
           name
@@ -216,11 +218,13 @@ export const PRODUCT = gql`
           unit
         }
         images {
+          id
           url
           type
           name
         }
         featured_image {
+          id
           url
           type
           name
@@ -247,6 +251,7 @@ export const PRODUCT = gql`
         unit
       }
       images {
+        id
         url
         type
         name
