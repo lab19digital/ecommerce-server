@@ -857,7 +857,8 @@ import ErrorNotification from "@/components/ErrorNotification.vue";
 import SuccessNotification from "@/components/SuccessNotification.vue";
 import { apolloClient } from "@/vue-apollo";
 import { PRODUCT } from "@/graphql/queries";
-import { UPDATE_PRODUCT_IMAGES, UPDATE_PRODUCT } from "@/graphql/mutations";
+// import { UPDATE_PRODUCT_IMAGES, UPDATE_PRODUCT } from "@/graphql/mutations";
+import { UPDATE_PRODUCT } from "@/graphql/mutations";
 import Table from "@/components/Table.vue";
 import { cleanupData } from "@/utils/helper";
 import { Product as TProduct } from "@/types/product.ts";
@@ -883,7 +884,7 @@ export default class Product extends Vue {
     long_description: "",
     meta: [{ key: "", value: "" }],
     prices: [{ currency: "", value: 0 }],
-    images: [{ url: "", name: "", type: "" }],
+    images: [{ id: -1, url: "", name: "", type: "" }],
     sizes: [{ size: 0 }],
     tags: [{ name: "" }],
     categories: [{ title: "" }],
@@ -971,6 +972,7 @@ export default class Product extends Vue {
 
   public addImages() {
     this.product.images.push({
+      id: -1,
       url: "url...",
       name: "name...",
       type: "type...",
@@ -1004,6 +1006,7 @@ export default class Product extends Vue {
           categories: this.product.categories,
           dimensions: this.product.dimensions,
           weight: this.product.weight,
+          images: JSON.stringify(this.product.images),
           fixprices: this.product.fixedPrices.map(
             (item: { country_code: string; price: number }) => {
               return { currency: item.country_code, price_cents: item.price };
@@ -1014,19 +1017,19 @@ export default class Product extends Vue {
     });
 
     // Also update the images
-    let imagesData = await apolloClient.mutate({
-      mutation: UPDATE_PRODUCT_IMAGES,
-      variables: {
-        product_id: this.product.id,
-        images: this.product.images,
-      },
-    });
-    console.log(imagesData);
+    // let imagesData = await apolloClient.mutate({
+    //   mutation: UPDATE_PRODUCT_IMAGES,
+    //   variables: {
+    //     product_id: this.product.id,
+    //     images: this.product.images,
+    //   },
+    // });
+    // console.log(imagesData);
 
     try {
       let error = data.errors[0].debugMessage;
-      let error2 = imagesData.errors[0].debugMessage;
-      this.errors.push(error, error2);
+      // let error2 = imagesData.errors[0].debugMessage;
+      // this.errors.push(error, error2);
       this.productUpdated = "";
       console.log(error);
       return;
@@ -1042,7 +1045,7 @@ export default class Product extends Vue {
       query: PRODUCT,
       variables: { id: this.$route.params.id },
     });
-    // console.log(data);
+    console.log(data);
 
     try {
       let error = data.errors[0].debugMessage;
@@ -1053,7 +1056,31 @@ export default class Product extends Vue {
       // no error
     }
 
-    this.product = cleanupData(data.data.product);
+    let cleanData = cleanupData(data.data.product);
+    let image = {
+      id: -1,
+      url: "url...",
+      name: "name...",
+      type: "type...",
+    };
+
+    if (!cleanData.featured_image) {
+      cleanData.featured_image = image;
+    }
+
+    if (cleanData.images.length <= 0) {
+      cleanData.images.push(image);
+    }
+
+    if (cleanData.variants.length <= 0) {
+      cleanData.variants = cleanData.variants.map((variant: any) => {
+        variant.featured_image = image;
+        variant.images.push(image);
+        return variant;
+      });
+    }
+
+    this.product = cleanData;
   }
 }
 </script>
