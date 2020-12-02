@@ -176,6 +176,7 @@ input UpdateProductInput {
     dimensions: ProductDimensionsInput
     weight: ProductWeightInput
     fixprices: [PricingInput]
+    images: String
 }
 
 input ProductAttributeInput {
