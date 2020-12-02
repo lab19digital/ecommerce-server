@@ -7,7 +7,7 @@ export interface Product {
   long_description: string;
   meta: [{ key: string; value: string }];
   prices: [{ currency: string; value: number }];
-  images: [{ url: string; name: string; type: string }];
+  images: [{ id: number; url: string; name: string; type: string }];
   sizes: [{ size: number }];
   tags: [{ name: string }];
   categories: [{ title: string }];
