@@ -950,7 +950,7 @@ export default class Product extends Vue {
   }
 
   public addTag() {
-    this.product.tags.push({ name: "tag..." });
+    this.product.tags.push({ id: -1, name: "tag..." });
   }
 
   public removeTag(event: any) {
@@ -1007,6 +1007,7 @@ export default class Product extends Vue {
           dimensions: this.product.dimensions,
           weight: this.product.weight,
           images: JSON.stringify(this.product.images),
+          tags: JSON.stringify(this.product.tags),
           fixprices: this.product.fixedPrices.map(
             (item: { country_code: string; price: number }) => {
               return { currency: item.country_code, price_cents: item.price };
@@ -1016,20 +1017,8 @@ export default class Product extends Vue {
       },
     });
 
-    // Also update the images
-    // let imagesData = await apolloClient.mutate({
-    //   mutation: UPDATE_PRODUCT_IMAGES,
-    //   variables: {
-    //     product_id: this.product.id,
-    //     images: this.product.images,
-    //   },
-    // });
-    // console.log(imagesData);
-
     try {
       let error = data.errors[0].debugMessage;
-      // let error2 = imagesData.errors[0].debugMessage;
-      // this.errors.push(error, error2);
       this.productUpdated = "";
       console.log(error);
       return;
@@ -1038,6 +1027,7 @@ export default class Product extends Vue {
     }
 
     this.productUpdated = "Product successfully updated.";
+    location.reload(); //this is to reload the state for updated images
   }
 
   async mounted() {
@@ -1058,7 +1048,7 @@ export default class Product extends Vue {
 
     let cleanData = cleanupData(data.data.product);
     let image = {
-      id: -1,
+      id: -1, //pushing -1 as the product image, so that in the backend we know this should be a new image to create
       url: "url...",
       name: "name...",
       type: "type...",
