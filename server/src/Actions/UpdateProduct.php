@@ -6,7 +6,7 @@ use \App;
 use Gernzy\Server\Actions\Helpers\Attributes;
 use Gernzy\Server\Models\Image;
 use Gernzy\Server\Models\Product;
-use Illuminate\Support\Facades\Log;
+use Gernzy\Server\Models\Tag;
 
 class UpdateProduct
 {
@@ -48,37 +48,49 @@ class UpdateProduct
             $attributes->toArray()
         );
 
-        // Update the images
-        // $product->images()->delete();
+        /*Update images*/
+        // Detach all product images (note this does not delete the image from the images table, only removed the association)
+        $product->images()->detach();
         $images = json_decode($args["images"]);
 
-        // Log::debug($images);
-
-
-        // $imagesNew = [];
-
+        // For each incoming image, if it already has an id, then update, otherwise create the new image and attach to product
+        $imagesNew = [];
         foreach ($images as $image) {
-            if ($image->id > 0) {
+
+            // images from the front end with -1 as id will 'new' and needs to be created
+            if ($image->id >= 0) {
                 $imageFind = Image::find($image->id);
                 $imageFind->name = $image->name;
                 $imageFind->url = $image->url;
                 $imageFind->type = $image->type;
-                $imageFind->save();
+                array_push($imagesNew, $imageFind);
             } else {
                 $imageNew = new Image(["name" => $image->name, "url" => $image->url, "type" => $image->type]);
-                // $imageNew->save();
-                $product->images()->save($imageNew);
+                array_push($imagesNew, $imageNew);
             }
-
-            // $imageNew = new Image(["name" => $image->name, "url" => $image->url, "type" => $image->type]);
-            // if ($image->id > 0) {
-            //     $imageNew->id = $image->id;
-            // }
-            // array_push($imagesNew, $imageNew);
         }
+        $product->images()->saveMany($imagesNew); // make the new association of images to the product
 
-        // $images = $product->images()->saveMany($imagesNew);
+        /*Update tags*/
+        // Detach all product tags (note this does not delete the tag from the tags table, only removed the association)
+        $product->tags()->detach();
+        $tags = json_decode($args["tags"]);
 
+        // For each incoming tag, if it already has an id, then update, otherwise create the new tag and attach to product
+        $tagsNew = [];
+        foreach ($tags as $tag) {
+
+            // tags from the front end with -1 as id will 'new' and needs to be created
+            if ($tag->id >= 0) {
+                $tagFind = Tag::find($tag->id);
+                $tagFind->name = $tag->name;
+                array_push($tagsNew, $tagFind);
+            } else {
+                $tagNew = new Tag(["name" => $tag->name]);
+                array_push($tagsNew, $tagNew);
+            }
+        }
+        $product->tags()->saveMany($tagsNew); // make the new association of tags to the product
 
 
         // Product details
