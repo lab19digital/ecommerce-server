@@ -177,6 +177,7 @@ input UpdateProductInput {
     weight: ProductWeightInput
     fixprices: [PricingInput]
     images: String
+    tags: String
 }
 
 input ProductAttributeInput {
@@ -232,13 +233,6 @@ extend type Mutation {
         )
     addProductImages(product_id: ID!, images: [ID!]): AddProductImagesPayload!
         @field(resolver: "Gernzy\\Server\\GraphQL\\Mutations\\Product@attachImages")
-        @can(
-            ability: "create"
-            model: "Gernzy\\Server\\Models\\Product"
-            policy: "Gernzy\\Server\\Policies\\ProductPolicy"
-        )
-    updateProductImages(product_id: ID!, images: [ID!]): AddProductImagesPayload!
-        @field(resolver: "Gernzy\\Server\\GraphQL\\Mutations\\Product@attachImagesUpdate")
         @can(
             ability: "create"
             model: "Gernzy\\Server\\Models\\Product"
