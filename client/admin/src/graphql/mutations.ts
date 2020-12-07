@@ -39,16 +39,6 @@ export const REGISTER_USER = gql`
   }
 `;
 
-export const UPDATE_PRODUCT_IMAGES = gql`
-  mutation($product_id: String!, $images: Array) {
-    updateProductImages(product_id: $product_id, images: $images) {
-      product {
-        id
-      }
-    }
-  }
-`;
-
 export const UPDATE_PRODUCT = gql`
   mutation($id: ID!, $input: UpdateProductInput!) {
     updateProduct(id: $id, input: $input) {
