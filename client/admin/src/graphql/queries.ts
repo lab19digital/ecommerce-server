@@ -262,6 +262,7 @@ export const PRODUCT = gql`
         name
       }
       tags {
+        id
         name
       }
       fixedPrices {
