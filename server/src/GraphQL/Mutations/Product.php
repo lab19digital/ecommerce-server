@@ -7,7 +7,6 @@ use Gernzy\Server\Actions\CreateProduct;
 use Gernzy\Server\Actions\CreateProductVariant;
 use Gernzy\Server\Actions\DeleteProduct;
 use Gernzy\Server\Actions\ProductAttachImages;
-use Gernzy\Server\Actions\ProductAttachImagesUpdate;
 use Gernzy\Server\Actions\ProductAttachTags;
 use Gernzy\Server\Actions\ProductSetFeaturedImage;
 use Gernzy\Server\Actions\UpdateProduct;
@@ -57,15 +56,6 @@ class Product
     public function attachImages($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
         $attachImage = App::make(ProductAttachImages::class);
-        $result = $attachImage->handle($args['product_id'], $args['images']);
-        return [
-            'product' => $result
-        ];
-    }
-
-    public function attachImagesUpdate($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
-    {
-        $attachImage = App::make(ProductAttachImagesUpdate::class);
         $result = $attachImage->handle($args['product_id'], $args['images']);
         return [
             'product' => $result
