@@ -26,7 +26,12 @@
       <h5 class="text-3xl font-bold">Create Product</h5>
 
       <label class="md:w-2/3 block text-gray-500 font-bold">
-        <input class="mr-2 leading-tight" type="checkbox" />
+        <input
+          class="mr-2 leading-tight"
+          type="checkbox"
+          @click="toggleHasVariant"
+          :checked="productHasVariant"
+        />
         <span>Has variant</span>
       </label>
 
@@ -559,7 +564,7 @@
       <!-- Product End -->
 
       <!-- Variants -->
-      <div class="mt-8">
+      <div class="mt-8" v-show="productHasVariant == true">
         <h5 class="text-3xl font-bold">Variants</h5>
         <div class="bg-white rounded shadow border p-6 w-full break-words">
           <div v-for="(variant, key) in product.variants" :key="key">
@@ -840,6 +845,15 @@
       </div>
       <!-- Variants end -->
 
+      <!-- Add variant -->
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-6"
+        @click="addVariant"
+        v-if="productHasVariant"
+      >
+        Add variant
+      </button>
+
       <!-- Update the product button -->
       <button
         class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-16"
@@ -874,22 +888,33 @@ export default class Product extends Vue {
   // Errors array
   private errors: string[] = [];
   private productUpdated: string = "";
+  private productHasVariant: boolean = false;
 
+  // This the product field with initialisation values
   private product: TProduct = {
     id: -1,
-    title: "",
-    price_cents: "",
-    price_currency: "",
-    short_description: "",
+    categories: [{ title: "" }],
+    dimensions: { length: 0, width: 0, height: 0, unit: "unit" },
+    images: [{ id: -1, url: "", name: "", type: "" }],
     long_description: "",
     meta: [{ key: "", value: "" }],
+    parent_id: -1,
+    price_cents: 0,
+    price_currency: "",
     prices: [{ currency: "", value: 0 }],
-    images: [{ id: -1, url: "", name: "", type: "" }],
+    published: 1,
+    short_description: "",
     sizes: [{ size: 0 }],
-    tags: [{ name: "" }],
-    categories: [{ title: "" }],
-    dimensions: [],
-    weight: [],
+    status: "",
+    tags: [{ id: -1, name: "" }],
+    title: "",
+    weight: { weight: 0, unit: "unit" },
+    variants: [{}],
+    featured_image: {
+      url: "url",
+      type: "type",
+      name: "name",
+    },
     fixedPrices: [
       {
         country_code: "",
@@ -984,6 +1009,49 @@ export default class Product extends Vue {
     this.product.images.splice(key, 1);
   }
 
+  public addVariant() {
+    this.product.variants.push({
+      id: -1,
+      categories: [{ title: "" }],
+      dimensions: { length: 0, width: 0, height: 0, unit: "unit" },
+      images: [{ url: "", name: "", type: "" }],
+      long_description: "",
+      meta: [{ key: "", value: "" }],
+      parent_id: this.product.id,
+      price_cents: 0,
+      price_currency: "",
+      prices: [{ currency: "", value: 0 }],
+      published: 1,
+      short_description: "",
+      sizes: [{ size: 0 }],
+      status: "",
+      tags: [{ name: "" }],
+      title: "",
+      weight: { weight: 0, unit: "unit" },
+      featured_image: {
+        url: "url",
+        type: "type",
+        name: "name",
+      },
+      fixedPrices: [
+        {
+          country_code: "",
+          price: 0,
+        },
+      ],
+    });
+  }
+
+  public removeVariant(event: any) {
+    console.log(event);
+    // let key = event.target.getAttribute("data-key");
+    // this.product.images.splice(key, 1);
+  }
+
+  public toggleHasVariant() {
+    this.productHasVariant = !this.productHasVariant;
+  }
+
   /**
    * updateProduct
    */
@@ -1047,30 +1115,12 @@ export default class Product extends Vue {
     }
 
     let cleanData = cleanupData(data.data.product);
-    let image = {
-      id: -1, //pushing -1 as the product image, so that in the backend we know this should be a new image to create
-      url: "url...",
-      name: "name...",
-      type: "type...",
-    };
-
-    if (!cleanData.featured_image) {
-      cleanData.featured_image = image;
-    }
-
-    if (cleanData.images.length <= 0) {
-      cleanData.images.push(image);
-    }
-
-    if (cleanData.variants.length <= 0) {
-      cleanData.variants = cleanData.variants.map((variant: any) => {
-        variant.featured_image = image;
-        variant.images.push(image);
-        return variant;
-      });
-    }
-
     this.product = cleanData;
+
+    //Set the has variant
+    if (this.product.variants.length > 0) {
+      this.productHasVariant = true;
+    }
   }
 }
 </script>
