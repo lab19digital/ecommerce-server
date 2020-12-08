@@ -9,7 +9,7 @@ export interface Product {
   prices: [{ currency: string; value: number }];
   images: [{ id: number; url: string; name: string; type: string }];
   sizes: [{ size: number }];
-  tags: [{ name: string }];
+  tags: [{ id: number; name: string }];
   categories: [{ title: string }];
   dimensions: [];
   weight: [];
