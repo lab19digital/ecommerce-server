@@ -1058,6 +1058,9 @@ export default class Product extends Vue {
   public async updateProduct() {
     this.productUpdated = "Updating...";
 
+    // check variants toggle
+    if (!this.productHasVariant) this.product.variants = [];
+
     let data = await apolloClient.mutate({
       mutation: UPDATE_PRODUCT,
       variables: {
@@ -1076,6 +1079,7 @@ export default class Product extends Vue {
           weight: this.product.weight,
           images: JSON.stringify(this.product.images),
           tags: JSON.stringify(this.product.tags),
+          variants: JSON.stringify(this.product.variants),
           fixprices: this.product.fixedPrices.map(
             (item: { country_code: string; price: number }) => {
               return { currency: item.country_code, price_cents: item.price };
