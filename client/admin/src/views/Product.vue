@@ -613,20 +613,28 @@
               <!-- Categories -->
               <div class="mt-8">
                 <h5 class="text-gray-700 text-sm font-bold mb-2">Categories</h5>
-                <div class="flex mb-4">
+                <div class="flex flex-wrap mb-4">
                   <div v-for="(category, key) in variant.categories" :key="key">
-                    <div>
+                    <div class="flex mr-6 mb-6">
                       <input
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         type="text"
                         v-model="category.title"
                       />
+
+                      <button
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        :data-key="key"
+                        @click="removeCategoryVariant"
+                      >
+                        x
+                      </button>
                     </div>
                   </div>
                 </div>
                 <button
                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  @click="addCategory"
+                  @click="addCategoryVariant"
                 >
                   Add category
                 </button>
@@ -1009,12 +1017,20 @@ export default class Product extends Vue {
     this.product.images.splice(key, 1);
   }
 
+  public addCategoryVariant() {
+    this.product.categories.push({ title: "category..." });
+  }
+
+  public removeCategoryVariant(event: any) {
+    let key = event.target.getAttribute("data-key");
+    this.product.categories.splice(key, 1);
+  }
+
   public addVariant() {
     this.product.variants.push({
-      id: -1,
       categories: [{ title: "" }],
       dimensions: { length: 0, width: 0, height: 0, unit: "unit" },
-      images: [{ url: "", name: "", type: "" }],
+      images: [{ id: -1, url: "", name: "", type: "" }],
       long_description: "",
       meta: [{ key: "", value: "" }],
       parent_id: this.product.id,
@@ -1025,7 +1041,7 @@ export default class Product extends Vue {
       short_description: "",
       sizes: [{ size: 0 }],
       status: "",
-      tags: [{ name: "" }],
+      tags: [{ id: -1, name: "" }],
       title: "",
       weight: { weight: 0, unit: "unit" },
       featured_image: {
