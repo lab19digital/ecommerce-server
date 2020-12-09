@@ -178,6 +178,7 @@ input UpdateProductInput {
     fixprices: [PricingInput]
     images: String
     tags: String
+    variants: String
 }
 
 input ProductAttributeInput {
