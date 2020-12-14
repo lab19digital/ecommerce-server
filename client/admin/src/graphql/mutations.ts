@@ -46,3 +46,17 @@ export const UPDATE_PRODUCT = gql`
     }
   }
 `;
+
+export const SET_PRODUCT_FEATURED_IMAGE = gql`
+  mutation($id: ID!, $imageID: ID!) {
+    setProductFeaturedImage(product_id: $id, image_id: $imageID) {
+      product {
+        id
+        featured_image {
+          id
+          url
+        }
+      }
+    }
+  }
+`;
