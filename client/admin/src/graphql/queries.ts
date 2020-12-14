@@ -204,9 +204,6 @@ export const PRODUCT = gql`
         sizes {
           size
         }
-        categories {
-          title
-        }
         dimensions {
           length
           width
@@ -229,15 +226,13 @@ export const PRODUCT = gql`
           type
           name
         }
-        tags {
-          name
-        }
         fixedPrices {
           country_code
           price
         }
       }
       categories {
+        id
         title
       }
       dimensions {
@@ -257,6 +252,7 @@ export const PRODUCT = gql`
         name
       }
       featured_image {
+        id
         url
         type
         name
