@@ -567,9 +567,12 @@
       <div class="mt-8" v-show="productHasVariant == true">
         <h5 class="text-3xl font-bold">Variants</h5>
         <div class="bg-white rounded shadow border p-6 w-full break-words">
-          <div v-for="(variant, key) in product.variants" :key="key">
+          <div
+            v-for="(variant, variantKey) in product.variants"
+            :key="variantKey"
+          >
             <!-- Product Variant Begin-->
-            <div v-bind:class="{ 'mt-24': checkKey(key) }">
+            <div v-bind:class="{ 'mt-24': checkKey(variantKey) }">
               <!-- top row -->
               <div class="flex mb-4">
                 <div class="w-1/3">
@@ -608,36 +611,6 @@
                     v-model="variant.title"
                   />
                 </div>
-              </div>
-
-              <!-- Categories -->
-              <div class="mt-8">
-                <h5 class="text-gray-700 text-sm font-bold mb-2">Categories</h5>
-                <div class="flex flex-wrap mb-4">
-                  <div v-for="(category, key) in variant.categories" :key="key">
-                    <div class="flex mr-6 mb-6">
-                      <input
-                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        type="text"
-                        v-model="category.title"
-                      />
-
-                      <button
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        :data-key="key"
-                        @click="removeCategoryVariant"
-                      >
-                        x
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  @click="addCategoryVariant"
-                >
-                  Add category
-                </button>
               </div>
 
               <!-- Short description -->
@@ -709,12 +682,21 @@
                         v-model="value.value"
                       />
                     </div>
+                    <button
+                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      :data-key="key"
+                      :data-var-key="variantKey"
+                      @click="removeAttributesVariant"
+                    >
+                      x
+                    </button>
                   </div>
                 </div>
 
                 <button
                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  @click="addAttributes"
+                  @click="addAttributesVariant"
+                  :data-var-key="variantKey"
                 >
                   Add attribute
                 </button>
@@ -844,6 +826,168 @@
                       v-model="variant.title"
                     />
                   </div>
+                </div>
+              </div>
+
+              <!-- Prices -->
+              <div class="mt-8">
+                <h5 class="text-gray-700 text-sm font-bold mb-2">Prices</h5>
+                <div v-for="(value, key) in variant.prices" :key="key">
+                  <div class="flex mb-4">
+                    <div class="w-1/2">
+                      <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        v-model="value.currency"
+                      />
+                    </div>
+                    <div class="w-1/2">
+                      <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        v-model="value.value"
+                      />
+                    </div>
+                    <button
+                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      :data-key="key"
+                      :data-var-key="variantKey"
+                      @click="removePricesVariant"
+                    >
+                      x
+                    </button>
+                  </div>
+                </div>
+                <button
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  @click="addPriceVariant"
+                  :data-var-key="variantKey"
+                >
+                  Add price
+                </button>
+              </div>
+
+              <!-- Sizes -->
+              <div class="mt-8">
+                <h5 class="text-gray-700 text-sm font-bold mb-2">Sizes</h5>
+                <div class="flex flex-wrap mb-4">
+                  <div v-for="(size, key) in variant.sizes" :key="key">
+                    <div class="flex mr-6 mb-6">
+                      <input
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        type="text"
+                        v-model="size.size"
+                      />
+
+                      <button
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        :data-key="key"
+                        :data-var-key="variantKey"
+                        @click="removeSizeVariant"
+                      >
+                        x
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  @click="addSizeVariant"
+                  :data-var-key="variantKey"
+                >
+                  Add size
+                </button>
+              </div>
+
+              <!-- Dimensions -->
+              <div class="flex mt-8">
+                <div>
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="length"
+                  >
+                    Length
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="length"
+                    type="text"
+                    v-model="variant.dimensions.length"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="height"
+                  >
+                    Height
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="height"
+                    type="text"
+                    v-model="variant.dimensions.height"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="width"
+                  >
+                    Width
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="width"
+                    type="text"
+                    v-model="variant.dimensions.width"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="product_dimensions_unit"
+                  >
+                    Unit
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="product_dimensions_unit"
+                    type="text"
+                    v-model="variant.dimensions.unit"
+                  />
+                </div>
+              </div>
+
+              <!-- Weight -->
+              <div class="flex mt-8">
+                <div>
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="weight"
+                  >
+                    Weight
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="weight"
+                    type="text"
+                    v-model="variant.weight.weight"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-gray-700 text-sm font-bold mb-2"
+                    for="product_weight_unit"
+                  >
+                    Unit
+                  </label>
+                  <input
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="product_weight_unit"
+                    type="text"
+                    v-model="variant.weight.unit"
+                  />
                 </div>
               </div>
             </div>
@@ -1017,13 +1161,41 @@ export default class Product extends Vue {
     this.product.images.splice(key, 1);
   }
 
-  public addCategoryVariant() {
-    this.product.categories.push({ title: "category..." });
+  public addPriceVariant(event: any) {
+    let variantKey = event.target.getAttribute("data-var-key");
+
+    this.product.variants[variantKey].prices.push({
+      currency: "currency...",
+      value: 0.0,
+    });
   }
 
-  public removeCategoryVariant(event: any) {
-    let key = event.target.getAttribute("data-key");
-    this.product.categories.splice(key, 1);
+  public removePricesVariant(event: any) {
+    let variantKey = event.target.getAttribute("data-var-key");
+    let priceKey = event.target.getAttribute("data-key");
+    this.product.variants[variantKey].prices.splice(priceKey, 1);
+  }
+
+  public addAttributesVariant(event: any) {
+    let variantKey = event.target.getAttribute("data-var-key");
+    this.product.variants[variantKey].meta.push({ key: "...", value: "..." });
+  }
+
+  public removeAttributesVariant(event: any) {
+    let variantKey = event.target.getAttribute("data-var-key");
+    let metaKey = event.target.getAttribute("data-key");
+    this.product.variants[variantKey].meta.splice(metaKey, 1);
+  }
+
+  public addSizeVariant(event: any) {
+    let variantKey = event.target.getAttribute("data-var-key");
+    this.product.variants[variantKey].sizes.push({ size: 0 });
+  }
+
+  public removeSizeVariant(event: any) {
+    let variantKey = event.target.getAttribute("data-var-key");
+    let metaKey = event.target.getAttribute("data-key");
+    this.product.variants[variantKey].sizes.splice(metaKey, 1);
   }
 
   public addVariant() {
@@ -1075,7 +1247,9 @@ export default class Product extends Vue {
     this.productUpdated = "Updating...";
 
     // check variants toggle
-    if (!this.productHasVariant) this.product.variants = [];
+    if (!this.productHasVariant) {
+      this.product.variants = [];
+    }
 
     let data = await apolloClient.mutate({
       mutation: UPDATE_PRODUCT,
@@ -1093,6 +1267,9 @@ export default class Product extends Vue {
           categories: this.product.categories,
           dimensions: this.product.dimensions,
           weight: this.product.weight,
+          status: this.product.status,
+          featured_image: JSON.stringify(this.product.featured_image),
+          published: parseInt(this.product.published),
           images: JSON.stringify(this.product.images),
           tags: JSON.stringify(this.product.tags),
           variants: JSON.stringify(this.product.variants),
