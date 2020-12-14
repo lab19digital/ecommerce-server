@@ -9,6 +9,8 @@ use Gernzy\Server\Models\Image;
 use Gernzy\Server\Models\Product;
 use Gernzy\Server\Models\Tag;
 
+use function GuzzleHttp\json_decode;
+
 class UpdateProduct
 {
     public static function handle(Int $id, array $args): Product
@@ -99,12 +101,28 @@ class UpdateProduct
             $product->tags()->saveMany($tagsNew); // make the new association of tags to the product
         }
 
-
         /* variants */
         if ($variants = json_decode($args["variants"], true) ?? false) {
             foreach ($variants as $variant) {
                 UpdateProduct::createVariant($product, $variant);
             }
+        } elseif (count(json_decode($args["variants"], true)) <= 0) {
+            $product->variants()->delete();
+        }
+
+        // Update featured image
+        if (isset($args["featured_image"])) {
+            $featuredImageNew = json_decode($args["featured_image"]);
+            $image = Image::findOrFail($featuredImageNew->id);
+            $image->url = $featuredImageNew->url;
+            $image->type = $featuredImageNew->type;
+            $image->name = $featuredImageNew->name;
+            $image->save();
+            $attributes = new Attributes($product);
+            $attributes->featuredImage($image);
+            $product->attributes()->createMany(
+                $attributes->toArray()
+            );
         }
 
         // Product fixed prices
@@ -136,25 +154,6 @@ class UpdateProduct
         $product->parent_id = $parent->id;
         $product->save();
 
-        $categories = $args['categories'] ?? [];
-        $createCategories = [];
-        foreach ($categories as $category) {
-            if (isset($category['id'])) {
-                $cat = Category::find($category['id']);
-                if ($cat) {
-                    $product->categories()->attach($cat);
-                }
-            } elseif (isset($category['title'])) {
-                $createCategories[] = [
-                    'title' => $category['title']
-                ];
-            }
-        }
-
-        // To avoid duplicates delete existing categories and add new incoming categories
-        $product->categories()->delete();
-        $product->categories()->createMany($createCategories);
-
         $attributes = new Attributes($product);
         $attributes
             ->meta($args['meta'] ?? [])
@@ -185,57 +184,29 @@ class UpdateProduct
                     $imageFind->name = $image->name;
                     $imageFind->url = $image->url;
                     $imageFind->type = $image->type;
-                    array_push($imagesNew, $imageFind);
+                    $imagesNew[] = $imageFind;
                 } else {
                     $imageNew = new Image(["name" => $image->name, "url" => $image->url, "type" => $image->type]);
-                    array_push($imagesNew, $imageNew);
+                    $imagesNew[] = $imageNew;
                 }
             }
             $product->images()->saveMany($imagesNew); // make the new association of images to the product
-        }
 
 
-        /*Update tags*/
-        // Detach all product tags (note this does not delete the tag from the tags table, only removed the association)
-        if (isset($args["tags"])) {
-            $tags = $args["tags"];
-            $product->tags()->detach();
-
-            // For each incoming tag, if it already has an id, then update, otherwise create the new tag and attach to product
-            $tagsNew = [];
-            foreach ($tags as $tag) {
-                $tag = (object)$tag;
-
-                // tags from the front end with -1 as id will 'new' and needs to be created
-                if ($tag->id >= 0) {
-                    $tagFind = Tag::find($tag->id);
-                    $tagFind->name = $tag->name;
-                    array_push($tagsNew, $tagFind);
-                } else {
-                    $tagNew = new Tag(["name" => $tag->name]);
-                    array_push($tagsNew, $tagNew);
-                }
+            // Update featured image
+            if (isset($args["featured_image"])) {
+                $featuredImageNew = $args["featured_image"];
+                $image = Image::findOrFail($featuredImageNew["id"]);
+                $image->url = $featuredImageNew["url"];
+                $image->type = $featuredImageNew["type"];
+                $image->name = $featuredImageNew["name"];
+                $image->save();
+                $attributes = new Attributes($product);
+                $attributes->featuredImage($image);
+                $product->attributes()->createMany(
+                    $attributes->toArray()
+                );
             }
-            $product->tags()->saveMany($tagsNew); // make the new association of tags to the product
         }
-
-
-        // Product fixed prices
-        $productPrice = $args['price_cents'] ?? false;
-        $productBaseCurrency = $args['price_currency'] ?? false;
-        $fixCurrencies = $args['fixedPrices'] ?? false;
-
-        if (!$fixCurrencies || !$productPrice || !$productBaseCurrency) {
-            return $product;
-        }
-
-        // Use FixPricesService to map over $fixCurrencies and fix the price for the product in that currency
-        // and pass the resultant array to the save many function
-        return (App::make('Gernzy\FixPricesService'))
-            ->setProduct($product)
-            ->setFixCurrencies($fixCurrencies)
-            ->setProductPrice($productPrice)
-            ->setProductBaseCurrency($productBaseCurrency)
-            ->handleFixedPricesUpdate();
     }
 }
