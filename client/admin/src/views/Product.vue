@@ -716,7 +716,7 @@
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     :id="variant.id + '_status'"
                     type="text"
-                    v-model="product.status"
+                    v-model="variant.status"
                   />
                 </div>
                 <div class="w-1/4">
@@ -731,7 +731,7 @@
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     :id="variant.id + '_published'"
                     type="text"
-                    v-model="product.published"
+                    v-model="variant.published"
                   />
                 </div>
                 <div class="w-1/4">
@@ -746,7 +746,7 @@
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     :id="variant.id + '_price_cents'"
                     type="text"
-                    v-model="product.price_cents"
+                    v-model="variant.price_cents"
                   />
                 </div>
                 <div class="w-1/4">
@@ -761,71 +761,8 @@
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     :id="variant.id + '_price_currency'"
                     type="text"
-                    v-model="product.price_currency"
+                    v-model="variant.price_currency"
                   />
-                </div>
-              </div>
-
-              <!-- Stock -->
-              <div class="mt-8">
-                <h5 class="text-gray-700 text-sm font-bold mb-2">Stock</h5>
-                <div class="flex mb-4">
-                  <div class="w-1/4">
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      :for="variant.id + '_stock'"
-                    >
-                      Quantity
-                    </label>
-                    <input
-                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      :id="variant.id + '_stock'"
-                      type="text"
-                      v-model="variant.title"
-                    />
-                  </div>
-                  <div class="w-1/4">
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      :for="variant.id + '_cost_price'"
-                    >
-                      Cost price
-                    </label>
-                    <input
-                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      :id="variant.id + '_cost_price'"
-                      type="text"
-                      v-model="variant.title"
-                    />
-                  </div>
-                  <div class="w-1/4">
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      :for="variant.id + '_price'"
-                    >
-                      Price
-                    </label>
-                    <input
-                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      :id="variant.id + '_price'"
-                      type="text"
-                      v-model="variant.title"
-                    />
-                  </div>
-                  <div class="w-1/4">
-                    <label
-                      class="block text-gray-700 text-sm font-bold mb-2"
-                      :for="variant.id + '_store'"
-                    >
-                      Store
-                    </label>
-                    <input
-                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      :id="variant.id + '_store'"
-                      type="text"
-                      v-model="variant.title"
-                    />
-                  </div>
                 </div>
               </div>
 
@@ -904,13 +841,13 @@
                 <div>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="length"
+                    :for="variant.id + '_length'"
                   >
                     Length
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="length"
+                    :id="variant.id + '_length'"
                     type="text"
                     v-model="variant.dimensions.length"
                   />
@@ -918,13 +855,13 @@
                 <div>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="height"
+                    :for="variant.id + '_height'"
                   >
                     Height
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="height"
+                    :id="variant.id + '_height'"
                     type="text"
                     v-model="variant.dimensions.height"
                   />
@@ -932,13 +869,13 @@
                 <div>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="width"
+                    :for="variant.id + '_width'"
                   >
                     Width
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="width"
+                    :id="variant.id + '_width'"
                     type="text"
                     v-model="variant.dimensions.width"
                   />
@@ -946,13 +883,13 @@
                 <div>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="product_dimensions_unit"
+                    :for="variant.id + '_variant_dimensions_unit'"
                   >
                     Unit
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="product_dimensions_unit"
+                    :id="variant.id + '_variant_dimensions_unit'"
                     type="text"
                     v-model="variant.dimensions.unit"
                   />
@@ -964,13 +901,13 @@
                 <div>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="weight"
+                    :for="variant.id + '_weight'"
                   >
                     Weight
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="weight"
+                    :id="variant.id + '_weight'"
                     type="text"
                     v-model="variant.weight.weight"
                   />
@@ -978,13 +915,13 @@
                 <div>
                   <label
                     class="block text-gray-700 text-sm font-bold mb-2"
-                    for="product_weight_unit"
+                    :for="variant.id + '_variant_weigth_unit'"
                   >
                     Unit
                   </label>
                   <input
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="product_weight_unit"
+                    :id="variant.id + '_variant_weigth_unit'"
                     type="text"
                     v-model="variant.weight.unit"
                   />
