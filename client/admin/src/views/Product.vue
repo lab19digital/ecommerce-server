@@ -990,6 +990,16 @@
                   />
                 </div>
               </div>
+
+              <!-- Remove variant -->
+              <button
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-12 mr-6"
+                @click="removeVariant"
+                v-if="productHasVariant"
+                :data-var-key="variantKey"
+              >
+                Remove variant
+              </button>
             </div>
             <!-- Product End -->
           </div>
@@ -1200,7 +1210,7 @@ export default class Product extends Vue {
 
   public addVariant() {
     this.product.variants.push({
-      categories: [{ title: "" }],
+      id: -1,
       dimensions: { length: 0, width: 0, height: 0, unit: "unit" },
       images: [{ id: -1, url: "", name: "", type: "" }],
       long_description: "",
@@ -1208,7 +1218,7 @@ export default class Product extends Vue {
       parent_id: this.product.id,
       price_cents: 0,
       price_currency: "",
-      prices: [{ currency: "", value: 0 }],
+      prices: [{ currency: "currency...", value: 0 }],
       published: 1,
       short_description: "",
       sizes: [{ size: 0 }],
@@ -1217,23 +1227,17 @@ export default class Product extends Vue {
       title: "",
       weight: { weight: 0, unit: "unit" },
       featured_image: {
+        id: -1,
         url: "url",
         type: "type",
         name: "name",
       },
-      fixedPrices: [
-        {
-          country_code: "",
-          price: 0,
-        },
-      ],
     });
   }
 
   public removeVariant(event: any) {
-    console.log(event);
-    // let key = event.target.getAttribute("data-key");
-    // this.product.images.splice(key, 1);
+    let variantKey = event.target.getAttribute("data-var-key");
+    this.product.variants.splice(variantKey, 1);
   }
 
   public toggleHasVariant() {
