@@ -113,11 +113,18 @@ class UpdateProduct
         // Update featured image
         if (isset($args["featured_image"])) {
             $featuredImageNew = json_decode($args["featured_image"]);
-            $image = Image::findOrFail($featuredImageNew->id);
-            $image->url = $featuredImageNew->url;
-            $image->type = $featuredImageNew->type;
-            $image->name = $featuredImageNew->name;
-            $image->save();
+            // If existing image then update, otherwise create
+            if ($featuredImageNew->id >= 0) {
+                $image = Image::findOrFail($featuredImageNew->id);
+                $image->url = $featuredImageNew->url;
+                $image->type = $featuredImageNew->type;
+                $image->name = $featuredImageNew->name;
+                $image->save();
+            } else {
+                $image = new Image(["name" => $featuredImageNew->name, "url" => $featuredImageNew->url, "type" => $featuredImageNew->type]);
+                $image->save();
+            }
+
             $attributes = new Attributes($product);
             $attributes->featuredImage($image);
             $product->attributes()->createMany(
@@ -195,12 +202,19 @@ class UpdateProduct
 
             // Update featured image
             if (isset($args["featured_image"])) {
+                // If existing image then update, otherwise create
                 $featuredImageNew = $args["featured_image"];
-                $image = Image::findOrFail($featuredImageNew["id"]);
-                $image->url = $featuredImageNew["url"];
-                $image->type = $featuredImageNew["type"];
-                $image->name = $featuredImageNew["name"];
-                $image->save();
+                if ($featuredImageNew["id"] >= 0) {
+                    $image = Image::findOrFail($featuredImageNew["id"]);
+                    $image->url = $featuredImageNew["url"];
+                    $image->type = $featuredImageNew["type"];
+                    $image->name = $featuredImageNew["name"];
+                    $image->save();
+                } else {
+                    $image = new Image(["name" => $featuredImageNew["name"], "url" => $featuredImageNew["url"], "type" => $featuredImageNew["type"]]);
+                    $image->save();
+                }
+
                 $attributes = new Attributes($product);
                 $attributes->featuredImage($image);
                 $product->attributes()->createMany(
