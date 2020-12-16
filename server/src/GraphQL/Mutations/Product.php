@@ -3,7 +3,6 @@
 namespace Gernzy\Server\GraphQL\Mutations;
 
 use \App;
-use GraphQL\Type\Definition\ResolveInfo;
 use Gernzy\Server\Actions\CreateProduct;
 use Gernzy\Server\Actions\CreateProductVariant;
 use Gernzy\Server\Actions\DeleteProduct;
@@ -11,6 +10,7 @@ use Gernzy\Server\Actions\ProductAttachImages;
 use Gernzy\Server\Actions\ProductAttachTags;
 use Gernzy\Server\Actions\ProductSetFeaturedImage;
 use Gernzy\Server\Actions\UpdateProduct;
+use GraphQL\Type\Definition\ResolveInfo;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class Product

@@ -60,11 +60,13 @@ export const ADMIN_PRODUCTS = gql`
           unit
         }
         images {
+          id
           url
           type
           name
         }
         featured_image {
+          id
           url
           type
           name
@@ -149,6 +151,119 @@ export const ORDER = gql`
         status
         transaction_data
         payment_method
+      }
+    }
+  }
+`;
+
+export const PRODUCT = gql`
+  query($id: ID!) {
+    product(id: $id) {
+      id
+      parent_id
+      title
+      status
+      published
+      price_cents
+      price_currency
+      short_description
+      long_description
+      created_at
+      updated_at
+      meta {
+        key
+        value
+      }
+      prices {
+        value
+        currency
+      }
+      sizes {
+        size
+      }
+      variants {
+        id
+        title
+        status
+        published
+        price_cents
+        price_currency
+        short_description
+        long_description
+        created_at
+        updated_at
+        meta {
+          key
+          group
+          value
+        }
+        prices {
+          value
+          currency
+        }
+        sizes {
+          size
+        }
+        dimensions {
+          length
+          width
+          height
+          unit
+        }
+        weight {
+          weight
+          unit
+        }
+        images {
+          id
+          url
+          type
+          name
+        }
+        featured_image {
+          id
+          url
+          type
+          name
+        }
+        fixedPrices {
+          country_code
+          price
+        }
+      }
+      categories {
+        id
+        title
+      }
+      dimensions {
+        length
+        width
+        height
+        unit
+      }
+      weight {
+        weight
+        unit
+      }
+      images {
+        id
+        url
+        type
+        name
+      }
+      featured_image {
+        id
+        url
+        type
+        name
+      }
+      tags {
+        id
+        name
+      }
+      fixedPrices {
+        country_code
+        price
       }
     }
   }

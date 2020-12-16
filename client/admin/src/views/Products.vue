@@ -202,7 +202,9 @@ export default class Products extends Vue {
           }
 
           // Populate column data
-          this.productsDisplay = filterArray(this.tableColums, this.products);
+          this.productsDisplay = filterArray(this.tableColums, this.products, {
+            url: window.location.href,
+          });
 
           return Promise.resolve();
         }

@@ -175,6 +175,13 @@ input UpdateProductInput {
     categories: [CategoryInput!]
     dimensions: ProductDimensionsInput
     weight: ProductWeightInput
+    fixprices: [PricingInput]
+    images: String
+    tags: String
+    variants: String
+    status: String!
+    published: Int!
+    featured_image: String
 }
 
 input ProductAttributeInput {

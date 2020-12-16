@@ -38,3 +38,25 @@ export const REGISTER_USER = gql`
     }
   }
 `;
+
+export const UPDATE_PRODUCT = gql`
+  mutation($id: ID!, $input: UpdateProductInput!) {
+    updateProduct(id: $id, input: $input) {
+      id
+    }
+  }
+`;
+
+export const SET_PRODUCT_FEATURED_IMAGE = gql`
+  mutation($id: ID!, $imageID: ID!) {
+    setProductFeaturedImage(product_id: $id, image_id: $imageID) {
+      product {
+        id
+        featured_image {
+          id
+          url
+        }
+      }
+    }
+  }
+`;

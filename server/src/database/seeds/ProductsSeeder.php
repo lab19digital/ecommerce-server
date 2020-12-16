@@ -40,6 +40,10 @@ class ProductsSeeder extends Seeder
             'published' => $rand > 5 ? 1 : 0
         ]);
 
+        /**
+         * it is quite an expensive process seeding product variants, thus just assigning a random parent_id to the product
+         * to simulate variant
+         * */
         $product->parent_id = $rand;
 
         $product->save();

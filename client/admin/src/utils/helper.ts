@@ -26,7 +26,7 @@ export function cleanupData(data: any) {
  * @constructor
  * @param {array} tableColums - The array of table columns.
  * @param {array} originalArray - The original incoming array.
- * @param {array} mutatedArray - The mutated array.
+ * @param {object} data - Extra info required, like what url to format.
  */
 export function filterArray(
   tableColums: any,
